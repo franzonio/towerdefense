@@ -1,0 +1,81 @@
+[gd_scene load_steps=10 format=3 uid="uid://u6ind33q4kx3"]
+
+[ext_resource type="Script" uid="uid://d3edevewkvfqe" path="res://Enemies/GhastlyEye.gd" id="1_yh4ea"]
+[ext_resource type="Texture2D" uid="uid://e24ttj8wbavh" path="res://Assets/EnemyAssets/Basic Undead Animations/Ghastly Eye/GhastlyEye.png" id="2_o4vet"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_883a1"]
+atlas = ExtResource("2_o4vet")
+region = Rect2(0, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pxc0b"]
+atlas = ExtResource("2_o4vet")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1vjuf"]
+atlas = ExtResource("2_o4vet")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rdnxg"]
+atlas = ExtResource("2_o4vet")
+region = Rect2(48, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_rvsyd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_883a1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pxc0b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1vjuf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rdnxg")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_yh4ea"]
+bg_color = Color(0, 0, 0, 0.443137)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+border_blend = true
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_o4vet"]
+bg_color = Color(0, 0.690196, 0.0980392, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+
+[node name="GhastlyEye" type="CharacterBody2D"]
+z_index = 4
+scale = Vector2(3, 3)
+script = ExtResource("1_yh4ea")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+scale = Vector2(3, 3)
+sprite_frames = SubResource("SpriteFrames_rvsyd")
+animation = &"walk"
+
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="HealthBar" type="ProgressBar" parent="."]
+offset_left = -13.3333
+offset_top = -22.6667
+offset_right = -9.33333
+offset_bottom = 4.33334
+rotation = -1.5708
+theme_override_styles/background = SubResource("StyleBoxFlat_yh4ea")
+theme_override_styles/fill = SubResource("StyleBoxFlat_o4vet")
+value = 100.0
+fill_mode = 2
+show_percentage = false
