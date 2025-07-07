@@ -10,8 +10,8 @@ config_version=5
 
 [application]
 
-config/name="Tower Defense"
-run/main_scene="res://main.tscn"
+config/name="Gladiator"
+run/main_scene="uid://kfhwn4lpml61"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 

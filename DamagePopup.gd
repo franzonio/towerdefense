@@ -1,23 +1,29 @@
 extends Node2D
 
-#@onready var label = $Label
 var float_speed = -30
-var lifetime = 2
+var lifetime = 3
 
-func show_damage(amount: float, hit_success, dodge_success):
+func show_damage(amount: float, hit_success, dodge_success, crit):
 	if not hit_success:
-		#print("Color is now:", $Label.get_theme_color("font_color"))
-		$Label.remove_theme_color_override("font_color")  # clear existing
-		$Label.add_theme_color_override("font_color", Color.WHITE) 
-		$Label.text = "MISS"
-		#print("Color is now:", $Label.get_theme_color("font_color"))
-		modulate.a = 1.0  # Fully visible
+		customize_popup_font(Color.DARK_ORANGE, 30, "MISS")
 	elif dodge_success:
-		$Label.text = "DODGE"
-		modulate.a = 1.0  # Fully visible
+		customize_popup_font(Color.WHITE, 30, "DODGE")
 	else:
-		$Label.text = str(int(amount))
+		if crit == 2:
+			customize_popup_font(Color.RED, 55, str(int(amount)))
+		else:
+			customize_popup_font(Color.YELLOW, 44, str(int(amount)))
+
+
+func customize_popup_font(color: Color, size, text: String):
+		$Label.add_theme_color_override("font_color", color) 
+		$Label.add_theme_font_size_override("font_size", size)
+		$Label.text = text
+		
+		
+		
 		modulate.a = 1.0  # Fully visible
+
 
 func _process(delta):
 	position.y += float_speed * delta

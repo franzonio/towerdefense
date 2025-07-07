@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://bh10l06wi8flh"]
+[gd_scene load_steps=29 format=3 uid="uid://bh10l06wi8flh"]
 
 [ext_resource type="Script" uid="uid://wndbyt2f56xv" path="res://Player/Gladiator.gd" id="1_l0fom"]
 [ext_resource type="Texture2D" uid="uid://dvkftuu6pmsh6" path="res://Assets/PlayerAssets/Free RGW Sprites/RPG Maker/RPG Maker MZ (48x48)/sv_actors/Character_005_Battler.png" id="2_neicb"]
@@ -23,10 +23,6 @@ region = Rect2(480, 0, 96, 96)
 [sub_resource type="AtlasTexture" id="AtlasTexture_l0fom"]
 atlas = ExtResource("2_oqlk4")
 region = Rect2(0, 0, 72, 72)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vdipt"]
-atlas = ExtResource("2_oqlk4")
-region = Rect2(144, 72, 72, 72)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oqlk4"]
 atlas = ExtResource("2_oqlk4")
@@ -106,10 +102,13 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_48e2f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_otfga")
 }],
 "loop": false,
 "name": &"attack",
-"speed": 10.0
+"speed": 15.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -121,9 +120,9 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_vdipt")
+"texture": SubResource("AtlasTexture_otfga")
 }],
-"loop": true,
+"loop": false,
 "name": &"idle_left",
 "speed": 5.0
 }, {
@@ -157,9 +156,9 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_f5j4m")
 }],
-"loop": true,
+"loop": false,
 "name": &"walk_left",
-"speed": 10.0
+"speed": 15.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -223,7 +222,7 @@ script = ExtResource("1_l0fom")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_608te")
-animation = &"attack"
+animation = &"idle_left"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 9)
