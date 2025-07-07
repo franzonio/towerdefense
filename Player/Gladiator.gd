@@ -5,24 +5,26 @@ extends CharacterBody2D
 @onready var health_bar = $HealthBar
 @onready var enemy = null
 
+
+
+
 # === Damage attributes ===
 var strength := 10.0
 var base_dmg_min := 3
 var base_dmg_max := 15
 var weapon_skill := 80.0
 var weapon_req := 100.0
-var attack_speed: float = 1.5  # Seconds between attacks
+var attack_speed: float = 1.25  # Seconds between attacks
 var time_since_last_attack: float = 0.0
-var attack_range = 80
+var attack_range = 150
 var crit_chance = 0.10
 var hit_chance = (weapon_skill/weapon_req) - 0.20*weapon_skill/100
 
-var weight = 1
-# === Defense attributes ===
+var weight = 1# === Defense attributes ===
 var max_health := 100
 var current_health := 100
 var armor := 0.1       # 10% damage reduction
-var dodge_chance := 0.05  # 5% chance to dodge
+var dodge_chance := 0.15  # 5% chance to dodge
 var move_speed := 350.0
 
 func upgrade_attribute(attr_name: String, amount: float):
@@ -38,7 +40,8 @@ func take_damage(damage: float):
 
 	current_health = max(0, current_health - damage)
 	$HealthBar.value = current_health
-
+	#damage_popup(damage)
+	
 	if current_health <= 0:
 		die()
 
@@ -62,7 +65,8 @@ func _physics_process(delta):
 		#print("in range")
 		if time_since_last_attack >= attack_speed:
 			#print("asd")
-			CombatManager_.deal_attack(self, enemy, weapon_req, weight, crit_chance, strength, base_dmg_min, base_dmg_max, dodge_chance)
+			sprite.play("attack")
+			CombatManager_.deal_attack(self, enemy)
 			time_since_last_attack = 0.0
 	
 	'''
@@ -82,24 +86,28 @@ func _physics_process(delta):
 	if nav.is_navigation_finished():
 		#queue_free()  # Reached goal
 		move_speed = 0
-		sprite.play("idle_left")
+		#sprite.play("idle_left")
 		return
 		
 	var direction = (nav.get_next_path_position() - global_position).normalized()
-	play_walk_animation(direction)
+	
+	play_walk_animation(direction, move_speed)
 	velocity = direction * move_speed
 	
 	move_and_slide()
 
 
-func play_walk_animation(direction: Vector2):
-	if abs(direction.x) > abs(direction.y):
-		if direction.x > 0:
-			sprite.play("walk_right")
+func play_walk_animation(direction: Vector2, move_speed):
+	if move_speed != 0:
+		if abs(direction.x) > abs(direction.y):
+			if direction.x > 0:
+				sprite.play("walk_right")
+			else:
+				sprite.play("walk_left")
 		else:
-			sprite.play("walk_left")
+			if direction.y > 0:
+				sprite.play("walk_down")
+			else:
+				sprite.play("walk_up")
 	else:
-		if direction.y > 0:
-			sprite.play("walk_down")
-		else:
-			sprite.play("walk_up")
+		sprite.play("idle_left")

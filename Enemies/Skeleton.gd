@@ -15,7 +15,7 @@ var weapon_skill := 80.0
 var weapon_req := 100.0
 var attack_speed: float = 1.5  # Seconds between attacks
 var time_since_last_attack: float = 0.0
-var attack_range = 80
+var attack_range = 150
 var crit_chance = 0.10
 var hit_chance = (weapon_skill/weapon_req) - 0.20*weapon_skill/100
 
@@ -45,7 +45,7 @@ func _ready():
 	if move_speed == 0:
 		animated_sprite_2d.play("idle")
 	else:
-		animated_sprite_2d.play("walk")
+		animated_sprite_2d.play("test")
 	
 	
 func _physics_process(delta):
@@ -54,13 +54,13 @@ func _physics_process(delta):
 	if gladiator and global_position.distance_to(gladiator.global_position) < attack_range:
 		if time_since_last_attack >= attack_speed:
 			#attack_gladiator()
-			CombatManager_.deal_attack(self, gladiator, weapon_req, weight, crit_chance, strength, base_dmg_min, base_dmg_max, dodge_chance)
+			CombatManager_.deal_attack(self, gladiator)
 			time_since_last_attack = 0.0
 
 	if nav.is_navigation_finished():
 		#queue_free()  # Reached goal
 		move_speed = 0
-		animated_sprite_2d.play("idle")
+		animated_sprite_2d.play("walk")
 		return
 		
 	var direction = (nav.get_next_path_position() - global_position).normalized()

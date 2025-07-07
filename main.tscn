@@ -1837,7 +1837,7 @@ enemy_scene = ExtResource("2_rvfaf")
 position = Vector2(-29, -116)
 
 [node name="PlayerGoal" type="Node2D" parent="."]
-position = Vector2(26, -120)
+position = Vector2(78, -166)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.5, 0.5)
@@ -1845,7 +1845,7 @@ script = ExtResource("3_84ssy")
 
 [node name="Gladiator" parent="." instance=ExtResource("8_5vw27")]
 z_index = 4
-position = Vector2(389, -182)
+position = Vector2(387, -190)
 
 [node name="Skeleton" parent="." instance=ExtResource("2_rvfaf")]
 position = Vector2(-307, -154)

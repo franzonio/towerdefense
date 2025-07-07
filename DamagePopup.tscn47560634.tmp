@@ -1,0 +1,17 @@
+[gd_scene load_steps=4 format=3 uid="uid://bs0getqy76446"]
+
+[ext_resource type="Script" uid="uid://btrklbxbulets" path="res://DamagePopup.gd" id="1_8pnj6"]
+
+[sub_resource type="FontVariation" id="FontVariation_8pnj6"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_wqsle"]
+font = SubResource("FontVariation_8pnj6")
+font_color = Color(0.750895, 0.0959281, 0.262438, 1)
+
+[node name="Node2D" type="Node2D"]
+script = ExtResource("1_8pnj6")
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0
+label_settings = SubResource("LabelSettings_wqsle")
