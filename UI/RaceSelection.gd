@@ -14,7 +14,9 @@ func on_race_selected(race: String):
 	# e.g., GameState.selected_race = race
 
 	# Now load the game scene
-	get_tree().change_scene_to_file("res://Main.tscn")  # Replace with your actual game scene
+	GameState_.selected_race = race
+	get_tree().change_scene_to_file("res://UI/AttributeAllocation.tscn")
+	#get_tree().change_scene_to_file("res://Main.tscn")  # Replace with your actual game scene
 
 func go_back():
 	get_tree().change_scene_to_file("res://UI/MainMenu.tscn")

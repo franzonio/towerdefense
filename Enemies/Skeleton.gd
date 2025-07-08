@@ -9,8 +9,8 @@ var target: Node = null
 var direction
 
 # === Weapon attributes ===
-var weapon_dmg_min := 3
-var weapon_dmg_max := 15
+var weapon_dmg_min := 1
+var weapon_dmg_max := 5
 var weapon_req := 100.0
 var weapon_speed := 1
 var weapon_range = 150
@@ -84,17 +84,3 @@ func _physics_process(delta):
 		animated_sprite_2d.play("idle")
 		return
 		
-
-
-func attack_gladiator():
-	if gladiator:
-		var crit = 1
-		var hit_success = 1
-		if randf() < crit_chance:
-			crit = 2
-		if randf() > hit_chance:
-			hit_success = 0
-			print("SKELETON MISSED")
-			
-		gladiator.take_damage(hit_success*(randf_range(weapon_dmg_min, weapon_dmg_max)*crit+strength/15.0))
-		time_since_last_attack = 0.0

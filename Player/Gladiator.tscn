@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://bh10l06wi8flh"]
+[gd_scene load_steps=39 format=3 uid="uid://bh10l06wi8flh"]
 
 [ext_resource type="Script" uid="uid://wndbyt2f56xv" path="res://Player/Gladiator.gd" id="1_l0fom"]
 [ext_resource type="Texture2D" uid="uid://dvkftuu6pmsh6" path="res://Assets/PlayerAssets/Free RGW Sprites/RPG Maker/RPG Maker MZ (48x48)/sv_actors/Character_005_Battler.png" id="2_neicb"]
@@ -19,6 +19,42 @@ region = Rect2(384, 0, 96, 96)
 [sub_resource type="AtlasTexture" id="AtlasTexture_48e2f"]
 atlas = ExtResource("2_neicb")
 region = Rect2(480, 0, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vdipt"]
+atlas = ExtResource("2_neicb")
+region = Rect2(0, 384, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_608te"]
+atlas = ExtResource("2_neicb")
+region = Rect2(96, 384, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_upc8x"]
+atlas = ExtResource("2_neicb")
+region = Rect2(192, 384, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jour8"]
+atlas = ExtResource("2_neicb")
+region = Rect2(288, 384, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rxyw2"]
+atlas = ExtResource("2_neicb")
+region = Rect2(384, 384, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_00cwx"]
+atlas = ExtResource("2_neicb")
+region = Rect2(480, 384, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_anf1e"]
+atlas = ExtResource("2_neicb")
+region = Rect2(576, 384, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ktegd"]
+atlas = ExtResource("2_neicb")
+region = Rect2(672, 384, 96, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_anao8"]
+atlas = ExtResource("2_neicb")
+region = Rect2(768, 384, 96, 96)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_l0fom"]
 atlas = ExtResource("2_oqlk4")
@@ -108,6 +144,38 @@ animations = [{
 }],
 "loop": false,
 "name": &"attack",
+"speed": 15.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vdipt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_608te")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_upc8x")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jour8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rxyw2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_00cwx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_anf1e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ktegd")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_anao8")
+}],
+"loop": false,
+"name": &"die",
 "speed": 15.0
 }, {
 "frames": [{
@@ -216,13 +284,19 @@ border_width_right = 1
 border_width_bottom = 1
 border_color = Color(0, 0, 0, 1)
 
+[sub_resource type="LabelSettings" id="LabelSettings_oqlk4"]
+font_size = 40
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
+
 [node name="Gladiator" type="CharacterBody2D"]
 scale = Vector2(3, 3)
 script = ExtResource("1_l0fom")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_608te")
-animation = &"idle_left"
+animation = &"die"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 9)
@@ -240,4 +314,20 @@ value = 100.0
 fill_mode = 2
 show_percentage = false
 
+[node name="HealthBarText" type="Label" parent="HealthBar"]
+layout_direction = 2
+layout_mode = 1
+offset_left = 13.3333
+offset_top = 0.333664
+offset_right = 81.3333
+offset_bottom = 55.3337
+rotation = 1.5708
+scale = Vector2(0.2, 0.2)
+label_settings = SubResource("LabelSettings_oqlk4")
+horizontal_alignment = 1
+
 [node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="Label" type="Label" parent="."]
+offset_right = 40.0
+offset_bottom = 23.0

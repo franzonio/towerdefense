@@ -8,3 +8,7 @@ func _unhandled_input(event):
 			pause_menu.hide_menu()
 		else:
 			pause_menu.show_menu()
+
+func _ready():
+	var hud = preload("res://UI/HUD.tscn").instantiate()
+	add_child(hud)

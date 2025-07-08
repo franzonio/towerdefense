@@ -5,16 +5,16 @@ var damage_popup_scene = preload("res://DamagePopup.tscn")
 
 func deal_attack(attacker: Node, defender: Node, attacker_direction):
 	
-	var hit_chance = calculate_hit_chance(
-		attacker.weapon_skill,
-		attacker.weapon_req,
-	)
+	#var hit_chance = calculate_hit_chance(
+		#attacker.weapon_skill,
+		#attacker.weapon_req,
+	#)
 	
 	var dodge_success = 0	# default 0 means defender did not didge
 	var hit_success = 1		# default 1 means attacker hit successfully
 	var crit = 1
 	
-	if randf() > hit_chance:
+	if randf() > attacker.hit_chance:
 		#print("%s missed the attack!" % [attacker.name])
 		hit_success = 0
 		# 🟡 Attacker missed → make them vulnerable to next hit

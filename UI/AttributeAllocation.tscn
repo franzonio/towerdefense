@@ -1,0 +1,250 @@
+[gd_scene load_steps=2 format=3 uid="uid://bt21imgkgrpjm"]
+
+[ext_resource type="Script" uid="uid://bfpo3nty4nyn7" path="res://UI/AttributeAllocation.gd" id="1_tvy0e"]
+
+[node name="AttributeAllocation" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tvy0e")
+
+[node name="Panel" type="Panel" parent="."]
+self_modulate = Color(0, 0, 0, 0.52549)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -72.0
+offset_right = 72.0
+offset_bottom = 23.0
+grow_horizontal = 2
+
+[node name="GridContainer" type="GridContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -92.5
+offset_top = -120.5
+offset_right = 126.5
+offset_bottom = 120.5
+grow_horizontal = 2
+grow_vertical = 2
+columns = 3
+
+[node name="Strength" type="Label" parent="Panel/GridContainer"]
+layout_mode = 2
+text = "Strength"
+
+[node name="Strength_Value" type="Label" parent="Panel/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Strength_Buttons" type="HBoxContainer" parent="Panel/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+alignment = 2
+
+[node name="Strength_Sub" type="Button" parent="Panel/GridContainer/Strength_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Strength_Add" type="Button" parent="Panel/GridContainer/Strength_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Weapon Skill" type="Label" parent="Panel/GridContainer"]
+layout_mode = 2
+text = "Weapon Mastery"
+
+[node name="Weapon Skill_Value" type="Label" parent="Panel/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Weapon Skill_Buttons" type="HBoxContainer" parent="Panel/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Weapon Skill_Sub" type="Button" parent="Panel/GridContainer/Weapon Skill_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Weapon Skill_Add" type="Button" parent="Panel/GridContainer/Weapon Skill_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Quickness" type="Label" parent="Panel/GridContainer"]
+layout_mode = 2
+text = "Quickness"
+
+[node name="Quickness_Value" type="Label" parent="Panel/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Quickness_Buttons" type="HBoxContainer" parent="Panel/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Quickness_Sub" type="Button" parent="Panel/GridContainer/Quickness_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Quickness_Add" type="Button" parent="Panel/GridContainer/Quickness_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Crit Rating" type="Label" parent="Panel/GridContainer"]
+layout_mode = 2
+text = "Criticality"
+
+[node name="Crit Rating_Value" type="Label" parent="Panel/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Crit Rating_Buttons" type="HBoxContainer" parent="Panel/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Crit Rating_Sub" type="Button" parent="Panel/GridContainer/Crit Rating_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Crit Rating_Add" type="Button" parent="Panel/GridContainer/Crit Rating_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Avoidance" type="Label" parent="Panel/GridContainer"]
+layout_mode = 2
+text = "Avoidance"
+
+[node name="Avoidance_Value" type="Label" parent="Panel/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Avoidance_Buttons" type="HBoxContainer" parent="Panel/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Avoidance_Sub" type="Button" parent="Panel/GridContainer/Avoidance_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Avoidance_Add" type="Button" parent="Panel/GridContainer/Avoidance_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Health" type="Label" parent="Panel/GridContainer"]
+layout_mode = 2
+text = "Health"
+
+[node name="Health_Value" type="Label" parent="Panel/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Health_Buttons" type="HBoxContainer" parent="Panel/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Health_Sub" type="Button" parent="Panel/GridContainer/Health_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Health_Add" type="Button" parent="Panel/GridContainer/Health_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Resilience" type="Label" parent="Panel/GridContainer"]
+layout_mode = 2
+text = "Resilience"
+
+[node name="Resilience_Value" type="Label" parent="Panel/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Resilience_Buttons" type="HBoxContainer" parent="Panel/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Resilience_Sub" type="Button" parent="Panel/GridContainer/Resilience_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Resilience_Add" type="Button" parent="Panel/GridContainer/Resilience_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Endurance" type="Label" parent="Panel/GridContainer"]
+layout_mode = 2
+text = "Endurance"
+
+[node name="Endurance_Value" type="Label" parent="Panel/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Endurance_Buttons" type="HBoxContainer" parent="Panel/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Endurance_Sub" type="Button" parent="Panel/GridContainer/Endurance_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Endurance_Add" type="Button" parent="Panel/GridContainer/Endurance_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="RemainingLabel" type="Label" parent="Panel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -77.0
+offset_top = 10.0
+offset_right = 77.0
+offset_bottom = 33.0
+grow_horizontal = 2
+text = "Remaining points: X"
+
+[node name="ConfirmButton" type="Button" parent="Panel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -35.5
+offset_top = -37.0
+offset_right = 35.5
+offset_bottom = -6.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Confirm"
+
+[connection signal="pressed" from="Panel/GridContainer/Strength_Buttons/Strength_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="Panel/GridContainer/Weapon Skill_Buttons/Weapon Skill_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="Panel/GridContainer/Quickness_Buttons/Quickness_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="Panel/GridContainer/Crit Rating_Buttons/Crit Rating_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="Panel/GridContainer/Avoidance_Buttons/Avoidance_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="Panel/GridContainer/Resilience_Buttons/Resilience_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="Panel/GridContainer/Endurance_Buttons/Endurance_Sub" to="." method="_on_strength_sub_pressed"]

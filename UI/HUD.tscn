@@ -1,0 +1,30 @@
+[gd_scene load_steps=2 format=3 uid="uid://dutn6wxx1oapc"]
+
+[ext_resource type="Script" uid="uid://cpvmnjflyi4ln" path="res://UI/HUD.gd" id="1_yixhe"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_yixhe")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 10
+anchor_right = 1.0
+offset_bottom = 23.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="Label_Timer" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Time: 0"
+
+[node name="Label_Gold" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Gold: 0"
+
+[node name="Label_Experience" type="Label" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "       XP: 0"

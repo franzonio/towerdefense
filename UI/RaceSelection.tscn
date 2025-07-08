@@ -19,6 +19,7 @@ grow_vertical = 2
 script = ExtResource("1_d2gui")
 
 [node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
 offset_left = -14.0
 offset_top = -16.0
 offset_right = 1167.0
