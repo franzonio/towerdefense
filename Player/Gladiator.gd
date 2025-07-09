@@ -47,6 +47,7 @@ var dodge_chance := (avoidance/200.0) / ((avoidance/200.0)+1)		# decaying dodge_
 var seconds_to_live := endurance/3.0
 
 func _ready():
+	GameState_.gladiator_alive = 1
 	enemy = get_tree().get_root().get_node("Main/Skeleton")
 	nav.target_position = get_node("/root/Main/PlayerGoal").global_position
 	
@@ -81,6 +82,7 @@ func die():
 
 func _on_die_animation_finished():
 	if sprite.animation == "die":
+		GameState_.gladiator_alive = 0
 		queue_free()
 
 func _find_enemy():

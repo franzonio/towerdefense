@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://cnrem3bmub04u"]
 
 [ext_resource type="Script" uid="uid://dnwr68csowbhg" path="res://UI/RaceSelection.gd" id="1_d2gui"]
-[ext_resource type="Texture2D" uid="uid://cw3yv54k8bvgr" path="res://Assets/MenuAssets/retro-background-gjqkb94ajz14w26m.jpg" id="2_u82wt"]
+[ext_resource type="Texture2D" uid="uid://rvb7qe2ysdkk" path="res://Assets/MenuAssets/gladiator_background.png" id="2_d2gui"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_5n2to"]
 font_size = 26
@@ -19,12 +19,9 @@ grow_vertical = 2
 script = ExtResource("1_d2gui")
 
 [node name="Background" type="TextureRect" parent="."]
-layout_mode = 0
-offset_left = -14.0
-offset_top = -16.0
-offset_right = 1167.0
-offset_bottom = 665.0
-texture = ExtResource("2_u82wt")
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("2_d2gui")
 expand_mode = 1
 
 [node name="Label" type="Label" parent="."]

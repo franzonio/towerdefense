@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cw3yv54k8bvgr"
-path="res://.godot/imported/retro-background-gjqkb94ajz14w26m.jpg-fe2f850f680673d0b500d08a15c87829.ctex"
+uid="uid://rvb7qe2ysdkk"
+path="res://.godot/imported/gladiator_background.png-1e581eb5b9254c138f040cd10b3106ae.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/MenuAssets/retro-background-gjqkb94ajz14w26m.jpg"
-dest_files=["res://.godot/imported/retro-background-gjqkb94ajz14w26m.jpg-fe2f850f680673d0b500d08a15c87829.ctex"]
+source_file="res://Assets/MenuAssets/gladiator_background.png"
+dest_files=["res://.godot/imported/gladiator_background.png-1e581eb5b9254c138f040cd10b3106ae.ctex"]
 
 [params]
 

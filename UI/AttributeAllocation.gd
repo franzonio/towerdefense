@@ -3,20 +3,21 @@ class_name AttributeAllocation
 
 signal confirmed(attributes: Dictionary)
 
-@export var max_points := 57
+@export var max_points := 58
 @export var starting_values: Dictionary = {}
 
 var attributes := {}
 var remaining_points := 0
 
-@onready var remaining_label = $Panel/RemainingLabel
-@onready var confirm_button = $Panel/ConfirmButton
+@onready var remaining_label = $RemainingLabel
+@onready var confirm_button = $ConfirmButton
 
 func _ready():
 	_initialize_attributes()
 	_setup_buttons()
 	_update_ui()
 	confirm_button.pressed.connect(_on_confirm)
+	get_node("GoBack").pressed.connect(func(): go_back())
 
 func _initialize_attributes():
 	attributes = {
@@ -38,8 +39,8 @@ func _initialize_attributes():
 
 func _setup_buttons():
 	for attr in attributes.keys():
-		var add = $Panel/GridContainer.find_child(attr.capitalize() + "_Add", true, false)
-		var sub = $Panel/GridContainer.find_child(attr.capitalize() + "_Sub", true, false)
+		var add = $GridContainer.find_child(attr.capitalize() + "_Add", true, false)
+		var sub = $GridContainer.find_child(attr.capitalize() + "_Sub", true, false)
 
 		if add and sub:
 			add.pressed.connect(func(): _increase(attr))
@@ -65,9 +66,37 @@ func _decrease(attr):
 	_update_ui()
 
 func _update_ui():
+	var race_modifiers = GameState_.RACE_MODIFIERS.get(GameState_.selected_race, {})
+	
 	for attr in attributes:
-		var value_label = $Panel/GridContainer.get_node(attr.capitalize() + "_Value")
-		value_label.text = str(attributes[attr])
+		var value_label = $GridContainer.get_node(attr.capitalize() + "_Value")
+		var mod_label = $GridContainer.get_node(attr.capitalize() + "_Modifier")
+		var final_label = $GridContainer.get_node(attr.capitalize() + "_Final")
+		
+		if value_label:
+			value_label.text = str(attributes[attr]) 
+
+		if mod_label:
+			var multiplier = race_modifiers.get(attr, 1.0)
+			
+			var percent_change = int(round((multiplier - 1.0) * 100))
+			var prefix = "+" if percent_change > 0 else ""
+
+			mod_label.text = prefix + str(percent_change) + "%"
+			#mod_label.text = "(x" + str(multiplier).pad_decimals(2) + ")"
+			#mod_label.
+			# Only show if not neutral
+			if multiplier == 1.0:
+				mod_label.add_theme_color_override("font_color", Color.YELLOW)
+			if multiplier > 1.0:
+				mod_label.add_theme_color_override("font_color", Color.GREEN)  # green
+			if multiplier < 1.0:
+				mod_label.add_theme_color_override("font_color", Color.RED)  # red
+				
+			mod_label.add_theme_font_size_override("font_size", 10)
+			var final = int(round(attributes[attr] * multiplier))
+			final_label.text = str(final)
+		#value_label.text = str(attributes[attr])
 	remaining_label.text = "Remaining: %d" % remaining_points
 
 func _on_confirm():
@@ -75,10 +104,21 @@ func _on_confirm():
 		print("Distribute all points before continuing.")
 		return
 	# Store or emit
-	GameState_.gladiator_attributes = attributes.duplicate()
+	var final_attributes = apply_race_modifiers(attributes, GameState_.selected_race).duplicate()
+	GameState_.gladiator_attributes = final_attributes.duplicate()
 	emit_signal("confirmed", attributes)
 	# Optional: transition to game
 	get_tree().change_scene_to_file("res://Main.tscn")
+
+func apply_race_modifiers(attributes: Dictionary, race: String) -> Dictionary:
+	var modifiers = GameState.RACE_MODIFIERS.get(race, {})
+	var modified_attributes = attributes.duplicate()
+
+	for attr in modifiers:
+		if modified_attributes.has(attr):
+			modified_attributes[attr] = round(modified_attributes[attr] * modifiers[attr])
+
+	return modified_attributes
 
 
 func _bind_scroll_input(button: Button, attr: String, is_add_button: bool):
@@ -95,3 +135,6 @@ func _bind_scroll_input(button: Button, attr: String, is_add_button: bool):
 				else:
 					_increase(attr)
 	)
+	
+func go_back():
+	get_tree().change_scene_to_file("res://UI/RaceSelection.tscn")

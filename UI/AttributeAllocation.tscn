@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://bt21imgkgrpjm"]
+[gd_scene load_steps=3 format=3 uid="uid://bt21imgkgrpjm"]
 
 [ext_resource type="Script" uid="uid://bfpo3nty4nyn7" path="res://UI/AttributeAllocation.gd" id="1_tvy0e"]
+[ext_resource type="Texture2D" uid="uid://rvb7qe2ysdkk" path="res://Assets/MenuAssets/gladiator_background.png" id="2_5miig"]
 
 [node name="AttributeAllocation" type="Control"]
 layout_mode = 3
@@ -11,6 +12,12 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_tvy0e")
 
+[node name="Background" type="TextureRect" parent="."]
+offset_right = 1152.0
+offset_bottom = 648.0
+texture = ExtResource("2_5miig")
+expand_mode = 1
+
 [node name="Panel" type="Panel" parent="."]
 self_modulate = Color(0, 0, 0, 0.52549)
 layout_mode = 1
@@ -20,201 +27,281 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Label" type="Label" parent="Panel"]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -72.0
-offset_right = 72.0
-offset_bottom = 23.0
-grow_horizontal = 2
-
-[node name="GridContainer" type="GridContainer" parent="Panel"]
+[node name="GridContainer" type="GridContainer" parent="."]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -92.5
-offset_top = -120.5
-offset_right = 126.5
-offset_bottom = 120.5
+offset_left = -186.5
+offset_top = -151.5
+offset_right = 186.5
+offset_bottom = 151.5
 grow_horizontal = 2
 grow_vertical = 2
-columns = 3
+theme_override_constants/h_separation = 50
+columns = 4
 
-[node name="Strength" type="Label" parent="Panel/GridContainer"]
+[node name="1" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="2" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="3" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "             "
+
+[node name="4" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Strength_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Strength" type="Label" parent="GridContainer"]
 layout_mode = 2
 text = "Strength"
 
-[node name="Strength_Value" type="Label" parent="Panel/GridContainer"]
+[node name="Strength_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Strength_Final" type="Label" parent="GridContainer"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 6
 text = "0"
 
-[node name="Strength_Buttons" type="HBoxContainer" parent="Panel/GridContainer"]
+[node name="Strength_Buttons" type="HBoxContainer" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 alignment = 2
 
-[node name="Strength_Sub" type="Button" parent="Panel/GridContainer/Strength_Buttons"]
+[node name="Strength_Sub" type="Button" parent="GridContainer/Strength_Buttons"]
 layout_mode = 2
 text = "-"
 
-[node name="Strength_Add" type="Button" parent="Panel/GridContainer/Strength_Buttons"]
+[node name="Strength_Add" type="Button" parent="GridContainer/Strength_Buttons"]
 layout_mode = 2
 text = "+"
 
-[node name="Weapon Skill" type="Label" parent="Panel/GridContainer"]
+[node name="Weapon Skill_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Weapon Skill" type="Label" parent="GridContainer"]
 layout_mode = 2
 text = "Weapon Mastery"
 
-[node name="Weapon Skill_Value" type="Label" parent="Panel/GridContainer"]
+[node name="Weapon Skill_Value" type="Label" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "0"
 
-[node name="Weapon Skill_Buttons" type="HBoxContainer" parent="Panel/GridContainer"]
+[node name="Weapon Skill_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Weapon Skill_Buttons" type="HBoxContainer" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Weapon Skill_Sub" type="Button" parent="Panel/GridContainer/Weapon Skill_Buttons"]
+[node name="Weapon Skill_Sub" type="Button" parent="GridContainer/Weapon Skill_Buttons"]
 layout_mode = 2
 text = "-"
 
-[node name="Weapon Skill_Add" type="Button" parent="Panel/GridContainer/Weapon Skill_Buttons"]
+[node name="Weapon Skill_Add" type="Button" parent="GridContainer/Weapon Skill_Buttons"]
 layout_mode = 2
 text = "+"
 
-[node name="Quickness" type="Label" parent="Panel/GridContainer"]
+[node name="Quickness_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Quickness" type="Label" parent="GridContainer"]
 layout_mode = 2
 text = "Quickness"
 
-[node name="Quickness_Value" type="Label" parent="Panel/GridContainer"]
+[node name="Quickness_Value" type="Label" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "0"
 
-[node name="Quickness_Buttons" type="HBoxContainer" parent="Panel/GridContainer"]
+[node name="Quickness_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Quickness_Buttons" type="HBoxContainer" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Quickness_Sub" type="Button" parent="Panel/GridContainer/Quickness_Buttons"]
+[node name="Quickness_Sub" type="Button" parent="GridContainer/Quickness_Buttons"]
 layout_mode = 2
 text = "-"
 
-[node name="Quickness_Add" type="Button" parent="Panel/GridContainer/Quickness_Buttons"]
+[node name="Quickness_Add" type="Button" parent="GridContainer/Quickness_Buttons"]
 layout_mode = 2
 text = "+"
 
-[node name="Crit Rating" type="Label" parent="Panel/GridContainer"]
+[node name="Crit Rating_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Crit Rating" type="Label" parent="GridContainer"]
 layout_mode = 2
 text = "Criticality"
 
-[node name="Crit Rating_Value" type="Label" parent="Panel/GridContainer"]
+[node name="Crit Rating_Value" type="Label" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "0"
 
-[node name="Crit Rating_Buttons" type="HBoxContainer" parent="Panel/GridContainer"]
+[node name="Crit Rating_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Crit Rating_Buttons" type="HBoxContainer" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Crit Rating_Sub" type="Button" parent="Panel/GridContainer/Crit Rating_Buttons"]
+[node name="Crit Rating_Sub" type="Button" parent="GridContainer/Crit Rating_Buttons"]
 layout_mode = 2
 text = "-"
 
-[node name="Crit Rating_Add" type="Button" parent="Panel/GridContainer/Crit Rating_Buttons"]
+[node name="Crit Rating_Add" type="Button" parent="GridContainer/Crit Rating_Buttons"]
 layout_mode = 2
 text = "+"
 
-[node name="Avoidance" type="Label" parent="Panel/GridContainer"]
+[node name="Avoidance_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Avoidance" type="Label" parent="GridContainer"]
 layout_mode = 2
 text = "Avoidance"
 
-[node name="Avoidance_Value" type="Label" parent="Panel/GridContainer"]
+[node name="Avoidance_Value" type="Label" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "0"
 
-[node name="Avoidance_Buttons" type="HBoxContainer" parent="Panel/GridContainer"]
+[node name="Avoidance_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Avoidance_Buttons" type="HBoxContainer" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Avoidance_Sub" type="Button" parent="Panel/GridContainer/Avoidance_Buttons"]
+[node name="Avoidance_Sub" type="Button" parent="GridContainer/Avoidance_Buttons"]
 layout_mode = 2
 text = "-"
 
-[node name="Avoidance_Add" type="Button" parent="Panel/GridContainer/Avoidance_Buttons"]
+[node name="Avoidance_Add" type="Button" parent="GridContainer/Avoidance_Buttons"]
 layout_mode = 2
 text = "+"
 
-[node name="Health" type="Label" parent="Panel/GridContainer"]
+[node name="Health_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Health" type="Label" parent="GridContainer"]
 layout_mode = 2
 text = "Health"
 
-[node name="Health_Value" type="Label" parent="Panel/GridContainer"]
+[node name="Health_Value" type="Label" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "0"
 
-[node name="Health_Buttons" type="HBoxContainer" parent="Panel/GridContainer"]
+[node name="Health_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Health_Buttons" type="HBoxContainer" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Health_Sub" type="Button" parent="Panel/GridContainer/Health_Buttons"]
+[node name="Health_Sub" type="Button" parent="GridContainer/Health_Buttons"]
 layout_mode = 2
 text = "-"
 
-[node name="Health_Add" type="Button" parent="Panel/GridContainer/Health_Buttons"]
+[node name="Health_Add" type="Button" parent="GridContainer/Health_Buttons"]
 layout_mode = 2
 text = "+"
 
-[node name="Resilience" type="Label" parent="Panel/GridContainer"]
+[node name="Resilience_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Resilience" type="Label" parent="GridContainer"]
 layout_mode = 2
 text = "Resilience"
 
-[node name="Resilience_Value" type="Label" parent="Panel/GridContainer"]
+[node name="Resilience_Value" type="Label" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "0"
 
-[node name="Resilience_Buttons" type="HBoxContainer" parent="Panel/GridContainer"]
+[node name="Resilience_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Resilience_Buttons" type="HBoxContainer" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Resilience_Sub" type="Button" parent="Panel/GridContainer/Resilience_Buttons"]
+[node name="Resilience_Sub" type="Button" parent="GridContainer/Resilience_Buttons"]
 layout_mode = 2
 text = "-"
 
-[node name="Resilience_Add" type="Button" parent="Panel/GridContainer/Resilience_Buttons"]
+[node name="Resilience_Add" type="Button" parent="GridContainer/Resilience_Buttons"]
 layout_mode = 2
 text = "+"
 
-[node name="Endurance" type="Label" parent="Panel/GridContainer"]
+[node name="Endurance_Modifier" type="Label" parent="GridContainer"]
+layout_direction = 2
+layout_mode = 2
+
+[node name="Endurance" type="Label" parent="GridContainer"]
 layout_mode = 2
 text = "Endurance"
 
-[node name="Endurance_Value" type="Label" parent="Panel/GridContainer"]
+[node name="Endurance_Value" type="Label" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "0"
 
-[node name="Endurance_Buttons" type="HBoxContainer" parent="Panel/GridContainer"]
+[node name="Endurance_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Endurance_Buttons" type="HBoxContainer" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
 
-[node name="Endurance_Sub" type="Button" parent="Panel/GridContainer/Endurance_Buttons"]
+[node name="Endurance_Sub" type="Button" parent="GridContainer/Endurance_Buttons"]
 layout_mode = 2
 text = "-"
 
-[node name="Endurance_Add" type="Button" parent="Panel/GridContainer/Endurance_Buttons"]
+[node name="Endurance_Add" type="Button" parent="GridContainer/Endurance_Buttons"]
 layout_mode = 2
 text = "+"
 
-[node name="RemainingLabel" type="Label" parent="Panel"]
+[node name="RemainingLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -226,7 +313,7 @@ offset_bottom = 33.0
 grow_horizontal = 2
 text = "Remaining points: X"
 
-[node name="ConfirmButton" type="Button" parent="Panel"]
+[node name="ConfirmButton" type="Button" parent="."]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -241,10 +328,22 @@ grow_horizontal = 2
 grow_vertical = 0
 text = "Confirm"
 
-[connection signal="pressed" from="Panel/GridContainer/Strength_Buttons/Strength_Sub" to="." method="_on_strength_sub_pressed"]
-[connection signal="pressed" from="Panel/GridContainer/Weapon Skill_Buttons/Weapon Skill_Sub" to="." method="_on_strength_sub_pressed"]
-[connection signal="pressed" from="Panel/GridContainer/Quickness_Buttons/Quickness_Sub" to="." method="_on_strength_sub_pressed"]
-[connection signal="pressed" from="Panel/GridContainer/Crit Rating_Buttons/Crit Rating_Sub" to="." method="_on_strength_sub_pressed"]
-[connection signal="pressed" from="Panel/GridContainer/Avoidance_Buttons/Avoidance_Sub" to="." method="_on_strength_sub_pressed"]
-[connection signal="pressed" from="Panel/GridContainer/Resilience_Buttons/Resilience_Sub" to="." method="_on_strength_sub_pressed"]
-[connection signal="pressed" from="Panel/GridContainer/Endurance_Buttons/Endurance_Sub" to="." method="_on_strength_sub_pressed"]
+[node name="GoBack" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = -33.0
+offset_right = 67.0
+offset_bottom = -2.0
+grow_vertical = 0
+text = "Back"
+
+[connection signal="pressed" from="GridContainer/Strength_Buttons/Strength_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Weapon Skill_Buttons/Weapon Skill_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Quickness_Buttons/Quickness_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Crit Rating_Buttons/Crit Rating_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Avoidance_Buttons/Avoidance_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Resilience_Buttons/Resilience_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Endurance_Buttons/Endurance_Sub" to="." method="_on_strength_sub_pressed"]

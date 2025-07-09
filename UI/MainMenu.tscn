@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://kfhwn4lpml61"]
 
 [ext_resource type="Script" uid="uid://v412lfmukh41" path="res://UI/MainMenu.gd" id="1_uahxu"]
-[ext_resource type="Texture2D" uid="uid://cw3yv54k8bvgr" path="res://Assets/MenuAssets/retro-background-gjqkb94ajz14w26m.jpg" id="2_b37jj"]
+[ext_resource type="Texture2D" uid="uid://rvb7qe2ysdkk" path="res://Assets/MenuAssets/gladiator_background.png" id="2_b37jj"]
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -13,11 +13,9 @@ grow_vertical = 2
 script = ExtResource("1_uahxu")
 
 [node name="Background" type="TextureRect" parent="."]
-layout_mode = 2
-offset_left = -14.0
-offset_top = -16.0
-offset_right = 1167.0
-offset_bottom = 665.0
+layout_mode = 1
+offset_right = 1152.0
+offset_bottom = 648.0
 texture = ExtResource("2_b37jj")
 expand_mode = 1
 
