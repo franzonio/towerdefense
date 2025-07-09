@@ -10,8 +10,8 @@ var seconds : float = 0.0
 
 # === Weapon attributes ===
 var weapon_dmg_min := 3
-var weapon_dmg_max := 15
-var weapon_req := 100.0
+var weapon_dmg_max := 5
+var weapon_req := 20.0
 var weapon_speed := 1
 var weapon_range = 150
 var weapon_crit := 1
@@ -66,16 +66,19 @@ func take_damage(damage: float):
 		health_bar.value = current_health
 		health_bar_text.text = str(int(current_health))
 		
+		print("Gladiator hp: " + str(current_health))
+		
 		if current_health <= 0:
+			print("Gladiator dies")
 			die()
 
 func die():
-	# Disable logic & collision
 	set_physics_process(false)
 	set_process(false)
 	$CollisionShape2D.disabled = true
 
 	# Connect to animation_finished and play die animation
+	sprite.stop()
 	if not sprite.is_playing():
 		sprite.play("die")
 		sprite.animation_finished.connect(_on_die_animation_finished, CONNECT_ONE_SHOT)
@@ -83,7 +86,8 @@ func die():
 func _on_die_animation_finished():
 	if sprite.animation == "die":
 		GameState_.gladiator_alive = 0
-		queue_free()
+		# Disable logic & collision
+		#queue_free()
 
 func _find_enemy():
 	enemy = get_tree().get_root().get_node("Main/Skeleton")
@@ -92,8 +96,7 @@ func _physics_process(delta):
 	time_since_last_attack += delta
 	var prev_sec = seconds
 	seconds += delta
-	if int(prev_sec) != int(seconds):
-		print(int(seconds))
+	#print("gladiator seconds: " + str(seconds))
 	
 	if seconds > seconds_to_live:
 		die()
@@ -108,7 +111,7 @@ func _physics_process(delta):
 		#print(global_position)
 		if enemy and global_position.distance_to(enemy.global_position) < weapon_range:
 			#print("in range")
-			if time_since_last_attack >= attack_speed:
+			if time_since_last_attack >= attack_speed and GameState_.skeleton_alive == 1:
 				#print("asd")
 				sprite.play("attack")
 				#print(direction)

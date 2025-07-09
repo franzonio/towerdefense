@@ -4,6 +4,7 @@ class_name GameState
 var selected_race: String = ""
 var gladiator_attributes: Dictionary = {}
 var gladiator_alive: int = 0
+var skeleton_alive: int = 0
 
 #$Main/HUD.update_gold(new_gold_amount)
 #$HUD.update_experience(new_xp)
