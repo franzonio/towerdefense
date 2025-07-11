@@ -1,4 +1,4 @@
-[gd_scene load_steps=39 format=3 uid="uid://bh10l06wi8flh"]
+[gd_scene load_steps=40 format=3 uid="uid://bh10l06wi8flh"]
 
 [ext_resource type="Script" uid="uid://wndbyt2f56xv" path="res://Player/Gladiator.gd" id="1_l0fom"]
 [ext_resource type="Texture2D" uid="uid://dvkftuu6pmsh6" path="res://Assets/PlayerAssets/Free RGW Sprites/RPG Maker/RPG Maker MZ (48x48)/sv_actors/Character_005_Battler.png" id="2_neicb"]
@@ -290,6 +290,8 @@ outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_oqlk4"]
+
 [node name="Gladiator" type="CharacterBody2D"]
 scale = Vector2(3, 3)
 script = ExtResource("1_l0fom")
@@ -331,3 +333,6 @@ horizontal_alignment = 1
 [node name="Label" type="Label" parent="."]
 offset_right = 40.0
 offset_bottom = 23.0
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_oqlk4")

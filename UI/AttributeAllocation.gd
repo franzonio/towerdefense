@@ -3,7 +3,7 @@ class_name AttributeAllocation
 
 signal confirmed(attributes: Dictionary)
 
-@export var max_points := 58
+@export var max_points := 8
 @export var starting_values: Dictionary = {}
 
 var attributes := {}
@@ -100,15 +100,43 @@ func _update_ui():
 	remaining_label.text = "Remaining: %d" % remaining_points
 
 func _on_confirm():
+	#print("✅ Client connected with ID:", multiplayer.get_unique_id())
+	#print("❓ Is server:", multiplayer.is_server())
+	
 	if remaining_points > 0:
 		print("Distribute all points before continuing.")
 		return
 	# Store or emit
 	var final_attributes = apply_race_modifiers(attributes, GameState_.selected_race).duplicate()
-	GameState_.gladiator_attributes = final_attributes.duplicate()
+	
+	# Prepare your data
+	var gladiator = {
+		"name": "PlayerName",
+		"race": GameState_.selected_race,
+		"attributes": final_attributes
+	}
+
+	if multiplayer.is_server():
+
+		GameState_._submit_gladiator_remote(gladiator)
+			
+	if !multiplayer.is_server():
+		print("✅ Client connected with ID:", multiplayer.get_unique_id())
+		print("❓ Is server:", multiplayer.is_server())
+		print("🧪 I am authority:", is_multiplayer_authority())
+#		if !multiplayer.is_connected_to_server():
+#			print("⏳ Waiting for connection...")
+#			await multiplayer.connected_to_server
+#			print("✅ Connected to server!")
+#		else:
+#			print("✅ Already connected.")
+		# Submit to host
+		GameState_.submit_gladiator(gladiator)
+	
+	#GameState_.gladiator_attributes = final_attributes.duplicate()
 	emit_signal("confirmed", attributes)
-	# Optional: transition to game
-	get_tree().change_scene_to_file("res://Main.tscn")
+	
+	#get_tree().change_scene_to_file("res://Main.tscn")
 
 func apply_race_modifiers(attributes: Dictionary, race: String) -> Dictionary:
 	var modifiers = GameState.RACE_MODIFIERS.get(race, {})

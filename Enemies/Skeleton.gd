@@ -100,7 +100,7 @@ func _physics_process(delta):
 	seconds += delta
 	#print("skeleton seconds: " + str(seconds))
 	
-	if seconds > seconds_to_live+2:
+	if seconds > seconds_to_live:
 		die()
 	else:
 		var direction = (nav.get_next_path_position() - global_position).normalized()
