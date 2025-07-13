@@ -60,6 +60,18 @@ region = Rect2(768, 384, 96, 96)
 atlas = ExtResource("2_oqlk4")
 region = Rect2(0, 0, 72, 72)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_o4i8o"]
+atlas = ExtResource("2_oqlk4")
+region = Rect2(0, 72, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_60iw2"]
+atlas = ExtResource("2_oqlk4")
+region = Rect2(0, 144, 72, 72)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ii1j3"]
+atlas = ExtResource("2_oqlk4")
+region = Rect2(0, 216, 72, 72)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_oqlk4"]
 atlas = ExtResource("2_oqlk4")
 region = Rect2(0, 0, 72, 72)
@@ -76,10 +88,6 @@ region = Rect2(144, 0, 72, 72)
 atlas = ExtResource("2_oqlk4")
 region = Rect2(216, 0, 72, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_o4i8o"]
-atlas = ExtResource("2_oqlk4")
-region = Rect2(0, 72, 72, 72)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_cpgw7"]
 atlas = ExtResource("2_oqlk4")
 region = Rect2(72, 72, 72, 72)
@@ -92,10 +100,6 @@ region = Rect2(144, 72, 72, 72)
 atlas = ExtResource("2_oqlk4")
 region = Rect2(216, 72, 72, 72)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_60iw2"]
-atlas = ExtResource("2_oqlk4")
-region = Rect2(0, 144, 72, 72)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_g8gnm"]
 atlas = ExtResource("2_oqlk4")
 region = Rect2(72, 144, 72, 72)
@@ -107,10 +111,6 @@ region = Rect2(144, 144, 72, 72)
 [sub_resource type="AtlasTexture" id="AtlasTexture_gsoih"]
 atlas = ExtResource("2_oqlk4")
 region = Rect2(216, 144, 72, 72)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ii1j3"]
-atlas = ExtResource("2_oqlk4")
-region = Rect2(0, 216, 72, 72)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c2b0y"]
 atlas = ExtResource("2_oqlk4")
@@ -183,15 +183,31 @@ animations = [{
 "texture": SubResource("AtlasTexture_l0fom")
 }],
 "loop": true,
-"name": &"idle",
+"name": &"idle_down",
 "speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_otfga")
+"texture": SubResource("AtlasTexture_o4i8o")
 }],
 "loop": false,
 "name": &"idle_left",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_60iw2")
+}],
+"loop": true,
+"name": &"idle_right",
+"speed": 5.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ii1j3")
+}],
+"loop": true,
+"name": &"idle_up",
 "speed": 5.0
 }, {
 "frames": [{
@@ -274,6 +290,27 @@ properties/0/replication_mode = 1
 properties/1/path = NodePath(".:current_animation")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+properties/2/path = NodePath("HealthBar:value")
+properties/2/spawn = true
+properties/2/replication_mode = 1
+properties/3/path = NodePath("HealthBar/HealthBarText:text")
+properties/3/spawn = true
+properties/3/replication_mode = 1
+properties/4/path = NodePath("DamagePopup:text")
+properties/4/spawn = true
+properties/4/replication_mode = 1
+properties/5/path = NodePath(".:last_attack_time")
+properties/5/spawn = true
+properties/5/replication_mode = 1
+properties/6/path = NodePath(".:prev_animation")
+properties/6/spawn = true
+properties/6/replication_mode = 1
+properties/7/path = NodePath(".:next_attack_critical")
+properties/7/spawn = true
+properties/7/replication_mode = 1
+properties/8/path = NodePath(".:next_taken_hit_critical")
+properties/8/spawn = true
+properties/8/replication_mode = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l0fom"]
 bg_color = Color(0, 0, 0, 0.443137)
@@ -309,7 +346,7 @@ script = ExtResource("1_l0fom")
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_608te")
-animation = &"attack"
+animation = &"die"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 9)
@@ -356,4 +393,12 @@ offset_bottom = 10.6667
 scale = Vector2(0.2, 0.2)
 text = "N/A"
 label_settings = SubResource("LabelSettings_neicb")
+horizontal_alignment = 1
+
+[node name="DamagePopup" type="Label" parent="."]
+visible = false
+z_index = 5
+offset_right = 40.0
+offset_bottom = 23.0
+text = "df"
 horizontal_alignment = 1

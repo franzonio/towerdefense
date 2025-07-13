@@ -3,7 +3,7 @@ class_name AttributeAllocation
 
 signal confirmed(attributes: Dictionary)
 
-@export var max_points := 8
+@export var max_points := 338
 @export var starting_values: Dictionary = {}
 
 var attributes := {}
@@ -23,10 +23,10 @@ func _initialize_attributes():
 	attributes = {
 		"strength": 1,
 		"weapon_skill": 1,
-		"quickness": 1,
+		"quickness": 81,
 		"crit_rating": 1,
-		"avoidance": 1,
-		"health": 1,
+		"avoidance": 31,
+		"health": 221,
 		"resilience": 1,
 		"endurance": 1,
 	}
