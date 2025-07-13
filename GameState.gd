@@ -11,6 +11,8 @@ var skeleton_alive: int = 0
 ##
 var gladiator_data = {}
 var all_gladiators = {}  # peer_id => gladiator_data
+
+var selected_name = "PlayerName"
 ##
 
 #$Main/HUD.update_gold(new_gold_amount)
@@ -60,32 +62,22 @@ const RACE_MODIFIERS = {
 }
 
 func _ready():
-	
+	#print("🆔 Peer:", multiplayer.get_unique_id(), " Is server:", multiplayer.is_server())
 	await get_tree().process_frame
 	call_deferred("_assign_authority")
-	#print("GameState loaded")
-	#print("✅ GameState loaded on peer:", multiplayer.get_unique_id())
-	#print("🌐 Is server:", multiplayer.is_server())
-	#print("🧪 I am authority:", is_multiplayer_authority())
-	
-#	call_deferred("_check_and_set_authority")
-#	if multiplayer.is_server():
-#		set_multiplayer_authority(multiplayer.get_unique_id())
 
 
 func submit_gladiator(data: Dictionary):
-	#print("🧾 Host submit_gladiator called")
-	#print("✔ GameState authority is:", get_multiplayer_authority())
-	#print("✔ My ID is:", multiplayer.get_unique_id())
 	gladiator_data = data
-	if multiplayer.is_server():
+	print("Submiting gladiator for peer: %d" % [multiplayer.get_unique_id()])
+	if multiplayer.get_unique_id() == 1:
 		_store_gladiator(multiplayer.get_unique_id(), data)
 	else:
 		print("📨 Sending gladiator to host via rpc_id...")
 		_submit_gladiator_remote.rpc_id(1, data)
 	
 
-@rpc("any_peer")
+@rpc("any_peer", "call_local")
 func _submit_gladiator_remote(data: Dictionary):
 	var sender_id = multiplayer.get_remote_sender_id()
 	print("✅ Host received gladiator from peer:", sender_id)
@@ -93,7 +85,7 @@ func _submit_gladiator_remote(data: Dictionary):
 
 func _store_gladiator(peer_id: int, data: Dictionary):
 	all_gladiators[peer_id] = data
-	print(all_gladiators)
+	#print(all_gladiators)
 	print("🎯 Gladiator stored for peer:", peer_id)
 	
 	if all_gladiators.size() >= NetworkManager_.max_players + 1:
@@ -104,7 +96,7 @@ func _store_gladiator(peer_id: int, data: Dictionary):
 func _start_game():
 	print("All gladiators submitted! Starting game...")
 	# Example: change scene to duel manager
-	get_tree().change_scene_to_file("res://Scenes/MatchManager.tscn")
+	get_tree().change_scene_to_file("res://main.tscn")
 
 
 func _check_and_set_authority():

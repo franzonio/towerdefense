@@ -1,169 +1,211 @@
 extends CharacterBody2D
+@onready var synchronizer = $MultiplayerSynchronizer
 
 @onready var nav = $NavigationAgent2D
 @onready var sprite = $Sprite
 @onready var health_bar = $HealthBar
 @onready var health_bar_text = $HealthBar/HealthBarText
-@onready var enemy = null
 
-var seconds : float = 0.0
+@export var speed: float = 100.0
+#@export var max_health: int = 100
+#var current_health: int = max_health
 
-# === Weapon attributes ===
-var weapon_dmg_min := 3
-var weapon_dmg_max := 5
-var weapon_req := 20.0
-var weapon_speed := 1
-var weapon_range = 150
-var weapon_crit := 1
+#@export var name: String = ""
+@export var race: String = ""
+@export var attributes: Dictionary = {}
 
-var armor_absorb := 1
+#@onready var nameLabel = $Name
 
-#var direction
-# === Base attributes ===
-var strength: int = GameState_.gladiator_attributes["strength"]
-var weapon_skill: int = GameState_.gladiator_attributes["weapon_skill"]
-var quickness: int = GameState_.gladiator_attributes["quickness"]
-var crit_rating: int = GameState_.gladiator_attributes["crit_rating"]
-var avoidance: int = GameState_.gladiator_attributes["avoidance"]
+#var velocity: Vector2 = Vector2.ZERO
+@export var current_animation: String = "idle"
+var input_vector := Vector2.ZERO
 
-var max_health: int = GameState_.gladiator_attributes["health"]
-var resilience: int = GameState_.gladiator_attributes["resilience"]
-var endurance: int = GameState_.gladiator_attributes["endurance"]
+####
+@export var weapon_dmg_min := 3
+@export var weapon_dmg_max := 5
+@export var weapon_req := 20.0
+@export var weapon_speed := 1
+@export var weapon_range = 150
+@export var weapon_crit := 1
 
-# === Damage calculations ===
-var attack_speed: float = (1/weapon_speed)/(log(10+sqrt(quickness))/log(10))  # Seconds between attacks
-var time_since_last_attack: float = 0.0
-var crit_chance = weapon_crit*crit_rating/20.0
-var hit_chance = (weapon_skill/weapon_req) - 0.20*weapon_skill/100
-var next_attack_critical := false
-var next_taken_hit_critical := false
+@export var armor_absorb := 1
 
-# === Calculations ===
-var weight = 1
-var move_speed := 350.0
-var current_health := max_health
-var armor := (1+sqrt(resilience)/10.0) * armor_absorb				# flat damage reduction
-var dodge_chance := (avoidance/200.0) / ((avoidance/200.0)+1)		# decaying dodge_chance -> 1
-var seconds_to_live := endurance/3.0
+
+@export var strength := 1
+@export var weapon_skill := 1
+@export var quickness := 1
+@export var crit_rating := 1
+@export var avoidance := 1
+
+@export var max_health := 1
+@export var resilience := 1
+@export var endurance := 1
+ 
+ # === Damage calculations ===
+@export var attack_speed: float = (1/weapon_speed)/(log(10+sqrt(quickness))/log(10))  # Seconds between attacks
+@export var time_since_last_attack: float = 0.0
+@export var crit_chance = weapon_crit*crit_rating/20.0
+@export var hit_chance = (weapon_skill/weapon_req) - 0.20*weapon_skill/100
+@export var next_attack_critical := false
+@export var next_taken_hit_critical := false
+
+ # === Calculations ===
+@export var weight = 1
+@export var move_speed := 350.0
+@export var current_health = max_health
+@export var armor = (1+sqrt(resilience)/10.0) * armor_absorb				# flat damage reduction
+@export var dodge_chance = (avoidance/200.0) / ((avoidance/200.0)+1)		# decaying dodge_chance -> 1
+@export var seconds_to_live = endurance/3.0
+
+####
+
+
+# Only process input if this is OUR player
+func _physics_process(delta):
+	if is_multiplayer_authority():
+		var input_vector = Vector2(
+			Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
+			Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+		).normalized()
+
+		velocity = input_vector * 200
+		position += velocity * delta
+
+		# Update animation
+		if input_vector != Vector2.ZERO:
+			if abs(input_vector.x) > abs(input_vector.y):
+				current_animation = "walk_right" if input_vector.x > 0 else "walk_left"
+			else:
+				current_animation = "walk_down" if input_vector.y > 0 else "walk_up"
+		else:
+			current_animation = "idle"
+
+		sprite.play(current_animation)
+	else:
+		# Non-authority plays animation based on synced variable
+		sprite.play(current_animation)
+		
+	
 
 func _ready():
-	GameState_.gladiator_alive = 1
-	enemy = get_tree().get_root().get_node("Main/Skeleton")
-	nav.target_position = get_node("/root/Main/PlayerGoal").global_position
+	print("👀 Gladiator node created on peer:", multiplayer.get_unique_id())
+	print("🛠 Is multiplayer authority:", is_multiplayer_authority())
 	
-	for attr in GameState_.gladiator_attributes.keys():
-		self.set(attr, GameState_.gladiator_attributes[attr])
+	var replication_config = SceneReplicationConfig.new()
+	
+	if synchronizer:
+		replication_config = {
+							"position": {},
+							"velocity": {},
+							}
+
+
+func handle_input():
+	input_vector = Vector2(
+		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
+		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+	).normalized()
+	velocity = input_vector * speed
+
+	# Animation update, optional
+	update_animation(input_vector)
+
+func update_animation(input_vector):
+	if input_vector == Vector2.ZERO:
+		return
+	var dir = input_vector
+	if abs(dir.x) > abs(dir.y):
+		sprite.play("walk_right" if dir.x > 0 else "walk_left")
+	else:
+		sprite.play("walk_down" if dir.y > 0 else "walk_up")
+
+
+func _multiplayer_post_spawn(data):
+	print("🧬 Gladiator spawned with data:", data)
+	initialize_gladiator(data)
+
+# Called by the server to initialize this gladiator
+#@rpc("any_peer", "call_local")
+func initialize_gladiator(data: Dictionary):
+	print("Initializing gladiator for " + data.name)
+	print(data)
+	weapon_dmg_min = 3
+	weapon_dmg_max = 5
+	weapon_req = 20.0
+	weapon_speed = 1
+	weapon_range = 150
+	weapon_crit = 1
+	armor_absorb = 1
+	
+	$Name.text = data.name
+	strength = data["attributes"]["strength"]
+	weapon_skill = data["attributes"]["weapon_skill"]
+	quickness = data["attributes"]["quickness"]
+	crit_rating = data["attributes"]["crit_rating"]
+	avoidance = data["attributes"]["avoidance"]
+	max_health = data["attributes"]["health"]
+	resilience = data["attributes"]["resilience"]
+	endurance = data["attributes"]["endurance"]
+
+	# === Damage calculations ===
+	attack_speed = (1/weapon_speed)/(log(10+sqrt(quickness))/log(10))  # Seconds between attacks
+	time_since_last_attack = 0.0
+	crit_chance = weapon_crit*crit_rating/20.0
+	hit_chance = (weapon_skill/weapon_req) - 0.20*weapon_skill/100
+	next_attack_critical = false
+	next_taken_hit_critical = false
+
+	# === Calculations ===
+	weight = 1
+	move_speed = 350.0
 	current_health = max_health
-	health_bar.max_value = max_health
-	health_bar.value = max_health
-	health_bar_text.text = str(max_health)
+	armor = (1+sqrt(resilience)/10.0) * armor_absorb				# flat damage reduction
+	dodge_chance = (avoidance/200.0) / ((avoidance/200.0)+1)		# decaying dodge_chance -> 1
+	seconds_to_live = endurance/3.0
+
+	current_health = max_health
+	$HealthBar.max_value = max_health
+	$HealthBar.value = max_health
+	$HealthBar/HealthBarText.text = str(int(max_health))
+
+func gladiator_set_attributes(data: Dictionary):
+	weapon_dmg_min = 3
+	weapon_dmg_max = 5
+	weapon_req = 20.0
+	weapon_speed = 1
+	weapon_range = 150
+	weapon_crit = 1
+	armor_absorb= 1
 	
-	print("Seconds to live: %d" % [seconds_to_live])
+	#print(data.name)
+	#print(get_multiplayer_authority())
+	$Name.text = data.name
+	strength = data["attributes"]["strength"]
+	weapon_skill = data["attributes"]["weapon_skill"]
+	quickness = data["attributes"]["quickness"]
+	crit_rating = data["attributes"]["crit_rating"]
+	avoidance = data["attributes"]["avoidance"]
+	max_health = data["attributes"]["health"]
+	resilience = data["attributes"]["resilience"]
+	endurance = data["attributes"]["endurance"]
 
-func take_damage(damage: float):
-	if seconds < seconds_to_live: 
-		current_health = max(0, current_health - damage)
-		health_bar.value = current_health
-		health_bar_text.text = str(int(current_health))
-		
-		print("Gladiator hp: " + str(current_health))
-		
-		if current_health <= 0:
-			print("Gladiator dies")
-			die()
+	# === Damage calculations ===
+	attack_speed = (1/weapon_speed)/(log(10+sqrt(quickness))/log(10))  # Seconds between attacks
+	time_since_last_attack = 0.0
+	crit_chance = weapon_crit*crit_rating/20.0
+	hit_chance = (weapon_skill/weapon_req) - 0.20*weapon_skill/100
+	next_attack_critical = false
+	next_taken_hit_critical = false
 
-func die():
-	set_physics_process(false)
-	set_process(false)
-	$CollisionShape2D.disabled = true
+	# === Calculations ===
+	weight = 1
+	move_speed = 350.0
+	current_health = max_health
+	armor = (1+sqrt(resilience)/10.0) * armor_absorb				# flat damage reduction
+	dodge_chance = (avoidance/200.0) / ((avoidance/200.0)+1)		# decaying dodge_chance -> 1
+	seconds_to_live = endurance/3.0
 
-	# Connect to animation_finished and play die animation
-	sprite.stop()
-	if not sprite.is_playing():
-		sprite.play("die")
-		sprite.animation_finished.connect(_on_die_animation_finished, CONNECT_ONE_SHOT)
-
-func _on_die_animation_finished():
-	if sprite.animation == "die":
-		GameState_.gladiator_alive = 0
-		# Disable logic & collision
-		#queue_free()
-
-func _find_enemy():
-	enemy = get_tree().get_root().get_node("Main/Skeleton")
-
-func _physics_process(delta):
-	time_since_last_attack += delta
-	var prev_sec = seconds
-	seconds += delta
-	#print("gladiator seconds: " + str(seconds))
-	
-	if seconds > seconds_to_live :
-		die()
-	else:
-		var direction = (nav.get_next_path_position() - global_position).normalized()
-		
-		if move_speed:
-			play_walk_animation(direction, move_speed)
-			velocity = direction * move_speed
-			move_and_slide()
-
-		#print(global_position)
-		if enemy and global_position.distance_to(enemy.global_position) < weapon_range:
-			#print("in range")
-			if time_since_last_attack >= attack_speed and GameState_.skeleton_alive == 1:
-				#print("asd")
-				sprite.play("attack")
-				#print(direction)
-				CombatManager_.deal_attack(self, enemy, direction[0])
-				time_since_last_attack = 0.0
-				
-				'''
-				var xp_gain = 2#int(damage * 0.5)
-				var gold_gain = 2 + randi() % 5  # 2–6 gold randomly
-					# Tell the HUD to update
-				var hud = get_tree().root.get_node("Main/HUD")  # adjust path if needed
-				if hud:
-					hud.update_experience(hud.experience + xp_gain)
-					hud.update_gold(hud.gold + gold_gain)
-				'''
-		
-
-		
-		if nav.is_navigation_finished():
-			#queue_free()  # Reached goal
-			move_speed = 0
-			#sprite.play("idle_left")
-			return
-		
-		
-		#var input_vector = Vector2.ZERO
-		#input_vector.x = Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left")
-		#input_vector.y = Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
-	#
-		#if input_vector.length() > 0:
-			#input_vector = input_vector.normalized()
-			#velocity = input_vector * move_speed
-			#play_walk_animation(input_vector)
-		#else:
-			#velocity = Vector2.ZERO
-			#sprite.stop()
-		
-
-
-
-
-func play_walk_animation(direction: Vector2, move_speed):
-	if move_speed != 0:
-		if abs(direction.x) > abs(direction.y):
-			if direction.x > 0:
-				sprite.play("walk_right")
-			else:
-				sprite.play("walk_left")
-		else:
-			if direction.y > 0:
-				sprite.play("walk_down")
-			else:
-				sprite.play("walk_up")
-	else:
-		sprite.play("idle_left")
+	current_health = max_health
+	$HealthBar.max_value = max_health
+	$HealthBar.value = max_health
+	$HealthBar/HealthBarText.text = str(int(max_health))

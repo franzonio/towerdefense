@@ -39,6 +39,7 @@ func _on_host_pressed():
 	NetworkManager_.host_game()
 	start_button.visible = NetworkManager_.is_host
 	register_player_name(multiplayer.get_unique_id(), name_input.text)  # register self
+	GameState_.selected_name = name_input.text
 
 func _on_join_pressed():
 	NetworkManager_.join_game(NetworkManager_.server_ip)
@@ -48,6 +49,7 @@ func _on_join_pressed():
 	print("❓ Is server:", multiplayer.is_server())
 	
 	register_player_name.rpc(multiplayer.get_unique_id(), name_input.text)
+	GameState_.selected_name = name_input.text
 	#get_tree().change_scene_to_file("res://Scenes/AttributeAllocation.tscn")
 
 

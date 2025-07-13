@@ -1,4 +1,4 @@
-[gd_scene load_steps=22 format=4 uid="uid://caiuxrar36pdn"]
+[gd_scene load_steps=21 format=4 uid="uid://caiuxrar36pdn"]
 
 [ext_resource type="Script" uid="uid://suyehakdkkof" path="res://EnemySpawner.gd" id="1_1fdr5"]
 [ext_resource type="Texture2D" uid="uid://betf4klbavfj5" path="res://Assets/MapAssets/TX/TX Tileset Stone Ground.png" id="1_3bhhl"]
@@ -8,7 +8,6 @@
 [ext_resource type="Script" uid="uid://cs4ijuksemqna" path="res://Camera2D.gd" id="3_84ssy"]
 [ext_resource type="Texture2D" uid="uid://d0i5jnkv7y03e" path="res://Assets/MapAssets/TX/TX Props.png" id="3_272bh"]
 [ext_resource type="Texture2D" uid="uid://cpeyca83eadit" path="res://Assets/MapAssets/TX/TX Plant.png" id="4_5vw27"]
-[ext_resource type="PackedScene" uid="uid://bh10l06wi8flh" path="res://Player/Gladiator.tscn" id="8_5vw27"]
 [ext_resource type="PackedScene" uid="uid://creeknovnevmu" path="res://UI/PauseMenu.tscn" id="10_efxa6"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1bvp3"]
@@ -1837,20 +1836,19 @@ script = ExtResource("1_1fdr5")
 enemy_scene = ExtResource("2_rvfaf")
 
 [node name="EnemyGoal" type="Node2D" parent="."]
+visible = false
 position = Vector2(-29, -116)
 
 [node name="PlayerGoal" type="Node2D" parent="."]
+visible = false
 position = Vector2(78, -166)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 zoom = Vector2(0.5, 0.5)
 script = ExtResource("3_84ssy")
 
-[node name="Gladiator" parent="." instance=ExtResource("8_5vw27")]
-z_index = 4
-position = Vector2(387, -190)
-
-[node name="Skeleton" parent="." instance=ExtResource("2_rvfaf")]
-position = Vector2(-307, -154)
-
 [node name="PauseMenu" parent="." instance=ExtResource("10_efxa6")]
+
+[node name="GladiatorSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("uid://bh10l06wi8flh")
+spawn_path = NodePath(".")

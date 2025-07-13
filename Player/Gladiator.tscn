@@ -1,4 +1,4 @@
-[gd_scene load_steps=40 format=3 uid="uid://bh10l06wi8flh"]
+[gd_scene load_steps=41 format=3 uid="uid://bh10l06wi8flh"]
 
 [ext_resource type="Script" uid="uid://wndbyt2f56xv" path="res://Player/Gladiator.gd" id="1_l0fom"]
 [ext_resource type="Texture2D" uid="uid://dvkftuu6pmsh6" path="res://Assets/PlayerAssets/Free RGW Sprites/RPG Maker/RPG Maker MZ (48x48)/sv_actors/Character_005_Battler.png" id="2_neicb"]
@@ -267,6 +267,14 @@ animations = [{
 radius = 17.0
 height = 52.0
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_oqlk4"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:current_animation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l0fom"]
 bg_color = Color(0, 0, 0, 0.443137)
 border_width_left = 1
@@ -290,7 +298,10 @@ outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_oqlk4"]
+[sub_resource type="LabelSettings" id="LabelSettings_neicb"]
+font_size = 40
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
 
 [node name="Gladiator" type="CharacterBody2D"]
 scale = Vector2(3, 3)
@@ -304,11 +315,16 @@ animation = &"attack"
 position = Vector2(0, 9)
 shape = SubResource("CapsuleShape2D_upc8x")
 
+[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_oqlk4")
+
 [node name="HealthBar" type="ProgressBar" parent="."]
 offset_left = -13.3333
 offset_top = -22.6667
-offset_right = -9.33333
-offset_bottom = 4.33334
+offset_right = -9.3333
+offset_bottom = 4.3333
 rotation = -1.5708
 theme_override_styles/background = SubResource("StyleBoxFlat_l0fom")
 theme_override_styles/fill = SubResource("StyleBoxFlat_oqlk4")
@@ -319,20 +335,25 @@ show_percentage = false
 [node name="HealthBarText" type="Label" parent="HealthBar"]
 layout_direction = 2
 layout_mode = 1
-offset_left = 13.3333
-offset_top = 0.333664
-offset_right = 81.3333
-offset_bottom = 55.3337
+offset_left = 13.6667
+offset_top = -16.6667
+offset_right = 311.667
+offset_bottom = 38.3334
 rotation = 1.5708
 scale = Vector2(0.2, 0.2)
 label_settings = SubResource("LabelSettings_oqlk4")
 horizontal_alignment = 1
 
-[node name="NavigationAgent2D" type="NavigationAgent2D" parent="."]
-
 [node name="Label" type="Label" parent="."]
 offset_right = 40.0
 offset_bottom = 23.0
 
-[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
-replication_config = SubResource("SceneReplicationConfig_oqlk4")
+[node name="Name" type="Label" parent="."]
+offset_left = -50.6667
+offset_top = -44.3333
+offset_right = 459.333
+offset_bottom = 10.6667
+scale = Vector2(0.2, 0.2)
+text = "N/A"
+label_settings = SubResource("LabelSettings_neicb")
+horizontal_alignment = 1

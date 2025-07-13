@@ -111,19 +111,20 @@ func _on_confirm():
 	
 	# Prepare your data
 	var gladiator = {
-		"name": "PlayerName",
+		"name": GameState_.selected_name,
 		"race": GameState_.selected_race,
 		"attributes": final_attributes
 	}
-
+	print(multiplayer.is_server)
 	if multiplayer.is_server():
-
-		GameState_._submit_gladiator_remote(gladiator)
+		print("✅ Server created gladiator")
+		GameState_._submit_gladiator_remote.rpc(gladiator)
 			
 	if !multiplayer.is_server():
-		print("✅ Client connected with ID:", multiplayer.get_unique_id())
-		print("❓ Is server:", multiplayer.is_server())
-		print("🧪 I am authority:", is_multiplayer_authority())
+		print("✅ Client created gladiator")
+		#print("✅ Client connected with ID:", multiplayer.get_unique_id())
+		#print("❓ Is server:", multiplayer.is_server())
+		#print("🧪 I am authority:", is_multiplayer_authority())
 #		if !multiplayer.is_connected_to_server():
 #			print("⏳ Waiting for connection...")
 #			await multiplayer.connected_to_server
@@ -132,6 +133,7 @@ func _on_confirm():
 #			print("✅ Already connected.")
 		# Submit to host
 		GameState_.submit_gladiator(gladiator)
+		
 	
 	#GameState_.gladiator_attributes = final_attributes.duplicate()
 	emit_signal("confirmed", attributes)
