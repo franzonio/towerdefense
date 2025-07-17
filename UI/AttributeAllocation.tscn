@@ -13,6 +13,7 @@ grow_vertical = 2
 script = ExtResource("1_tvy0e")
 
 [node name="Background" type="TextureRect" parent="."]
+layout_mode = 0
 offset_right = 1152.0
 offset_bottom = 648.0
 texture = ExtResource("2_5miig")
@@ -64,6 +65,8 @@ size_flags_horizontal = 4
 
 [node name="Strength" type="Label" parent="GridContainer"]
 layout_mode = 2
+tooltip_text = "Strength impacts how heavy weapons your gladiator can wield, and how hard you hit."
+mouse_filter = 1
 text = "Strength"
 
 [node name="Strength_Value" type="Label" parent="GridContainer"]
@@ -95,6 +98,8 @@ layout_mode = 2
 
 [node name="Weapon Skill" type="Label" parent="GridContainer"]
 layout_mode = 2
+tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
+mouse_filter = 1
 text = "Weapon Mastery"
 
 [node name="Weapon Skill_Value" type="Label" parent="GridContainer"]
@@ -125,6 +130,8 @@ layout_mode = 2
 
 [node name="Quickness" type="Label" parent="GridContainer"]
 layout_mode = 2
+tooltip_text = "Quickness determines how fast your gladiator attacks."
+mouse_filter = 1
 text = "Quickness"
 
 [node name="Quickness_Value" type="Label" parent="GridContainer"]
@@ -155,6 +162,8 @@ layout_mode = 2
 
 [node name="Crit Rating" type="Label" parent="GridContainer"]
 layout_mode = 2
+tooltip_text = "Criticality determines the likelihood of landing a crushing blow."
+mouse_filter = 1
 text = "Criticality"
 
 [node name="Crit Rating_Value" type="Label" parent="GridContainer"]
@@ -185,6 +194,8 @@ layout_mode = 2
 
 [node name="Avoidance" type="Label" parent="GridContainer"]
 layout_mode = 2
+tooltip_text = "Avoidance determines the likelihood of dodging in incoming attack."
+mouse_filter = 1
 text = "Avoidance"
 
 [node name="Avoidance_Value" type="Label" parent="GridContainer"]
@@ -215,6 +226,8 @@ layout_mode = 2
 
 [node name="Health" type="Label" parent="GridContainer"]
 layout_mode = 2
+tooltip_text = "How much health your gladiator has when starting a duel."
+mouse_filter = 1
 text = "Health"
 
 [node name="Health_Value" type="Label" parent="GridContainer"]
@@ -245,6 +258,8 @@ layout_mode = 2
 
 [node name="Resilience" type="Label" parent="GridContainer"]
 layout_mode = 2
+tooltip_text = "Resilience determines the effectiveness of your armor."
+mouse_filter = 1
 text = "Resilience"
 
 [node name="Resilience_Value" type="Label" parent="GridContainer"]
@@ -276,6 +291,8 @@ layout_mode = 2
 
 [node name="Endurance" type="Label" parent="GridContainer"]
 layout_mode = 2
+tooltip_text = "Endurance determines how long the gladiator can fight before collapsing from fatigue"
+mouse_filter = 1
 text = "Endurance"
 
 [node name="Endurance_Value" type="Label" parent="GridContainer"]

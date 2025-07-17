@@ -3,7 +3,7 @@ class_name AttributeAllocation
 
 signal confirmed(attributes: Dictionary)
 
-@export var max_points := 338
+@export var max_points := 148
 @export var starting_values: Dictionary = {}
 
 var attributes := {}
@@ -11,6 +11,7 @@ var remaining_points := 0
 
 @onready var remaining_label = $RemainingLabel
 @onready var confirm_button = $ConfirmButton
+@onready var player_life = 20
 
 func _ready():
 	_initialize_attributes()
@@ -22,11 +23,11 @@ func _ready():
 func _initialize_attributes():
 	attributes = {
 		"strength": 1,
-		"weapon_skill": 1,
+		"weapon_skill": 21,
 		"quickness": 81,
 		"crit_rating": 1,
 		"avoidance": 31,
-		"health": 221,
+		"health": 11,
 		"resilience": 1,
 		"endurance": 1,
 	}
@@ -107,15 +108,16 @@ func _on_confirm():
 		print("Distribute all points before continuing.")
 		return
 	# Store or emit
-	var final_attributes = apply_race_modifiers(attributes, GameState_.selected_race).duplicate()
+	var final_attributes = apply_race_modifiers(GameState_.selected_race).duplicate()
 	
 	# Prepare your data
 	var gladiator = {
 		"name": GameState_.selected_name,
 		"race": GameState_.selected_race,
-		"attributes": final_attributes
+		"attributes": final_attributes,
+		"player_life": player_life
 	}
-	print(multiplayer.is_server)
+	#print(multiplayer.is_server)
 	if multiplayer.is_server():
 		print("✅ Server created gladiator")
 		GameState_._submit_gladiator_remote.rpc(gladiator)
@@ -140,7 +142,7 @@ func _on_confirm():
 	
 	#get_tree().change_scene_to_file("res://Main.tscn")
 
-func apply_race_modifiers(attributes: Dictionary, race: String) -> Dictionary:
+func apply_race_modifiers(race: String) -> Dictionary:
 	var modifiers = GameState.RACE_MODIFIERS.get(race, {})
 	var modified_attributes = attributes.duplicate()
 

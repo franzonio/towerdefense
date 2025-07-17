@@ -3,18 +3,15 @@ class_name CombatManager
 
 var damage_popup_scene = preload("res://DamagePopup.tscn") 
 
-func deal_attack(attacker: Node, defender: Node, attacker_direction):
+func deal_attack(attacker: Node, defender: Node):
 
 	var dodge_success = 0	# default 0 means defender did not didge
 	var hit_success = 1		# default 1 means attacker hit successfully
 	var crit = 1
 	
 	if randf() > attacker.hit_chance:
-		#print("%s missed the attack!" % [attacker.name])
 		hit_success = 0
-		# 🟡 Attacker missed → make them vulnerable to next hit
 		attacker.next_taken_hit_critical = true
-		# 🟢 Defender gets a guaranteed crit next time
 		defender.next_attack_critical = true
 			
 		
@@ -26,32 +23,15 @@ func deal_attack(attacker: Node, defender: Node, attacker_direction):
 	
 	if raw_damage > 0 and randf() < defender.dodge_chance:
 		dodge_success = 1
-		# 🟢 Defender dodged → gets next guaranteed crit
 		defender.next_attack_critical = true
-		# 🔴 Attacker is vulnerable → takes next hit as crit
 		attacker.next_taken_hit_critical = true
-		#print("%s dodged the attack from %s!" % [defender.name, attacker.name])
-		#return
 	
 	var final_damage = hit_success*(1-dodge_success)*roundf(raw_damage - defender.armor)
 
 	if defender.has_method("receive_damage"):
 		defender.rpc_id(defender.get_multiplayer_authority(), "receive_damage", final_damage, hit_success, dodge_success, crit)
-		#defender.damage_popup(final_damage, hit_success, dodge_success, crit, attacker_direction)
-		#print("%s dealt %.1d damage to %s" % [attacker.name, final_damage, defender.name])
 		return true
 	else:
 		push_warning("Defender %s has no take_damage() method!" % defender.name)
 		return false
 		
-'''
-func damage_popup(damage:float, defender: Node, hit_success, dodge_success, crit, attacker_direction):
-	# Show damage popup
-	var popup = damage_popup_scene.instantiate()
-	
-	#print(attacker_direction)
-	popup.global_position = defender.global_position + attacker_direction
-
-	popup.show_damage(damage, hit_success, dodge_success, crit)
-	get_tree().current_scene.add_child(popup)
-'''

@@ -1,9 +1,8 @@
-[gd_scene load_steps=41 format=3 uid="uid://bh10l06wi8flh"]
+[gd_scene load_steps=35 format=3 uid="uid://bh10l06wi8flh"]
 
 [ext_resource type="Script" uid="uid://wndbyt2f56xv" path="res://Player/Gladiator.gd" id="1_l0fom"]
 [ext_resource type="Texture2D" uid="uid://dvkftuu6pmsh6" path="res://Assets/PlayerAssets/Free RGW Sprites/RPG Maker/RPG Maker MZ (48x48)/sv_actors/Character_005_Battler.png" id="2_neicb"]
 [ext_resource type="Texture2D" uid="uid://b63uuo7goncv2" path="res://Assets/PlayerAssets/Free RGW Sprites/48x48/Character_005.png" id="2_oqlk4"]
-[ext_resource type="Texture2D" uid="uid://bpnm5a30njgcn" path="res://Assets/PlayerAssets/Free RGW Sprites/RPG Maker/RPG Maker MZ (48x48)/sv_actors/Character_005_Battler_right.png" id="3_neicb"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_otfga"]
 atlas = ExtResource("2_neicb")
@@ -20,26 +19,6 @@ region = Rect2(384, 0, 96, 96)
 [sub_resource type="AtlasTexture" id="AtlasTexture_48e2f"]
 atlas = ExtResource("2_neicb")
 region = Rect2(480, 0, 96, 96)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vdipt"]
-atlas = ExtResource("3_neicb")
-region = Rect2(192, 0, 96, 96)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_jour8"]
-atlas = ExtResource("3_neicb")
-region = Rect2(480, 0, 96, 96)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_upc8x"]
-atlas = ExtResource("3_neicb")
-region = Rect2(384, 0, 96, 96)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_608te"]
-atlas = ExtResource("3_neicb")
-region = Rect2(288, 0, 96, 96)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_rxyw2"]
-atlas = ExtResource("3_neicb")
-region = Rect2(576, 0, 96, 96)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_anf1e"]
 atlas = ExtResource("2_neicb")
@@ -140,67 +119,7 @@ animations = [{
 "texture": SubResource("AtlasTexture_otfga")
 }],
 "loop": false,
-"name": &"attack_left",
-"speed": 15.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_otfga")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_48e2f")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ixci8")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ms5cr")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_otfga")
-}],
-"loop": false,
-"name": &"attack_left2",
-"speed": 15.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vdipt")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jour8")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_upc8x")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_608te")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_rxyw2")
-}],
-"loop": false,
-"name": &"attack_right",
-"speed": 15.0
-}, {
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vdipt")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_608te")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_upc8x")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_jour8")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_rxyw2")
-}],
-"loop": false,
-"name": &"attack_right2",
+"name": &"attack",
 "speed": 15.0
 }, {
 "frames": [{
@@ -221,7 +140,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_l0fom")
 }],
-"loop": false,
+"loop": true,
 "name": &"idle_down",
 "speed": 10.0
 }, {
@@ -237,7 +156,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_60iw2")
 }],
-"loop": false,
+"loop": true,
 "name": &"idle_right",
 "speed": 5.0
 }, {
@@ -245,7 +164,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_ii1j3")
 }],
-"loop": false,
+"loop": true,
 "name": &"idle_up",
 "speed": 5.0
 }, {
@@ -262,7 +181,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_2fui2")
 }],
-"loop": false,
+"loop": true,
 "name": &"walk_down",
 "speed": 10.0
 }, {
@@ -296,7 +215,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_gsoih")
 }],
-"loop": false,
+"loop": true,
 "name": &"walk_right",
 "speed": 10.0
 }, {
@@ -313,7 +232,7 @@ animations = [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_mgo4t")
 }],
-"loop": false,
+"loop": true,
 "name": &"walk_up",
 "speed": 10.0
 }]
@@ -325,46 +244,37 @@ height = 52.0
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_oqlk4"]
 properties/0/path = NodePath(".:position")
 properties/0/spawn = true
-properties/0/replication_mode = 2
+properties/0/replication_mode = 1
 properties/1/path = NodePath(".:current_animation")
 properties/1/spawn = true
-properties/1/replication_mode = 2
+properties/1/replication_mode = 1
 properties/2/path = NodePath("HealthBar:value")
 properties/2/spawn = true
-properties/2/replication_mode = 2
+properties/2/replication_mode = 1
 properties/3/path = NodePath("HealthBar/HealthBarText:text")
 properties/3/spawn = true
-properties/3/replication_mode = 2
+properties/3/replication_mode = 1
 properties/4/path = NodePath("DamagePopup:text")
 properties/4/spawn = true
-properties/4/replication_mode = 2
+properties/4/replication_mode = 1
 properties/5/path = NodePath(".:last_attack_time")
 properties/5/spawn = true
-properties/5/replication_mode = 2
+properties/5/replication_mode = 1
 properties/6/path = NodePath(".:prev_animation")
 properties/6/spawn = true
-properties/6/replication_mode = 2
+properties/6/replication_mode = 1
 properties/7/path = NodePath(".:next_attack_critical")
 properties/7/spawn = true
-properties/7/replication_mode = 2
+properties/7/replication_mode = 1
 properties/8/path = NodePath(".:next_taken_hit_critical")
 properties/8/spawn = true
-properties/8/replication_mode = 2
+properties/8/replication_mode = 1
 properties/9/path = NodePath(".:opponent_peer_id")
 properties/9/spawn = true
-properties/9/replication_mode = 2
+properties/9/replication_mode = 1
 properties/10/path = NodePath(".:gladiator_name")
 properties/10/spawn = true
-properties/10/replication_mode = 2
-properties/11/path = NodePath(".:in_combat")
-properties/11/spawn = true
-properties/11/replication_mode = 2
-properties/12/path = NodePath("Sprite:animation")
-properties/12/spawn = true
-properties/12/replication_mode = 2
-properties/13/path = NodePath(".:current_health")
-properties/13/spawn = true
-properties/13/replication_mode = 2
+properties/10/replication_mode = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l0fom"]
 bg_color = Color(0, 0, 0, 0.443137)
@@ -395,13 +305,40 @@ outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
 [node name="Gladiator" type="CharacterBody2D"]
-z_index = 7
 scale = Vector2(3, 3)
 script = ExtResource("1_l0fom")
+speed = null
+race = null
+attributes = null
+gladiator_name = null
+current_animation = null
+prev_animation = null
+weapon_dmg_min = null
+weapon_dmg_max = null
+weapon_req = null
+weapon_speed = null
+weapon_range = null
+weapon_crit = null
+armor_absorb = null
+strength = null
+weapon_skill = null
+quickness = null
+crit_rating = null
+avoidance = null
+max_health = null
+resilience = null
+endurance = null
+time_since_last_attack = null
+next_attack_critical = null
+next_taken_hit_critical = null
+weight = null
+move_speed = null
+last_attack_time = null
+opponent_peer_id = null
 
 [node name="Sprite" type="AnimatedSprite2D" parent="."]
 sprite_frames = SubResource("SpriteFrames_608te")
-animation = &"attack_left2"
+animation = &"die"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 9)

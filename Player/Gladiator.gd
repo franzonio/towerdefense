@@ -2,12 +2,13 @@ extends CharacterBody2D
 
 @onready var DamagePopupScene = preload("res://DamagePopup.tscn")
 
-@onready var synchronizer = $MultiplayerSynchronizer
+#@onready var synchronizer = $MultiplayerSynchronizer
 
 @onready var nav = $NavigationAgent2D
 @onready var sprite = $Sprite
 @onready var health_bar = $HealthBar
 @onready var health_bar_text = $HealthBar/HealthBarText
+@onready var multiplayer_sync = $MultiplayerSynchronizer
 
 @export var speed: float = 250.0
 #@export var max_health: int = 100
@@ -16,6 +17,7 @@ extends CharacterBody2D
 #@export var name: String = ""
 @export var race: String = ""
 @export var attributes: Dictionary = {}
+@export var gladiator_name: String = ""
 
 #@onready var nameLabel = $Name
 
@@ -26,25 +28,25 @@ extends CharacterBody2D
 var input_vector := Vector2.ZERO
 
 ####
-@export var weapon_dmg_min := 3
-@export var weapon_dmg_max := 5
+@export var weapon_dmg_min := 3.0
+@export var weapon_dmg_max := 5.0
 @export var weapon_req := 2.0
-@export var weapon_speed := 1
-@export var weapon_range = 150
-@export var weapon_crit := 1
+@export var weapon_speed := 1.0
+@export var weapon_range = 150.0
+@export var weapon_crit := 1.0
 
-@export var armor_absorb := 1
+@export var armor_absorb := 1.0
 
 
-@export var strength := 1
-@export var weapon_skill := 1
-@export var quickness := 1
-@export var crit_rating := 1
-@export var avoidance := 1
+@export var strength := 1.0
+@export var weapon_skill := 1.0
+@export var quickness := 1.0
+@export var crit_rating := 1.0
+@export var avoidance := 1.0
 
-@export var max_health := 1
-@export var resilience := 1
-@export var endurance := 1
+@export var max_health := 1.0
+@export var resilience := 1.0
+@export var endurance := 1.0
  
  # === Damage calculations ===
 @export var attack_speed: float = (1/weapon_speed)/(log(10+sqrt(quickness))/log(10))  # Seconds between attacks
@@ -53,6 +55,7 @@ var input_vector := Vector2.ZERO
 @export var hit_chance = (weapon_skill/weapon_req) - 0.20*weapon_skill/100
 @export var next_attack_critical: bool = false
 @export var next_taken_hit_critical: bool = false
+var spawn_point
 
  # === Calculations ===
 @export var weight = 1
@@ -63,7 +66,7 @@ var input_vector := Vector2.ZERO
 @export var seconds_to_live = endurance/3.0
 
 ####
-
+var target_position: Vector2 = Vector2.ZERO
 
 const ATTACK_RANGE := 160.0
 @export var last_attack_time := -999.0
@@ -74,132 +77,171 @@ var attack_charge_time: float = 0.0
 var float_speed = -30
 var lifetime = 30
 
+var attack_right_animations: Array = []# all_animations.filter(func(name): return name.begins_with("attack_right"))
+var attack_left_animations: Array = []# = all_animations.filter(func(name): return name.begins_with("attack_left"))
 
-# Only process input if this is OUR player
-func _physics_process(delta):
-	if is_multiplayer_authority():
-		handle_input(delta)
-		check_for_attack(delta)
-	else:
-		# Non-authority plays animation based on synced variable
-		sprite.play(current_animation)
-		
+@export var opponent_peer_id: int = -1
+@onready var opponent: Node = null
+#@onready var round_manager = get_tree().get_root().get_node("Main/RoundManager")
+
+@export var in_combat := false
+var last_played_animation: String = ""
+@export var direction: Vector2 = Vector2.ZERO
+var owner_id
+
+signal died
 
 func _ready():
-	print("👀 Gladiator node created on peer:", multiplayer.get_unique_id())
-	print("🛠 Is multiplayer authority:", is_multiplayer_authority())
+	await get_tree().process_frame 
 	add_to_group("gladiators")
+	sprite.play("idle_down")
+	await get_tree().create_timer(11.0).timeout
 	
-	var replication_config = SceneReplicationConfig.new()
-	
-	if synchronizer:
-		replication_config = {
-							"position": {},
-							"velocity": {},
-							}
+	if opponent_peer_id:
+		if opponent == null:
+			for g in get_tree().get_nodes_in_group("gladiators"):
+				if g.get_multiplayer_authority() == opponent_peer_id: opponent = g
+		
+		var all_animations = sprite.sprite_frames.get_animation_names()
 
+		for animation_name in all_animations:
+			if animation_name.begins_with("attack_right"): attack_right_animations.append(animation_name)
+			if animation_name.begins_with("attack_left"): attack_left_animations.append(animation_name)
+	
+# Only process input if this is OUR player
+func _physics_process(delta):
+	if is_multiplayer_authority() and opponent != null and is_instance_valid(opponent) and opponent.current_health > 0 and opponent_peer_id:
+		prev_animation = current_animation
+		check_for_attack(delta)
+		handle_ai_movement(delta)
+		handle_animation()
+	else: 
+		if current_animation.begins_with("attack"): sprite.play(current_animation)
+		elif !current_animation.begins_with("attack") and current_animation != "N/A": sprite.play(current_animation)
+		
+		
+func handle_animation():
+	if current_animation.begins_with("attack") and !sprite.is_playing(): sprite.play(current_animation)
+	elif !current_animation.begins_with("attack") and current_animation != "N/A": sprite.play(current_animation)
+	
+	if not sprite.is_connected("animation_finished", _on_any_animation_finished): sprite.animation_finished.connect(_on_any_animation_finished, CONNECT_ONE_SHOT)
+	
+	
+func _on_any_animation_finished(): 
+	if sprite.animation == "die": emit_signal("died")
+	else: current_animation = "N/A"
+		
+		
 func check_for_attack(delta: float):
-	if not is_multiplayer_authority():
+	if opponent == null or !is_instance_valid(opponent):
+		current_attack_target = null
+		attack_charge_time = 0.0
 		return
-	
-	var found_target = false
 
-	for other in get_tree().get_nodes_in_group("gladiators"):
-		#print(other)
-		if other == self:
-			continue
-			
-		if global_position.distance_to(other.global_position) < ATTACK_RANGE:
-			current_attack_target = other
-			found_target = true
-			#break
+	if opponent and opponent.is_inside_tree():
+		var distance = global_position.distance_to(opponent.global_position)
 
-		#if found_target:
+		if distance <= ATTACK_RANGE:
+			in_combat = true
+			current_attack_target = opponent
 			attack_charge_time += delta
-			if attack_charge_time >= attack_speed:
-				print("next attack critical: " + str(next_attack_critical))
-				#print("next hit received critical: " + str(next_taken_hit_critical))
-				CombatManager_.deal_attack(self, other, input_vector)
+
+			if attack_charge_time >= attack_speed and opponent.current_health > 0:
+				if direction.x > 0.0: current_animation = attack_right_animations[randi_range(0, attack_right_animations.size()-1)]
+				if direction.x < 0.0: current_animation = attack_left_animations[randi_range(0, attack_left_animations.size()-1)]
+				CombatManager_.deal_attack(self, opponent)
 				attack_charge_time = 0.0
-			#rpc_id(other.get_multiplayer_authority(), "receive_damage", strength)
-			
 		else:
 			attack_charge_time = 0.0
+			in_combat = false
+	else:
+		in_combat = false
+		attack_charge_time = 0.0
+
 
 @rpc("any_peer", "call_local")
 func receive_damage(amount: int, hit_success, dodge_success, crit):
-	if !hit_success or dodge_success:
-		next_attack_critical = true
+	if !hit_success or dodge_success: next_attack_critical = true
 	
 	current_health -= amount
 	$HealthBar.value = current_health
 	$HealthBar/HealthBarText.text = str(int(current_health))
-	print(name + " took damage! Health now: ", current_health)
-
 	rpc("show_damage_popup", amount, hit_success, dodge_success, crit)
 
-	if current_health <= 0:
-		rpc("die")
+	if current_health <= 0 and is_multiplayer_authority(): rpc("die")
+
 
 @rpc("any_peer", "call_local")
 func die():
+	if is_multiplayer_authority():
+		var health_loss = 5
+		GameState_.modify_gladiator_life.rpc(owner_id, health_loss)
+		GameState_.modify_gladiator_life(owner_id, health_loss)  # Run it locally too!
+		#var life = GameState_.all_gladiators[owner_id]["player_life"]
+		#GameState_.all_gladiators[owner_id]["player_life"] -= health_loss
+		#print("🩸 " + GameState_.all_gladiators[owner_id]["name"] + " lost " + str(health_loss) + " life, remaining: " + str(life))
 	set_physics_process(false)
 	set_process(false)
 	$CollisionShape2D.disabled = true
 	sprite.stop()
+	
 	if not sprite.is_playing():
 		sprite.play("die")
 		sprite.animation_finished.connect(_on_die_animation_finished, CONNECT_ONE_SHOT)
-	#queue_free()
+		
 
 func _on_die_animation_finished():
-	if sprite.animation == "die":
-		#GameState_.gladiator_alive = 0
-		queue_free()
+	if sprite.animation == "die": emit_signal("died")
+	#if owner_id == multiplayer.get_unique_id(): multiplayer_sync.public_visibility = false
+	#if !multiplayer.is_server(): return
+	#queue_free()
 
-func handle_input(delta):
-	input_vector = Vector2(
-		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
-		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
-	).normalized()
-
-	velocity = input_vector * move_speed
+func handle_ai_movement(delta):
+	direction = (target_position - global_position).normalized()
+	
+	if !in_combat: velocity = direction * move_speed
+	else: velocity = Vector2.ZERO
+		
 	position += velocity * delta
 
-	prev_animation = current_animation
-	# Update animation
-	if input_vector != Vector2.ZERO:
-		if abs(input_vector.x) > abs(input_vector.y):
-			current_animation = "walk_right" if input_vector.x > 0 else "walk_left"
+	if !current_animation.begins_with("attack"):# or current_animation != "N/A":
+		if !in_combat:
+			if abs(direction.x) > abs(direction.y): current_animation = "walk_right" if direction.x > 0 else "walk_left"
+			else: current_animation = "walk_down" if direction.y > 0 else "walk_up"
+			prev_animation = current_animation
 		else:
-			current_animation = "walk_down" if input_vector.y > 0 else "walk_up"
-	else:
-		if prev_animation == "walk_right": current_animation = "idle_right"
-		elif prev_animation == "walk_left": current_animation = "idle_left"
-		elif prev_animation == "walk_up": current_animation = "idle_up"
-		elif prev_animation == "walk_down": current_animation = "idle_down"
-		#else: current_animation = "idle_down"
+			# Stop at idle direction depending on last move
+			if prev_animation == "walk_right": current_animation = "idle_right"
+			elif prev_animation == "walk_left": current_animation = "idle_left"
+			elif prev_animation == "walk_up": current_animation = "idle_up"
+			elif prev_animation == "walk_down": current_animation = "idle_down"
 
-	sprite.play(current_animation)
+	# Stop when close enough
+	if global_position.distance_to(target_position) < 10:
+		velocity = Vector2.ZERO
+		target_position = Vector2.ZERO
 
-
-func _multiplayer_post_spawn(data):
-	print("🧬 Gladiator spawned with data:", data)
-	initialize_gladiator(data)
 
 # Called by the server to initialize this gladiator
 #@rpc("any_peer", "call_local")
-func initialize_gladiator(data: Dictionary):
-	print("Initializing gladiator for " + data.name)
-	print(data)
-	weapon_dmg_min = 3
-	weapon_dmg_max = 5
-	weapon_req = 2.0
-	weapon_speed = 1
+func initialize_gladiator(data: Dictionary, opponent_id, _spawn_point, meeting_point, peer_id):
+	weapon_dmg_min = 3.0
+	weapon_dmg_max = 5.0
+	weapon_req = 15.0
+	weapon_speed = 1.0
 	weapon_range = 150
-	weapon_crit = 1
-	armor_absorb = 1
+	weapon_crit = 1.0
+	armor_absorb = 1.0
 	
+	spawn_point = _spawn_point
+	position = _spawn_point
+	
+	owner_id = peer_id
+	if opponent_id: 
+		opponent_peer_id = opponent_id
+		target_position = meeting_point
+	else: target_position = position
+	gladiator_name = data.name
 	$Name.text = data.name
 	strength = data["attributes"]["strength"]
 	weapon_skill = data["attributes"]["weapon_skill"]
@@ -220,7 +262,7 @@ func initialize_gladiator(data: Dictionary):
 
 	# === Calculations ===
 	weight = 1
-	move_speed = 1000.0
+	move_speed = 500
 	current_health = max_health
 	armor = (1+sqrt(resilience)/10.0) * armor_absorb				# flat damage reduction
 	dodge_chance = (avoidance/200.0) / ((avoidance/200.0)+1)		# decaying dodge_chance -> 1
@@ -235,26 +277,12 @@ func initialize_gladiator(data: Dictionary):
 @rpc("any_peer", "call_local")
 func show_damage_popup(amount, hit_success, dodge_success, crit):
 	var popup = DamagePopupScene.instantiate()
-	
 	if prev_animation == "idle_left" or prev_animation == "walk_left": popup.global_position = global_position + Vector2(150, 40)
 	elif prev_animation == "idle_right" or prev_animation == "walk_right": popup.global_position = global_position + Vector2(-150, 40)
 	else: popup.global_position = global_position + Vector2(0, 40)
-	
-	popup.show_damage(amount, hit_success, dodge_success, crit)
-
-
+	print("show_damage_popup" + str(spawn_point))
+	popup.show_damage(amount, hit_success, dodge_success, crit, spawn_point)
 	get_tree().current_scene.add_child(popup)
-
-func show_damage_popup_old(amount: float, hit_success, dodge_success, crit):
-	if not hit_success:
-		customize_popup_font(Color.DARK_ORANGE, 30, "MISS")
-	elif dodge_success:
-		customize_popup_font(Color.WHITE, 30, "DODGE")
-	else:
-		if crit == 2:
-			customize_popup_font(Color.RED, 55, str(int(amount)))
-		else:
-			customize_popup_font(Color.YELLOW, 44, str(int(amount)))
 
 
 func customize_popup_font(color: Color, size, text: String):
@@ -262,3 +290,29 @@ func customize_popup_font(color: Color, size, text: String):
 		$Label.add_theme_font_size_override("font_size", size)
 		$Label.text = text
 		$Label.modulate.a = 1.0  # Fully visible
+
+
+'''func handle_input(delta):
+	input_vector = Vector2(
+		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
+		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+	).normalized()
+
+	velocity = input_vector * move_speed
+	position += velocity * delta
+
+	prev_animation = current_animation
+	# Update animation
+	if !sprite.animation == "attack":
+		if input_vector != Vector2.ZERO:
+			if abs(input_vector.x) > abs(input_vector.y):
+				current_animation = "walk_right" if input_vector.x > 0 else "walk_left"
+			else:
+				current_animation = "walk_down" if input_vector.y > 0 else "walk_up"
+		else:
+			if prev_animation == "walk_right": current_animation = "idle_right"
+			elif prev_animation == "walk_left": current_animation = "idle_left"
+			elif prev_animation == "walk_up": current_animation = "idle_up"
+			elif prev_animation == "walk_down": current_animation = "idle_down"
+
+		sprite.play(current_animation)'''

@@ -39,7 +39,10 @@ var armor #:= (1+sqrt(resilience)/10.0) * armor_absorb				# flat damage reductio
 var dodge_chance #:= (avoidance/200.0) / ((avoidance/200.0)+1)		# decaying dodge_chance -> 1
 var seconds_to_live #:= endurance/3.0
 
+@onready var spawn_points = $SpawnPoints.get_children()
+@onready var meeting_points = $MeetingPoints.get_children()
 
+var round_manager_scene := preload("res://Scenes/RoundManager.tscn")
 
 func _unhandled_input(event):
 	if event.is_action_pressed("ui_cancel"):  # ESC by default
@@ -51,14 +54,37 @@ func _unhandled_input(event):
 func _ready():
 	#if multiplayer.is_server():
 	#	get_tree().get_multiplayer().set_root_node(self)  # ✅ Correct
-	
+	#print($SpawnPoints/SpawnPoint0)
+	#print($SpawnPoints/SpawnPoint0.position)
+	#print($SpawnPoints/SpawnPoint0.global_position)
+	GameState_.spawn_points["left"] = [
+		$SpawnPoints/SpawnPoint0.position,
+		$SpawnPoints/SpawnPoint1.position,
+		$SpawnPoints/SpawnPoint2.position,
+		$SpawnPoints/SpawnPoint3.position
+	]
+	GameState_.spawn_points["right"] = [
+		$SpawnPoints/SpawnPoint4.position,
+		$SpawnPoints/SpawnPoint5.position,
+		$SpawnPoints/SpawnPoint6.position,
+		$SpawnPoints/SpawnPoint7.position
+	]
+	GameState_.meeting_points = meeting_points
+	#print(GameState_.spawn_points)
 	var hud = preload("res://UI/HUD.tscn").instantiate()
+	hud.name = "HUD"
 	add_child(hud)
+	
 	$GladiatorSpawner.spawn_function = custom_spawn
 	
+	
 	if multiplayer.is_server():
-		spawn_all_gladiators()
+		print("added round_manager")
+		var round_manager = round_manager_scene.instantiate()
+		add_child(round_manager)
+		#spawn_all_gladiators()
 
+'''
 func spawn_all_gladiators():
 	for peer_id in GameState_.all_gladiators.keys():
 		var data = GameState_.all_gladiators[peer_id]
@@ -76,23 +102,25 @@ func spawn_all_gladiators():
 
 		print("✅ Spawned gladiator '" + data.name + "' (peer: %d) on the arena." % [peer_id])
 		gladiator.global_position = Vector2(100+randi_range(300,800), 200)
-		#gladiator.gladiator_set_attributes(data)
-		#gladiator.rpc_id(peer_id, "initialize_gladiator", data)
-
+'''
 
 func custom_spawn(args: Dictionary) -> Node:
 	var scene_path = args.get("scene", "")
 	var peer_id = args.get("peer_id", 1)  # Default to 1 if missing
 	var gladiator_data = args.get("gladiator_data", {})
+	var opponent_id = args.get("opponent_id", {})
+	var spawn_point = args.get("spawn_point", {})
+	var meeting_point = args.get("meeting_point", {})
 
 	var scene = load(scene_path)
 	var instance = scene.instantiate()
 
 	# Set authority (very important)
 	instance.set_multiplayer_authority(peer_id)
+	
 
 	# Call init
 	if instance.has_method("initialize_gladiator"):
-		instance.initialize_gladiator(gladiator_data)
+		instance.initialize_gladiator(gladiator_data, opponent_id, spawn_point, meeting_point, peer_id)
 
 	return instance

@@ -1,9 +1,96 @@
-[gd_scene load_steps=2 format=3 uid="uid://dutn6wxx1oapc"]
+[gd_scene load_steps=7 format=3 uid="uid://dutn6wxx1oapc"]
 
 [ext_resource type="Script" uid="uid://cpvmnjflyi4ln" path="res://UI/HUD.gd" id="1_yixhe"]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_yixhe"]
+properties/0/path = NodePath("GridContainer/VBoxContainer/Player1/PlayerInfo/PlayerName:text")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+properties/1/path = NodePath("GridContainer/VBoxContainer/Player1/PlayerInfo/PlayerRace:text")
+properties/1/spawn = true
+properties/1/replication_mode = 2
+properties/2/path = NodePath("GridContainer/VBoxContainer/Player1/PlayerLife:text")
+properties/2/spawn = true
+properties/2/replication_mode = 2
+properties/3/path = NodePath("GridContainer/VBoxContainer/Player2/PlayerInfo/PlayerName:text")
+properties/3/spawn = true
+properties/3/replication_mode = 2
+properties/4/path = NodePath("GridContainer/VBoxContainer/Player2/PlayerInfo/PlayerRace:text")
+properties/4/spawn = true
+properties/4/replication_mode = 2
+properties/5/path = NodePath("GridContainer/VBoxContainer/Player2/PlayerLife:text")
+properties/5/spawn = true
+properties/5/replication_mode = 2
+properties/6/path = NodePath("GridContainer/VBoxContainer/Player3/PlayerInfo/PlayerName:text")
+properties/6/spawn = true
+properties/6/replication_mode = 2
+properties/7/path = NodePath("GridContainer/VBoxContainer/Player3/PlayerInfo/PlayerRace:text")
+properties/7/spawn = true
+properties/7/replication_mode = 2
+properties/8/path = NodePath("GridContainer/VBoxContainer/Player3/PlayerLife:text")
+properties/8/spawn = true
+properties/8/replication_mode = 2
+properties/9/path = NodePath("GridContainer/VBoxContainer/Player4/PlayerInfo/PlayerName:text")
+properties/9/spawn = true
+properties/9/replication_mode = 2
+properties/10/path = NodePath("GridContainer/VBoxContainer/Player4/PlayerInfo/PlayerRace:text")
+properties/10/spawn = true
+properties/10/replication_mode = 2
+properties/11/path = NodePath("GridContainer/VBoxContainer/Player4/PlayerLife:text")
+properties/11/spawn = true
+properties/11/replication_mode = 2
+properties/12/path = NodePath("GridContainer/VBoxContainer/Player5/PlayerInfo/PlayerName:text")
+properties/12/spawn = true
+properties/12/replication_mode = 2
+properties/13/path = NodePath("GridContainer/VBoxContainer/Player5/PlayerInfo/PlayerRace:text")
+properties/13/spawn = true
+properties/13/replication_mode = 2
+properties/14/path = NodePath("GridContainer/VBoxContainer/Player5/PlayerLife:text")
+properties/14/spawn = true
+properties/14/replication_mode = 2
+properties/15/path = NodePath("GridContainer/VBoxContainer/Player6/PlayerInfo/PlayerName:text")
+properties/15/spawn = true
+properties/15/replication_mode = 2
+properties/16/path = NodePath("GridContainer/VBoxContainer/Player6/PlayerInfo/PlayerRace:text")
+properties/16/spawn = true
+properties/16/replication_mode = 2
+properties/17/path = NodePath("GridContainer/VBoxContainer/Player6/PlayerLife:text")
+properties/17/spawn = true
+properties/17/replication_mode = 2
+properties/18/path = NodePath("GridContainer/VBoxContainer/Player7/PlayerInfo/PlayerName:text")
+properties/18/spawn = true
+properties/18/replication_mode = 2
+properties/19/path = NodePath("GridContainer/VBoxContainer/Player7/PlayerInfo/PlayerRace:text")
+properties/19/spawn = true
+properties/19/replication_mode = 2
+properties/20/path = NodePath("GridContainer/VBoxContainer/Player7/PlayerLife:text")
+properties/20/spawn = true
+properties/20/replication_mode = 2
+properties/21/path = NodePath("GridContainer/VBoxContainer/Player8/PlayerInfo/PlayerName:text")
+properties/21/spawn = true
+properties/21/replication_mode = 2
+properties/22/path = NodePath("GridContainer/VBoxContainer/Player8/PlayerInfo/PlayerRace:text")
+properties/22/spawn = true
+properties/22/replication_mode = 2
+properties/23/path = NodePath("GridContainer/VBoxContainer/Player8/PlayerLife:text")
+properties/23/spawn = true
+properties/23/replication_mode = 2
+
+[sub_resource type="LabelSettings" id="LabelSettings_yixhe"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ijstf"]
+font_size = 13
+
+[sub_resource type="LabelSettings" id="LabelSettings_4n7mi"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_uk570"]
+font_size = 26
+
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_yixhe")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_yixhe")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
 anchors_preset = 10
@@ -22,9 +109,306 @@ text = "Time: 0"
 [node name="Label_Gold" type="Label" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
-text = "Gold: 0"
+text = "💰 0"
 
 [node name="Label_Experience" type="Label" parent="MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 8
-text = "       XP: 0"
+text = "       🔹 0"
+
+[node name="GridContainer" type="GridContainer" parent="."]
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 18.0
+offset_top = -188.0
+offset_right = 205.0
+offset_bottom = 216.0
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Player1" type="HBoxContainer" parent="GridContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlayerInfo" type="VBoxContainer" parent="GridContainer/VBoxContainer/Player1"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="Label" parent="GridContainer/VBoxContainer/Player1/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_yixhe")
+vertical_alignment = 1
+
+[node name="PlayerRace" type="Label" parent="GridContainer/VBoxContainer/Player1/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_ijstf")
+vertical_alignment = 1
+
+[node name="PlayerLife" type="Label" parent="GridContainer/VBoxContainer/Player1"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+label_settings = SubResource("LabelSettings_4n7mi")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player2" type="HBoxContainer" parent="GridContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlayerInfo" type="VBoxContainer" parent="GridContainer/VBoxContainer/Player2"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="Label" parent="GridContainer/VBoxContainer/Player2/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_yixhe")
+vertical_alignment = 1
+
+[node name="PlayerRace" type="Label" parent="GridContainer/VBoxContainer/Player2/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_ijstf")
+vertical_alignment = 1
+
+[node name="PlayerLife" type="Label" parent="GridContainer/VBoxContainer/Player2"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player3" type="HBoxContainer" parent="GridContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlayerInfo" type="VBoxContainer" parent="GridContainer/VBoxContainer/Player3"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="Label" parent="GridContainer/VBoxContainer/Player3/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_yixhe")
+vertical_alignment = 1
+
+[node name="PlayerRace" type="Label" parent="GridContainer/VBoxContainer/Player3/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_ijstf")
+vertical_alignment = 1
+
+[node name="PlayerLife" type="Label" parent="GridContainer/VBoxContainer/Player3"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player4" type="HBoxContainer" parent="GridContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlayerInfo" type="VBoxContainer" parent="GridContainer/VBoxContainer/Player4"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="Label" parent="GridContainer/VBoxContainer/Player4/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_yixhe")
+vertical_alignment = 1
+
+[node name="PlayerRace" type="Label" parent="GridContainer/VBoxContainer/Player4/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_ijstf")
+vertical_alignment = 1
+
+[node name="PlayerLife" type="Label" parent="GridContainer/VBoxContainer/Player4"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player5" type="HBoxContainer" parent="GridContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlayerInfo" type="VBoxContainer" parent="GridContainer/VBoxContainer/Player5"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="Label" parent="GridContainer/VBoxContainer/Player5/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_yixhe")
+vertical_alignment = 1
+
+[node name="PlayerRace" type="Label" parent="GridContainer/VBoxContainer/Player5/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_ijstf")
+vertical_alignment = 1
+
+[node name="PlayerLife" type="Label" parent="GridContainer/VBoxContainer/Player5"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player6" type="HBoxContainer" parent="GridContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlayerInfo" type="VBoxContainer" parent="GridContainer/VBoxContainer/Player6"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="Label" parent="GridContainer/VBoxContainer/Player6/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_yixhe")
+vertical_alignment = 1
+
+[node name="PlayerRace" type="Label" parent="GridContainer/VBoxContainer/Player6/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_ijstf")
+vertical_alignment = 1
+
+[node name="PlayerLife" type="Label" parent="GridContainer/VBoxContainer/Player6"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player7" type="HBoxContainer" parent="GridContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlayerInfo" type="VBoxContainer" parent="GridContainer/VBoxContainer/Player7"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="Label" parent="GridContainer/VBoxContainer/Player7/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_yixhe")
+vertical_alignment = 1
+
+[node name="PlayerRace" type="Label" parent="GridContainer/VBoxContainer/Player7/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_ijstf")
+vertical_alignment = 1
+
+[node name="PlayerLife" type="Label" parent="GridContainer/VBoxContainer/Player7"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player8" type="HBoxContainer" parent="GridContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="PlayerInfo" type="VBoxContainer" parent="GridContainer/VBoxContainer/Player8"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="Label" parent="GridContainer/VBoxContainer/Player8/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_yixhe")
+vertical_alignment = 1
+
+[node name="PlayerRace" type="Label" parent="GridContainer/VBoxContainer/Player8/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_ijstf")
+vertical_alignment = 1
+
+[node name="PlayerLife" type="Label" parent="GridContainer/VBoxContainer/Player8"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ShopButton" type="Button" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -112.0
+offset_top = -111.0
+offset_right = -82.0
+offset_bottom = -80.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(2, 2)
+tooltip_text = "asd"
+text = "💼"
+icon_alignment = 1
+
+[node name="IntermissionTimer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[node name="IntermissionTimerLabel" type="Label" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 68.0
+offset_right = 20.0
+offset_bottom = 91.0
+grow_horizontal = 2
+label_settings = SubResource("LabelSettings_uk570")

@@ -30,8 +30,8 @@ func race_selection():
 	
 
 @rpc("any_peer")
-func register_player_name(id: int, name: String):
-	players[id] = name
+func register_player_name(id: int, player_name: String):
+	players[id] = player_name
 	_update_player_list()
 
 func _on_host_pressed():
