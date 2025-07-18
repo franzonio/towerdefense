@@ -21,3 +21,8 @@ func _on_button_up():
 			GameState_.modify_attribute(multiplayer.get_unique_id(), 5, "resilience")
 		else:
 			GameState_.rpc_id(1, "modify_attribute", multiplayer.get_unique_id(), 5, "resilience")
+			
+		mouse_inside_button = false
+		disabled = true
+		var tween := get_tree().create_tween()
+		tween.tween_property(self, "modulate:a", 0, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)

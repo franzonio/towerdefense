@@ -1,0 +1,29 @@
+Cards
+	Common card pool across players
+	Card design for all attributes
+
+Implement reward system
+	- Gold
+	- Experience/level
+	
+HUD/UI
+	- Add attributes overview in HUD
+	- Round counter
+
+
+Attributes in general
+	- Endurance
+	- Recovery rate
+	- Health regen
+	- Weapon types (mace/dagger/sword mastery)
+	
+How to implement equipment?
+	Weapons
+		- Shield (block)
+		- Parry
+		- Durability
+	Armor
+	Trinkets
+	Ring
+	Amulet
+	etc

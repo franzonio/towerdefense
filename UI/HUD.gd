@@ -58,14 +58,19 @@ func clear_shop_grid():
 	var tweens = []
 
 	for child in grid.get_children():
+		# Skip cards that are already faded out (invisible)
+		if child.modulate.a <= 0.05:
+			child.queue_free()
+			continue
+
 		var tween := get_tree().create_tween()
-		tween.tween_property(child, "modulate:a", 0.5, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+		tween.tween_property(child, "modulate:a", 0.0, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 		tween.tween_callback(func(): child.queue_free())
 		tweens.append(tween)
 
-	# Wait for the last tween to finish
 	if tweens.size() > 0:
 		await tweens[-1].finished
+
 
 
 	
