@@ -97,6 +97,15 @@ func _ready():
 	sprite.play("idle_down")
 	await get_tree().create_timer(11.0).timeout
 	
+	# Intermission phase where players buy upgrades
+	
+	if multiplayer.is_server(): update_all_gladiators(GameState_.all_gladiators)
+
+	#$HealthBar.value = max_health
+	$HealthBar.max_value = max_health
+	$HealthBar.value = max_health
+	$HealthBar/HealthBarText.text = str(int(current_health))
+
 	if opponent_peer_id:
 		if opponent == null:
 			for g in get_tree().get_nodes_in_group("gladiators"):
@@ -110,7 +119,9 @@ func _ready():
 	
 # Only process input if this is OUR player
 func _physics_process(delta):
+	$HealthBar.value = current_health
 	if is_multiplayer_authority() and opponent != null and is_instance_valid(opponent) and opponent.current_health > 0 and opponent_peer_id:
+		
 		prev_animation = current_animation
 		check_for_attack(delta)
 		handle_ai_movement(delta)
@@ -224,7 +235,7 @@ func handle_ai_movement(delta):
 
 # Called by the server to initialize this gladiator
 #@rpc("any_peer", "call_local")
-func initialize_gladiator(data: Dictionary, opponent_id, _spawn_point, meeting_point, peer_id):
+func initialize_gladiator(data, opponent_id, _spawn_point, meeting_point, peer_id):
 	weapon_dmg_min = 3.0
 	weapon_dmg_max = 5.0
 	weapon_req = 15.0
@@ -251,6 +262,8 @@ func initialize_gladiator(data: Dictionary, opponent_id, _spawn_point, meeting_p
 	max_health = data["attributes"]["health"]
 	resilience = data["attributes"]["resilience"]
 	endurance = data["attributes"]["endurance"]
+	
+	#print("str: " + str(strength))
 
 	# === Damage calculations ===
 	attack_speed = (1/weapon_speed)/(log(10+sqrt(quickness))/log(10))  # Seconds between attacks
@@ -280,7 +293,7 @@ func show_damage_popup(amount, hit_success, dodge_success, crit):
 	if prev_animation == "idle_left" or prev_animation == "walk_left": popup.global_position = global_position + Vector2(150, 40)
 	elif prev_animation == "idle_right" or prev_animation == "walk_right": popup.global_position = global_position + Vector2(-150, 40)
 	else: popup.global_position = global_position + Vector2(0, 40)
-	print("show_damage_popup" + str(spawn_point))
+	#print("show_damage_popup" + str(spawn_point))
 	popup.show_damage(amount, hit_success, dodge_success, crit, spawn_point)
 	get_tree().current_scene.add_child(popup)
 
@@ -316,3 +329,47 @@ func customize_popup_font(color: Color, size, text: String):
 			elif prev_animation == "walk_down": current_animation = "idle_down"
 
 		sprite.play(current_animation)'''
+
+func update_all_gladiators(data: Dictionary): 
+	for id in data:
+		for g in get_tree().get_nodes_in_group("gladiators"):
+			if g.owner_id == id:
+				var stats = data[id]["attributes"]
+				if g.is_multiplayer_authority():
+					# Local node: update directly
+					g.apply_stats(stats)
+				else:
+					# Remote node: call via RPC on owner
+					g.rpc_id(g.get_multiplayer_authority(), "apply_stats", stats)
+
+
+
+@rpc("any_peer", "call_local")
+func apply_stats(data: Dictionary):
+	strength = data.get("strength", 0)
+	weapon_skill = data.get("weapon_skill", 0)
+	quickness = data.get("quickness", 0)
+	crit_rating = data.get("crit_rating", 0)
+	avoidance = data.get("avoidance", 0)
+	max_health = data.get("health", 0)
+	resilience = data.get("resilience", 0)
+	endurance = data.get("endurance", 0)
+
+	# Derived stats
+	attack_speed = (1/weapon_speed)/(log(10+sqrt(quickness))/log(10))
+	time_since_last_attack = 0.0
+	crit_chance = weapon_crit * crit_rating / 20.0
+	hit_chance = (weapon_skill / weapon_req) - 0.20 * weapon_skill / 100
+	next_attack_critical = false
+	next_taken_hit_critical = false
+
+	weight = 1
+	move_speed = 500
+	current_health = max_health
+	armor = (1+sqrt(resilience)/10.0) * armor_absorb
+	dodge_chance = (avoidance/200.0) / ((avoidance/200.0)+1)
+	seconds_to_live = endurance/3.0
+	
+	$HealthBar.max_value = max_health
+	$HealthBar.value = max_health
+	$HealthBar/HealthBarText.text = str(int(max_health))

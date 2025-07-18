@@ -52,11 +52,6 @@ func _unhandled_input(event):
 			pause_menu.show_menu()
 
 func _ready():
-	#if multiplayer.is_server():
-	#	get_tree().get_multiplayer().set_root_node(self)  # ✅ Correct
-	#print($SpawnPoints/SpawnPoint0)
-	#print($SpawnPoints/SpawnPoint0.position)
-	#print($SpawnPoints/SpawnPoint0.global_position)
 	GameState_.spawn_points["left"] = [
 		$SpawnPoints/SpawnPoint0.position,
 		$SpawnPoints/SpawnPoint1.position,
@@ -82,27 +77,7 @@ func _ready():
 		print("added round_manager")
 		var round_manager = round_manager_scene.instantiate()
 		add_child(round_manager)
-		#spawn_all_gladiators()
-
-'''
-func spawn_all_gladiators():
-	for peer_id in GameState_.all_gladiators.keys():
-		var data = GameState_.all_gladiators[peer_id]
-
-		var spawn_data = {
-			"gladiator_data": data
-		}
-		var gladiator = $GladiatorSpawner.spawn({
-							"scene": "res://Player/Gladiator.tscn",
-							"peer_id": peer_id,
-							"gladiator_data": data
-							})
-
-
-
-		print("✅ Spawned gladiator '" + data.name + "' (peer: %d) on the arena." % [peer_id])
-		gladiator.global_position = Vector2(100+randi_range(300,800), 200)
-'''
+		
 
 func custom_spawn(args: Dictionary) -> Node:
 	var scene_path = args.get("scene", "")
@@ -118,7 +93,6 @@ func custom_spawn(args: Dictionary) -> Node:
 	# Set authority (very important)
 	instance.set_multiplayer_authority(peer_id)
 	
-
 	# Call init
 	if instance.has_method("initialize_gladiator"):
 		instance.initialize_gladiator(gladiator_data, opponent_id, spawn_point, meeting_point, peer_id)

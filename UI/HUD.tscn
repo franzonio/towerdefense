@@ -407,8 +407,40 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -20.0
-offset_top = 68.0
+offset_top = 35.0
 offset_right = 20.0
-offset_bottom = 91.0
+offset_bottom = 71.0
 grow_horizontal = 2
 label_settings = SubResource("LabelSettings_uk570")
+
+[node name="Shop" type="HBoxContainer" parent="."]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -313.5
+offset_top = 130.0
+offset_right = 313.5
+offset_bottom = 352.0
+grow_horizontal = 2
+
+[node name="HBoxContainer" type="VBoxContainer" parent="Shop"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Shop/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="RefreshButton" type="Button" parent="Shop/HBoxContainer/HBoxContainer"]
+layout_mode = 2
+text = "Refresh"
+
+[node name="GridContainer" type="GridContainer" parent="Shop/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+columns = 5
+
+[connection signal="pressed" from="ShopButton" to="." method="_on_shop_button_pressed"]
+[connection signal="toggled" from="ShopButton" to="." method="_on_shop_button_toggled"]
+[connection signal="pressed" from="Shop/HBoxContainer/HBoxContainer/RefreshButton" to="." method="_on_refresh_button_pressed"]

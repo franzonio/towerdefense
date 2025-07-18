@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://fjgq32ntuin8"
-path="res://.godot/imported/GraveRevenant.png-a7a0472111bce72a79f5ec8a89ef391a.ctex"
+uid="uid://d1flyb57j2b1m"
+path="res://.godot/imported/StrengthCard2_small.png-776942c83aa91af459ab735e0c238a9b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/CardsAssets/GraveRevenant.png"
-dest_files=["res://.godot/imported/GraveRevenant.png-a7a0472111bce72a79f5ec8a89ef391a.ctex"]
+source_file="res://Assets/CardAssets/StrengthCard2_small.png"
+dest_files=["res://.godot/imported/StrengthCard2_small.png-776942c83aa91af459ab735e0c238a9b.ctex"]
 
 [params]
 

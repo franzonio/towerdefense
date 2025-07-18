@@ -21,6 +21,7 @@ var selected_name = "PlayerName"
 @onready var meeting_points 
 
 signal gladiator_life_changed(id: int, new_life: int)
+signal gladiator_attribute_changed(new_all_gladiators: Dictionary)
 signal countdown_updated(time_left: int)
 
 const RACE_MODIFIERS = {
@@ -75,6 +76,15 @@ func _ready():
 func broadcast_countdown(time_left: int):
 	emit_signal("countdown_updated", time_left)
 
+@rpc("any_peer", "call_local")
+func modify_attribute(id: int, amount: int, attribute: String):
+	print("modify_attribute called on peer: ", multiplayer.get_unique_id())
+	var race = all_gladiators[id]["race"]
+	
+	if all_gladiators.has(id):
+		var amount_after_bonuses = float(amount)*RACE_MODIFIERS[race][attribute]
+		all_gladiators[id]["attributes"][attribute] += amount_after_bonuses
+		emit_signal("gladiator_attribute_changed", all_gladiators)
 
 @rpc("any_peer")
 func modify_gladiator_life(id: int, life_lost: int):

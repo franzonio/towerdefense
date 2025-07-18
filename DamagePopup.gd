@@ -19,9 +19,7 @@ func customize_popup_font(color: Color, size, text: String, spawn_point):
 		$Label.add_theme_color_override("font_color", color) 
 		$Label.add_theme_font_size_override("font_size", size)
 		$Label.text = text
-		print(spawn_point)
 		var side = find_spawn_side(spawn_point)
-		print(side)
 		if side == "left": $Label.position.x = -150
 		if side == "right": $Label.position.x = 150
 		

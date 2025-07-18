@@ -24,14 +24,17 @@ var player_ids = GameState_.all_gladiators.keys()
 var countdown_time := 10
 var intermission_timer #:= get_parent().get_node("HUD/IntermissionTimer")
 
+var data
+
 func _ready():
 	add_to_group("round_manager")
-	
+	GameState_.connect("gladiator_attribute_changed", Callable(self, "_on_gladiator_attribute_changed"))
 	if multiplayer.is_server():
 		hud_scene = get_parent().get_node("HUD")
 		intermission_timer = get_tree().get_root().get_node("Main/HUD/IntermissionTimer")
 		
 		await get_tree().create_timer(1.0).timeout
+		data = GameState_.all_gladiators
 		generate_round_robin_rounds()
 		start_next_round()
 
@@ -134,14 +137,14 @@ func start_next_round():
 	print("⚔️ Starting round:", current_round_index + 1)
 
 	current_round = rounds[current_round_index]
-	print("before: " + str(current_round))
+	#print("before: " + str(current_round))
 	current_round = regenerate_null_pairs(current_round)
-	print("after: " + str(current_round))
+	#print("after: " + str(current_round))
 	duel_results.clear()
 
 	# Spawn duels or assign auto-wins
 	total_duels = current_round.size()
-	print("total_duels = current_round.size(): " + str(total_duels))
+	#print("total_duels = current_round.size(): " + str(total_duels))
 	
 	var spawn_index = 0
 	for pair in current_round:
@@ -184,6 +187,10 @@ func register_duel_result(winner_id: int, loser_id: int = -1):
 	print("⚔️ Registering result for winner:", winner_id, " loser:", loser_id)
 	_on_duel_finished(winner_id, loser_id)
 
+func _on_gladiator_attribute_changed(new_all_gladiators: Dictionary): 
+	data = new_all_gladiators
+	print(data)
+	#print("signal: " + str(data))
 
 func spawn_duel_between(peer1, peer2, index: int):
 	var spawn_point_left = GameState_.spawn_points["left"][index]
@@ -191,8 +198,10 @@ func spawn_duel_between(peer1, peer2, index: int):
 	var meeting_point = GameState_.meeting_points[index % 4].global_position
 	
 	if peer1 != null and peer2 != null:
-		var data1 = GameState_.all_gladiators[peer1]
-		var data2 = GameState_.all_gladiators[peer2]
+		var data1 = data[peer1]
+		var data2 = data[peer2]
+		#print(data1)
+		#print(data2)
 		var glad1 = gladiator_spawner.spawn({
 			"scene": "res://Player/Gladiator.tscn",
 			"peer_id": peer1,
@@ -209,6 +218,7 @@ func spawn_duel_between(peer1, peer2, index: int):
 			"spawn_point": spawn_point_right,
 			"meeting_point": meeting_point
 		})
+		
 		glad1.died.connect(func(): _on_duel_finished(peer2, peer1))
 		glad2.died.connect(func(): _on_duel_finished(peer1, peer2))
 	if peer1 != null and peer2 == null:
