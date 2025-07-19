@@ -3,9 +3,29 @@ class_name AttributeAllocation
 
 signal confirmed(attributes: Dictionary)
 
-@export var max_points := 148
+@export var max_points := 50+8# 148
 @export var starting_values: Dictionary = {}
 
+var weapon_slot1 := {
+	"min_dmg": 1, 
+	"max_dmg": 3,
+	"durability": 30,
+	"req": 20,
+	"crit": 0.1,
+	"speed": 1,
+	"range": 150
+	}
+	
+var weapon_slot2 := {
+	"min_dmg": 1, 
+	"max_dmg": 3,
+	"durability": 30,
+	"req": 20,
+	"crit": 0.1,
+	"speed": 1,
+	"range": 150
+	}
+					 
 var attributes := {}
 var remaining_points := 0
 
@@ -23,11 +43,11 @@ func _ready():
 func _initialize_attributes():
 	attributes = {
 		"strength": 1,
-		"weapon_skill": 21,
-		"quickness": 81,
+		"weapon_skill": 1,#21,
+		"quickness": 1,#81,
 		"crit_rating": 1,
-		"avoidance": 31,
-		"health": 11,
+		"avoidance": 1,#31,
+		"health": 1,#11,
 		"resilience": 1,
 		"endurance": 1,
 	}
@@ -115,7 +135,9 @@ func _on_confirm():
 		"name": GameState_.selected_name,
 		"race": GameState_.selected_race,
 		"attributes": final_attributes,
-		"player_life": player_life
+		"player_life": player_life,
+		"weapon_slot1": weapon_slot1,
+		"weapon_slot2": weapon_slot2
 	}
 	#print(multiplayer.is_server)
 	if multiplayer.is_server():

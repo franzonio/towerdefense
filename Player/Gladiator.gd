@@ -33,7 +33,7 @@ var input_vector := Vector2.ZERO
 @export var weapon_req := 2.0
 @export var weapon_speed := 1.0
 @export var weapon_range = 150.0
-@export var weapon_crit := 1.0
+@export var weapon_crit := 0.1
 
 @export var armor_absorb := 1.0
 
@@ -241,7 +241,7 @@ func initialize_gladiator(data, opponent_id, _spawn_point, meeting_point, peer_i
 	weapon_req = 15.0
 	weapon_speed = 1.0
 	weapon_range = 150
-	weapon_crit = 1.0
+	weapon_crit = 0.1
 	armor_absorb = 1.0
 	
 	spawn_point = _spawn_point
@@ -268,7 +268,7 @@ func initialize_gladiator(data, opponent_id, _spawn_point, meeting_point, peer_i
 	# === Damage calculations ===
 	attack_speed = (1/weapon_speed)/(log(10+sqrt(quickness))/log(10))  # Seconds between attacks
 	time_since_last_attack = 0.0
-	crit_chance = weapon_crit*crit_rating/20.0
+	crit_chance = weapon_crit*crit_rating/10.0
 	hit_chance = (weapon_skill/weapon_req) - 0.20*weapon_skill/100
 	next_attack_critical = false
 	next_taken_hit_critical = false
@@ -358,7 +358,7 @@ func apply_stats(data: Dictionary):
 	# Derived stats
 	attack_speed = (1/weapon_speed)/(log(10+sqrt(quickness))/log(10))
 	time_since_last_attack = 0.0
-	crit_chance = weapon_crit * crit_rating / 20.0
+	crit_chance = weapon_crit * crit_rating / 10.0
 	hit_chance = (weapon_skill / weapon_req) - 0.20 * weapon_skill / 100
 	next_attack_critical = false
 	next_taken_hit_critical = false

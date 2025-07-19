@@ -1,29 +1,55 @@
+☆ = Req for MVP game
+
+Combat/strategy
+	- Recovery time when being struck
+	☆ Gladiator %health concede threshold
+		☆ Big player life loss if gladiator actually dies (< 0 HP, scale with how much below 0 HP)
+	- Gladiator combat strategy (light/heavy/normal attacks, def/off/normal tactic)
+
 Cards
-	Common card pool across players
-	Card design for all attributes
+	☆ Common card pool across players
+	☆ Placeholder card design for all attributes
 
 Implement reward system
-	- Gold
-	- Experience/level
+	☆ Experience/level
+	☆ Gold
+	☆ Some kind of penalty for leading gladiator
+	☆ Bonus for loss streak
 	
 HUD/UI
-	- Add attributes overview in HUD
-	- Round counter
+	☆ Attributes overview button
+	☆ Equipment overview button
+	☆ Round counter (instead of total game time)
+	☆ Round timer
+	☆ Selecting concede threshold during intermission
+	- Selecting gladiator combat strategy during intermission (see Combat/strategy section)
 
-
-Attributes in general
-	- Endurance
-	- Recovery rate
+Attributes
+	☆ Making all stats impactful
+	☆ Endurance (gladiator gives up after some time)
+	- Stun rating? (increase recovery time for opponent, scale with magnitute of the hit)
+	- Recovery rate (Hits should add a small recovery time for receiver, scaling with magnitute of hit)
 	- Health regen
-	- Weapon types (mace/dagger/sword mastery)
+	☆ Weapon types (mace/dagger/sword mastery)
 	
-How to implement equipment?
+Implement equipment system
 	Weapons
-		- Shield (block)
-		- Parry
-		- Durability
-	Armor
+		☆ Dual wield (alternating weapon hits)
+		☆ Two-handed
+		☆ Shield (block)
+		☆ Parry
+		☆ Durability (destroyed weapon -> replace with fists, no parry chance)
+	☆ Armor
 	Trinkets
 	Ring
 	Amulet
 	etc
+	
+Races
+	- Add more races
+	☆ Placeholder sprite for each race (with basic walk/attack animation)
+	- Single draft at start of game instead of choosing between all races
+	- Race icons (for in-game HUD and race selection)
+	
+Graphics
+	☆ Everything must scale with monitor resolution
