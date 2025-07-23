@@ -28,12 +28,19 @@ extends CharacterBody2D
 var input_vector := Vector2.ZERO
 
 ####
-@export var weapon_dmg_min := 3.0
-@export var weapon_dmg_max := 5.0
-@export var weapon_req := 2.0
-@export var weapon_speed := 1.0
-@export var weapon_range = 150.0
-@export var weapon_crit := 0.1
+@export var weapon1_dmg_min := 3.0
+@export var weapon1_dmg_max := 5.0
+@export var weapon1_req := 2.0
+@export var weapon1_speed := 1.0
+@export var weapon1_range = 150.0
+@export var weapon1_crit := 0.1
+@export var weapon2_dmg_min := 3.0
+@export var weapon2_dmg_max := 5.0
+@export var weapon2_req := 2.0
+@export var weapon2_speed := 1.0
+@export var weapon2_range = 150.0
+@export var weapon2_crit := 0.1
+
 
 @export var armor_absorb := 1.0
 
@@ -43,18 +50,24 @@ var input_vector := Vector2.ZERO
 @export var quickness := 1.0
 @export var crit_rating := 1.0
 @export var avoidance := 1.0
-
 @export var max_health := 1.0
 @export var resilience := 1.0
 @export var endurance := 1.0
  
+#var weapon: Dictionary
+var weapon1: Dictionary
+var weapon2: Dictionary
+var weapon_hands_to_carry: int
+
  # === Damage calculations ===
-@export var attack_speed: float = (1/weapon_speed)/(log(10+sqrt(quickness))/log(10))  # Seconds between attacks
-@export var time_since_last_attack: float = 0.0
-@export var crit_chance = weapon_crit*crit_rating/20.0
-@export var hit_chance = (weapon_skill/weapon_req) - 0.20*weapon_skill/100
+@export var attack_speed: float 
+@export var time_since_last_attack: float
+@export var crit_chance: Array
+@export var hit_chance: Array
 @export var next_attack_critical: bool = false
 @export var next_taken_hit_critical: bool = false
+@export var next_attack_weapon: int
+
 var spawn_point
 
  # === Calculations ===
@@ -160,7 +173,23 @@ func check_for_attack(delta: float):
 			if attack_charge_time >= attack_speed and opponent.current_health > 0:
 				if direction.x > 0.0: current_animation = attack_right_animations[randi_range(0, attack_right_animations.size()-1)]
 				if direction.x < 0.0: current_animation = attack_left_animations[randi_range(0, attack_left_animations.size()-1)]
-				CombatManager_.deal_attack(self, opponent)
+				
+				var weapon
+				var _hit_chance
+				var _crit_chance
+				
+				if next_attack_weapon == 0: 
+					weapon = weapon1
+					_hit_chance = hit_chance[0]
+					_crit_chance = crit_chance[0]
+					next_attack_weapon = 1
+				if next_attack_weapon == 1: 
+					weapon = weapon2
+					_hit_chance = hit_chance[1]
+					_crit_chance = crit_chance[1]
+					next_attack_weapon = 0
+					
+				CombatManager_.deal_attack(self, opponent, weapon, _hit_chance, _crit_chance)
 				attack_charge_time = 0.0
 		else:
 			attack_charge_time = 0.0
@@ -236,14 +265,6 @@ func handle_ai_movement(delta):
 # Called by the server to initialize this gladiator
 #@rpc("any_peer", "call_local")
 func initialize_gladiator(data, opponent_id, _spawn_point, meeting_point, peer_id):
-	weapon_dmg_min = 3.0
-	weapon_dmg_max = 5.0
-	weapon_req = 15.0
-	weapon_speed = 1.0
-	weapon_range = 150
-	weapon_crit = 0.1
-	armor_absorb = 1.0
-	
 	spawn_point = _spawn_point
 	position = _spawn_point
 	
@@ -252,39 +273,9 @@ func initialize_gladiator(data, opponent_id, _spawn_point, meeting_point, peer_i
 		opponent_peer_id = opponent_id
 		target_position = meeting_point
 	else: target_position = position
-	gladiator_name = data.name
-	$Name.text = data.name
-	strength = data["attributes"]["strength"]
-	weapon_skill = data["attributes"]["weapon_skill"]
-	quickness = data["attributes"]["quickness"]
-	crit_rating = data["attributes"]["crit_rating"]
-	avoidance = data["attributes"]["avoidance"]
-	max_health = data["attributes"]["health"]
-	resilience = data["attributes"]["resilience"]
-	endurance = data["attributes"]["endurance"]
 	
-	#print("str: " + str(strength))
+	update_gladiator(data)
 
-	# === Damage calculations ===
-	attack_speed = (1/weapon_speed)/(log(10+sqrt(quickness))/log(10))  # Seconds between attacks
-	time_since_last_attack = 0.0
-	crit_chance = weapon_crit*crit_rating/10.0
-	hit_chance = (weapon_skill/weapon_req) - 0.20*weapon_skill/100
-	next_attack_critical = false
-	next_taken_hit_critical = false
-
-	# === Calculations ===
-	weight = 1
-	move_speed = 500
-	current_health = max_health
-	armor = (1+sqrt(resilience)/10.0) * armor_absorb				# flat damage reduction
-	dodge_chance = (avoidance/200.0) / ((avoidance/200.0)+1)		# decaying dodge_chance -> 1
-	seconds_to_live = endurance/3.0
-
-	current_health = max_health
-	$HealthBar.max_value = max_health
-	$HealthBar.value = max_health
-	$HealthBar/HealthBarText.text = str(int(max_health))
 
 
 @rpc("any_peer", "call_local")
@@ -334,42 +325,63 @@ func update_all_gladiators(data: Dictionary):
 	for id in data:
 		for g in get_tree().get_nodes_in_group("gladiators"):
 			if g.owner_id == id:
-				var stats = data[id]["attributes"]
+				#var stats = data[id]
 				if g.is_multiplayer_authority():
 					# Local node: update directly
-					g.apply_stats(stats)
+					g.update_gladiator(data[id])
 				else:
 					# Remote node: call via RPC on owner
-					g.rpc_id(g.get_multiplayer_authority(), "apply_stats", stats)
+					g.rpc_id(g.get_multiplayer_authority(), "update_gladiator", data[id])
 
 
 
 @rpc("any_peer", "call_local")
-func apply_stats(data: Dictionary):
-	strength = data.get("strength", 0)
-	weapon_skill = data.get("weapon_skill", 0)
-	quickness = data.get("quickness", 0)
-	crit_rating = data.get("crit_rating", 0)
-	avoidance = data.get("avoidance", 0)
-	max_health = data.get("health", 0)
-	resilience = data.get("resilience", 0)
-	endurance = data.get("endurance", 0)
+func update_gladiator(data: Dictionary):
+	weapon1_req = data["weapon_slot1"]["req"]
+	weapon1_speed = data["weapon_slot1"]["speed"]
+	weapon1_range = data["weapon_slot1"]["range"]
+	weapon1_crit = data["weapon_slot1"]["crit"]
+	
+	armor_absorb = 1.0
+	
+	print("data" + str(data))
+	gladiator_name = data.name
+	$Name.text = data.name
+	strength = data["attributes"]["strength"]
+	weapon_skill = data["attributes"]["weapon_skill"]
+	quickness = data["attributes"]["quickness"]
+	crit_rating = data["attributes"]["crit_rating"]
+	avoidance = data["attributes"]["avoidance"]
+	max_health = data["attributes"]["health"]
+	resilience = data["attributes"]["resilience"]
+	endurance = data["attributes"]["endurance"]
+	weapon1 = data["weapon_slot1"]
+	weapon2 = data["weapon_slot2"]
+	weapon_hands_to_carry = data["weapon_slot1"]["hands"]
+	
+	#print("str: " + str(strength))
 
-	# Derived stats
-	attack_speed = (1/weapon_speed)/(log(10+sqrt(quickness))/log(10))
+ # === Damage calculations ===
+	if weapon_hands_to_carry == 1: attack_speed = (1/(weapon1_speed+weapon2_speed))/(log(10+sqrt(quickness))/log(10))
+	else: attack_speed = (1/(weapon1_speed))/(log(10+sqrt(quickness))/log(10))
+
+	  # Seconds between attacks
 	time_since_last_attack = 0.0
-	crit_chance = weapon_crit * crit_rating / 10.0
-	hit_chance = (weapon_skill / weapon_req) - 0.20 * weapon_skill / 100
+	crit_chance = [weapon1_crit*crit_rating/20.0, weapon2_crit*crit_rating/20.0]
+	hit_chance = [(weapon_skill/weapon1_req) - 0.20*weapon_skill/100, (weapon_skill/weapon1_req) - 0.20*weapon_skill/100]
 	next_attack_critical = false
 	next_taken_hit_critical = false
+	next_attack_weapon = 0
 
+	# === Calculations ===
 	weight = 1
 	move_speed = 500
 	current_health = max_health
-	armor = (1+sqrt(resilience)/10.0) * armor_absorb
-	dodge_chance = (avoidance/200.0) / ((avoidance/200.0)+1)
+	armor = (1+sqrt(resilience)/10.0) * armor_absorb				# flat damage reduction
+	dodge_chance = (avoidance/200.0) / ((avoidance/200.0)+1)		# decaying dodge_chance -> 1
 	seconds_to_live = endurance/3.0
-	
+
+	current_health = max_health
 	$HealthBar.max_value = max_health
 	$HealthBar.value = max_health
 	$HealthBar/HealthBarText.text = str(int(max_health))

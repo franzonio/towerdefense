@@ -21,6 +21,10 @@ CombatManager_="*res://CombatManager.gd"
 NetworkManager_="*res://Scripts/NetworkManager.gd"
 GameState_="*res://GameState.tscn"
 
+[display]
+
+window/dpi/allow_hidpi=false
+
 [input]
 
 ui_left={

@@ -1,6 +1,9 @@
 extends Node
 class_name GameState
 
+var all_equipment_data = load("res://Equipment.gd")
+
+
 #@onready var synchronizer := $MultiplayerSynchronizer
 var all_duels_done := true
 var selected_race: String = ""
@@ -23,6 +26,25 @@ var selected_name = "PlayerName"
 signal gladiator_life_changed(id: int, new_life: int)
 signal gladiator_attribute_changed(new_all_gladiators: Dictionary)
 signal countdown_updated(time_left: int)
+
+'var weapon_slot1 := {
+	"min_dmg": 1, 
+	"max_dmg": 3,
+	"durability": 30,
+	"req": 20,
+	"crit": 0.1,
+	"speed": 1,
+	"range": 150,
+	"parry:": true,
+	"block": false,
+	"attributes": 
+		{
+			"weapon_skill": 0,
+			"avoidance": 0
+		}
+	}'
+
+
 
 const RACE_MODIFIERS = {
 	"Orc": {
@@ -77,8 +99,27 @@ func broadcast_countdown(time_left: int):
 	emit_signal("countdown_updated", time_left)
 
 @rpc("any_peer", "call_local")
+func add_to_inventory(id: int, equipment: String): 
+	var data = all_equipment_data.all_equipment
+	for type in data:
+		for item in type:
+			if item == equipment: 
+				for slot in all_gladiators[id]["inventory"].size():
+					if !slot: 
+						all_gladiators[id]["inventory"][slot] = item
+						print("Added " + item + " to inventory")
+						return
+				print("No inventory space!")
+					
+
+
+@rpc("any_peer", "call_local")
+func remove_from_inventory(id: int, equipment: String): pass
+
+
+@rpc("any_peer", "call_local")
 func modify_attribute(id: int, amount: int, attribute: String):
-	print("modify_attribute called on peer: ", multiplayer.get_unique_id())
+	#print("modify_attribute called on peer: ", multiplayer.get_unique_id())
 	var race = all_gladiators[id]["race"]
 	
 	if all_gladiators.has(id):

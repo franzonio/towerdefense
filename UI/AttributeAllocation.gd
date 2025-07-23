@@ -3,28 +3,34 @@ class_name AttributeAllocation
 
 signal confirmed(attributes: Dictionary)
 
-@export var max_points := 50+8# 148
+@export var max_points := 148
 @export var starting_values: Dictionary = {}
 
-var weapon_slot1 := {
+var empty: Dictionary
+var head: Dictionary
+var shoulder: Dictionary
+var chest: Dictionary
+var ring1: Dictionary
+var ring2: Dictionary
+var inventory_slot1: Dictionary
+var inventory_slot2: Dictionary
+var inventory_slot3: Dictionary
+var inventory_slot4: Dictionary
+
+var no_weapon := {
+	"hands": 1,
 	"min_dmg": 1, 
 	"max_dmg": 3,
-	"durability": 30,
-	"req": 20,
+	"durability": 1,
+	"req": 1,
 	"crit": 0.1,
 	"speed": 1,
-	"range": 150
+	"range": 150,
+	"parry:": false,
+	"block": false,
+	"attributes": 0
 	}
-	
-var weapon_slot2 := {
-	"min_dmg": 1, 
-	"max_dmg": 3,
-	"durability": 30,
-	"req": 20,
-	"crit": 0.1,
-	"speed": 1,
-	"range": 150
-	}
+
 					 
 var attributes := {}
 var remaining_points := 0
@@ -43,11 +49,11 @@ func _ready():
 func _initialize_attributes():
 	attributes = {
 		"strength": 1,
-		"weapon_skill": 1,#21,
-		"quickness": 1,#81,
+		"weapon_skill": 21,
+		"quickness": 81,
 		"crit_rating": 1,
-		"avoidance": 1,#31,
-		"health": 1,#11,
+		"avoidance": 31,
+		"health": 11,
 		"resilience": 1,
 		"endurance": 1,
 	}
@@ -136,8 +142,23 @@ func _on_confirm():
 		"race": GameState_.selected_race,
 		"attributes": final_attributes,
 		"player_life": player_life,
-		"weapon_slot1": weapon_slot1,
-		"weapon_slot2": weapon_slot2
+		"weapon_slot1": no_weapon,
+		"weapon_slot2": no_weapon,
+		"armor": {
+			"head": empty,
+			"shoulder": empty,
+			"chest": empty,
+			},
+		"talismans:": {
+			"ring1": empty,
+			"ring2": empty
+		},
+		"inventory": {
+			"slot1": empty,
+			"slot2": empty,
+			"slot3": empty,
+			"slot4": empty
+		}
 	}
 	#print(multiplayer.is_server)
 	if multiplayer.is_server():
@@ -146,16 +167,6 @@ func _on_confirm():
 			
 	if !multiplayer.is_server():
 		print("✅ Client created gladiator")
-		#print("✅ Client connected with ID:", multiplayer.get_unique_id())
-		#print("❓ Is server:", multiplayer.is_server())
-		#print("🧪 I am authority:", is_multiplayer_authority())
-#		if !multiplayer.is_connected_to_server():
-#			print("⏳ Waiting for connection...")
-#			await multiplayer.connected_to_server
-#			print("✅ Connected to server!")
-#		else:
-#			print("✅ Already connected.")
-		# Submit to host
 		GameState_.submit_gladiator(gladiator)
 		
 	
@@ -165,7 +176,7 @@ func _on_confirm():
 	#get_tree().change_scene_to_file("res://Main.tscn")
 
 func apply_race_modifiers(race: String) -> Dictionary:
-	var modifiers = GameState.RACE_MODIFIERS.get(race, {})
+	var modifiers = GameState_.RACE_MODIFIERS.get(race, {})
 	var modified_attributes = attributes.duplicate()
 
 	for attr in modifiers:

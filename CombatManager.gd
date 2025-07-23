@@ -3,23 +3,23 @@ class_name CombatManager
 
 var damage_popup_scene = preload("res://DamagePopup.tscn") 
 
-func deal_attack(attacker: Node, defender: Node):
+func deal_attack(attacker: Node, defender: Node, weapon, hit_chance, crit_chance):
 
 	var dodge_success = 0	# default 0 means defender did not didge
 	var hit_success = 1		# default 1 means attacker hit successfully
 	var crit = 1
 	
-	if randf() > attacker.hit_chance:
+	if randf() > hit_chance:
 		hit_success = 0
 		attacker.next_taken_hit_critical = true
 		defender.next_attack_critical = true
 			
 		
-	if randf() < attacker.crit_chance or attacker.next_attack_critical:
+	if randf() < crit_chance or attacker.next_attack_critical:
 		crit = 2
 		attacker.next_attack_critical = false  # reset after use
 
-	var raw_damage = (randf_range(attacker.weapon_dmg_min, attacker.weapon_dmg_max)*crit+attacker.strength/15)
+	var raw_damage = (randf_range(weapon["min_dmg"], weapon["max_dmg"])*crit+attacker.strength/15)
 	
 	if raw_damage > 0 and randf() < defender.dodge_chance:
 		dodge_success = 1

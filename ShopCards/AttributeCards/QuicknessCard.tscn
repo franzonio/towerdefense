@@ -1,0 +1,32 @@
+[gd_scene load_steps=3 format=3 uid="uid://clwuq8tmkhybj"]
+
+[ext_resource type="Script" uid="uid://cx11jltnj821h" path="res://ShopCards/AttributeCards/QuicknessCard.gd" id="1_o553e"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_4p5m8"]
+font_size = 12
+
+[node name="QuicknessCard" type="Button"]
+offset_right = 306.0
+offset_bottom = 458.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+expand_icon = true
+script = ExtResource("1_o553e")
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -71.0
+offset_top = 25.0
+offset_right = 74.0
+offset_bottom = 61.0
+grow_horizontal = 2
+text = "+5 Quickness"
+label_settings = SubResource("LabelSettings_4p5m8")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="button_up" from="." to="." method="_on_button_up"]

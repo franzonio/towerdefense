@@ -168,6 +168,7 @@ func start_next_round():
 
 	current_round_index += 1
 	
+	# INTERMISSION PHASE
 	if intermission_timer == null:
 		intermission_timer = get_parent().get_node("HUD/IntermissionTimer")
 
