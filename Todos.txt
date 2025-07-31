@@ -8,7 +8,7 @@ Combat/strategy
 
 Cards
 	☆ Common card pool across players
-	☆ Placeholder card design for all attributes
+	☆ Placeholder art for cards
 
 Implement reward system
 	☆ Experience/level
@@ -17,6 +17,7 @@ Implement reward system
 	☆ Bonus for loss streak
 	
 HUD/UI
+	☆ Binds for shop/inventory
 	☆ Attributes overview button
 	☆ Equipment overview button
 	☆ Round counter (instead of total game time)
@@ -53,3 +54,11 @@ Races
 	
 Graphics
 	☆ Everything must scale with monitor resolution
+
+
+-----
+
+
+Future
+	Mixturer
+	Betting? Spelaren styr en "mästare" som interagerar och vadslår med andra spelare. Sälja items till andra spelare.

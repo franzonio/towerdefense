@@ -1,12 +1,19 @@
 extends CanvasLayer
 
-@onready var strength_card = preload("res://ShopCards/StrengthCard.tscn")
-@onready var health_card = preload("res://ShopCards/HealthCard.tscn")
-@onready var criticality_card = preload("res://ShopCards/CriticalityCard.tscn")
-@onready var endurance_card = preload("res://ShopCards/EnduranceCard.tscn")
-@onready var quickness_card = preload("res://ShopCards/QuicknessCard.tscn")
-@onready var resilience_card = preload("res://ShopCards/ResilienceCard.tscn")
-@onready var weapon_mastery_card = preload("res://ShopCards/WeaponMasteryCard.tscn")
+@onready var strength_card = preload("res://ShopCards/AttributeCards/StrengthCard.tscn")
+@onready var health_card = preload("res://ShopCards/AttributeCards/HealthCard.tscn")
+@onready var criticality_card = preload("res://ShopCards/AttributeCards/CriticalityCard.tscn")
+@onready var endurance_card = preload("res://ShopCards/AttributeCards/EnduranceCard.tscn")
+@onready var quickness_card = preload("res://ShopCards/AttributeCards/QuicknessCard.tscn")
+@onready var resilience_card = preload("res://ShopCards/AttributeCards/ResilienceCard.tscn")
+@onready var weapon_mastery_card = preload("res://ShopCards/AttributeCards/WeaponMasteryCard.tscn")
+
+@onready var simple_sword_card = preload("res://ShopCards/EquipmentCards/Sword/SimpleSword.gd")
+
+var equipment_card_scenes = {
+	"simple_sword": simple_sword_card
+}
+
 
 @onready var label_timer = $MarginContainer/HBoxContainer/Label_Timer
 @onready var label_gold = $MarginContainer/HBoxContainer/Label_Gold
@@ -36,10 +43,18 @@ func _ready():
 	countdown_label = $IntermissionTimerLabel
 	shop = $Shop
 	shop.visible = false
-	all_cards = [strength_card, health_card, criticality_card, endurance_card, quickness_card, resilience_card, weapon_mastery_card]
-	grid = $Shop/HBoxContainer/GridContainer
-	refresh_button = $Shop/HBoxContainer/HBoxContainer/RefreshButton
+	all_cards = [strength_card, health_card, criticality_card, endurance_card, quickness_card, 
+	resilience_card, weapon_mastery_card, simple_sword_card]
+	grid = $Shop/VBoxContainer/GridContainer
+	refresh_button = $Shop/VBoxContainer/HBoxContainer/RefreshButton
 	roll_initial_cards()
+	
+	
+func populate_inventory():
+	# loop through Gamestate_.all_gladiators[id]["inventory"] and instantiate + add_child in 
+	# $Inventory slot1-5
+	1
+	
 	
 func roll_initial_cards():
 	for i in range(5):
@@ -70,8 +85,6 @@ func clear_shop_grid():
 
 	if tweens.size() > 0:
 		await tweens[-1].finished
-
-
 
 	
 func roll_cards():
