@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bnv6q0a7c7jcr"]
 
-[ext_resource type="Script" uid="uid://ds2p46kahup3p" path="res://ShopCards/AttributeCards/EnduranceCard.gd" id="1_jkmrx"]
+[ext_resource type="Script" uid="uid://dyyvc2btnvyo" path="res://ShopCards/AttributeCards/BaseAttributeCard.gd" id="1_owh4d"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4p5m8"]
 font_size = 12
@@ -12,7 +12,8 @@ scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 expand_icon = true
-script = ExtResource("1_jkmrx")
+script = ExtResource("1_owh4d")
+attribute_name = "endurance"
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1

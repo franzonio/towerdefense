@@ -5,6 +5,7 @@ extends Node
 @export var all_equipment = {
 	"sword": {
 		"simple_sword": {
+			"stock": 500,
 			"type": "weapon",
 			"hands": 1,
 			"min_dmg": 3, 
@@ -24,6 +25,7 @@ extends Node
 			}
 		},
 		"iron_sword": {
+			"stock": 20,
 			"type": "weapon",
 			"hands": 1,
 			"min_dmg": 4, 
@@ -47,6 +49,7 @@ extends Node
 	
 	"axe": {
 		"light_axe": {
+			"stock": 20,
 			"type": "weapon",
 			"hands": 1,
 			"min_dmg": 2, 
@@ -66,6 +69,7 @@ extends Node
 			}
 		},
 		"copper_axe": {
+			"stock": 20,
 			"type": "weapon",
 			"hands": 1,
 			"min_dmg": 4, 

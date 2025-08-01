@@ -1,7 +1,9 @@
 extends Node
 class_name GameState
 
-var all_equipment_data = load("res://Equipment.gd")
+var equipment_script# = load("res://Equipment.gd")
+var equipment_instance
+var equipment_data
 
 
 #@onready var synchronizer := $MultiplayerSynchronizer
@@ -26,6 +28,11 @@ var selected_name = "PlayerName"
 signal gladiator_life_changed(id: int, new_life: int)
 signal gladiator_attribute_changed(new_all_gladiators: Dictionary)
 signal countdown_updated(time_left: int)
+signal card_stock_changed(new_all_cards_stock: Dictionary)
+#signal card_stock_initialize(new_attr_cards_stock: Dictionary)
+signal add_to_inventory_signal(peer_id: int, success: bool, gladiator_data: Dictionary)
+signal card_buy_result(peer_id: int, success: bool)
+
 
 'var weapon_slot1 := {
 	"min_dmg": 1, 
@@ -44,7 +51,8 @@ signal countdown_updated(time_left: int)
 		}
 	}'
 
-
+var attr_cards_stock
+var all_cards_stock
 
 const RACE_MODIFIERS = {
 	"Orc": {
@@ -92,40 +100,130 @@ const RACE_MODIFIERS = {
 func _ready():
 	#print("🆔 Peer:", multiplayer.get_unique_id(), " Is server:", multiplayer.is_server())
 	await get_tree().process_frame
-	#call_deferred("_assign_authority")
+	equipment_script = load("res://Equipment.gd")
+	equipment_instance = equipment_script.new()
+	equipment_data = equipment_instance.all_equipment
+	print("equipment_data: " + str(equipment_data))
+	
+	all_cards_stock = create_card_pool()
+	initialize_card_stock()
+	
+
+
 
 @rpc("any_peer", "call_local")
 func broadcast_countdown(time_left: int):
 	emit_signal("countdown_updated", time_left)
+	#initialize_card_stock()
+
+func get_equipment_by_name(item_name: String):
+	for category in equipment_data.keys():
+		var items = equipment_data[category]
+		if items.has(item_name):
+			var result := {}
+			result[item_name] = items[item_name]
+			return result
+	return {}  # Return empty if not found
+
+@rpc("authority", "call_local")
+func add_to_inventory(id: int, success: bool, _gladiator_data) -> void:
+	emit_signal("add_to_inventory_signal", id, success, _gladiator_data)
+
+@rpc("authority", "call_local")
+func notify_card_buy_result(id: int, success: bool, _gladiator_data) -> void:
+	emit_signal("card_buy_result", id, success, _gladiator_data)
 
 @rpc("any_peer", "call_local")
-func add_to_inventory(id: int, equipment: String): 
-	var data = all_equipment_data.all_equipment
-	for type in data:
-		for item in type:
-			if item == equipment: 
-				for slot in all_gladiators[id]["inventory"].size():
-					if !slot: 
-						all_gladiators[id]["inventory"][slot] = item
-						print("Added " + item + " to inventory")
-						return
-				print("No inventory space!")
+func buy_equipment_card(id: int, equipment: String): 
+	var success := false
+	if all_cards_stock[equipment] >= 1:
+		var item_dict = get_equipment_by_name(equipment)
+		
+		for slot_name in all_gladiators[id]["inventory"].keys():
+			if all_gladiators[id]["inventory"][slot_name] == {}:
+				all_gladiators[id]["inventory"][slot_name] = item_dict
+				adjust_card_stock(equipment, "remove")
+				success = true
+				rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
+				rpc_id(id, "add_to_inventory", id, success, all_gladiators[id])
+				return
+		print("No inventory space!")
+	else: 
+		print("No " + equipment + " cards left in stock!")
+		
+		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
+		rpc_id(id, "add_to_inventory", id, success, all_gladiators[id])
+
 					
-
-
 @rpc("any_peer", "call_local")
-func remove_from_inventory(id: int, equipment: String): pass
+func remove_from_inventory(id: int, equipment: String): 
+	for slot_name in all_gladiators[id]["inventory"].keys():
+		var item = all_gladiators[id]["inventory"][slot_name]
 
+		# Check if the item is a dictionary and contains the equipment name
+		if typeof(item) == TYPE_DICTIONARY and item.has(equipment):
+			all_gladiators[id]["inventory"][slot_name] = {}  # Clear slot
+			adjust_card_stock(equipment, "add")  # Restore stock
+			return  # Exit after first match
 
-@rpc("any_peer", "call_local")
-func modify_attribute(id: int, amount: int, attribute: String):
-	#print("modify_attribute called on peer: ", multiplayer.get_unique_id())
-	var race = all_gladiators[id]["race"]
+	print("Item not found in inventory!")
 	
-	if all_gladiators.has(id):
-		var amount_after_bonuses = float(amount)*RACE_MODIFIERS[race][attribute]
-		all_gladiators[id]["attributes"][attribute] += amount_after_bonuses
-		emit_signal("gladiator_attribute_changed", all_gladiators)
+	
+@rpc("any_peer", "call_local")
+func buy_attribute_card(id: int, amount: int, attribute: String):
+	var success := false
+	if all_cards_stock[attribute] >= 1:
+		#print("modify_attribute called on peer: ", multiplayer.get_unique_id())
+		var race = all_gladiators[id]["race"]
+		
+		if all_gladiators.has(id):
+			var amount_after_bonuses = float(amount)*RACE_MODIFIERS[race][attribute]
+			all_gladiators[id]["attributes"][attribute] += amount_after_bonuses
+			emit_signal("gladiator_attribute_changed", all_gladiators)
+			adjust_card_stock(attribute, "remove")
+			success = true
+			rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
+	else: 
+		print("No " + attribute + " cards left in stock!")
+		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
+		
+func create_card_pool():
+	attr_cards_stock = {
+		"strength": 100,
+		"weapon_skill": 100,
+		"quickness": 50,
+		"crit_rating": 50,
+		"avoidance": 50,
+		"health": 100,
+		"resilience": 50,
+		"endurance": 100,
+	}
+	var _all_cards_stock = {}  # Create a fresh dictionary
+
+	# Copy original attr_cards_stock values into it
+	for key in attr_cards_stock.keys():
+		_all_cards_stock[key] = attr_cards_stock[key]
+
+	# Now add stock values from equipment_data
+	for category in equipment_data.keys():
+		for item_name in equipment_data[category].keys():
+			var item_data = equipment_data[category][item_name]
+			if item_data.has("stock"):
+				_all_cards_stock[item_name] = item_data["stock"]
+				
+	print("asdasd" + str(_all_cards_stock))
+	return _all_cards_stock
+		
+@rpc("any_peer")
+func initialize_card_stock():
+	emit_signal("card_stock_changed", all_cards_stock)
+
+@rpc("any_peer")
+func adjust_card_stock(card: String, action: String):
+	if action == "remove": all_cards_stock[card] -= 1
+	if action == "add": all_cards_stock[card] += 1
+	
+	emit_signal("card_stock_changed", all_cards_stock)
 
 @rpc("any_peer")
 func modify_gladiator_life(id: int, life_lost: int):
@@ -163,6 +261,8 @@ func _store_gladiator(peer_id: int, data: Dictionary):
 func _start_game():
 	print("All gladiators submitted! Starting game...")
 	get_tree().change_scene_to_file("res://main.tscn")
+	#initialize_card_stock()
+	#print("initialize_card_stock()")
 
 func _assign_authority():
 	if multiplayer.is_server():

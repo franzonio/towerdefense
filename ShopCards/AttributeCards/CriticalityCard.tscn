@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://ccr8n46sytfdb"]
 
-[ext_resource type="Script" uid="uid://by6tkm7yvoxq" path="res://ShopCards/AttributeCards/CriticalityCard.gd" id="1_blvh5"]
+[ext_resource type="Script" uid="uid://dyyvc2btnvyo" path="res://ShopCards/AttributeCards/BaseAttributeCard.gd" id="1_rhs16"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4p5m8"]
 font_size = 12
@@ -12,7 +12,8 @@ scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 expand_icon = true
-script = ExtResource("1_blvh5")
+script = ExtResource("1_rhs16")
+attribute_name = "crit_rating"
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1

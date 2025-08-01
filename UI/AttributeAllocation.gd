@@ -24,7 +24,7 @@ var no_weapon := {
 	"durability": 1,
 	"req": 1,
 	"crit": 0.1,
-	"speed": 1,
+	"speed": 0.25,
 	"range": 150,
 	"parry:": false,
 	"block": false,
@@ -145,19 +145,19 @@ func _on_confirm():
 		"weapon_slot1": no_weapon,
 		"weapon_slot2": no_weapon,
 		"armor": {
-			"head": empty,
-			"shoulder": empty,
-			"chest": empty,
+			"head": {},
+			"shoulder": {},
+			"chest": {},
 			},
 		"talismans:": {
-			"ring1": empty,
-			"ring2": empty
+			"ring1": {},
+			"ring2": {}
 		},
 		"inventory": {
-			"slot1": empty,
-			"slot2": empty,
-			"slot3": empty,
-			"slot4": empty
+			"slot1": {},
+			"slot2": {},
+			"slot3": {},
+			"slot4": {}
 		}
 	}
 	#print(multiplayer.is_server)

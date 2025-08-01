@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://w4fakuk8hqgk"]
 
-[ext_resource type="Script" uid="uid://by6tkm7yvoxq" path="res://ShopCards/AttributeCards/CriticalityCard.gd" id="1_ok47v"]
+[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="1_52x22"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4p5m8"]
 font_size = 12
@@ -12,7 +12,8 @@ scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 expand_icon = true
-script = ExtResource("1_ok47v")
+script = ExtResource("1_52x22")
+equipment_name = "simple_sword"
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
@@ -30,5 +31,3 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [connection signal="button_up" from="." to="." method="_on_button_up"]
-[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
-[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

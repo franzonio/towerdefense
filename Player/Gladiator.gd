@@ -344,7 +344,7 @@ func update_gladiator(data: Dictionary):
 	
 	armor_absorb = 1.0
 	
-	print("data" + str(data))
+	print("\n data" + str(data) + "\n")
 	gladiator_name = data.name
 	$Name.text = data.name
 	strength = data["attributes"]["strength"]

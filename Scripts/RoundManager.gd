@@ -190,7 +190,7 @@ func register_duel_result(winner_id: int, loser_id: int = -1):
 
 func _on_gladiator_attribute_changed(new_all_gladiators: Dictionary): 
 	data = new_all_gladiators
-	print(data)
+	#print(data)
 	#print("signal: " + str(data))
 
 func spawn_duel_between(peer1, peer2, index: int):
