@@ -13,6 +13,8 @@ theme_override_icons/icon = ExtResource("1_egyka")
 expand_icon = true
 script = ExtResource("2_gc3nw")
 attribute_name = "strength"
+amount = 5
+cost = 5
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1

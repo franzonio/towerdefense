@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://w4fakuk8hqgk"]
+[gd_scene load_steps=4 format=3 uid="uid://w4fakuk8hqgk"]
 
+[ext_resource type="Texture2D" uid="uid://bdg4nnq18hw87" path="res://Assets/CardAssets/simple_sword.png" id="1_7nosa"]
 [ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="1_52x22"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4p5m8"]
@@ -11,9 +12,11 @@ offset_bottom = 458.0
 scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_icons/icon = ExtResource("1_7nosa")
 expand_icon = true
 script = ExtResource("1_52x22")
 equipment_name = "simple_sword"
+cost = 20
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1
@@ -21,11 +24,10 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -71.0
-offset_top = 25.0
+offset_top = 5.0
 offset_right = 74.0
-offset_bottom = 61.0
+offset_bottom = 41.0
 grow_horizontal = 2
-text = "Simple sword"
 label_settings = SubResource("LabelSettings_4p5m8")
 horizontal_alignment = 1
 vertical_alignment = 1

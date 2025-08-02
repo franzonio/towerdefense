@@ -48,7 +48,12 @@ func _ready():
 	GameState_.connect("gladiator_life_changed", Callable(self, "_on_life_changed"))
 	GameState_.connect("countdown_updated", Callable(self, "_on_countdown_updated"))
 	GameState_.connect("card_stock_changed", Callable(self, "_on_card_stock_changed"))
-	GameState_.connect("add_to_inventory_signal", Callable(self, "_on_add_to_inventory_signal"))
+	GameState_.connect("send_gladiator_data_to_peer_signal", Callable(self, "_on_send_gladiator_data_to_peer_signal"))
+	
+	
+
+	
+	
 	
 	#GameState_.connect("card_stock_initialize", Callable(self, "_on_card_stock_initialized"))
 	populate_hud()  # Initial draw
@@ -57,35 +62,46 @@ func _ready():
 	item_popup.add_item("Equip", 0)
 	item_popup.add_item("Sell", 1)
 	item_popup.id_pressed.connect(_on_item_popup_pressed)
-
+	
 	countdown_label = $IntermissionTimerLabel
 	shop = $Shop
 	shop.visible = false
 
 	if multiplayer.is_server(): GameState_.initialize_card_stock()
 	else: GameState_.rpc_id(1, "initialize_card_stock")
-	all_cards = [strength_card, health_card, criticality_card, endurance_card, quickness_card, 
-	resilience_card, weapon_mastery_card, simple_sword_card]
+	await get_tree().create_timer(1).timeout
+	all_cards = get_all_cards()
 	shop_grid = $Shop/VBoxContainer/ShopGridContainer
 	refresh_button = $Shop/VBoxContainer/HBoxContainer/RefreshButton
 	inventory_grid = $Inventory/InventoryGridContainer
 	#update_inventory_ui()
+	#await get_tree().create_timer(1).timeout
+	print("card_stock: " + str(card_stock))
+	if multiplayer.is_server():
+		GameState_.refresh_gladiator_data(multiplayer.get_unique_id())
+	else:
+		GameState_.rpc_id(1, "refresh_gladiator_data", multiplayer.get_unique_id())
+	
 	await get_tree().create_timer(0.8).timeout
 	roll_cards()
 	
-func _on_add_to_inventory_signal(peer_id: int, success: bool, _player_gladiator_data: Dictionary):
+func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data: Dictionary):
 	if peer_id == multiplayer.get_unique_id():
 		player_gladiator_data = _player_gladiator_data
+		print(peer_id)
 		update_inventory_ui(peer_id)
+		
+		update_gold(player_gladiator_data["gold"])
 	
 func update_inventory_ui(glad_id: int):
 	var gladiator_inventory = player_gladiator_data["inventory"]
-	print("gladiator_inventory: " + str(gladiator_inventory))
-	# Clear existing grid (optional, if you're reloading)
+	print("peer " + str(glad_id) + " inventory: " + str(gladiator_inventory))
+	
+	# Clear existing grid
 	for child in inventory_grid.get_children():
 		child.queue_free()
 
-	# Build a lookup from card name to PackedScene
+	# Build a lookup from all_cards
 	var card_scene_map := {}
 	for card in all_cards:
 		card_scene_map[card[1]] = card[0]  # card[1] is name, card[0] is scene
@@ -117,10 +133,13 @@ func _on_item_popup_pressed(id: int):
 			'''
 		1:
 			print("Sell requested for ", selected_item_name, " from ", selected_slot)
-			#GameState_.sell_item(multiplayer.get_unique_id(), selected_slot)
+			if multiplayer.is_server():
+				GameState_.sell_from_inventory(multiplayer.get_unique_id(), selected_item_name)
+			else:
+				GameState_.rpc_id(1, "sell_from_inventory", multiplayer.get_unique_id(), selected_item_name)
 
 	# Optionally repopulate UI after action
-	update_inventory_ui(multiplayer.get_unique_id())
+	#update_inventory_ui(multiplayer.get_unique_id())
 
 
 func _on_inventory_item_pressed(item_name: String, slot_name: String):
@@ -150,12 +169,17 @@ func clear_shop_grid():
 	if tweens.size() > 0:
 		await tweens[-1].finished
 
+func get_all_cards():
+	all_cards = [[strength_card, "strength", card_stock["strength"]], [health_card, "health", card_stock["health"]], 
+		[criticality_card, "crit_rating", card_stock["crit_rating"]], [endurance_card, "endurance", card_stock["endurance"]], 
+		[quickness_card, "quickness", card_stock["quickness"]], [resilience_card, "resilience", card_stock["resilience"]], 
+		[weapon_mastery_card, "weapon_skill", card_stock["weapon_skill"]], [simple_sword_card, "simple_sword", card_stock["simple_sword"]]]
+	return all_cards
+
 func roll_cards():
 	print("\n" + str(multiplayer.get_unique_id()) + "🃏reroll_cards: " + str(card_stock))
-	all_cards = [[strength_card, "strength", card_stock["strength"]], [health_card, "health", card_stock["health"]], 
-			[criticality_card, "crit_rating", card_stock["crit_rating"]], [endurance_card, "endurance", card_stock["endurance"]], 
-			[quickness_card, "quickness", card_stock["quickness"]], [resilience_card, "resilience", card_stock["resilience"]], 
-			[weapon_mastery_card, "weapon_skill", card_stock["weapon_skill"]], [simple_sword_card, "simple_sword", card_stock["simple_sword"]]]
+	
+	all_cards = get_all_cards()
 			
 	#print("owner: " + str(multiplayer.get_unique_id()))
 			
@@ -183,7 +207,7 @@ func weighted_random_selection(_all_cards: Array, count: int = 5):
 	var pool := []
 
 	# Step 1: Build a pool based on weights
-	print("\n" + str(multiplayer.get_unique_id()) + "🃏weighted_random_selection: " + str(_all_cards))
+	#print("\n" + str(multiplayer.get_unique_id()) + "🃏weighted_random_selection: " + str(_all_cards))
 	for pair in _all_cards:
 		var item = pair[0]
 		var stock = int(pair[2])
@@ -231,7 +255,8 @@ func _on_countdown_updated(time_left: int):
 	if time_left > 0: intermission = true
 	if intermission: 
 		if reroll_start_of_intermission:
-			reroll_cards()
+			print("time_passed: " + str(time_passed))
+			if time_passed > 5: reroll_cards()
 			reroll_start_of_intermission = 0
 		#update_countdown_labels(time_left)
 		if countdown_label: countdown_label.text = "⏳ %d" % time_left
@@ -289,9 +314,7 @@ func _process(delta: float) -> void:
 	label_timer.text = "Time: " + str(time_passed as int)
 
 func update_gold(amount: int):
-	gold = amount
-	label_gold.text = "Gold: " + str(gold)
+	label_gold.text = "💰" + str(amount)
 
 func update_experience(amount: int):
-	experience = amount
-	label_xp.text = "XP: " + str(experience)
+	label_xp.text = "       🔹" + str(amount)

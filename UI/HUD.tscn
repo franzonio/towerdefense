@@ -1,6 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://dutn6wxx1oapc"]
+[gd_scene load_steps=8 format=3 uid="uid://dutn6wxx1oapc"]
 
 [ext_resource type="Script" uid="uid://cpvmnjflyi4ln" path="res://UI/HUD.gd" id="1_yixhe"]
+[ext_resource type="Texture2D" uid="uid://b3rcyrl5mceea" path="res://Assets/MenuAssets/Menu Buttons/Square Buttons/Square Buttons/Questionmark Square Button.png" id="2_ijstf"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_yixhe"]
 properties/0/path = NodePath("GridContainer/VBoxContainer/Player1/PlayerInfo/PlayerName:text")
@@ -471,26 +472,96 @@ columns = 4
 
 [node name="ItemPopup" type="PopupMenu" parent="."]
 
-[node name="Equipment" type="VBoxContainer" parent="."]
+[node name="EquipmentPanel" type="Panel" parent="."]
+self_modulate = Color(1, 1, 1, 0.513726)
 offset_left = 774.0
 offset_top = 158.0
 offset_right = 1016.0
 offset_bottom = 438.0
 
-[node name="HBoxContainer" type="HBoxContainer" parent="Equipment"]
-layout_mode = 2
+[node name="HeadSlot" type="Button" parent="EquipmentPanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+tooltip_text = "Head"
+icon = ExtResource("2_ijstf")
+expand_icon = true
 
-[node name="Button" type="Button" parent="Equipment/HBoxContainer"]
-custom_minimum_size = Vector2(40, 40)
+[node name="ChestSlot" type="Button" parent="EquipmentPanel"]
 layout_mode = 2
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -71.0
+offset_right = 20.0
+offset_bottom = -31.0
+grow_horizontal = 2
+grow_vertical = 2
+tooltip_text = "Chest"
+icon = ExtResource("2_ijstf")
+expand_icon = true
 
-[node name="MarginContainer" type="MarginContainer" parent="Equipment/HBoxContainer"]
+[node name="WeaponSlot1" type="Button" parent="EquipmentPanel"]
 layout_mode = 2
-size_flags_horizontal = 3
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -48.0
+offset_top = -40.0
+offset_right = -8.0
+grow_horizontal = 2
+grow_vertical = 0
+tooltip_text = "Main hand"
+icon = ExtResource("2_ijstf")
+expand_icon = true
 
-[node name="Button2" type="Button" parent="Equipment/HBoxContainer"]
-custom_minimum_size = Vector2(40, 40)
+[node name="WeaponSlot2" type="Button" parent="EquipmentPanel"]
 layout_mode = 2
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -40.0
+offset_right = 48.0
+grow_horizontal = 2
+grow_vertical = 0
+tooltip_text = "Off hand"
+icon = ExtResource("2_ijstf")
+expand_icon = true
+
+[node name="Ring1Slot" type="Button" parent="EquipmentPanel"]
+layout_mode = 2
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_top = -43.0
+offset_right = 40.0
+offset_bottom = -3.0
+grow_vertical = 2
+tooltip_text = "Ring"
+icon = ExtResource("2_ijstf")
+expand_icon = true
+
+[node name="Ring2Slot" type="Button" parent="EquipmentPanel"]
+layout_mode = 2
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 41.0
+offset_top = -43.0
+offset_right = 81.0
+offset_bottom = -3.0
+grow_vertical = 2
+tooltip_text = "Ring"
+icon = ExtResource("2_ijstf")
+expand_icon = true
 
 [connection signal="pressed" from="ShopButton" to="." method="_on_shop_button_pressed"]
 [connection signal="toggled" from="ShopButton" to="." method="_on_shop_button_toggled"]

@@ -14,6 +14,8 @@ size_flags_vertical = 3
 expand_icon = true
 script = ExtResource("1_owh4d")
 attribute_name = "endurance"
+amount = 5
+cost = 5
 
 [node name="Label" type="Label" parent="."]
 layout_mode = 1

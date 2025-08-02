@@ -2,14 +2,32 @@
 extends Button
 
 @export var equipment_name: String = ""
+@export var cost: int
+var label
+var parent_name
 
 var mouse_inside_button := false
 var added := false
+
 
 func _ready():
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	GameState_.connect("card_buy_result", Callable(self, "_on_card_buy_result"))
+	parent_name = get_parent().name
+	if parent_name == "ShopGridContainer":
+		var label_display = format_name(equipment_name)
+		label = $Label
+		label.text = label_display+"\n💰" + str(cost)
+
+func format_name(raw_name: String) -> String:
+	var parts = raw_name.split("_")            # → ["simple", "sword"]
+	var joined = ""                            
+	for i in parts.size():
+		joined += parts[i]
+		if i < parts.size() - 1:
+			joined += " "
+	return joined.capitalize()                 # → "Simple Sword"
 
 func _on_mouse_entered():
 	mouse_inside_button = true
@@ -22,7 +40,7 @@ func _on_mouse_exited():
 	tween.tween_property(self, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 
 func _on_button_up():
-	var parent_name = get_parent().name
+	
 	
 	if parent_name == "ShopGridContainer": 
 		if is_multiplayer_authority(): buy_equipment()
@@ -42,9 +60,9 @@ func buy_equipment():
 		var id := multiplayer.get_unique_id()
 		
 		if multiplayer.is_server():
-			GameState_.buy_equipment_card(multiplayer.get_unique_id(), "simple_sword")
+			GameState_.buy_equipment_card(id, equipment_name, cost)
 		else:
-			GameState_.rpc_id(1, "buy_equipment_card", multiplayer.get_unique_id(), "simple_sword")
+			GameState_.rpc_id(1, "buy_equipment_card", id, equipment_name, cost)
 
 		await get_tree().create_timer(0.15).timeout
 		#print(added)
@@ -57,5 +75,4 @@ func buy_equipment():
 
 func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data):
 	if peer_id == multiplayer.get_unique_id():
-		#print(added)
 		added = success

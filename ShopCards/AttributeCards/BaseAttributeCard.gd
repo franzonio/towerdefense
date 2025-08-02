@@ -2,14 +2,33 @@
 extends Button
 
 @export var attribute_name: String = ""
+@export var amount: int
+@export var cost: int
+var label
+var parent_name
 
 var mouse_inside_button := false
 var added := false
+
 
 func _ready():
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	GameState_.connect("card_buy_result", Callable(self, "_on_card_buy_result"))
+	parent_name = get_parent().name
+	if parent_name == "ShopGridContainer":
+		var label_display = format_name(attribute_name)
+		label = $Label
+		label.text = "+" + str(amount) + " " + label_display+"\n💰" + str(cost)
+
+func format_name(raw_name: String) -> String:
+	var parts = raw_name.split("_")            # → ["simple", "sword"]
+	var joined = ""                            
+	for i in parts.size():
+		joined += parts[i]
+		if i < parts.size() - 1:
+			joined += " "
+	return joined.capitalize()                 # → "Simple Sword"
 
 func _on_mouse_entered():
 	mouse_inside_button = true
@@ -42,9 +61,9 @@ func buy_equipment():
 		var id := multiplayer.get_unique_id()
 		
 		if multiplayer.is_server():
-			GameState_.buy_attribute_card(id, 5, attribute_name)
+			GameState_.buy_attribute_card(id, 5, attribute_name, cost)
 		else:
-			GameState_.rpc_id(1, "buy_attribute_card", id, 5, attribute_name)
+			GameState_.rpc_id(1, "buy_attribute_card", id, 5, attribute_name, cost)
 
 		await get_tree().create_timer(0.15).timeout
 		#print(added)

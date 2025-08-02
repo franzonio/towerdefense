@@ -37,7 +37,7 @@ var remaining_points := 0
 
 @onready var remaining_label = $RemainingLabel
 @onready var confirm_button = $ConfirmButton
-@onready var player_life = 20
+@onready var player_life = 200
 
 func _ready():
 	_initialize_attributes()
@@ -139,6 +139,9 @@ func _on_confirm():
 	# Prepare your data
 	var gladiator = {
 		"name": GameState_.selected_name,
+		"gold": 100,
+		"exp": 0,
+		"level": 0,
 		"race": GameState_.selected_race,
 		"attributes": final_attributes,
 		"player_life": player_life,

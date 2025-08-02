@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c00ypgu5deako"
-path="res://.godot/imported/Background.jpg-323dff397e5f42cc8f8257703114acfc.ctex"
+uid="uid://bdg4nnq18hw87"
+path="res://.godot/imported/simple_sword.png-6550f82166e3e59f2788ab9dc61e9699.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/MenuAssets/Background.jpg"
-dest_files=["res://.godot/imported/Background.jpg-323dff397e5f42cc8f8257703114acfc.ctex"]
+source_file="res://Assets/CardAssets/simple_sword.png"
+dest_files=["res://.godot/imported/simple_sword.png-6550f82166e3e59f2788ab9dc61e9699.ctex"]
 
 [params]
 

@@ -5,13 +5,15 @@ extends Node
 @export var all_equipment = {
 	"sword": {
 		"simple_sword": {
+			"price": 20,
 			"stock": 500,
 			"type": "weapon",
 			"hands": 1,
 			"min_dmg": 3, 
 			"max_dmg": 6,
 			"durability": 30,
-			"req": 20,
+			"str_req": 20,
+			"skill_req": 30,
 			"lvl": 1,
 			"crit": 0.1,
 			"speed": 1,

@@ -7,10 +7,14 @@ Combat/strategy
 	- Gladiator combat strategy (light/heavy/normal attacks, def/off/normal tactic)
 
 Cards
-	☆ Reroll cards at start of new intermission phase
-	☆ Common card pool across players
-		☆ Probability of appearing should depend on stock size
+	#☆ Reroll cards at start of new intermission phase
+	#☆ Common card pool across players
+	#	☆ Probability of appearing should depend on stock size
 	☆ Placeholder art for cards
+	#☆ Card costs, updating player gold. Checking if possible to buy (inventory space, player gold)
+	#☆ Selling equipment (half price)
+	#	☆ Adding to card pool on sell
+
 
 Implement reward system
 	☆ Experience/level
@@ -22,9 +26,10 @@ Implement reward system
 
 	
 HUD/UI
-	☆ Binds for shop/inventory
+	#☆ Inventory overview
 	☆ Attributes overview button
 	☆ Equipment overview button
+	☆ Binds for shop/inventory
 	☆ Round counter (instead of total game time)
 	☆ Round timer
 	☆ Selecting concede threshold during intermission
@@ -65,5 +70,6 @@ Graphics
 
 
 Future
-	Mixturer
-	Betting? Spelaren styr en "mästare" som interagerar och vadslår med andra spelare. Sälja items till andra spelare.
+	Potions (long/short term)
+	Betting?
+	Auction house for items (instead of selling)

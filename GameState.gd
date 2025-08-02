@@ -30,7 +30,7 @@ signal gladiator_attribute_changed(new_all_gladiators: Dictionary)
 signal countdown_updated(time_left: int)
 signal card_stock_changed(new_all_cards_stock: Dictionary)
 #signal card_stock_initialize(new_attr_cards_stock: Dictionary)
-signal add_to_inventory_signal(peer_id: int, success: bool, gladiator_data: Dictionary)
+signal send_gladiator_data_to_peer_signal(peer_id: int, gladiator_data: Dictionary)
 signal card_buy_result(peer_id: int, success: bool)
 
 
@@ -126,63 +126,84 @@ func get_equipment_by_name(item_name: String):
 	return {}  # Return empty if not found
 
 @rpc("authority", "call_local")
-func add_to_inventory(id: int, success: bool, _gladiator_data) -> void:
-	emit_signal("add_to_inventory_signal", id, success, _gladiator_data)
+func equip_item(peer_id, item): pass
+
+@rpc("authority", "call_local")
+func send_gladiator_data_to_peer(id: int, _gladiator_data) -> void:
+	emit_signal("send_gladiator_data_to_peer_signal", id, _gladiator_data)
+
+@rpc("any_peer", "call_local")
+func refresh_gladiator_data(id: int) -> void:
+	#print("asdasdasd: " + str(all_gladiators[id]))
+	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
 
 @rpc("authority", "call_local")
 func notify_card_buy_result(id: int, success: bool, _gladiator_data) -> void:
 	emit_signal("card_buy_result", id, success, _gladiator_data)
 
 @rpc("any_peer", "call_local")
-func buy_equipment_card(id: int, equipment: String): 
+func buy_equipment_card(id: int, equipment: String, cost: int): 
 	var success := false
 	if all_cards_stock[equipment] >= 1:
-		var item_dict = get_equipment_by_name(equipment)
-		
-		for slot_name in all_gladiators[id]["inventory"].keys():
-			if all_gladiators[id]["inventory"][slot_name] == {}:
-				all_gladiators[id]["inventory"][slot_name] = item_dict
-				adjust_card_stock(equipment, "remove")
-				success = true
-				rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
-				rpc_id(id, "add_to_inventory", id, success, all_gladiators[id])
-				return
-		print("No inventory space!")
+		if all_gladiators[id]["gold"] >= cost:
+			var item_dict = get_equipment_by_name(equipment)
+			
+			for slot_name in all_gladiators[id]["inventory"].keys():
+				if all_gladiators[id]["inventory"][slot_name] == {}:
+					all_gladiators[id]["inventory"][slot_name] = item_dict
+					all_gladiators[id]["gold"] -= cost
+					adjust_card_stock(equipment, "remove")
+					success = true
+					rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
+					rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
+					return
+			print("No inventory space!")
+		else: print("Not enough gold!")
 	else: 
 		print("No " + equipment + " cards left in stock!")
 		
 		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
-		rpc_id(id, "add_to_inventory", id, success, all_gladiators[id])
+		rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
 
 					
 @rpc("any_peer", "call_local")
-func remove_from_inventory(id: int, equipment: String): 
+func sell_from_inventory(id: int, equipment: String): 
+	var item_dict = get_equipment_by_name(equipment)
+	#print("item_dict: " + str(item_dict))
+	var price = item_dict[equipment]["price"]
 	for slot_name in all_gladiators[id]["inventory"].keys():
 		var item = all_gladiators[id]["inventory"][slot_name]
 
 		# Check if the item is a dictionary and contains the equipment name
 		if typeof(item) == TYPE_DICTIONARY and item.has(equipment):
 			all_gladiators[id]["inventory"][slot_name] = {}  # Clear slot
+			all_gladiators[id]["gold"] += int(price/2)
+			print("gold: " + str(all_gladiators[id]["gold"]))
 			adjust_card_stock(equipment, "add")  # Restore stock
+			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
 			return  # Exit after first match
 
 	print("Item not found in inventory!")
 	
 	
 @rpc("any_peer", "call_local")
-func buy_attribute_card(id: int, amount: int, attribute: String):
+func buy_attribute_card(id: int, amount: int, attribute: String, cost: int):
 	var success := false
 	if all_cards_stock[attribute] >= 1:
-		#print("modify_attribute called on peer: ", multiplayer.get_unique_id())
-		var race = all_gladiators[id]["race"]
-		
-		if all_gladiators.has(id):
-			var amount_after_bonuses = float(amount)*RACE_MODIFIERS[race][attribute]
-			all_gladiators[id]["attributes"][attribute] += amount_after_bonuses
-			emit_signal("gladiator_attribute_changed", all_gladiators)
-			adjust_card_stock(attribute, "remove")
-			success = true
-			rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
+		if all_gladiators[id]["gold"] >= cost:
+			#print("modify_attribute called on peer: ", multiplayer.get_unique_id())
+			var race = all_gladiators[id]["race"]
+			
+			if all_gladiators.has(id):
+				var amount_after_bonuses = float(amount)*RACE_MODIFIERS[race][attribute]
+				all_gladiators[id]["attributes"][attribute] += amount_after_bonuses
+				all_gladiators[id]["gold"] -= cost
+				emit_signal("gladiator_attribute_changed", all_gladiators)
+				adjust_card_stock(attribute, "remove")
+				success = true
+				rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
+				rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
+		else: print("Not enough gold!")
 	else: 
 		print("No " + attribute + " cards left in stock!")
 		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
@@ -211,7 +232,7 @@ func create_card_pool():
 			if item_data.has("stock"):
 				_all_cards_stock[item_name] = item_data["stock"]
 				
-	print("asdasd" + str(_all_cards_stock))
+	#print("asdasd" + str(_all_cards_stock))
 	return _all_cards_stock
 		
 @rpc("any_peer")
