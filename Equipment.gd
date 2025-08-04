@@ -40,7 +40,7 @@ extends Node
 			"skill_req": 30,
 			"lvl": 1,
 			"crit": 0.1,
-			"speed": 1,
+			"speed": 0.25,
 			"range": 150,
 			"parry:": true,
 			"block": false,

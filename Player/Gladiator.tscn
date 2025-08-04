@@ -368,6 +368,12 @@ properties/13/replication_mode = 2
 properties/14/path = NodePath("HealthBar:max_value")
 properties/14/spawn = true
 properties/14/replication_mode = 2
+properties/15/path = NodePath(".:concede_threshold")
+properties/15/spawn = true
+properties/15/replication_mode = 2
+properties/16/path = NodePath(".:max_health")
+properties/16/spawn = true
+properties/16/replication_mode = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l0fom"]
 bg_color = Color(0, 0, 0, 0.443137)

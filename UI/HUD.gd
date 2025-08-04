@@ -2,6 +2,7 @@ extends CanvasLayer
 
 @onready var strength_card = preload("res://ShopCards/AttributeCards/StrengthCard.tscn")
 @onready var health_card = preload("res://ShopCards/AttributeCards/HealthCard.tscn")
+@onready var avoidance_card = preload("res://ShopCards/AttributeCards/AvoidanceCard.tscn")
 @onready var criticality_card = preload("res://ShopCards/AttributeCards/CriticalityCard.tscn")
 @onready var endurance_card = preload("res://ShopCards/AttributeCards/EnduranceCard.tscn")
 @onready var quickness_card = preload("res://ShopCards/AttributeCards/QuicknessCard.tscn")
@@ -16,10 +17,11 @@ var equipment_card_scenes = {
 
 @onready var inventory_popup := $InventoryPopup
 @onready var equipment_popup := $EquipmentPopup
-@onready var label_timer = $MarginContainer/HBoxContainer/Label_Timer
+@onready var label_round = $MarginContainer/HBoxContainer/Label_Round
 @onready var label_gold = $MarginContainer/HBoxContainer/Label_Gold
 @onready var label_xp = $MarginContainer/HBoxContainer/Label_Experience
 
+@export var round = 0
 @export var time_passed: float = 0.0
 @export var gold: int = 0
 @export var experience: int = 0
@@ -61,6 +63,17 @@ var equipment_button_parent_name
 @onready var weapon2_slot = $EquipmentPanel/Weapon2Slot
 @onready var ring1_slot = $EquipmentPanel/Ring1Slot
 @onready var ring2_slot = $EquipmentPanel/Ring2Slot
+
+@onready var attribute_panel = $AttributePanel
+@onready var health_panel = $AttributePanel/GridContainer/Health
+@onready var strength_panel = $AttributePanel/GridContainer/Strength
+@onready var weapon_skill_panel = $AttributePanel/GridContainer/WeaponSkill
+@onready var endurance_panel = $AttributePanel/GridContainer/Endurance
+@onready var criticality_panel = $AttributePanel/GridContainer/Criticality
+@onready var avoidance_panel = $AttributePanel/GridContainer/Avoidance
+@onready var quickness_panel = $AttributePanel/GridContainer/Quickness
+@onready var resilience_panel = $AttributePanel/GridContainer/Resilience
+
 #@onready var all_equipment_slots = [head_slot, chest_slot, weapon1_slot, weapon2_slot, ring1_slot, ring2_slot]
 
 func _ready():
@@ -85,6 +98,7 @@ func _ready():
 
 	shop.visible = false
 	equipment_panel.visible = false
+	attribute_panel.visible = false
 	
 	if multiplayer.is_server(): GameState_.initialize_card_stock()
 	else: GameState_.rpc_id(1, "initialize_card_stock")
@@ -99,14 +113,37 @@ func _ready():
 	await get_tree().create_timer(0.8).timeout
 	roll_cards()
 	
+	
+func _process(delta: float) -> void:
+	time_passed += delta
+	if !intermission: label_round.text = "Round " + str(round) + " | " + str(int(time_passed))
+	#label_timer.text = "Time: " + str(time_passed as int)
+	if Input.is_action_just_pressed("toggle_shop"):
+		if $ShopButton:
+			$ShopButton.emit_signal("pressed")
+	if Input.is_action_just_pressed("toggle_equipment"):
+		if $EquipmentButton:
+			$EquipmentButton.emit_signal("pressed")
+	
 func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data: Dictionary):
 	if peer_id == multiplayer.get_unique_id():
 		print("_player_gladiator_data: " + str(_player_gladiator_data))
 		player_gladiator_data = _player_gladiator_data
 		update_inventory_ui(peer_id)
 		update_equipment_ui(peer_id)
-		
+		update_attribute_ui(peer_id)
 		update_gold(player_gladiator_data["gold"])
+	
+func update_attribute_ui(peer_id: int): 
+	var attributes = player_gladiator_data.get("attributes", {})
+	health_panel.text = "Health: " + str(int(attributes["health"]))
+	strength_panel.text = "Strength: " + str(int(attributes["strength"]))
+	weapon_skill_panel.text = "Weapon Mastery " + str(int(attributes["weapon_skill"]))
+	endurance_panel.text = "Endurance " + str(int(attributes["endurance"]))
+	criticality_panel.text = "Criticality " + str(int(attributes["crit_rating"]))
+	avoidance_panel.text = "Avoidance " + str(int(attributes["avoidance"]))
+	quickness_panel.text = "Quickness " + str(int(attributes["quickness"]))
+	resilience_panel.text = "Resilience " + str(int(attributes["resilience"]))
 	
 func update_equipment_ui(peer_id: int): 
 	for slot in equipment_panel.get_children():
@@ -304,6 +341,8 @@ func get_all_cards():
 	all_cards = [[strength_card, "strength", card_stock["strength"]], [health_card, "health", card_stock["health"]], 
 		[criticality_card, "crit_rating", card_stock["crit_rating"]], [endurance_card, "endurance", card_stock["endurance"]], 
 		[quickness_card, "quickness", card_stock["quickness"]], [resilience_card, "resilience", card_stock["resilience"]], 
+		[avoidance_card, "avoidance", card_stock["avoidance"]],
+		
 		[weapon_mastery_card, "weapon_skill", card_stock["weapon_skill"]], [simple_sword_card, "simple_sword", card_stock["simple_sword"]]]
 	return all_cards
 
@@ -368,8 +407,12 @@ func _on_refresh_button_pressed():
 
 func _on_equipment_button_pressed():
 	equipment_pressed = !equipment_pressed
-	if equipment_pressed: equipment_panel.visible = true
-	else: equipment_panel.visible = false
+	if equipment_pressed: 
+		equipment_panel.visible = true
+		attribute_panel.visible = true
+	else: 
+		equipment_panel.visible = false
+		attribute_panel.visible = false
 
 func _on_shop_button_pressed():
 	shop_pressed = !shop_pressed
@@ -389,8 +432,11 @@ func _on_card_stock_changed(new_all_cards_stock: Dictionary):
 func _on_countdown_updated(time_left: int):
 	if time_left > 0: intermission = true
 	if intermission: 
+		label_round.text = "Round " + str(round)
 		if reroll_start_of_intermission:
+			#print("New round!")
 			#print("time_passed: " + str(time_passed))
+			round += 1
 			if time_passed > 5: reroll_cards()
 			reroll_start_of_intermission = 0
 		#update_countdown_labels(time_left)
@@ -399,6 +445,7 @@ func _on_countdown_updated(time_left: int):
 		if time_left == 0:
 			reroll_start_of_intermission = 1
 			intermission = false
+			time_passed = 0
 			await get_tree().create_timer(1.0).timeout
 			countdown_label.text = ""
 	
@@ -443,10 +490,6 @@ func populate_hud():
 		name_label.text = str(gladiator_data.get("name", "Unknown"))
 		race_label.text = str(gladiator_data.get("race", "???"))
 		life_label.text = "❤️ %d" % int(gladiator_data.get("player_life", 0))
-
-func _process(delta: float) -> void:
-	time_passed += delta
-	label_timer.text = "Time: " + str(time_passed as int)
 
 func update_gold(amount: int):
 	label_gold.text = "💰" + str(amount)

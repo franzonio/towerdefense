@@ -101,6 +101,7 @@ var attack_left_animations: Array = []# = all_animations.filter(func(name): retu
 var last_played_animation: String = ""
 @export var direction: Vector2 = Vector2.ZERO
 var owner_id
+@export var concede_threshold = 0.0
 
 signal died
 
@@ -117,6 +118,7 @@ func _ready():
 	#$HealthBar.value = max_health
 	$HealthBar.max_value = max_health
 	$HealthBar.value = max_health
+	#$HealthBar.bg_color = Color.FOREST_GREEN
 	$HealthBar/HealthBarText.text = str(int(current_health))
 
 	if opponent_peer_id:
@@ -133,7 +135,7 @@ func _ready():
 # Only process input if this is OUR player
 func _physics_process(delta):
 	$HealthBar.value = current_health
-	if is_multiplayer_authority() and opponent != null and is_instance_valid(opponent) and opponent.current_health > 0 and opponent_peer_id:
+	if is_multiplayer_authority() and opponent != null and is_instance_valid(opponent) and opponent.current_health > opponent.max_health*opponent.concede_threshold and opponent_peer_id:
 		
 		prev_animation = current_animation
 		check_for_attack(delta)
@@ -170,7 +172,8 @@ func check_for_attack(delta: float):
 			current_attack_target = opponent
 			attack_charge_time += delta
 
-			if attack_charge_time >= attack_speed and opponent.current_health > 0:
+			print("opponent.current_health" + str(opponent.current_health))
+			if attack_charge_time >= attack_speed and opponent.current_health > opponent.max_health*opponent.concede_threshold:
 				if direction.x > 0.0: current_animation = attack_right_animations[randi_range(0, attack_right_animations.size()-1)]
 				if direction.x < 0.0: current_animation = attack_left_animations[randi_range(0, attack_left_animations.size()-1)]
 				
@@ -236,16 +239,19 @@ func receive_damage(amount: int, hit_success, dodge_success, crit):
 	
 	current_health -= amount
 	$HealthBar.value = current_health
+	#$HealthBar.bg_color = Color.DARK_RED
 	$HealthBar/HealthBarText.text = str(int(current_health))
 	rpc("show_damage_popup", amount, hit_success, dodge_success, crit)
 
-	if current_health <= 0 and is_multiplayer_authority(): rpc("die")
+	if current_health <= concede_threshold*max_health and is_multiplayer_authority(): rpc("die")
 
 
 @rpc("any_peer", "call_local")
 func die():
 	if is_multiplayer_authority():
-		var health_loss = 5
+		var health_loss
+		if current_health <= concede_threshold*max_health and current_health > 0: health_loss = 5
+		if current_health <= 0: health_loss = 15 + abs(current_health) 
 		GameState_.modify_gladiator_life.rpc(owner_id, health_loss)
 		GameState_.modify_gladiator_life(owner_id, health_loss)  # Run it locally too!
 		#var life = GameState_.all_gladiators[owner_id]["player_life"]

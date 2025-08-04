@@ -2,8 +2,8 @@
 
 Combat/strategy
 	- Recovery time when being struck
-	☆ Gladiator %health concede threshold
-		☆ Big player life loss if gladiator actually dies (< 0 HP, scale with how much below 0 HP)
+	#☆ Gladiator %health concede threshold
+	#	☆ Big player life loss if gladiator actually dies (< 0 HP, scale with how much below 0 HP)
 	- Gladiator combat strategy (light/heavy/normal attacks, def/off/normal tactic)
 
 Cards
@@ -27,11 +27,11 @@ Implement reward system
 	
 HUD/UI
 	#☆ Inventory overview
-	☆ Attributes overview button
-	☆ Equipment overview button
-	☆ Binds for shop/inventory
-	☆ Round counter (instead of total game time)
-	☆ Round timer
+	#☆ Attributes overview button
+	#☆ Equipment overview button
+	#☆ Binds for shop/inventory
+	#☆ Round counter (instead of total game time)
+	#☆ Round timer
 	☆ Selecting concede threshold during intermission
 	- Selecting gladiator combat strategy during intermission (see Combat/strategy section)
     - Chat
@@ -60,6 +60,7 @@ Implement equipment system
 	
 Races
 	- Add more races
+    - Race age modifications (young, adult, middle-aged, ...)
 	☆ Placeholder sprite for each race (with basic walk/attack animation)
 	- Single draft at start of game instead of choosing between all races
 	- Race icons (for in-game HUD and race selection)
