@@ -34,6 +34,8 @@ HUD/UI
 	☆ Round timer
 	☆ Selecting concede threshold during intermission
 	- Selecting gladiator combat strategy during intermission (see Combat/strategy section)
+    - Chat
+    ☆ Log (informing what's happening in game)
 
 Attributes
 	☆ Making all stats impactful
@@ -45,7 +47,7 @@ Attributes
 	
 Implement equipment system
 	Weapons
-		☆ Dual wield (alternating weapon hits)
+		#☆ Dual wield (alternating weapon hits)
 		☆ Two-handed
 		☆ Shield (block)
 		☆ Parry
@@ -71,5 +73,6 @@ Graphics
 
 Future
 	Potions (long/short term)
+    Curses
 	Betting?
 	Auction house for items (instead of selling)

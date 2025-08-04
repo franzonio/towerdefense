@@ -8,7 +8,7 @@ var parent_name
 
 var mouse_inside_button := false
 var added := false
-
+signal button_parent(parent_name: String)
 
 func _ready():
 	mouse_entered.connect(_on_mouse_entered)
@@ -31,16 +31,19 @@ func format_name(raw_name: String) -> String:
 
 func _on_mouse_entered():
 	mouse_inside_button = true
-	var tween := get_tree().create_tween()
-	tween.tween_property(self, "scale", Vector2(1.05, 1.05), 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+	if parent_name == "ShopGridContainer":
+		var tween := get_tree().create_tween()
+		tween.tween_property(self, "scale", Vector2(1.05, 1.05), 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _on_mouse_exited():
 	mouse_inside_button = false
-	var tween := get_tree().create_tween()
-	tween.tween_property(self, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+	if parent_name == "ShopGridContainer":
+		var tween := get_tree().create_tween()
+		tween.tween_property(self, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 
 func _on_button_up():
 	
+	emit_signal("button_parent", parent_name)
 	
 	if parent_name == "ShopGridContainer": 
 		if is_multiplayer_authority(): buy_equipment()

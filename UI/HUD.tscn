@@ -384,6 +384,23 @@ mouse_filter = 1
 horizontal_alignment = 1
 vertical_alignment = 1
 
+[node name="EquipmentButton" type="Button" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -112.0
+offset_top = -178.0
+offset_right = -82.0
+offset_bottom = -147.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(2, 2)
+tooltip_text = "asd"
+text = "🤺"
+icon_alignment = 1
+
 [node name="ShopButton" type="Button" parent="."]
 anchors_preset = 3
 anchor_left = 1.0
@@ -470,7 +487,10 @@ size_flags_horizontal = 3
 size_flags_vertical = 3
 columns = 4
 
-[node name="ItemPopup" type="PopupMenu" parent="."]
+[node name="InventoryPopup" type="PopupMenu" parent="."]
+
+[node name="EquipmentPopup" type="PopupMenu" parent="."]
+auto_translate_mode = 1
 
 [node name="EquipmentPanel" type="Panel" parent="."]
 self_modulate = Color(1, 1, 1, 0.513726)
@@ -479,90 +499,93 @@ offset_top = 158.0
 offset_right = 1016.0
 offset_bottom = 438.0
 
-[node name="HeadSlot" type="Button" parent="EquipmentPanel"]
+[node name="HeadSlot" type="TextureRect" parent="EquipmentPanel"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -20.0
+offset_top = 10.0
 offset_right = 20.0
-offset_bottom = 40.0
+offset_bottom = 50.0
 grow_horizontal = 2
-tooltip_text = "Head"
-icon = ExtResource("2_ijstf")
-expand_icon = true
+texture = ExtResource("2_ijstf")
+expand_mode = 4
 
-[node name="ChestSlot" type="Button" parent="EquipmentPanel"]
-layout_mode = 2
+[node name="ChestSlot" type="TextureRect" parent="EquipmentPanel"]
+layout_mode = 1
+anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -20.0
-offset_top = -71.0
+offset_top = -54.0
 offset_right = 20.0
-offset_bottom = -31.0
+offset_bottom = -14.0
 grow_horizontal = 2
 grow_vertical = 2
-tooltip_text = "Chest"
-icon = ExtResource("2_ijstf")
-expand_icon = true
+texture = ExtResource("2_ijstf")
+expand_mode = 4
 
-[node name="WeaponSlot1" type="Button" parent="EquipmentPanel"]
-layout_mode = 2
+[node name="Weapon1Slot" type="TextureRect" parent="EquipmentPanel"]
+layout_mode = 1
+anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -48.0
-offset_top = -40.0
+offset_top = -44.0
 offset_right = -8.0
+offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 0
-tooltip_text = "Main hand"
-icon = ExtResource("2_ijstf")
-expand_icon = true
+texture = ExtResource("2_ijstf")
+expand_mode = 4
 
-[node name="WeaponSlot2" type="Button" parent="EquipmentPanel"]
-layout_mode = 2
+[node name="Weapon2Slot" type="TextureRect" parent="EquipmentPanel"]
+layout_mode = 1
+anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = -40.0
-offset_right = 48.0
+offset_left = 9.0
+offset_top = -44.0
+offset_right = 49.0
+offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 0
-tooltip_text = "Off hand"
-icon = ExtResource("2_ijstf")
-expand_icon = true
+texture = ExtResource("2_ijstf")
+expand_mode = 4
 
-[node name="Ring1Slot" type="Button" parent="EquipmentPanel"]
-layout_mode = 2
+[node name="Ring1Slot" type="TextureRect" parent="EquipmentPanel"]
+layout_mode = 1
+anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -43.0
+offset_top = -29.0
 offset_right = 40.0
-offset_bottom = -3.0
+offset_bottom = 11.0
 grow_vertical = 2
-tooltip_text = "Ring"
-icon = ExtResource("2_ijstf")
-expand_icon = true
+texture = ExtResource("2_ijstf")
+expand_mode = 4
 
-[node name="Ring2Slot" type="Button" parent="EquipmentPanel"]
-layout_mode = 2
+[node name="Ring2Slot" type="TextureRect" parent="EquipmentPanel"]
+layout_mode = 1
+anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
 offset_left = 41.0
-offset_top = -43.0
+offset_top = -29.0
 offset_right = 81.0
-offset_bottom = -3.0
+offset_bottom = 11.0
 grow_vertical = 2
-tooltip_text = "Ring"
-icon = ExtResource("2_ijstf")
-expand_icon = true
+texture = ExtResource("2_ijstf")
+expand_mode = 4
 
+[connection signal="pressed" from="EquipmentButton" to="." method="_on_equipment_button_pressed"]
 [connection signal="pressed" from="ShopButton" to="." method="_on_shop_button_pressed"]
 [connection signal="toggled" from="ShopButton" to="." method="_on_shop_button_toggled"]
 [connection signal="pressed" from="Shop/VBoxContainer/HBoxContainer/RefreshButton" to="." method="_on_refresh_button_pressed"]

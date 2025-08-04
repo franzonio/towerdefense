@@ -145,14 +145,137 @@ func _on_confirm():
 		"race": GameState_.selected_race,
 		"attributes": final_attributes,
 		"player_life": player_life,
-		"weapon_slot1": no_weapon,
-		"weapon_slot2": no_weapon,
+		
+		"weapon1": {
+			"unarmed": 
+				{
+					"hands": 1,
+					"min_dmg": 1, 
+					"max_dmg": 3,
+					"durability": 1,
+					"crit": 0.1,
+					"speed": 0.25,
+					"range": 150,
+					"parry:": false,
+					"block": false,
+					"price": 0,
+					"stock": 500,
+					"type": "weapon",
+					"str_req": 0,
+					"skill_req": 0,
+					"lvl": 1,
+					"attributes": 
+					{
+						"weapon_skill": 0,
+					}
+		
+				}
+		},
+		"weapon2": {
+			"unarmed": 
+				{
+					"hands": 1,
+					"min_dmg": 1, 
+					"max_dmg": 3,
+					"durability": 1,
+					"crit": 0.1,
+					"speed": 0.25,
+					"range": 150,
+					"parry:": false,
+					"block": false,
+					"price": 0,
+					"stock": 500,
+					"type": "weapon",
+					"str_req": 20,
+					"skill_req": 30,
+					"lvl": 1,
+					"attributes": 
+					{
+						"weapon_skill": 0,
+					}
+		
+				}
+		},
+		
+		"head": {},
+		"shoulder": {},
+		"chest": {},
+
+		"ring1": {},
+		"ring2": {},
+		
+		"inventory": {
+			"slot1": {},
+			"slot2": {},
+			"slot3": {},
+			"slot4": {}
+		}
+	}
+	'
+	var gladiator = {
+		"name": GameState_.selected_name,
+		"gold": 100,
+		"exp": 0,
+		"level": 0,
+		"race": GameState_.selected_race,
+		"attributes": final_attributes,
+		"player_life": player_life,
+		"weapon1": {
+			"unarmed": 
+				{
+					"hands": 1,
+					"min_dmg": 1, 
+					"max_dmg": 3,
+					"durability": 1,
+					"crit": 0.1,
+					"speed": 0.25,
+					"range": 150,
+					"parry:": false,
+					"block": false,
+					"price": 0,
+					"stock": 500,
+					"type": "weapon",
+					"str_req": 0,
+					"skill_req": 0,
+					"lvl": 1,
+					"attributes": 
+					{
+						"weapon_skill": 0,
+					}
+		
+				}
+		},
+		"weapon2": {
+			"unarmed": 
+				{
+					"hands": 1,
+					"min_dmg": 1, 
+					"max_dmg": 3,
+					"durability": 1,
+					"crit": 0.1,
+					"speed": 0.25,
+					"range": 150,
+					"parry:": false,
+					"block": false,
+					"price": 0,
+					"stock": 500,
+					"type": "weapon",
+					"str_req": 20,
+					"skill_req": 30,
+					"lvl": 1,
+					"attributes": 
+					{
+						"weapon_skill": 0,
+					}
+		
+				}
+		},
 		"armor": {
 			"head": {},
 			"shoulder": {},
 			"chest": {},
 			},
-		"talismans:": {
+		"talismans": {
 			"ring1": {},
 			"ring2": {}
 		},
@@ -162,7 +285,7 @@ func _on_confirm():
 			"slot3": {},
 			"slot4": {}
 		}
-	}
+	}'
 	#print(multiplayer.is_server)
 	if multiplayer.is_server():
 		print("✅ Server created gladiator")

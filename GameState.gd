@@ -33,24 +33,6 @@ signal card_stock_changed(new_all_cards_stock: Dictionary)
 signal send_gladiator_data_to_peer_signal(peer_id: int, gladiator_data: Dictionary)
 signal card_buy_result(peer_id: int, success: bool)
 
-
-'var weapon_slot1 := {
-	"min_dmg": 1, 
-	"max_dmg": 3,
-	"durability": 30,
-	"req": 20,
-	"crit": 0.1,
-	"speed": 1,
-	"range": 150,
-	"parry:": true,
-	"block": false,
-	"attributes": 
-		{
-			"weapon_skill": 0,
-			"avoidance": 0
-		}
-	}'
-
 var attr_cards_stock
 var all_cards_stock
 
@@ -125,9 +107,72 @@ func get_equipment_by_name(item_name: String):
 			return result
 	return {}  # Return empty if not found
 
-@rpc("authority", "call_local")
-func equip_item(peer_id, item): pass
+@rpc("any_peer", "call_local")
+func unequip_item(peer_id, equipment, equipment_button_parent_name):
+	print("Unqeuip equipment not implemented yet")
+	# 1. Remove from all_gladiators[peer_id][equipment_button_parent_name]
+	# 2. Add to 
+	var item_dict = get_equipment_by_name(equipment)
+	var type = item_dict[equipment]["type"]
+	var item = equipment_button_parent_name.replace("Slot", "").to_lower()
+	
+	
+	for slot_name in all_gladiators[peer_id]["inventory"].keys():
+		if all_gladiators[peer_id]["inventory"][slot_name] == {}:
+			all_gladiators[peer_id]["inventory"][slot_name] = item_dict
+			
+			if item == "weapon1" or item == "weapon2": all_gladiators[peer_id][item] = get_equipment_by_name("unarmed")
+			else: all_gladiators[peer_id][item] = {}
+			
+			rpc_id(peer_id, "send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id])
+			return
+	
+	print("❌No inventory space!")
 
+	
+
+@rpc("any_peer", "call_local")
+func equip_item(peer_id, equipment):
+	var item_dict = get_equipment_by_name(equipment)
+	var type = item_dict[equipment]["type"]
+	
+	if type == "weapon":
+		var hands = item_dict[equipment]["hands"]
+		var str_req = item_dict[equipment]["str_req"]
+		var skill_req = item_dict[equipment]["skill_req"]
+		
+		if all_gladiators[peer_id]["weapon1"].keys()[0] == "unarmed": all_gladiators[peer_id]["weapon1"] = item_dict
+		elif all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed": all_gladiators[peer_id]["weapon2"] = item_dict
+		else: print("❌Cannot equip more weapons!")
+			
+	elif type == "head":
+		if all_gladiators[peer_id]["head"] == {}: all_gladiators[peer_id]["head"] = item_dict
+		else: print("❌Already wearing a head")
+		
+	elif type == "chest":
+		if all_gladiators[peer_id]["chest"] == {}: all_gladiators[peer_id]["chest"] = item_dict
+		else: print("❌Already wearing a chest")
+		
+	elif type == "shoulder":
+		if all_gladiators[peer_id]["shoulder"] == {}: all_gladiators[peer_id]["shoulder"] = item_dict
+		else: print("❌Already wearing shoulders")
+		
+	elif type == "ring": 
+		if all_gladiators[peer_id]["ring1"].keys()[0] == {}: all_gladiators[peer_id]["ring1"] = item_dict
+		elif all_gladiators[peer_id]["ring2"].keys()[0] == {}: all_gladiators[peer_id]["ring2"] = item_dict
+		else: print("❌Cannot equip more rings!")
+		
+	else: print("❌Invalid item type!")
+
+	for slot_name in all_gladiators[peer_id]["inventory"].keys():
+		var item = all_gladiators[peer_id]["inventory"][slot_name]
+
+		if typeof(item) == TYPE_DICTIONARY and item.has(equipment):
+			all_gladiators[peer_id]["inventory"][slot_name] = {}  # Clear slot
+			break
+
+	rpc_id(peer_id, "send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id])
+	
 @rpc("authority", "call_local")
 func send_gladiator_data_to_peer(id: int, _gladiator_data) -> void:
 	emit_signal("send_gladiator_data_to_peer_signal", id, _gladiator_data)
@@ -157,7 +202,7 @@ func buy_equipment_card(id: int, equipment: String, cost: int):
 					rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 					rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
 					return
-			print("No inventory space!")
+			print("❌No inventory space!")
 		else: print("Not enough gold!")
 	else: 
 		print("No " + equipment + " cards left in stock!")
@@ -165,6 +210,26 @@ func buy_equipment_card(id: int, equipment: String, cost: int):
 		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 		rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
 
+@rpc("any_peer", "call_local")
+func sell_from_equipment(id: int, equipment: String, equipment_button_parent_name): 
+	# 1 remove from slot, increase gold
+	# replace with unarmed if weapon is sold
+	var item_dict = get_equipment_by_name(equipment)
+	var price = item_dict[equipment]["price"]
+	var item = equipment_button_parent_name.replace("Slot", "").to_lower()
+	var type = item_dict[equipment]["type"]
+	
+	if type == "weapon":
+		all_gladiators[id][item] = get_equipment_by_name("unarmed")
+	else: 
+		all_gladiators[id][item] = {}
+	
+	all_gladiators[id]["gold"] += int(price/2)
+	#print("gold: " + str(all_gladiators[id]["gold"]))
+	adjust_card_stock(equipment, "add")  # Restore stock
+	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
+
+	#print("Item not found in equipment panel!")
 					
 @rpc("any_peer", "call_local")
 func sell_from_inventory(id: int, equipment: String): 
@@ -178,7 +243,7 @@ func sell_from_inventory(id: int, equipment: String):
 		if typeof(item) == TYPE_DICTIONARY and item.has(equipment):
 			all_gladiators[id]["inventory"][slot_name] = {}  # Clear slot
 			all_gladiators[id]["gold"] += int(price/2)
-			print("gold: " + str(all_gladiators[id]["gold"]))
+			#print("gold: " + str(all_gladiators[id]["gold"]))
 			adjust_card_stock(equipment, "add")  # Restore stock
 			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
 			return  # Exit after first match
@@ -238,6 +303,7 @@ func create_card_pool():
 @rpc("any_peer")
 func initialize_card_stock():
 	emit_signal("card_stock_changed", all_cards_stock)
+	
 
 @rpc("any_peer")
 func adjust_card_stock(card: String, action: String):
@@ -282,8 +348,6 @@ func _store_gladiator(peer_id: int, data: Dictionary):
 func _start_game():
 	print("All gladiators submitted! Starting game...")
 	get_tree().change_scene_to_file("res://main.tscn")
-	#initialize_card_stock()
-	#print("initialize_card_stock()")
 
 func _assign_authority():
 	if multiplayer.is_server():

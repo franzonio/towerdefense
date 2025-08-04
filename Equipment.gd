@@ -3,6 +3,30 @@ extends Node
 # buy from shop -> add to inventory -> equip
 
 @export var all_equipment = {
+	"fist_weapon": {
+		"unarmed": {
+			"hands": 1,
+			"min_dmg": 1, 
+			"max_dmg": 3,
+			"durability": 1,
+			"crit": 0.1,
+			"speed": 0.25,
+			"range": 150,
+			"parry:": false,
+			"block": false,
+			"price": 0,
+			"stock": 500,
+			"type": "weapon",
+			"str_req": 20,
+			"skill_req": 30,
+			"lvl": 1,
+			"attributes": 
+			{
+				"weapon_skill": 0,
+			}
+		
+		}
+	},
 	"sword": {
 		"simple_sword": {
 			"price": 20,

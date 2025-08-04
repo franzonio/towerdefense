@@ -177,19 +177,19 @@ func check_for_attack(delta: float):
 				var weapon
 				var _hit_chance
 				var _crit_chance
-				
+				#print(str(owner_id) + " weapon: " + str(next_attack_weapon))
 				if next_attack_weapon == 0: 
 					weapon = weapon1
 					_hit_chance = hit_chance[0]
 					_crit_chance = crit_chance[0]
 					next_attack_weapon = 1
-				if next_attack_weapon == 1: 
+				elif next_attack_weapon == 1: 
 					weapon = weapon2
 					_hit_chance = hit_chance[1]
 					_crit_chance = crit_chance[1]
 					next_attack_weapon = 0
 					
-				CombatManager_.deal_attack(self, opponent, weapon, _hit_chance, _crit_chance)
+				deal_attack(self, opponent, weapon, _hit_chance, _crit_chance)
 				attack_charge_time = 0.0
 		else:
 			attack_charge_time = 0.0
@@ -198,6 +198,37 @@ func check_for_attack(delta: float):
 		in_combat = false
 		attack_charge_time = 0.0
 
+func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_chance):
+
+	var dodge_success = 0	# default 0 means defender did not didge
+	var hit_success = 1		# default 1 means attacker hit successfully
+	var crit = 1
+	
+	if randf() > _hit_chance:
+		hit_success = 0
+		attacker.next_taken_hit_critical = true
+		defender.next_attack_critical = true
+			
+		
+	if randf() < _crit_chance or attacker.next_attack_critical:
+		crit = 2
+		attacker.next_attack_critical = false  # reset after use
+
+	var raw_damage = (randf_range(_weapon["min_dmg"], _weapon["max_dmg"])*crit+attacker.strength/15)
+	
+	if raw_damage > 0 and randf() < defender.dodge_chance:
+		dodge_success = 1
+		defender.next_attack_critical = true
+		attacker.next_taken_hit_critical = true
+	
+	var final_damage = hit_success*(1-dodge_success)*roundf(raw_damage - defender.armor)
+
+	if defender.has_method("receive_damage"):
+		defender.rpc_id(defender.get_multiplayer_authority(), "receive_damage", final_damage, hit_success, dodge_success, crit)
+		return true
+	else:
+		push_warning("Defender %s has no take_damage() method!" % defender.name)
+		return false
 
 @rpc("any_peer", "call_local")
 func receive_damage(amount: int, hit_success, dodge_success, crit):
@@ -337,10 +368,21 @@ func update_all_gladiators(data: Dictionary):
 
 @rpc("any_peer", "call_local")
 func update_gladiator(data: Dictionary):
-	weapon1_req = data["weapon_slot1"]["req"]
-	weapon1_speed = data["weapon_slot1"]["speed"]
-	weapon1_range = data["weapon_slot1"]["range"]
-	weapon1_crit = data["weapon_slot1"]["crit"]
+	#print("update_gladiator: " + str(data["weapon1"]))
+	var weapon1_name = data["weapon1"].keys()[0]
+	var weapon2_name = data["weapon2"].keys()[0]
+	#print("asd data: " + str(data))
+	#print("weapon1_name: " + str(weapon1_name))
+	#print("weapon2_name: " + str(weapon2_name))
+	weapon1_req = data["weapon1"][weapon1_name]["str_req"]
+	weapon1_speed = data["weapon1"][weapon1_name]["speed"]
+	weapon1_range = data["weapon1"][weapon1_name]["range"]
+	weapon1_crit = data["weapon1"][weapon1_name]["crit"]
+	
+	weapon2_req = data["weapon2"][weapon2_name]["str_req"]
+	weapon2_speed = data["weapon2"][weapon2_name]["speed"]
+	weapon2_range = data["weapon2"][weapon2_name]["range"]
+	weapon2_crit = data["weapon2"][weapon2_name]["crit"]
 	
 	armor_absorb = 1.0
 	
@@ -356,12 +398,10 @@ func update_gladiator(data: Dictionary):
 	max_health = data["attributes"]["health"]
 	resilience = data["attributes"]["resilience"]
 	endurance = data["attributes"]["endurance"]
-	weapon1 = data["weapon_slot1"]
-	weapon2 = data["weapon_slot2"]
-	weapon_hands_to_carry = data["weapon_slot1"]["hands"]
+	weapon1 = data["weapon1"][weapon1_name]
+	weapon2 = data["weapon2"][weapon2_name]
+	weapon_hands_to_carry = data["weapon1"][weapon1_name]["hands"]
 	
-	#print("str: " + str(strength))
-
  # === Damage calculations ===
 	if weapon_hands_to_carry == 1: attack_speed = (1/(weapon1_speed+weapon2_speed))/(log(10+sqrt(quickness))/log(10))
 	else: attack_speed = (1/(weapon1_speed))/(log(10+sqrt(quickness))/log(10))
@@ -369,7 +409,7 @@ func update_gladiator(data: Dictionary):
 	  # Seconds between attacks
 	time_since_last_attack = 0.0
 	crit_chance = [weapon1_crit*crit_rating/20.0, weapon2_crit*crit_rating/20.0]
-	hit_chance = [(weapon_skill/weapon1_req) - 0.20*weapon_skill/100, (weapon_skill/weapon1_req) - 0.20*weapon_skill/100]
+	hit_chance = [(weapon_skill/weapon1_req) - 0.20*weapon_skill/100, (weapon_skill/weapon2_req) - 0.20*weapon_skill/100]
 	next_attack_critical = false
 	next_taken_hit_critical = false
 	next_attack_weapon = 0

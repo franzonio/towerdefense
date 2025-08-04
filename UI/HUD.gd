@@ -14,7 +14,8 @@ var equipment_card_scenes = {
 	"simple_sword": simple_sword_card
 }
 
-@onready var item_popup := $ItemPopup
+@onready var inventory_popup := $InventoryPopup
+@onready var equipment_popup := $EquipmentPopup
 @onready var label_timer = $MarginContainer/HBoxContainer/Label_Timer
 @onready var label_gold = $MarginContainer/HBoxContainer/Label_Gold
 @onready var label_xp = $MarginContainer/HBoxContainer/Label_Experience
@@ -28,13 +29,15 @@ var equipment_card_scenes = {
 @export var life_label: Node
 
 var player_gladiator_data
-var countdown_label 
-var shop
+#var countdown_label 
+#var shop
 var intermission := true
 var shop_pressed := false
-var shop_grid
-var inventory_grid
-var refresh_button
+var equipment_pressed := false
+#var shop_grid
+#var inventory_grid
+#var equipment_panel
+#var refresh_button
 @export var all_cards: Array
 #var _all_cards
 var reroll_start_of_intermission
@@ -43,6 +46,22 @@ var is_refreshing := false
 
 var selected_item_name := ""
 var selected_slot := ""
+var equipment_button_parent_name
+
+@onready var shop_grid = $Shop/VBoxContainer/ShopGridContainer
+@onready var refresh_button = $Shop/VBoxContainer/HBoxContainer/RefreshButton
+@onready var equipment_panel = $EquipmentPanel
+@onready var inventory_grid = $Inventory/InventoryGridContainer
+@onready var countdown_label = $IntermissionTimerLabel
+@onready var shop = $Shop
+
+@onready var head_slot = $EquipmentPanel/HeadSlot
+@onready var chest_slot = $EquipmentPanel/ChestSlot
+@onready var weapon1_slot = $EquipmentPanel/Weapon1Slot
+@onready var weapon2_slot = $EquipmentPanel/Weapon2Slot
+@onready var ring1_slot = $EquipmentPanel/Ring1Slot
+@onready var ring2_slot = $EquipmentPanel/Ring2Slot
+#@onready var all_equipment_slots = [head_slot, chest_slot, weapon1_slot, weapon2_slot, ring1_slot, ring2_slot]
 
 func _ready():
 	GameState_.connect("gladiator_life_changed", Callable(self, "_on_life_changed"))
@@ -51,32 +70,27 @@ func _ready():
 	GameState_.connect("send_gladiator_data_to_peer_signal", Callable(self, "_on_send_gladiator_data_to_peer_signal"))
 	
 	
-
-	
-	
-	
 	#GameState_.connect("card_stock_initialize", Callable(self, "_on_card_stock_initialized"))
 	populate_hud()  # Initial draw
 	
-	item_popup.clear()
-	item_popup.add_item("Equip", 0)
-	item_popup.add_item("Sell", 1)
-	item_popup.id_pressed.connect(_on_item_popup_pressed)
+	inventory_popup.clear()
+	inventory_popup.add_item("Equip", 0)
+	inventory_popup.add_item("Sell", 1)
+	inventory_popup.id_pressed.connect(_on_inventory_popup_pressed)
 	
-	countdown_label = $IntermissionTimerLabel
-	shop = $Shop
-	shop.visible = false
+	equipment_popup.clear()
+	equipment_popup.add_item("Unequip", 0)
+	equipment_popup.add_item("Sell", 1)
+	equipment_popup.id_pressed.connect(_on_equipment_popup_pressed)
 
+	shop.visible = false
+	equipment_panel.visible = false
+	
 	if multiplayer.is_server(): GameState_.initialize_card_stock()
 	else: GameState_.rpc_id(1, "initialize_card_stock")
 	await get_tree().create_timer(1).timeout
 	all_cards = get_all_cards()
-	shop_grid = $Shop/VBoxContainer/ShopGridContainer
-	refresh_button = $Shop/VBoxContainer/HBoxContainer/RefreshButton
-	inventory_grid = $Inventory/InventoryGridContainer
-	#update_inventory_ui()
-	#await get_tree().create_timer(1).timeout
-	print("card_stock: " + str(card_stock))
+
 	if multiplayer.is_server():
 		GameState_.refresh_gladiator_data(multiplayer.get_unique_id())
 	else:
@@ -87,11 +101,89 @@ func _ready():
 	
 func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data: Dictionary):
 	if peer_id == multiplayer.get_unique_id():
+		print("_player_gladiator_data: " + str(_player_gladiator_data))
 		player_gladiator_data = _player_gladiator_data
-		print(peer_id)
 		update_inventory_ui(peer_id)
+		update_equipment_ui(peer_id)
 		
 		update_gold(player_gladiator_data["gold"])
+	
+func update_equipment_ui(peer_id: int): 
+	for slot in equipment_panel.get_children():
+		for i in slot.get_children():
+			i.queue_free()
+			
+	var head_name
+	var chest_name 
+	var weapon1_name
+	var weapon2_name
+	var ring1_name 
+	var ring2_name 
+			
+	var all_equipment_slots = [head_slot, chest_slot, weapon1_slot, weapon2_slot, ring1_slot, ring2_slot]
+	if player_gladiator_data["head"] != {}:
+		head_name = player_gladiator_data["head"].keys()[0]
+	else:
+		head_name = "empty"
+	
+	if player_gladiator_data["chest"] != {}:
+		chest_name = player_gladiator_data["chest"].keys()[0]
+	else:
+		chest_name = "empty"
+	
+	if player_gladiator_data["weapon1"] != {}:
+		weapon1_name = player_gladiator_data["weapon1"].keys()[0]
+	else:
+		weapon1_name = "empty"
+		
+	if player_gladiator_data["weapon1"] != {}:
+		weapon1_name = player_gladiator_data["weapon1"].keys()[0]
+	else:
+		weapon1_name = "empty"
+		
+	if player_gladiator_data["weapon2"] != {}:
+		weapon2_name = player_gladiator_data["weapon2"].keys()[0]
+	else:
+		weapon2_name = "empty"
+		
+	if player_gladiator_data["ring1"] != {}:
+		ring1_name = player_gladiator_data["ring1"].keys()[0]
+	else:
+		ring1_name = "empty"
+	
+	if player_gladiator_data["ring2"] != {}:
+		ring2_name = player_gladiator_data["ring2"].keys()[0]
+	else:
+		ring2_name = "empty"
+	
+	
+	var all_equipped_items_name = [head_name, chest_name, weapon1_name, weapon2_name, ring1_name, ring2_name]
+	
+	for i in all_equipped_items_name.size()-1: 
+		var item_slot = all_equipment_slots[i]
+		var item_name = all_equipped_items_name[i]
+		var card_found = 0
+		
+		for card_map in all_cards:
+			if card_map[1] == item_name:
+				var item_instance = card_map[0].instantiate()
+				item_instance.button_parent.connect(_on_equipment_pressed)
+				item_instance.pressed.connect(_on_equipment_item_pressed.bind(item_name))
+				item_instance.set_multiplayer_authority(multiplayer.get_unique_id())
+				item_slot.add_child(item_instance)
+				item_instance.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+				item_instance.custom_minimum_size = item_slot.size
+				card_found = 1
+				continue
+			elif item_name == "empty" or item_name == "unarmed":
+				card_found = 1
+				continue
+				
+		if card_found == 0: print("No card defined for item " + str(item_name))
+			
+func _on_equipment_pressed(parent_name: String):
+	equipment_button_parent_name = parent_name
+	#print("_on_equipment_pressed: " + str(parent_name))
 	
 func update_inventory_ui(glad_id: int):
 	var gladiator_inventory = player_gladiator_data["inventory"]
@@ -121,26 +213,65 @@ func update_inventory_ui(glad_id: int):
 			else:
 				print("⚠️ No matching scene for item:", item_name)
 
-func _on_item_popup_pressed(id: int):
+func _on_equipment_popup_pressed(id: int):
+
+		
 	match id:
 		0:
-			print("Equip requested for ", selected_item_name, " from ", selected_slot)
-			'''
+			if !intermission: 
+				print("Cannot unequip item during duel!")
+				return
+			
 			if multiplayer.is_server():
-				GameState_.equip_item(multiplayer.get_unique_id(), "selected_slot")
+				GameState_.unequip_item(multiplayer.get_unique_id(), selected_item_name, equipment_button_parent_name)
 			else:
-				GameState_.rpc_id(1, "equip_item", multiplayer.get_unique_id(), "selected_slot")
-			'''
+				GameState_.rpc_id(1, "unequip_item", multiplayer.get_unique_id(), selected_item_name, equipment_button_parent_name)
+			
+			
+			await get_tree().create_timer(0.2).timeout
+			
 		1:
-			print("Sell requested for ", selected_item_name, " from ", selected_slot)
+			if !intermission: 
+				print("Cannot sell an equipped item during duel!")
+				return
+				
+			print("Sell from equipment not implemented yet")
+			if multiplayer.is_server():
+				GameState_.sell_from_equipment(multiplayer.get_unique_id(), selected_item_name, equipment_button_parent_name)
+			else:
+				GameState_.rpc_id(1, "sell_from_equipment", multiplayer.get_unique_id(), selected_item_name, equipment_button_parent_name)
+
+func _on_inventory_popup_pressed(id: int):
+	match id:
+		0:
+			#print("Equip requested for ", selected_item_name, " from ", selected_slot)
+			
+			if !intermission: 
+				print("Cannot equip item during duel!")
+				return
+			
+			if multiplayer.is_server():
+				GameState_.equip_item(multiplayer.get_unique_id(), selected_item_name)
+			else:
+				GameState_.rpc_id(1, "equip_item", multiplayer.get_unique_id(), selected_item_name)
+			
+			await get_tree().create_timer(0.2).timeout
+			
+		1:
+			#print("Sell requested for ", selected_item_name, " from ", selected_slot)
 			if multiplayer.is_server():
 				GameState_.sell_from_inventory(multiplayer.get_unique_id(), selected_item_name)
 			else:
 				GameState_.rpc_id(1, "sell_from_inventory", multiplayer.get_unique_id(), selected_item_name)
 
-	# Optionally repopulate UI after action
-	#update_inventory_ui(multiplayer.get_unique_id())
 
+func _on_equipment_item_pressed(item_name: String):
+	# Store selected item info (you can make these class vars if needed)
+	selected_item_name = item_name
+
+	# Show popup near mouse
+	equipment_popup.set_position(get_viewport().get_mouse_position())
+	equipment_popup.popup()
 
 func _on_inventory_item_pressed(item_name: String, slot_name: String):
 	# Store selected item info (you can make these class vars if needed)
@@ -148,8 +279,8 @@ func _on_inventory_item_pressed(item_name: String, slot_name: String):
 	selected_slot = slot_name
 
 	# Show popup near mouse
-	item_popup.set_position(get_viewport().get_mouse_position())
-	item_popup.popup()
+	inventory_popup.set_position(get_viewport().get_mouse_position())
+	inventory_popup.popup()
 
 	
 func clear_shop_grid():
@@ -177,7 +308,7 @@ func get_all_cards():
 	return all_cards
 
 func roll_cards():
-	print("\n" + str(multiplayer.get_unique_id()) + "🃏reroll_cards: " + str(card_stock))
+	#print("\n" + str(multiplayer.get_unique_id()) + "🃏reroll_cards: " + str(card_stock))
 	
 	all_cards = get_all_cards()
 			
@@ -235,6 +366,10 @@ func _on_refresh_button_pressed():
 	refresh_button.disabled = false
 	is_refreshing = false
 
+func _on_equipment_button_pressed():
+	equipment_pressed = !equipment_pressed
+	if equipment_pressed: equipment_panel.visible = true
+	else: equipment_panel.visible = false
 
 func _on_shop_button_pressed():
 	shop_pressed = !shop_pressed
@@ -255,7 +390,7 @@ func _on_countdown_updated(time_left: int):
 	if time_left > 0: intermission = true
 	if intermission: 
 		if reroll_start_of_intermission:
-			print("time_passed: " + str(time_passed))
+			#print("time_passed: " + str(time_passed))
 			if time_passed > 5: reroll_cards()
 			reroll_start_of_intermission = 0
 		#update_countdown_labels(time_left)

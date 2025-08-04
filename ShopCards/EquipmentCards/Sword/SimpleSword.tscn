@@ -7,9 +7,12 @@
 font_size = 12
 
 [node name="SimpleSword" type="Button"]
-offset_right = 306.0
-offset_bottom = 458.0
-scale = Vector2(0.5, 0.5)
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -508.0
+grow_horizontal = 2
+grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_icons/icon = ExtResource("1_7nosa")
