@@ -101,7 +101,7 @@ var attack_left_animations: Array = []# = all_animations.filter(func(name): retu
 var last_played_animation: String = ""
 @export var direction: Vector2 = Vector2.ZERO
 var owner_id
-@export var concede_threshold = 0.0
+@export var concede_threshold := 0.5
 
 signal died
 
@@ -109,11 +109,17 @@ func _ready():
 	await get_tree().process_frame 
 	add_to_group("gladiators")
 	sprite.play("idle_down")
+	if is_multiplayer_authority():
+		var hud = get_node("/root/Main/HUD")
+		if hud:
+			hud.concede_threshold_changed.connect(_on_concede_threshold_changed)
 	await get_tree().create_timer(11.0).timeout
 	
 	# Intermission phase where players buy upgrades
 	
 	if multiplayer.is_server(): update_all_gladiators(GameState_.all_gladiators)
+
+
 
 	#$HealthBar.value = max_health
 	$HealthBar.max_value = max_health
@@ -145,7 +151,12 @@ func _physics_process(delta):
 		if current_animation.begins_with("attack"): sprite.play(current_animation)
 		elif !current_animation.begins_with("attack") and current_animation != "N/A": sprite.play(current_animation)
 		
-		
+func _on_concede_threshold_changed(value: float):
+	concede_threshold = value
+	print("🛡️ " + str(owner_id) +  " updated concede threshold to: ", max_health*concede_threshold)
+	#print("concede_threshold: " + str(concede_threshold))
+	#print("value: " + str(value))
+	
 func handle_animation():
 	if current_animation.begins_with("attack") and !sprite.is_playing(): sprite.play(current_animation)
 	elif !current_animation.begins_with("attack") and current_animation != "N/A": sprite.play(current_animation)
@@ -172,7 +183,7 @@ func check_for_attack(delta: float):
 			current_attack_target = opponent
 			attack_charge_time += delta
 
-			print("opponent.current_health" + str(opponent.current_health))
+			#print("opponent.current_health" + str(opponent.current_health))
 			if attack_charge_time >= attack_speed and opponent.current_health > opponent.max_health*opponent.concede_threshold:
 				if direction.x > 0.0: current_animation = attack_right_animations[randi_range(0, attack_right_animations.size()-1)]
 				if direction.x < 0.0: current_animation = attack_left_animations[randi_range(0, attack_left_animations.size()-1)]
@@ -242,7 +253,7 @@ func receive_damage(amount: int, hit_success, dodge_success, crit):
 	#$HealthBar.bg_color = Color.DARK_RED
 	$HealthBar/HealthBarText.text = str(int(current_health))
 	rpc("show_damage_popup", amount, hit_success, dodge_success, crit)
-
+	#print(concede_threshold*max_health)
 	if current_health <= concede_threshold*max_health and is_multiplayer_authority(): rpc("die")
 
 
@@ -391,7 +402,8 @@ func update_gladiator(data: Dictionary):
 	weapon2_crit = data["weapon2"][weapon2_name]["crit"]
 	
 	armor_absorb = 1.0
-	
+	concede_threshold = data["concede"]
+	#print(str(owner_id) + " concede: " + str(concede_threshold))
 	#print("\ndata" + str(data) + "\n")
 	
 	gladiator_name = data.name

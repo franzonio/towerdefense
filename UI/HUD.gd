@@ -56,6 +56,7 @@ var equipment_button_parent_name
 @onready var inventory_grid = $Inventory/InventoryGridContainer
 @onready var countdown_label = $IntermissionTimerLabel
 @onready var shop = $Shop
+@onready var concede_threshold_menu = $ConcedePanel/ConcedeThresholdMenu
 
 @onready var head_slot = $EquipmentPanel/HeadSlot
 @onready var chest_slot = $EquipmentPanel/ChestSlot
@@ -75,6 +76,7 @@ var equipment_button_parent_name
 @onready var resilience_panel = $AttributePanel/GridContainer/Resilience
 
 #@onready var all_equipment_slots = [head_slot, chest_slot, weapon1_slot, weapon2_slot, ring1_slot, ring2_slot]
+signal concede_threshold_changed(value: int)
 
 func _ready():
 	GameState_.connect("gladiator_life_changed", Callable(self, "_on_life_changed"))
@@ -82,8 +84,7 @@ func _ready():
 	GameState_.connect("card_stock_changed", Callable(self, "_on_card_stock_changed"))
 	GameState_.connect("send_gladiator_data_to_peer_signal", Callable(self, "_on_send_gladiator_data_to_peer_signal"))
 	
-	
-	#GameState_.connect("card_stock_initialize", Callable(self, "_on_card_stock_initialized"))
+
 	populate_hud()  # Initial draw
 	
 	inventory_popup.clear()
@@ -112,11 +113,24 @@ func _ready():
 	
 	await get_tree().create_timer(0.8).timeout
 	roll_cards()
+	var attributes = player_gladiator_data.get("attributes", {})
+	var options = ["50% (" + str(int(round(0.5*attributes["health"]))) + " hp)", 
+					"40% (" + str(int(round(0.4*attributes["health"]))) + " hp)", 
+					"30% (" + str(int(round(0.3*attributes["health"]))) + " hp)", 
+					"20% (" + str(int(round(0.2*attributes["health"]))) + " hp)", 
+					"10% (" + str(int(round(0.1*attributes["health"]))) + " hp)", 
+					"0% ("  + str(int(round(0.0*attributes["health"]))) + " hp)"]
 	
+	for option in options:
+		concede_threshold_menu.add_item(option)
+		
+	concede_threshold_menu.connect("item_selected", Callable(self, "_on_threshold_selected"))
 	
 func _process(delta: float) -> void:
 	time_passed += delta
 	if !intermission: label_round.text = "Round " + str(round) + " | " + str(int(time_passed))
+	if intermission: concede_threshold_menu.disabled = false
+	else: concede_threshold_menu.disabled = true
 	#label_timer.text = "Time: " + str(time_passed as int)
 	if Input.is_action_just_pressed("toggle_shop"):
 		if $ShopButton:
@@ -250,9 +264,24 @@ func update_inventory_ui(glad_id: int):
 			else:
 				print("⚠️ No matching scene for item:", item_name)
 
-func _on_equipment_popup_pressed(id: int):
+func _on_threshold_selected(index: int):
+	var selected_text = concede_threshold_menu.get_item_text(index)
+	var regex = RegEx.new()
+	regex.compile("^\\d+")
+	var result = regex.search(selected_text)
+	var threshold = result.get_string() if result != null else "0"
+	threshold = float(threshold)/100
 
-		
+	if multiplayer.is_server():
+		GameState_.peer_concede(multiplayer.get_unique_id(), threshold)
+	else:
+		GameState_.rpc_id(1, "peer_concede", multiplayer.get_unique_id(), threshold)
+
+	emit_signal("concede_threshold_changed", threshold)
+	#print("📉 Threshold selected:", threshold)
+
+
+func _on_equipment_popup_pressed(id: int):
 	match id:
 		0:
 			if !intermission: 

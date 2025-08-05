@@ -173,6 +173,11 @@ func equip_item(peer_id, equipment):
 
 	rpc_id(peer_id, "send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id])
 	
+@rpc("any_peer", "call_local")
+func peer_concede(id, threshold): 
+	all_gladiators[id]["concede"] = threshold
+	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
+	
 @rpc("authority", "call_local")
 func send_gladiator_data_to_peer(id: int, _gladiator_data) -> void:
 	emit_signal("send_gladiator_data_to_peer_signal", id, _gladiator_data)

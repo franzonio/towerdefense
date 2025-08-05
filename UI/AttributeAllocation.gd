@@ -143,6 +143,7 @@ func _on_confirm():
 		"exp": 0,
 		"level": 0,
 		"race": GameState_.selected_race,
+		"concede": 0.5,
 		"attributes": final_attributes,
 		"player_life": player_life,
 		
