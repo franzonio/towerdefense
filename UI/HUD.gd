@@ -113,6 +113,8 @@ func _ready():
 	
 	await get_tree().create_timer(0.8).timeout
 	roll_cards()
+	
+	'''	
 	var attributes = player_gladiator_data.get("attributes", {})
 	var options = ["50% (" + str(int(round(0.5*attributes["health"]))) + " hp)", 
 					"40% (" + str(int(round(0.4*attributes["health"]))) + " hp)", 
@@ -123,8 +125,9 @@ func _ready():
 	
 	for option in options:
 		concede_threshold_menu.add_item(option)
-		
+	'''
 	concede_threshold_menu.connect("item_selected", Callable(self, "_on_threshold_selected"))
+	
 	
 func _process(delta: float) -> void:
 	time_passed += delta
@@ -146,7 +149,24 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data
 		update_inventory_ui(peer_id)
 		update_equipment_ui(peer_id)
 		update_attribute_ui(peer_id)
+		update_concede_ui(peer_id)
 		update_gold(player_gladiator_data["gold"])
+	
+func update_concede_ui(peer_id):
+	var previous_index = concede_threshold_menu.get_selected_id()
+	print(previous_index)
+	var attributes = player_gladiator_data.get("attributes", {})
+	var options = ["50% (" + str(int(round(0.5*attributes["health"]))) + " hp)", 
+					"40% (" + str(int(round(0.4*attributes["health"]))) + " hp)", 
+					"30% (" + str(int(round(0.3*attributes["health"]))) + " hp)", 
+					"20% (" + str(int(round(0.2*attributes["health"]))) + " hp)", 
+					"10% (" + str(int(round(0.1*attributes["health"]))) + " hp)", 
+					"0% ("  + str(int(round(0.0*attributes["health"]))) + " hp)"]
+					
+	concede_threshold_menu.clear()
+	for option in options: concede_threshold_menu.add_item(option)
+	if previous_index == -1: concede_threshold_menu.select(0)
+	else: concede_threshold_menu.select(previous_index)
 	
 func update_attribute_ui(peer_id: int): 
 	var attributes = player_gladiator_data.get("attributes", {})

@@ -18,7 +18,7 @@ Cards
 
 Implement reward system
 	☆ Experience/level
-		- What happens when leveling up? Unlocking new items in shop + placing #X attr points?
+		- What happens when leveling up? Unlocking new items in shop + placing X attr points?
 		- Buying exp for gold?
 	☆ Gold
 	☆ Some kind of penalty for leading gladiator
@@ -34,7 +34,7 @@ HUD/UI
 	#☆ Round timer
 	#☆ Selecting concede threshold during intermission
 	- Selecting gladiator combat strategy during intermission (see Combat/strategy section)
-    - Chat
+    ☆ Chat
     ☆ Log (informing what's happening in game)
 
 Attributes
