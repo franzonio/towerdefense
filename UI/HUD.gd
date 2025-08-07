@@ -21,6 +21,14 @@ var equipment_card_scenes = {
 @onready var label_gold = $MarginContainer/HBoxContainer/Label_Gold
 @onready var label_xp = $MarginContainer/HBoxContainer/Label_Experience
 
+const MAX_MESSAGES = 25
+const MAX_LENGTH = 255
+
+@onready var chat_log = $Panel/ChatScroll/ChatLog
+@onready var chat_input = $HBoxContainer/ChatInput
+@onready var send_button = $HBoxContainer/SendButton
+@onready var chat_scroll = $Panel/ChatScroll
+
 @export var round = 0
 @export var time_passed: float = 0.0
 @export var gold: int = 0
@@ -36,6 +44,8 @@ var player_gladiator_data
 var intermission := true
 var shop_pressed := false
 var equipment_pressed := false
+var chat_input_pressed := false
+var msg_just_sent := false
 #var shop_grid
 #var inventory_grid
 #var equipment_panel
@@ -85,6 +95,9 @@ func _ready():
 	GameState_.connect("send_gladiator_data_to_peer_signal", Callable(self, "_on_send_gladiator_data_to_peer_signal"))
 	
 
+	send_button.pressed.connect(_on_send_pressed)
+	chat_input.text_submitted.connect(_on_send_pressed)
+
 	populate_hud()  # Initial draw
 	
 	inventory_popup.clear()
@@ -114,33 +127,67 @@ func _ready():
 	await get_tree().create_timer(0.8).timeout
 	roll_cards()
 	
-	'''	
-	var attributes = player_gladiator_data.get("attributes", {})
-	var options = ["50% (" + str(int(round(0.5*attributes["health"]))) + " hp)", 
-					"40% (" + str(int(round(0.4*attributes["health"]))) + " hp)", 
-					"30% (" + str(int(round(0.3*attributes["health"]))) + " hp)", 
-					"20% (" + str(int(round(0.2*attributes["health"]))) + " hp)", 
-					"10% (" + str(int(round(0.1*attributes["health"]))) + " hp)", 
-					"0% ("  + str(int(round(0.0*attributes["health"]))) + " hp)"]
-	
-	for option in options:
-		concede_threshold_menu.add_item(option)
-	'''
 	concede_threshold_menu.connect("item_selected", Callable(self, "_on_threshold_selected"))
 	
 	
 func _process(delta: float) -> void:
 	time_passed += delta
+	#print("mouse position: " + str(get_viewport().get_mouse_position()))
 	if !intermission: label_round.text = "Round " + str(round) + " | " + str(int(time_passed))
 	if intermission: concede_threshold_menu.disabled = false
 	else: concede_threshold_menu.disabled = true
-	#label_timer.text = "Time: " + str(time_passed as int)
-	if Input.is_action_just_pressed("toggle_shop"):
+	
+	if Input.is_action_just_pressed("toggle_shop") and not chat_input.has_focus():
 		if $ShopButton:
 			$ShopButton.emit_signal("pressed")
-	if Input.is_action_just_pressed("toggle_equipment"):
+	if Input.is_action_just_pressed("toggle_equipment") and not chat_input.has_focus():
 		if $EquipmentButton:
 			$EquipmentButton.emit_signal("pressed")
+	
+	
+func _input(event):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+		if not chat_input.get_global_rect().has_point(event.position):
+			chat_input.release_focus()
+
+	
+func _on_send_pressed(submitted_text = ""):
+	var msg = chat_input.text.strip_edges()
+	if msg.length() == 0 or msg.length() > MAX_LENGTH:
+		return
+
+	var sender_id = get_tree().get_multiplayer().get_unique_id()
+	var now = Time.get_datetime_dict_from_system()
+	var timestamp = "[%02d:%02d]" % [now.hour, now.minute]
+
+	chat_input.clear()
+	rpc("broadcast_message", str(player_gladiator_data["name"]), timestamp, msg)
+
+	
+@rpc("any_peer", "call_local")
+func broadcast_message(sender_name: String, timestamp: String, message: String):
+	var formatted = "%s [%s]: %s" % [timestamp, sender_name, message]
+	_add_message(formatted)
+
+func _add_message(text: String):
+	var label = Label.new()
+	label.text = text
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	label.clip_text = false
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	chat_input.keep_editing_on_text_submit
+
+	chat_log.add_child(label)
+
+	if chat_log.get_child_count() > MAX_MESSAGES:
+		chat_log.get_child(0).queue_free()
+
+	await get_tree().process_frame
+	await get_tree().process_frame
+	chat_scroll.scroll_vertical = chat_scroll.get_v_scroll_bar().max_value
+
+
 	
 func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data: Dictionary):
 	if peer_id == multiplayer.get_unique_id():

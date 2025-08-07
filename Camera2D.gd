@@ -8,11 +8,23 @@ var max_zoom = 2.0
 
 var target_zoom = Vector2(1, 1)
 var zoom_speed = 8.0  # Higher = faster smoothing
+var chat_input #= $HUD/ChatInput
 
 func _ready():
 	target_zoom = zoom
 
+	
 func _input(event):
+	if event is InputEventMouse:
+		var hud = get_parent().get_node("HUD")
+		var chat_window = hud.get_node("Panel/ChatScroll")
+		
+		var mouse_pos = get_viewport().get_mouse_position()
+		var rect = Rect2(chat_window.global_position, chat_window.size)
+		
+		if rect.has_point(mouse_pos):
+			return  # Cursor is outside chat window, ignore input
+	
 	# Zoom with mouse wheel
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
@@ -35,5 +47,6 @@ func _input(event):
 		last_mouse_position = event.position
 
 func _process(delta):
+	
 	# Smooth zoom transition
 	zoom = zoom.lerp(target_zoom, zoom_speed * delta)

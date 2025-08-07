@@ -34,7 +34,7 @@ HUD/UI
 	#☆ Round timer
 	#☆ Selecting concede threshold during intermission
 	- Selecting gladiator combat strategy during intermission (see Combat/strategy section)
-    ☆ Chat
+    #☆ Chat
     ☆ Log (informing what's happening in game)
 
 Attributes
