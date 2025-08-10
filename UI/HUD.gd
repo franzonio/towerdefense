@@ -97,6 +97,7 @@ var equipment_data
 signal concede_threshold_changed(value: int)
 
 func _ready():
+	#refresh_button.visible = false
 	equipment_script = load("res://Equipment.gd")
 	equipment_instance = equipment_script.new()
 	equipment_data = equipment_instance.all_equipment
@@ -140,6 +141,7 @@ func _ready():
 	
 	await get_tree().create_timer(0.8).timeout
 	roll_cards()
+	refresh_button.disabled = false
 	
 	concede_threshold_menu.connect("item_selected", Callable(self, "_on_threshold_selected"))
 	
@@ -164,6 +166,10 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("toggle_equipment") and not chat_input.has_focus():
 		if $EquipmentButton:
 			$EquipmentButton.emit_signal("pressed")
+	if Input.is_action_just_pressed("refresh_cards") and not chat_input.has_focus():
+		if $EquipmentButton:
+			$Shop/VBoxContainer/HBoxContainer/RefreshButton.emit_signal("pressed")
+	
 	
 func get_equipment_by_name(item_name: String):
 	for category in equipment_data.keys():
@@ -592,6 +598,8 @@ func weighted_random_selection(_all_cards: Array, count: int = 5):
 
 
 func _on_refresh_button_pressed():
+	if refresh_button.disabled:
+		return
 	#update_inventory_ui(multiplayer.get_unique_id())
 	if is_refreshing:
 		return

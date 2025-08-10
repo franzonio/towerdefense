@@ -374,6 +374,18 @@ properties/15/replication_mode = 2
 properties/16/path = NodePath(".:max_health")
 properties/16/spawn = true
 properties/16/replication_mode = 2
+properties/17/path = NodePath(".:weapon1_durability")
+properties/17/spawn = true
+properties/17/replication_mode = 2
+properties/18/path = NodePath(".:weapon2_durability")
+properties/18/spawn = true
+properties/18/replication_mode = 2
+properties/19/path = NodePath(".:weapon1_can_parry")
+properties/19/spawn = true
+properties/19/replication_mode = 2
+properties/20/path = NodePath(".:weapon2_can_parry")
+properties/20/spawn = true
+properties/20/replication_mode = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l0fom"]
 bg_color = Color(0, 0, 0, 0.443137)

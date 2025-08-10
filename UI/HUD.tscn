@@ -458,7 +458,8 @@ size_flags_horizontal = 4
 
 [node name="RefreshButton" type="Button" parent="Shop/VBoxContainer/HBoxContainer"]
 layout_mode = 2
-text = "Refresh"
+disabled = true
+text = "Reroll"
 
 [node name="ShopGridContainer" type="GridContainer" parent="Shop/VBoxContainer"]
 layout_mode = 2

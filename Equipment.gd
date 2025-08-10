@@ -12,7 +12,7 @@ extends Node
 			"crit": 0.1,
 			"speed": 0.25,
 			"range": 150,
-			"parry:": false,
+			"parry": false,
 			"block": false,
 			"price": 0,
 			"stock": 500,
@@ -42,7 +42,7 @@ extends Node
 			"crit": 0.1,
 			"speed": 0.25,
 			"range": 150,
-			"parry:": true,
+			"parry": true,
 			"block": false,
 			"attributes": 
 			{
@@ -62,7 +62,7 @@ extends Node
 			"crit": 0.1,
 			"speed": 1,
 			"range": 150,
-			"parry:": true,
+			"parry": true,
 			"block": false,
 			"attributes": 
 			{
@@ -86,7 +86,7 @@ extends Node
 			"crit": 0.1,
 			"speed": 1,
 			"range": 150,
-			"parry:": true,
+			"parry": true,
 			"block": false,
 			"attributes": 
 			{
@@ -106,7 +106,7 @@ extends Node
 			"crit": 0.1,
 			"speed": 1,
 			"range": 150,
-			"parry:": true,
+			"parry": true,
 			"block": false,
 			"attributes": 
 			{

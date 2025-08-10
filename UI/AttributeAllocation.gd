@@ -37,7 +37,7 @@ var no_weapon := {
 	"crit": 0.1,
 	"speed": 0.25,
 	"range": 150,
-	"parry:": false,
+	"parry": false,
 	"block": false,
 	"attributes": 0
 	}
@@ -221,12 +221,12 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 	
 func _initialize_attributes():
 	attributes = {
-		"strength": 1,
-		"weapon_skill": 21,
+		"strength": 25,
+		"weapon_skill": 41,
 		"quickness": 81,
 		"crit_rating": 1,
 		"avoidance": 31,
-		"health": 11,
+		"health": 110,
 		"resilience": 1,
 		"endurance": 1,
 	}
@@ -336,7 +336,7 @@ func _on_confirm():
 					"crit": 0.1,
 					"speed": 0.25,
 					"range": 150,
-					"parry:": false,
+					"parry": false,
 					"block": false,
 					"price": 0,
 					"stock": 500,
@@ -361,7 +361,7 @@ func _on_confirm():
 					"crit": 0.1,
 					"speed": 0.25,
 					"range": 150,
-					"parry:": false,
+					"parry": false,
 					"block": false,
 					"price": 0,
 					"stock": 500,

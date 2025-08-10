@@ -57,15 +57,17 @@ Implement equipment system
     #☆ Lvl req for equipment
 	☆ Weapons
 		#☆ Dual wield (alternating weapon hits)
+        ☆ Weapon types (mace/dagger/sword mastery)
 		☆ Two-handed
 		☆ Shield (block)
-		☆ Parry
-		☆ Durability (destroyed weapon -> replace with fists, no parry chance)
+		#☆ Parry
+		#☆ Durability (destroyed weapon -> replace with fists, no parry chance)
 	☆ Armor
-	Trinkets
-	Ring
-	Amulet
-	etc
+	- Trinkets
+	- Ring
+	- Amulet
+    - Back
+	- etc
 	
 Races
 	- Add more races
@@ -98,3 +100,4 @@ Future
         Leveling up or aging should increase "luck"
         Chance to double income depending on "luck"?
     Attribute "Aptitute/Intelligence/Intellect/Clarity/Brightness..." to boost exp gained
+    Choose Ascendancy (modify bonuses + new portrait)

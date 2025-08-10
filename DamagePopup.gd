@@ -3,11 +3,17 @@ extends Node2D
 var float_speed = -40
 var lifetime = 4
 
-func show_damage(amount: float, hit_success, dodge_success, crit, spawn_point):
+func show_damage(amount: float, hit_success, dodge_success, crit, parry_success, spawn_point, defender_weapon1_broken, defender_weapon2_broken):
 	if not hit_success:
 		customize_popup_font(Color.DARK_ORANGE, 30, "MISS", spawn_point)
 	elif dodge_success:
 		customize_popup_font(Color.WHITE, 30, "DODGE", spawn_point)
+	elif parry_success and defender_weapon1_broken == 0 and defender_weapon2_broken == 0:
+		customize_popup_font(Color.WHITE, 30, "PARRY", spawn_point)
+	elif parry_success and defender_weapon1_broken == 1 and defender_weapon2_broken == 0:
+		customize_popup_font(Color.RED, 30, "🗡️DESTROYED", spawn_point)
+	elif parry_success and defender_weapon1_broken == 0 and defender_weapon2_broken == 1:
+		customize_popup_font(Color.RED, 30, "🗡️DESTROYED", spawn_point)
 	else:
 		if crit == 2:
 			customize_popup_font(Color.RED, 55, str(int(amount)), spawn_point)

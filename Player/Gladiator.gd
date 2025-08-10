@@ -3,6 +3,27 @@ extends CharacterBody2D
 @onready var DamagePopupScene = preload("res://DamagePopup.tscn")
 
 #@onready var synchronizer = $MultiplayerSynchronizer
+var no_wep = {"hands": 1,
+			"min_dmg": 1, 
+			"max_dmg": 3,
+			"durability": INF,
+			"crit": 0.1,
+			"speed": 0.25,
+			"range": 150,
+			"parry": false,
+			"block": false,
+			"price": 0,
+			"stock": 500,
+			"type": "weapon",
+			"str_req": 20,
+			"skill_req": 30,
+			"level": 1,
+			"attributes": 
+			{
+				"weapon_skill": 0,
+			}}
+var no_wep_hit_chance = 0.7
+var no_wep_crit_chance = 0.1
 
 @onready var nav = $NavigationAgent2D
 @onready var sprite = $Sprite
@@ -56,14 +77,19 @@ var input_vector := Vector2.ZERO
 @export var endurance := 1.0
  
 #var weapon: Dictionary
-var weapon1: Dictionary
-var weapon2: Dictionary
-var weapon_hands_to_carry: int
+@export var weapon1_durability: int
+@export var weapon2_durability: int
+@export var weapon1_can_parry: bool
+@export var weapon2_can_parry: bool
+@export var weapon1: Dictionary
+@export var weapon2: Dictionary
+@export var weapon_hands_to_carry: int
 
  # === Damage calculations ===
 @export var attack_speed: float 
 @export var time_since_last_attack: float
 @export var crit_chance: Array
+@export var parry_chance: Array
 @export var hit_chance: Array
 @export var next_attack_critical: bool = false
 @export var next_taken_hit_critical: bool = false
@@ -122,6 +148,13 @@ func _ready():
 	# Intermission phase where players buy upgrades
 	
 	if multiplayer.is_server(): update_all_gladiators(GameState_.all_gladiators)
+
+	await get_tree().create_timer(0.1).timeout
+
+	if multiplayer.is_server():
+		GameState_.refresh_gladiator_data(multiplayer.get_unique_id())
+	else:
+		GameState_.rpc_id(1, "refresh_gladiator_data", multiplayer.get_unique_id())
 
 
 	#$HealthBar.value = max_health
@@ -198,17 +231,32 @@ func check_for_attack(delta: float):
 				var _hit_chance
 				var _crit_chance
 				#print(str(owner_id) + " weapon: " + str(next_attack_weapon))
+				print("weapon1_durability: " + str(weapon1_durability))
+				print("weapon2_durability: " + str(weapon2_durability))
+				if weapon1_durability < 0: 
+					weapon1 = no_wep
+					print("Switch to fists in weapon slot 1")
+				if weapon2_durability < 0: 
+					weapon2 = no_wep
+					print("Switch to fists in weapon slot 2")
+				
 				if next_attack_weapon == 0: 
 					weapon = weapon1
-					_hit_chance = hit_chance[0]
-					_crit_chance = crit_chance[0]
+					if weapon1_durability > 0: _hit_chance = hit_chance[0]
+					else: _hit_chance = no_wep_hit_chance
+					if weapon1_durability > 0: _crit_chance = crit_chance[0]
+					else: _crit_chance = no_wep_crit_chance
 					next_attack_weapon = 1
 				elif next_attack_weapon == 1: 
 					weapon = weapon2
-					_hit_chance = hit_chance[1]
-					_crit_chance = crit_chance[1]
+					if weapon2_durability > 0: _hit_chance = hit_chance[1]
+					else: _hit_chance = no_wep_hit_chance
+					if weapon2_durability > 0: _crit_chance = crit_chance[1]
+					else: _crit_chance = no_wep_crit_chance
 					next_attack_weapon = 0
 					
+				print("Peer parry chance: " + str(parry_chance))
+				print("Opponent parry chance: " + str(opponent.parry_chance))
 				deal_attack(self, opponent, weapon, _hit_chance, _crit_chance)
 				attack_charge_time = 0.0
 		else:
@@ -219,10 +267,16 @@ func check_for_attack(delta: float):
 		attack_charge_time = 0.0
 
 func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_chance):
-
-	var dodge_success = 0	# default 0 means defender did not didge
+	#defender.current_health = 0
+	var parry_success = 0	# default 0 means defender did not parry
+	var dodge_success = 0	# default 0 means defender did not dodge
 	var hit_success = 1		# default 1 means attacker hit successfully
 	var crit = 1
+	var defender_weapon1_broken = 0
+	var defender_weapon2_broken = 0
+	
+	print("defender.weapon1_can_parry: " + str(defender.weapon1_can_parry))
+	print("defender.weapon2_can_parry: " + str(defender.weapon2_can_parry))
 	
 	if randf() > _hit_chance:
 		hit_success = 0
@@ -240,25 +294,41 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 		dodge_success = 1
 		defender.next_attack_critical = true
 		attacker.next_taken_hit_critical = true
+	elif defender.weapon2_can_parry and defender.weapon2_durability > 0 and raw_damage > 0 and randf() < defender.parry_chance[1]:
+		parry_success = 1
+		defender.weapon2_durability -= raw_damage
+		if defender.weapon2_durability <= 0:
+			defender.weapon2 = no_wep
+			defender_weapon2_broken = 1
+		print(defender.name + " parried with weapon2, durability: " + str(defender.weapon2_durability))
+	elif defender.weapon1_can_parry and defender.weapon2_durability < 0 and defender.weapon1_durability > 0 and raw_damage > 0 and randf() < defender.parry_chance[0]:
+		parry_success = 1
+		defender.weapon1_durability -= raw_damage
+		if defender.weapon1_durability <= 0:
+			defender.weapon1 = no_wep
+			defender_weapon1_broken = 1
+		print(defender.name + " parried with weapon1, durability: " + str(defender.weapon1_durability))
 	
-	var final_damage = hit_success*(1-dodge_success)*roundf(raw_damage - defender.armor)
+	var final_damage = hit_success*(1-dodge_success)*(1-parry_success)*roundf(raw_damage - defender.armor)
 
 	if defender.has_method("receive_damage"):
-		defender.rpc_id(defender.get_multiplayer_authority(), "receive_damage", final_damage, hit_success, dodge_success, crit)
+		defender.rpc_id(defender.get_multiplayer_authority(), "receive_damage", final_damage, hit_success, dodge_success, crit, parry_success, defender_weapon1_broken, defender_weapon2_broken, defender.weapon1_durability, defender.weapon2_durability)
 		return true
 	else:
 		push_warning("Defender %s has no take_damage() method!" % defender.name)
 		return false
 
 @rpc("any_peer", "call_local")
-func receive_damage(amount: int, hit_success, dodge_success, crit):
+func receive_damage(amount: int, hit_success, dodge_success, crit, parry_success, defender_weapon1_broken, defender_weapon2_broken, wep1_new_durability, wep2_new_durability):
 	if !hit_success or dodge_success: next_attack_critical = true
 	
+	weapon1_durability = wep1_new_durability
+	weapon2_durability = wep2_new_durability
 	current_health -= amount
 	$HealthBar.value = current_health
 	#$HealthBar.bg_color = Color.DARK_RED
 	$HealthBar/HealthBarText.text = str(int(current_health))
-	rpc("show_damage_popup", amount, hit_success, dodge_success, crit)
+	rpc("show_damage_popup", amount, hit_success, dodge_success, crit, parry_success, defender_weapon1_broken, defender_weapon2_broken)
 	#print(concede_threshold*max_health)
 	if current_health <= concede_threshold*max_health and is_multiplayer_authority(): rpc("die")
 
@@ -333,13 +403,13 @@ func initialize_gladiator(data, opponent_id, _spawn_point, meeting_point, peer_i
 
 
 @rpc("any_peer", "call_local")
-func show_damage_popup(amount, hit_success, dodge_success, crit):
+func show_damage_popup(amount, hit_success, dodge_success, crit, parry_success, defender_weapon1_broken, defender_weapon2_broken):
 	var popup = DamagePopupScene.instantiate()
 	if prev_animation == "idle_left" or prev_animation == "walk_left": popup.global_position = global_position + Vector2(150, 40)
 	elif prev_animation == "idle_right" or prev_animation == "walk_right": popup.global_position = global_position + Vector2(-150, 40)
 	else: popup.global_position = global_position + Vector2(0, 40)
 	#print("show_damage_popup" + str(spawn_point))
-	popup.show_damage(amount, hit_success, dodge_success, crit, spawn_point)
+	popup.show_damage(amount, hit_success, dodge_success, crit, parry_success, spawn_point, defender_weapon1_broken, defender_weapon2_broken)
 	get_tree().current_scene.add_child(popup)
 
 
@@ -428,16 +498,46 @@ func update_gladiator(data: Dictionary):
 	endurance = data["attributes"]["endurance"]
 	weapon1 = data["weapon1"][weapon1_name]
 	weapon2 = data["weapon2"][weapon2_name]
+	#print(weapon1)
+	#print(weapon2)
+	#print("Update gladiator")
+	weapon1_durability = data["weapon1"][weapon1_name]["durability"]
+	weapon2_durability = data["weapon2"][weapon2_name]["durability"]
+	
+	#print(data["weapon1"][weapon1_name])
+	#print(data["weapon2"][weapon2_name])
+	print(weapon1_can_parry)
+	print(weapon2_can_parry)
+	weapon1_can_parry = data["weapon1"][weapon1_name]["parry"]
+	weapon2_can_parry = data["weapon2"][weapon2_name]["parry"]
 	weapon_hands_to_carry = data["weapon1"][weapon1_name]["hands"]
 	
  # === Damage calculations ===
-	if weapon_hands_to_carry == 1: attack_speed = (1/(weapon1_speed+weapon2_speed))/(log(10+sqrt(quickness))/log(10))
-	else: attack_speed = (1/(weapon1_speed))/(log(10+sqrt(quickness))/log(10))
+	if weapon_hands_to_carry == 1: 
+		attack_speed = (1/(weapon1_speed+weapon2_speed))/(log(10+sqrt(quickness))/log(10))
+		
+		var ratio1 = weapon_skill / weapon1_req
+		var ratio2 = weapon_skill / weapon2_req
+		parry_chance = [0.8 - exp(-0.4*(2*ratio1-1.0)), 0.8 - exp(-0.4*(2*ratio2-1.0))]
+	else: 
+		attack_speed = (1/(weapon1_speed))/(log(10+sqrt(quickness))/log(10))
+		
+		var ratio1 = weapon_skill / weapon1_req
+		parry_chance = [0.8 - exp(-0.4*(2*ratio1-1.0)), 0.8 - exp(-0.4*(2*ratio1-1.0))]
 
 	  # Seconds between attacks
 	time_since_last_attack = 0.0
+	
 	crit_chance = [weapon1_crit*crit_rating/20.0, weapon2_crit*crit_rating/20.0]
 	hit_chance = [(weapon_skill/weapon1_req) - 0.20*weapon_skill/100, (weapon_skill/weapon2_req) - 0.20*weapon_skill/100]
+	
+	if weapon1_durability == 1:		# THIS MEANS EQUIPPING NO WEP IN SLOT
+		crit_chance[0] = no_wep_crit_chance
+		hit_chance[0] = no_wep_hit_chance
+	if weapon2_durability == 1:
+		crit_chance[1] = no_wep_crit_chance
+		hit_chance[1] = no_wep_hit_chance
+	
 	next_attack_critical = false
 	next_taken_hit_critical = false
 	next_attack_weapon = 0
