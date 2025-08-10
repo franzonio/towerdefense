@@ -41,17 +41,17 @@ func _on_mouse_exited():
 	tween.tween_property(self, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 
 func _on_button_up():
-	var parent_name = get_parent().name
+	var _parent_name = get_parent().name
 	
-	if parent_name == "ShopGridContainer": 
-		if is_multiplayer_authority(): buy_equipment()
-	if parent_name == "InventoryGridContainer": 
+	if _parent_name == "ShopGridContainer": 
+		if is_multiplayer_authority(): buy_card()
+	if _parent_name == "InventoryGridContainer": 
 		if is_multiplayer_authority(): handle_inventory()
 		print("Pressed inventory slot")
 
 func handle_inventory(): pass
 
-func buy_equipment():
+func buy_card():
 	if not attribute_name:
 		push_error("Card attribute_name is not set!")
 		return

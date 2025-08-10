@@ -30,11 +30,21 @@ signal gladiator_attribute_changed(new_all_gladiators: Dictionary)
 signal countdown_updated(time_left: int)
 signal card_stock_changed(new_all_cards_stock: Dictionary)
 #signal card_stock_initialize(new_attr_cards_stock: Dictionary)
-signal send_gladiator_data_to_peer_signal(peer_id: int, gladiator_data: Dictionary)
+signal send_gladiator_data_to_peer_signal(peer_id: int, gladiator_data: Dictionary, all_gladiators)
 signal card_buy_result(peer_id: int, success: bool)
+signal broadcast_log_signal(message: String)
+signal send_player_colors_to_peer_signal(id: int, colors: Dictionary)
 
 var attr_cards_stock
 var all_cards_stock
+
+var exp_for_level = {"1": 0, "2": 10, "3": 12, "4": 14, "5": 18, "6": 22, "7": 26, "8": 30, "9": 34, "10": 36}
+
+var peer_colors = [Color.ANTIQUE_WHITE, Color.AQUAMARINE, Color.CHOCOLATE, Color.DEEP_PINK,
+				   Color.DODGER_BLUE,   Color.KHAKI,      Color.YELLOW,    Color.RED]
+var player_colors := {}
+
+
 
 const RACE_MODIFIERS = {
 	"Orc": {
@@ -85,13 +95,183 @@ func _ready():
 	equipment_script = load("res://Equipment.gd")
 	equipment_instance = equipment_script.new()
 	equipment_data = equipment_instance.all_equipment
-	print("equipment_data: " + str(equipment_data))
+	#print("equipment_data: " + str(equipment_data))
 	
 	all_cards_stock = create_card_pool()
 	initialize_card_stock()
+
+@rpc("any_peer", "call_local")
+func grant_exp_for_peer(id: int, amount: int, cost: int):
+	if all_gladiators[id]["gold"] >= cost:
+		all_gladiators[id]["gold"] -= cost
+		all_gladiators[id]["exp"] += amount
+		var current_level = all_gladiators[id]["level"]
+		var current_exp = all_gladiators[id]["exp"]
+
+		while true:
+			var next_level = str(int(current_level) + 1)
+			if not exp_for_level.has(next_level):
+				break  # Max level reached
+
+			var required_exp = exp_for_level[next_level]
+			if current_exp >= required_exp:
+				current_exp -= required_exp
+				current_level = str(int(current_level) + 1)
+			else:
+				break
+
+		all_gladiators[id]["level"] = current_level
+		all_gladiators[id]["exp"] = current_exp
+		rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+	else: add_to_log(id, "Not enough gold!")
+
+@rpc("any_peer", "call_local")
+func grant_gold_for_peer(id: int, base_amount: int, opponent_id: int, winner: bool):
+	var peer_color = all_gladiators[id]["color"].to_html()
+	var opponent_color = all_gladiators[opponent_id]["color"].to_html()
 	
+	var peer_name = "[color=%s]%s[/color]" % [peer_color, all_gladiators[id]["name"]]
+	var opponent_name = "[color=%s]%s[/color]" % [opponent_color, all_gladiators[opponent_id]["name"]]
+
+	var win_streak_quotes = [
+	peer_name + " is hailed—streak commands glory!",
+	#peer_name + " is cheered—victories stir the crowd",
+	#peer_name + " is revered—unbroken reign ignites awe",
+	peer_name + " is exalted—triumphs sway the emperor!",
+	peer_name + " is immortalized—streak crowns a legend!"]
+	
+	var loss_streak_quotes = [
+	peer_name + " endures—the crowd spares a coin...",
+	peer_name + " perseveres—pity swells in the stands...",
+	#peer_name + " rises—defeat feeds the people’s compassion",
+	peer_name + " struggles—the emperor’s hand turns generous...",
+	peer_name + " endures legend’s trial—gold fuels the return..."]
+
+	var break_streak_quotes = [
+	peer_name + " strikes—" + opponent_name + "'s streak falls!",
+	#peer_name + " topples " + opponent_name + "—cheers shake the arena",
+	peer_name + " ends " + opponent_name + "'s reign—the emperor rises to applaud!",
+	#peer_name + " shatters " + opponent_name + "'s destiny—gold rains from the stands",
+	peer_name + " breaks " + opponent_name + "'s legend—the empire rewards the impossible!"]
+
+	# --- Tunable parameters ---
+	var WIN_STREAK_STEP := 3          # Wins per +1 gold
+	var WIN_STREAK_CAP := 3           # Max gold from win streak
+	var LOSS_STREAK_STEP := 2         # Losses per +1 gold
+	var LOSS_STREAK_CAP := 4          # Max gold from loss streak
+	
+	var STREAK_BREAK_BONUS_SAME := 1  # You both had win streaks
+	var STREAK_BREAK_BONUS_UPSET := 3 # You had loss streak, opponent had win streak
+	
+	# Gold thresholds and corresponding bonuses
+	var INCOME_GOLD_THRESHOLDS := [10, 20, 30, 40, 50]
+	var INCOME_GOLD_BONUSES :=    [1,   2,  3,  4,  5]
+	
+	# --- Logic ---
+	var peer_streak = all_gladiators[id]["streak"]
+	var peer_gold = all_gladiators[id]["gold"]
+	var total_bonus = 0
+	var streak_bonus = 0
+	var streak_break_bonus = 0
+	var income_bonus = 0
+	
+	# 1. Streak bonus
+	if peer_streak > 0: # win-streak
+		streak_bonus += min(peer_streak / WIN_STREAK_STEP, WIN_STREAK_CAP)
+	elif peer_streak < 0: # loss-streak
+		streak_bonus += min(abs(peer_streak) / LOSS_STREAK_STEP, LOSS_STREAK_CAP)
+	
+	# Announce streak bonus quote
+	if peer_streak > 0 and streak_bonus > 0 and peer_streak % WIN_STREAK_STEP == 0:
+		var index = min(int(streak_bonus) - 1, win_streak_quotes.size() - 1)
+		add_to_log(id, win_streak_quotes[index])
+	elif peer_streak < 0 and streak_bonus > 0 and peer_streak % LOSS_STREAK_STEP == 0:
+		var index = min(int(streak_bonus) - 1, loss_streak_quotes.size() - 1)
+		add_to_log(id, loss_streak_quotes[index])
+
+	# 2. Opponent streak break bonus
+	var opponent_streak = all_gladiators[opponent_id]["streak"]
+	if opponent_streak > WIN_STREAK_STEP and winner:
+		if peer_streak > 0:
+			streak_break_bonus += STREAK_BREAK_BONUS_SAME
+		elif peer_streak <= 0:
+			streak_break_bonus += STREAK_BREAK_BONUS_UPSET
+			
+	if opponent_streak > 0 and streak_break_bonus:
+		var streak_tier = min(opponent_streak / WIN_STREAK_STEP, WIN_STREAK_CAP)
+		var index = int(streak_tier) - 1  # Tier 1 → index 0, Tier 2 → index 1, etc.
+		if index >= 0 and index < break_streak_quotes.size():
+			add_to_log(id, break_streak_quotes[index])
+
+	
+	# 3. Income bonus
+	for i in range(INCOME_GOLD_THRESHOLDS.size()):
+		if peer_gold >= INCOME_GOLD_THRESHOLDS[i] and (i == INCOME_GOLD_THRESHOLDS.size() - 1 or peer_gold < INCOME_GOLD_THRESHOLDS[i+1]):
+			income_bonus += INCOME_GOLD_BONUSES[i]
+			break
+	
+	total_bonus = streak_bonus + streak_break_bonus + income_bonus
+	#print(all_gladiators[id]["name"] + " total_bonus: " + str(total_bonus))
+	# 4. Final gold addition
+	all_gladiators[id]["gold"] += base_amount + int(total_bonus)
+	rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 
 
+@rpc("any_peer", "call_local")
+func modify_streak(id: int, win: bool):
+	var current_streak = all_gladiators[id]["streak"]
+	if current_streak >= 0 and win: # continue win streak
+		all_gladiators[id]["streak"] += 1
+	elif current_streak <= 0 and !win: # continue loss streak
+		all_gladiators[id]["streak"] -= 1
+	elif current_streak <= 0 and win: # broke loss streak
+		all_gladiators[id]["streak"] = 1
+	elif current_streak >= 0 and !win: # broke win streak
+		all_gladiators[id]["streak"] = -1
+	
+	rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+	
+	
+@rpc("authority", "call_local")
+func send_player_colors_to_peer(id: int, _player_colors) -> void:
+	emit_signal("send_player_colors_to_peer_signal", id, _player_colors)
+
+@rpc("any_peer", "call_local")
+func get_player_colors(id: int) -> void:
+	#print("asdasdasd: " + str(all_gladiators[id]))
+	rpc_id(id, "send_player_colors_to_peer", id, player_colors)
+	
+func assign_peer_colors(players): 
+	var shuffled_colors = peer_colors.duplicate()
+	shuffled_colors.shuffle()
+
+	var i = 0
+	for peer_id in players.keys():
+		if i < shuffled_colors.size():
+			player_colors[peer_id] = shuffled_colors[i]
+			i += 1
+		else:
+			push_error("Not enough colors for all players!")
+	#print(player_colors)
+
+@rpc("any_peer", "call_local")
+func broadcast_log(message: String) -> void:
+	emit_signal("broadcast_log_signal", message)
+
+@rpc("any_peer", "call_local")
+func add_to_log_from_peer(id: int, message: String) -> void:
+	#print("asdasdasd: " + str(all_gladiators[id]))
+	rpc_id(id, "broadcast_log", message)
+
+@rpc("any_peer", "call_local")
+func add_to_peer_log(id: int, message: String) -> void:
+	#print("asdasdasd: " + str(all_gladiators[id]))
+	rpc_id(id, "broadcast_log", message)
+
+@rpc("any_peer", "call_local")
+func add_to_log(_id: int, message: String) -> void:
+	#print("asdasdasd: " + str(all_gladiators[id]))
+	rpc("broadcast_log", message)
 
 @rpc("any_peer", "call_local")
 func broadcast_countdown(time_left: int):
@@ -109,11 +289,11 @@ func get_equipment_by_name(item_name: String):
 
 @rpc("any_peer", "call_local")
 func unequip_item(peer_id, equipment, equipment_button_parent_name):
-	print("Unqeuip equipment not implemented yet")
+	#print("Unqeuip equipment not implemented yet")
 	# 1. Remove from all_gladiators[peer_id][equipment_button_parent_name]
 	# 2. Add to 
 	var item_dict = get_equipment_by_name(equipment)
-	var type = item_dict[equipment]["type"]
+	var _type = item_dict[equipment]["type"] # to be implemented
 	var item = equipment_button_parent_name.replace("Slot", "").to_lower()
 	
 	
@@ -124,10 +304,10 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name):
 			if item == "weapon1" or item == "weapon2": all_gladiators[peer_id][item] = get_equipment_by_name("unarmed")
 			else: all_gladiators[peer_id][item] = {}
 			
-			rpc_id(peer_id, "send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id])
+			rpc_id(peer_id, "send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
 			return
 	
-	print("❌No inventory space!")
+	add_to_peer_log(peer_id, "[INFO] ❌No inventory space!")
 
 	
 
@@ -135,57 +315,61 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name):
 func equip_item(peer_id, equipment):
 	var item_dict = get_equipment_by_name(equipment)
 	var type = item_dict[equipment]["type"]
-	
-	if type == "weapon":
-		var hands = item_dict[equipment]["hands"]
-		var str_req = item_dict[equipment]["str_req"]
-		var skill_req = item_dict[equipment]["skill_req"]
-		
-		if all_gladiators[peer_id]["weapon1"].keys()[0] == "unarmed": all_gladiators[peer_id]["weapon1"] = item_dict
-		elif all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed": all_gladiators[peer_id]["weapon2"] = item_dict
-		else: print("❌Cannot equip more weapons!")
-			
-	elif type == "head":
-		if all_gladiators[peer_id]["head"] == {}: all_gladiators[peer_id]["head"] = item_dict
-		else: print("❌Already wearing a head")
-		
-	elif type == "chest":
-		if all_gladiators[peer_id]["chest"] == {}: all_gladiators[peer_id]["chest"] = item_dict
-		else: print("❌Already wearing a chest")
-		
-	elif type == "shoulder":
-		if all_gladiators[peer_id]["shoulder"] == {}: all_gladiators[peer_id]["shoulder"] = item_dict
-		else: print("❌Already wearing shoulders")
-		
-	elif type == "ring": 
-		if all_gladiators[peer_id]["ring1"].keys()[0] == {}: all_gladiators[peer_id]["ring1"] = item_dict
-		elif all_gladiators[peer_id]["ring2"].keys()[0] == {}: all_gladiators[peer_id]["ring2"] = item_dict
-		else: print("❌Cannot equip more rings!")
-		
-	else: print("❌Invalid item type!")
+	var str_req = item_dict[equipment].get("str_req", 0) 
+	var lvl_req = item_dict[equipment].get("level", 0) 
+	if int(all_gladiators[peer_id]["level"]) >= lvl_req:
+		if all_gladiators[peer_id]["attributes"]["strength"] >= str_req:
+			if type == "weapon":
+				var _hands = item_dict[equipment]["hands"] # to be implemented
+				
+				var _skill_req = item_dict[equipment]["skill_req"] # to be implemented
+				
+				if all_gladiators[peer_id]["weapon1"].keys()[0] == "unarmed": all_gladiators[peer_id]["weapon1"] = item_dict
+				elif all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed": all_gladiators[peer_id]["weapon2"] = item_dict
+				else: add_to_peer_log(peer_id, "[INFO] ❌Cannot equip more weapons!")
+					
+			elif type == "head":
+				if all_gladiators[peer_id]["head"] == {}: all_gladiators[peer_id]["head"] = item_dict
+				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing a head")
+				
+			elif type == "chest":
+				if all_gladiators[peer_id]["chest"] == {}: all_gladiators[peer_id]["chest"] = item_dict
+				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing a chest")
+				
+			elif type == "shoulder":
+				if all_gladiators[peer_id]["shoulder"] == {}: all_gladiators[peer_id]["shoulder"] = item_dict
+				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing shoulders")
+				
+			elif type == "ring": 
+				if all_gladiators[peer_id]["ring1"].keys()[0] == {}: all_gladiators[peer_id]["ring1"] = item_dict
+				elif all_gladiators[peer_id]["ring2"].keys()[0] == {}: all_gladiators[peer_id]["ring2"] = item_dict
+				else: add_to_peer_log(peer_id, "[INFO] ❌Cannot equip more rings!")
+				
+			else: add_to_peer_log(peer_id, "[INFO] ❌Invalid item type! Please report this as a bug.")
 
-	for slot_name in all_gladiators[peer_id]["inventory"].keys():
-		var item = all_gladiators[peer_id]["inventory"][slot_name]
+			for slot_name in all_gladiators[peer_id]["inventory"].keys():
+				var item = all_gladiators[peer_id]["inventory"][slot_name]
 
-		if typeof(item) == TYPE_DICTIONARY and item.has(equipment):
-			all_gladiators[peer_id]["inventory"][slot_name] = {}  # Clear slot
-			break
+				if typeof(item) == TYPE_DICTIONARY and item.has(equipment):
+					all_gladiators[peer_id]["inventory"][slot_name] = {}  # Clear slot
+					break
 
-	rpc_id(peer_id, "send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id])
-	
+			rpc_id(peer_id, "send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
+		else: add_to_peer_log(peer_id, "[INFO] ❌Need " + str(str_req) + " strength to equip item, you have " + str(int(all_gladiators[peer_id]["attributes"]["strength"])) + "!")
+	else: add_to_peer_log(peer_id, "[INFO] ❌Item requires level " + str(lvl_req) + " to equip, you are level " + str(all_gladiators[peer_id]["level"]))
 @rpc("any_peer", "call_local")
 func peer_concede(id, threshold): 
 	all_gladiators[id]["concede"] = threshold
-	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
+	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 	
-@rpc("authority", "call_local")
-func send_gladiator_data_to_peer(id: int, _gladiator_data) -> void:
-	emit_signal("send_gladiator_data_to_peer_signal", id, _gladiator_data)
+@rpc("any_peer", "call_local")
+func send_gladiator_data_to_peer(id: int, _gladiator_data, _all_gladiators) -> void:
+	emit_signal("send_gladiator_data_to_peer_signal", id, _gladiator_data, _all_gladiators)
 
 @rpc("any_peer", "call_local")
 func refresh_gladiator_data(id: int) -> void:
 	#print("asdasdasd: " + str(all_gladiators[id]))
-	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
+	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 
 @rpc("authority", "call_local")
 func notify_card_buy_result(id: int, success: bool, _gladiator_data) -> void:
@@ -205,15 +389,15 @@ func buy_equipment_card(id: int, equipment: String, cost: int):
 					adjust_card_stock(equipment, "remove")
 					success = true
 					rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
-					rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
+					rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 					return
-			print("❌No inventory space!")
-		else: print("Not enough gold!")
+			add_to_peer_log(id, "[INFO] ❌No inventory space!")
+		else: add_to_peer_log(id, "[INFO] ❌Not enough gold!")
 	else: 
-		print("No " + equipment + " cards left in stock!")
+		add_to_log(id, "No " + equipment + " cards left in stock!")
 		
 		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
-		rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
+		rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 
 @rpc("any_peer", "call_local")
 func sell_from_equipment(id: int, equipment: String, equipment_button_parent_name): 
@@ -232,7 +416,7 @@ func sell_from_equipment(id: int, equipment: String, equipment_button_parent_nam
 	all_gladiators[id]["gold"] += int(price/2)
 	#print("gold: " + str(all_gladiators[id]["gold"]))
 	adjust_card_stock(equipment, "add")  # Restore stock
-	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
+	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 
 	#print("Item not found in equipment panel!")
 					
@@ -250,10 +434,10 @@ func sell_from_inventory(id: int, equipment: String):
 			all_gladiators[id]["gold"] += int(price/2)
 			#print("gold: " + str(all_gladiators[id]["gold"]))
 			adjust_card_stock(equipment, "add")  # Restore stock
-			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
+			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 			return  # Exit after first match
 
-	print("Item not found in inventory!")
+	add_to_peer_log(id, "[INFO] ❌Item not found in inventory!")
 	
 	
 @rpc("any_peer", "call_local")
@@ -272,10 +456,10 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int):
 				adjust_card_stock(attribute, "remove")
 				success = true
 				rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
-				rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id])
-		else: print("Not enough gold!")
+				rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+		else: add_to_log(id, "Not enough gold!")
 	else: 
-		print("No " + attribute + " cards left in stock!")
+		add_to_peer_log(id, "[INFO] ❌No " + attribute + " cards left in stock!")
 		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 		
 func create_card_pool():
@@ -317,9 +501,15 @@ func adjust_card_stock(card: String, action: String):
 	
 	emit_signal("card_stock_changed", all_cards_stock)
 
-@rpc("any_peer")
+@rpc("any_peer", "call_local")
 func modify_gladiator_life(id: int, life_lost: int):
 	if all_gladiators.has(id):
+		var color = all_gladiators[id]["color"]
+		var glad_name = all_gladiators[id]["name"]
+		var hex_color = color.to_html()
+		var formatted = "[color=%s]%s[/color] was defeated and lost [color=%s]%s life [/color]" % [hex_color, glad_name, Color.RED.to_html(), str(life_lost)]
+		
+		add_to_log(get_multiplayer_authority(), formatted)
 		all_gladiators[id]["player_life"] -= life_lost
 		var new_life = all_gladiators[id]["player_life"]
 		emit_signal("gladiator_life_changed", id, new_life)
@@ -341,10 +531,30 @@ func _submit_gladiator_remote(data: Dictionary):
 	_store_gladiator(sender_id, data)
 
 func _store_gladiator(peer_id: int, data: Dictionary):
+	#var used_colors = []
+	#for gladiator in all_gladiators.values():
+	#	used_colors.append(gladiator.get("color"))
+		
+	#var available_colors = peer_colors.filter(func(c): return not used_colors.has(c))
+	#var assigned_color = available_colors.pick_random()
+	#print("peer_id: " + str(peer_id))
+	#print("player_colors: " + str(player_colors))
+	#print("player_colors[1]: " + str(player_colors[1]))
+	
+	if player_colors.has(int(peer_id)):
+		data["color"] = player_colors[int(peer_id)]
 	all_gladiators[peer_id] = data
-	print("🎯 Gladiator stored for peer:", peer_id)
-	print(all_gladiators)
+	
+	#print("🎯 Gladiator stored for peer:", peer_id)
+	#print(all_gladiators)
+	
 	if all_gladiators.size() >= NetworkManager_.max_players + 1:
+		
+		#await get_tree().create_timer(2).timeout
+		var countdown = 1
+		for i in countdown:
+			add_to_log(get_multiplayer_authority(), "✅ All players ready, starting game in %s..." % [str(countdown-i)])
+			await get_tree().create_timer(1).timeout
 		
 		_start_game.rpc()
 		_start_game()

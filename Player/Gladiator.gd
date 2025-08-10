@@ -16,6 +16,7 @@ extends CharacterBody2D
 
 #@export var name: String = ""
 @export var race: String = ""
+@export var level: String 
 @export var attributes: Dictionary = {}
 @export var gladiator_name: String = ""
 
@@ -79,6 +80,7 @@ var spawn_point
 @export var seconds_to_live = endurance/3.0
 
 ####
+var all_gladiators
 var target_position: Vector2 = Vector2.ZERO
 
 const ATTACK_RANGE := 160.0
@@ -109,7 +111,9 @@ func _ready():
 	await get_tree().process_frame 
 	add_to_group("gladiators")
 	sprite.play("idle_down")
+	GameState_.connect("send_gladiator_data_to_peer_signal", Callable(self, "_on_send_gladiator_data_to_peer_signal"))
 	if is_multiplayer_authority():
+		
 		var hud = get_node("/root/Main/HUD")
 		if hud:
 			hud.concede_threshold_changed.connect(_on_concede_threshold_changed)
@@ -118,7 +122,6 @@ func _ready():
 	# Intermission phase where players buy upgrades
 	
 	if multiplayer.is_server(): update_all_gladiators(GameState_.all_gladiators)
-
 
 
 	#$HealthBar.value = max_health
@@ -150,6 +153,9 @@ func _physics_process(delta):
 	else: 
 		if current_animation.begins_with("attack"): sprite.play(current_animation)
 		elif !current_animation.begins_with("attack") and current_animation != "N/A": sprite.play(current_animation)
+		
+func _on_send_gladiator_data_to_peer_signal(_peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
+	all_gladiators = _all_gladiators
 		
 func _on_concede_threshold_changed(value: float):
 	concede_threshold = value
@@ -263,8 +269,8 @@ func die():
 		var health_loss
 		if current_health <= concede_threshold*max_health and current_health > 0: health_loss = 5
 		if current_health <= 0: health_loss = 15 + abs(current_health) 
-		GameState_.modify_gladiator_life.rpc(owner_id, health_loss)
-		GameState_.modify_gladiator_life(owner_id, health_loss)  # Run it locally too!
+		if multiplayer.is_server(): GameState_.modify_gladiator_life(owner_id, health_loss)  # Run it locally too!
+		else: GameState_.modify_gladiator_life.rpc(owner_id, health_loss)
 		#var life = GameState_.all_gladiators[owner_id]["player_life"]
 		#GameState_.all_gladiators[owner_id]["player_life"] -= health_loss
 		#print("🩸 " + GameState_.all_gladiators[owner_id]["name"] + " lost " + str(health_loss) + " life, remaining: " + str(life))
@@ -386,6 +392,7 @@ func update_all_gladiators(data: Dictionary):
 @rpc("any_peer", "call_local")
 func update_gladiator(data: Dictionary):
 	#print("update_gladiator: " + str(data["weapon1"]))
+	level = data["level"]
 	var weapon1_name = data["weapon1"].keys()[0]
 	var weapon2_name = data["weapon2"].keys()[0]
 	#print("asd data: " + str(data))
@@ -407,7 +414,10 @@ func update_gladiator(data: Dictionary):
 	#print("\ndata" + str(data) + "\n")
 	
 	gladiator_name = data.name
+	#$Name.label_settings.set_font_color(data["color"])
 	$Name.text = data.name
+	$Name.add_theme_color_override("font_color", data.color)
+	
 	strength = data["attributes"]["strength"]
 	weapon_skill = data["attributes"]["weapon_skill"]
 	quickness = data["attributes"]["quickness"]

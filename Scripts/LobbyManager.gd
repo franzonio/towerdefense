@@ -15,18 +15,18 @@ func _ready():
 	start_button.pressed.connect(_on_start_game_pressed)
 	start_button.visible = false
 	#print("ready")
-	print()
+	#print()
 	if multiplayer.is_server():
 		_on_peer_connected(multiplayer.get_unique_id())  # Add self
 
 func _on_start_game_pressed():
-	
+	GameState_.assign_peer_colors(players)
 	race_selection.rpc()
 	race_selection()
 
 @rpc("authority")
 func race_selection():
-	get_tree().change_scene_to_file("res://UI/RaceSelection.tscn")
+	get_tree().change_scene_to_file("res://UI/AttributeAllocation.tscn")
 	
 
 @rpc("any_peer")

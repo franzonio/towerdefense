@@ -14,15 +14,18 @@ Cards
 	#☆ Card costs, updating player gold. Checking if possible to buy (inventory space, player gold)
 	#☆ Selling equipment (half price)
 	#	☆ Adding to card pool on sell
+    #☆ Should only be able to roll cards for level+1
+
 
 
 Implement reward system
-	☆ Experience/level
-		- What happens when leveling up? Unlocking new items in shop + placing X attr points?
-		- Buying exp for gold?
-	☆ Gold
-	☆ Some kind of penalty for leading gladiator
-	☆ Bonus for loss streak
+	#☆ Experience/level system
+		#☆ Unlocking new items in shop (+ placing X attr points?)
+		#☆ Buying exp for gold
+        #☆ Base exp per duel
+	#☆ Gold income system
+    #    ☆ Some kind of penalty for leading gladiator
+    #    ☆ Bonus for loss streak
 
 	
 HUD/UI
@@ -35,7 +38,10 @@ HUD/UI
 	#☆ Selecting concede threshold during intermission
 	- Selecting gladiator combat strategy during intermission (see Combat/strategy section)
     #☆ Chat
-    ☆ Log (informing what's happening in game)
+        #- Lobby chat
+        #- In-game chat
+    #☆ Log (informing what's happening in game)
+    #    ☆ Announcing loss/winstreaks and a opponent's winstreak 
 
 Attributes
 	☆ Making all stats impactful
@@ -46,7 +52,10 @@ Attributes
 	☆ Weapon types (mace/dagger/sword mastery)
 	
 Implement equipment system
-	Weapons
+    - Weight
+    #☆ Str req for equipment
+    #☆ Lvl req for equipment
+	☆ Weapons
 		#☆ Dual wield (alternating weapon hits)
 		☆ Two-handed
 		☆ Shield (block)
@@ -69,11 +78,23 @@ Graphics
 	☆ Everything must scale with monitor resolution
 
 
+Sound
+    - 
+
+Settings
+    - Sound bar
+
 -----
 
 
 Future
-	Potions (long/short term)
-    Curses
-	Betting?
+	Potions (long/short term boosts)
+    Curses (long/short term debuffs for enemy)
 	Auction house for items (instead of selling)
+    
+    Small interval for attribute cards?
+        3 to 5 (same cost) in shop
+        Attribute "luck" that increases probability for getting higher value in shop
+        Leveling up or aging should increase "luck"
+        Chance to double income depending on "luck"?
+    Attribute "Aptitute/Intelligence/Intellect/Clarity/Brightness..." to boost exp gained

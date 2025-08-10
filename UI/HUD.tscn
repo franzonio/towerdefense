@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=3 uid="uid://dutn6wxx1oapc"]
+[gd_scene load_steps=10 format=3 uid="uid://dutn6wxx1oapc"]
 
 [ext_resource type="Script" uid="uid://cpvmnjflyi4ln" path="res://UI/HUD.gd" id="1_yixhe"]
 [ext_resource type="Texture2D" uid="uid://b3rcyrl5mceea" path="res://Assets/MenuAssets/Menu Buttons/Square Buttons/Square Buttons/Questionmark Square Button.png" id="2_ijstf"]
+[ext_resource type="Script" uid="uid://cd4mgamt3dion" path="res://UI/ExpButton.gd" id="3_4n7mi"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_yixhe"]
 properties/0/path = NodePath("GridContainer/VBoxContainer/Player1/PlayerInfo/PlayerName:text")
@@ -711,8 +712,8 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 4.0
-offset_top = -183.0
-offset_right = 412.0
+offset_top = -251.0
+offset_right = 541.0
 offset_bottom = -39.0
 grow_vertical = 0
 size_flags_horizontal = 3
@@ -720,12 +721,11 @@ size_flags_vertical = 3
 
 [node name="ChatScroll" type="ScrollContainer" parent="Panel"]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_top = -144.0
-offset_right = 408.0
-grow_vertical = 0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="ChatLog" type="VBoxContainer" parent="Panel/ChatScroll"]
 layout_mode = 2
@@ -738,7 +738,7 @@ anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 4.0
 offset_top = -35.0
-offset_right = 412.0
+offset_right = 541.0
 offset_bottom = -4.0
 grow_vertical = 0
 
@@ -756,7 +756,21 @@ layout_mode = 2
 size_flags_horizontal = 8
 text = "Send"
 
+[node name="ExpButton" type="Button" parent="."]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -47.0
+offset_top = 40.0
+offset_right = -10.0
+offset_bottom = 71.0
+grow_horizontal = 0
+text = "TRAIN
+💰5"
+script = ExtResource("3_4n7mi")
+
 [connection signal="pressed" from="EquipmentButton" to="." method="_on_equipment_button_pressed"]
 [connection signal="pressed" from="ShopButton" to="." method="_on_shop_button_pressed"]
 [connection signal="toggled" from="ShopButton" to="." method="_on_shop_button_toggled"]
 [connection signal="pressed" from="Shop/VBoxContainer/HBoxContainer/RefreshButton" to="." method="_on_refresh_button_pressed"]
+[connection signal="button_up" from="ExpButton" to="ExpButton" method="_on_button_up"]

@@ -1,7 +1,13 @@
-[gd_scene load_steps=3 format=3 uid="uid://bt21imgkgrpjm"]
+[gd_scene load_steps=4 format=3 uid="uid://bt21imgkgrpjm"]
 
 [ext_resource type="Script" uid="uid://bfpo3nty4nyn7" path="res://UI/AttributeAllocation.gd" id="1_tvy0e"]
 [ext_resource type="Texture2D" uid="uid://rvb7qe2ysdkk" path="res://Assets/MenuAssets/gladiator_background.png" id="2_5miig"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_5miig"]
+font_size = 26
+font_color = Color(0.928571, 0.68508, 0.36248, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
 
 [node name="AttributeAllocation" type="Control"]
 layout_mode = 3
@@ -341,24 +347,116 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -35.5
-offset_top = -37.0
+offset_top = -35.0
 offset_right = 35.5
-offset_bottom = -6.0
+offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 0
 text = "Confirm"
 
 [node name="GoBack" type="Button" parent="."]
 layout_mode = 1
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 73.0
+offset_bottom = 39.0
+text = "Disconnect"
+
+[node name="ChatPanel" type="Panel" parent="."]
+layout_mode = 1
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
-offset_left = 2.0
-offset_top = -33.0
-offset_right = 67.0
-offset_bottom = -2.0
+offset_left = 4.0
+offset_top = -251.0
+offset_right = 541.0
+offset_bottom = -39.0
 grow_vertical = 0
-text = "Back"
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ChatScroll" type="ScrollContainer" parent="ChatPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ChatLog" type="VBoxContainer" parent="ChatPanel/ChatScroll"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -35.0
+offset_right = 541.0
+offset_bottom = -4.0
+grow_vertical = 0
+
+[node name="ChatInput" type="LineEdit" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Type here..."
+keep_editing_on_text_submit = true
+clear_button_enabled = true
+draw_control_chars = true
+caret_blink = true
+
+[node name="SendButton" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Send"
+
+[node name="RaceSelectionTitle" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -128.5
+offset_top = 58.0
+offset_right = 128.5
+offset_bottom = 94.0
+grow_horizontal = 2
+text = "CHOOSE YOUR RACE"
+label_settings = SubResource("LabelSettings_5miig")
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.5
+offset_top = -68.0
+offset_right = 32.5
+offset_bottom = 68.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Human" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Human"
+
+[node name="Elf" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Elf"
+
+[node name="Orc" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Orc"
+
+[node name="Troll" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Troll"
 
 [connection signal="pressed" from="GridContainer/Strength_Buttons/Strength_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Weapon Skill_Buttons/Weapon Skill_Sub" to="." method="_on_strength_sub_pressed"]

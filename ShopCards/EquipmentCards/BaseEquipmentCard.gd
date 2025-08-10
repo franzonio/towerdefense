@@ -49,7 +49,7 @@ func _on_button_up():
 		if is_multiplayer_authority(): buy_equipment()
 	if parent_name == "InventoryGridContainer": 
 		if is_multiplayer_authority(): handle_inventory()
-		print("Pressed inventory slot")
+		#print("Pressed inventory slot")
 
 func handle_inventory(): pass
 

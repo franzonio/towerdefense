@@ -21,7 +21,7 @@ var equipment_card_scenes = {
 @onready var label_gold = $MarginContainer/HBoxContainer/Label_Gold
 @onready var label_xp = $MarginContainer/HBoxContainer/Label_Experience
 
-const MAX_MESSAGES = 25
+const MAX_MESSAGES = 50
 const MAX_LENGTH = 255
 
 @onready var chat_log = $Panel/ChatScroll/ChatLog
@@ -29,7 +29,7 @@ const MAX_LENGTH = 255
 @onready var send_button = $HBoxContainer/SendButton
 @onready var chat_scroll = $Panel/ChatScroll
 
-@export var round = 0
+@export var round_now = 0
 @export var time_passed: float = 0.0
 @export var gold: int = 0
 @export var experience: int = 0
@@ -39,6 +39,7 @@ const MAX_LENGTH = 255
 @export var life_label: Node
 
 var player_gladiator_data
+var all_gladiators
 #var countdown_label 
 #var shop
 var intermission := true
@@ -67,6 +68,7 @@ var equipment_button_parent_name
 @onready var countdown_label = $IntermissionTimerLabel
 @onready var shop = $Shop
 @onready var concede_threshold_menu = $ConcedePanel/ConcedeThresholdMenu
+@onready var exp_button = $ExpButton
 
 @onready var head_slot = $EquipmentPanel/HeadSlot
 @onready var chest_slot = $EquipmentPanel/ChestSlot
@@ -85,20 +87,32 @@ var equipment_button_parent_name
 @onready var quickness_panel = $AttributePanel/GridContainer/Quickness
 @onready var resilience_panel = $AttributePanel/GridContainer/Resilience
 
+var exp_for_level = {"1": 0, "2": 10, "3": 12, "4": 14, "5": 18, "6": 22, "7": 26, "8": 30, "9": 34, "10": 36}
+var max_lvl
+
+var equipment_script 
+var equipment_instance
+var equipment_data 
 #@onready var all_equipment_slots = [head_slot, chest_slot, weapon1_slot, weapon2_slot, ring1_slot, ring2_slot]
 signal concede_threshold_changed(value: int)
 
 func _ready():
+	equipment_script = load("res://Equipment.gd")
+	equipment_instance = equipment_script.new()
+	equipment_data = equipment_instance.all_equipment
+	#print(equipment_data)
+	
 	GameState_.connect("gladiator_life_changed", Callable(self, "_on_life_changed"))
 	GameState_.connect("countdown_updated", Callable(self, "_on_countdown_updated"))
 	GameState_.connect("card_stock_changed", Callable(self, "_on_card_stock_changed"))
 	GameState_.connect("send_gladiator_data_to_peer_signal", Callable(self, "_on_send_gladiator_data_to_peer_signal"))
+	GameState_.connect("broadcast_log_signal", Callable(self, "_on_log_received"))
 	
 
 	send_button.pressed.connect(_on_send_pressed)
 	chat_input.text_submitted.connect(_on_send_pressed)
 
-	populate_hud()  # Initial draw
+	#populate_hud()  # Initial draw
 	
 	inventory_popup.clear()
 	inventory_popup.add_item("Equip", 0)
@@ -129,11 +143,18 @@ func _ready():
 	
 	concede_threshold_menu.connect("item_selected", Callable(self, "_on_threshold_selected"))
 	
+	var keys = exp_for_level.keys()
+	var int_keys = []
+	for k in keys:
+		int_keys.append(int(k))
+
+	int_keys.sort()  # Sorts in place
+	max_lvl = str(int_keys[-1])  # "10"
 	
 func _process(delta: float) -> void:
 	time_passed += delta
 	#print("mouse position: " + str(get_viewport().get_mouse_position()))
-	if !intermission: label_round.text = "Round " + str(round) + " | " + str(int(time_passed))
+	if !intermission: label_round.text = "Day " + str(round_now) + " | " + str(int(time_passed))
 	if intermission: concede_threshold_menu.disabled = false
 	else: concede_threshold_menu.disabled = true
 	
@@ -144,6 +165,14 @@ func _process(delta: float) -> void:
 		if $EquipmentButton:
 			$EquipmentButton.emit_signal("pressed")
 	
+func get_equipment_by_name(item_name: String):
+	for category in equipment_data.keys():
+		var items = equipment_data[category]
+		if items.has(item_name):
+			var result := {}
+			result[item_name] = items[item_name]
+			return result
+	return {}  # Return empty if not found
 	
 func _input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
@@ -151,7 +180,7 @@ func _input(event):
 			chat_input.release_focus()
 
 	
-func _on_send_pressed(submitted_text = ""):
+func _on_send_pressed(): #submitted_text = ""):
 	var msg = chat_input.text.strip_edges()
 	if msg.length() == 0 or msg.length() > MAX_LENGTH:
 		return
@@ -161,47 +190,97 @@ func _on_send_pressed(submitted_text = ""):
 	var timestamp = "[%02d:%02d]" % [now.hour, now.minute]
 
 	chat_input.clear()
-	rpc("broadcast_message", str(player_gladiator_data["name"]), timestamp, msg)
+	rpc("broadcast_message", sender_id, str(player_gladiator_data["name"]), timestamp, msg)
 
-	
-@rpc("any_peer", "call_local")
-func broadcast_message(sender_name: String, timestamp: String, message: String):
-	var formatted = "%s [%s]: %s" % [timestamp, sender_name, message]
-	_add_message(formatted)
 
-func _add_message(text: String):
-	var label = Label.new()
-	label.text = text
+func _on_log_received(message):
+	#var now = Time.get_datetime_dict_from_system()
+	#var timestamp = "[%02d:%02d]" % [now.hour, now.minute]
+	var formatted = "%s" % [message]
+
+	var label = RichTextLabel.new()
+	label.bbcode_enabled = true
+	label.text = formatted
+
+	# Ensure it expands and wraps
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD
-	label.clip_text = false
+	label.fit_content = true
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
-	chat_input.keep_editing_on_text_submit
+	label.scroll_active = false
 
+	# Add to chat log
 	chat_log.add_child(label)
 
+	# Remove old messages
 	if chat_log.get_child_count() > MAX_MESSAGES:
 		chat_log.get_child(0).queue_free()
 
+	# Scroll to bottom
+	await get_tree().process_frame
+	await get_tree().process_frame
+	chat_scroll.scroll_vertical = chat_scroll.get_v_scroll_bar().max_value
+	
+	
+@rpc("any_peer", "call_local")
+func broadcast_message(sender_id, sender_name: String, timestamp: String, message: String):
+	_add_message(sender_id, sender_name, timestamp, message)
+
+
+func _add_message(sender_id, sender_name: String, timestamp: String, message: String):
+	var gladiator = all_gladiators.get(sender_id)
+	var color = gladiator.get("color", Color.WHITE)
+	var hex_color = color.to_html()
+
+	var formatted = "%s [color=%s]%s[/color]: %s" % [timestamp, hex_color, sender_name, message]
+
+	var label = RichTextLabel.new()
+	label.bbcode_enabled = true
+	label.text = formatted
+
+	# Ensure it expands and wraps
+	label.autowrap_mode = TextServer.AUTOWRAP_WORD
+	label.fit_content = true
+	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
+	label.scroll_active = false
+
+	# Add to chat log
+	chat_log.add_child(label)
+
+	# Debug print
+	#print("Added chat message:", formatted)
+
+	# Remove old messages
+	if chat_log.get_child_count() > MAX_MESSAGES:
+		chat_log.get_child(0).queue_free()
+
+	# Scroll to bottom
 	await get_tree().process_frame
 	await get_tree().process_frame
 	chat_scroll.scroll_vertical = chat_scroll.get_v_scroll_bar().max_value
 
 
+
 	
-func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data: Dictionary):
+func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
+	all_gladiators = _all_gladiators
 	if peer_id == multiplayer.get_unique_id():
-		print("_player_gladiator_data: " + str(_player_gladiator_data))
+		#print("streak for peer " + str(peer_id) + ": " + str(all_gladiators[peer_id]["streak"]))
+		#print("_player_gladiator_data: " + _player_gladiator_data["name"] + ", exp: " + str(_player_gladiator_data["exp"]) + ", lvl: " + _player_gladiator_data["level"])
 		player_gladiator_data = _player_gladiator_data
 		update_inventory_ui(peer_id)
-		update_equipment_ui(peer_id)
-		update_attribute_ui(peer_id)
-		update_concede_ui(peer_id)
+		update_equipment_ui()
+		update_attribute_ui()
+		update_concede_ui()
 		update_gold(player_gladiator_data["gold"])
+		update_experience(player_gladiator_data["exp"])
+	#print("_on_send_gladiator_data_to_peer_signal: " + str(multiplayer.get_unique_id()))
+	populate_hud()
 	
-func update_concede_ui(peer_id):
+func update_concede_ui():
 	var previous_index = concede_threshold_menu.get_selected_id()
-	print(previous_index)
+	#print(previous_index)
 	var attributes = player_gladiator_data.get("attributes", {})
 	var options = ["50% (" + str(int(round(0.5*attributes["health"]))) + " hp)", 
 					"40% (" + str(int(round(0.4*attributes["health"]))) + " hp)", 
@@ -215,7 +294,7 @@ func update_concede_ui(peer_id):
 	if previous_index == -1: concede_threshold_menu.select(0)
 	else: concede_threshold_menu.select(previous_index)
 	
-func update_attribute_ui(peer_id: int): 
+func update_attribute_ui(): 
 	var attributes = player_gladiator_data.get("attributes", {})
 	health_panel.text = "Health: " + str(int(attributes["health"]))
 	strength_panel.text = "Strength: " + str(int(attributes["strength"]))
@@ -226,7 +305,7 @@ func update_attribute_ui(peer_id: int):
 	quickness_panel.text = "Quickness " + str(int(attributes["quickness"]))
 	resilience_panel.text = "Resilience " + str(int(attributes["resilience"]))
 	
-func update_equipment_ui(peer_id: int): 
+func update_equipment_ui(): 
 	for slot in equipment_panel.get_children():
 		for i in slot.get_children():
 			i.queue_free()
@@ -297,7 +376,12 @@ func update_equipment_ui(peer_id: int):
 				card_found = 1
 				continue
 				
-		if card_found == 0: print("No card defined for item " + str(item_name))
+		if card_found == 0: 
+			if multiplayer.is_server():
+				GameState_.add_to_peer_log(multiplayer.get_unique_id(), "No card defined for item " + str(item_name) + ". Please report this as a bug.")
+			else:
+				GameState_.rpc_id(1, "add_to_peer_log", multiplayer.get_unique_id(), "No card defined for item " + str(item_name) + ". Please report this as a bug.")
+			#print("No card defined for item " + str(item_name))
 			
 func _on_equipment_pressed(parent_name: String):
 	equipment_button_parent_name = parent_name
@@ -305,7 +389,7 @@ func _on_equipment_pressed(parent_name: String):
 	
 func update_inventory_ui(glad_id: int):
 	var gladiator_inventory = player_gladiator_data["inventory"]
-	print("peer " + str(glad_id) + " inventory: " + str(gladiator_inventory))
+	#print("peer " + str(glad_id) + " inventory: " + str(gladiator_inventory))
 	
 	# Clear existing grid
 	for child in inventory_grid.get_children():
@@ -352,7 +436,12 @@ func _on_equipment_popup_pressed(id: int):
 	match id:
 		0:
 			if !intermission: 
-				print("Cannot unequip item during duel!")
+				if multiplayer.is_server():
+					GameState_.add_to_peer_log(multiplayer.get_unique_id(), "[INFO] ❌Cannot unequip item during duel!")
+				else:
+					GameState_.rpc_id(1, "add_to_peer_log", multiplayer.get_unique_id(), "[INFO] ❌Cannot unequip item during duel!")
+				
+				#GameState_.rpc("add_to_peer_log", "Cannot unequip item during duel!")
 				return
 			
 			if multiplayer.is_server():
@@ -365,10 +454,13 @@ func _on_equipment_popup_pressed(id: int):
 			
 		1:
 			if !intermission: 
-				print("Cannot sell an equipped item during duel!")
+				if multiplayer.is_server():
+					GameState_.add_to_peer_log(multiplayer.get_unique_id(), "[INFO] ❌Cannot sell equipped item during duel!")
+				else:
+					GameState_.rpc_id(1, "add_to_peer_log", multiplayer.get_unique_id(), "[INFO] ❌Cannot sell equipped item during duel!")
 				return
 				
-			print("Sell from equipment not implemented yet")
+			#print("Sell from equipment not implemented yet")
 			if multiplayer.is_server():
 				GameState_.sell_from_equipment(multiplayer.get_unique_id(), selected_item_name, equipment_button_parent_name)
 			else:
@@ -380,7 +472,10 @@ func _on_inventory_popup_pressed(id: int):
 			#print("Equip requested for ", selected_item_name, " from ", selected_slot)
 			
 			if !intermission: 
-				print("Cannot equip item during duel!")
+				if multiplayer.is_server():
+					GameState_.add_to_peer_log(multiplayer.get_unique_id(), "[INFO] ❌Cannot equip item during duel!")
+				else:
+					GameState_.rpc_id(1, "add_to_peer_log", multiplayer.get_unique_id(), "[INFO] ❌Cannot equip item during duel!")
 				return
 			
 			if multiplayer.is_server():
@@ -437,17 +532,15 @@ func get_all_cards():
 	all_cards = [[strength_card, "strength", card_stock["strength"]], [health_card, "health", card_stock["health"]], 
 		[criticality_card, "crit_rating", card_stock["crit_rating"]], [endurance_card, "endurance", card_stock["endurance"]], 
 		[quickness_card, "quickness", card_stock["quickness"]], [resilience_card, "resilience", card_stock["resilience"]], 
-		[avoidance_card, "avoidance", card_stock["avoidance"]],
+		[avoidance_card, "avoidance", card_stock["avoidance"]], [weapon_mastery_card, "weapon_skill", card_stock["weapon_skill"]], 
 		
-		[weapon_mastery_card, "weapon_skill", card_stock["weapon_skill"]], [simple_sword_card, "simple_sword", card_stock["simple_sword"]]]
+		[simple_sword_card, "simple_sword", card_stock["simple_sword"]]]
 	return all_cards
 
 func roll_cards():
 	#print("\n" + str(multiplayer.get_unique_id()) + "🃏reroll_cards: " + str(card_stock))
 	
 	all_cards = get_all_cards()
-			
-	#print("owner: " + str(multiplayer.get_unique_id()))
 			
 	var weighted_random_cards = weighted_random_selection(all_cards, 5)
 	var i = 1
@@ -476,7 +569,15 @@ func weighted_random_selection(_all_cards: Array, count: int = 5):
 	#print("\n" + str(multiplayer.get_unique_id()) + "🃏weighted_random_selection: " + str(_all_cards))
 	for pair in _all_cards:
 		var item = pair[0]
+		var item_name = pair[1]
 		var stock = int(pair[2])
+		
+		var item_dict = get_equipment_by_name(item_name)
+		if item_dict != {}:
+			# Only add cards that are below player level + 1
+			if item_dict[item_name]["level"] > int(all_gladiators[multiplayer.get_unique_id()]["level"]) + 1: 
+				continue
+			
 		for i in stock:
 			pool.append(item)  # Add item 'stock' times
 
@@ -528,11 +629,11 @@ func _on_card_stock_changed(new_all_cards_stock: Dictionary):
 func _on_countdown_updated(time_left: int):
 	if time_left > 0: intermission = true
 	if intermission: 
-		label_round.text = "Round " + str(round)
+		label_round.text = "Day " + str(round_now)
 		if reroll_start_of_intermission:
 			#print("New round!")
 			#print("time_passed: " + str(time_passed))
-			round += 1
+			round_now += 1
 			if time_passed > 5: reroll_cards()
 			reroll_start_of_intermission = 0
 		#update_countdown_labels(time_left)
@@ -566,12 +667,15 @@ func _on_life_changed(peer_id: int, new_life: int):
 	life_label.text = "❤️ %d" % new_life
 	
 func populate_hud():
-	var peer_ids = GameState_.all_gladiators.keys()
+	var peer_ids = all_gladiators.keys()
 	peer_ids.sort()  # Optional but stable
+
+	#print(str(multiplayer.get_unique_id()) + " is populating HUD")
+	#print("Peers: " + str(peer_ids))
 
 	for i in range(min(peer_ids.size(), 8)):  # Clamp to available HUD slots
 		var peer_id = peer_ids[i]
-		var gladiator_data = GameState_.all_gladiators[peer_id]
+		var gladiator_data = all_gladiators[peer_id]
 		var container_name = "Player%d" % (i + 1)
 
 		var player_container = $GridContainer/VBoxContainer.get_node_or_null(container_name)
@@ -583,12 +687,17 @@ func populate_hud():
 		race_label = player_container.get_node("PlayerInfo/PlayerRace")
 		life_label = player_container.get_node("PlayerLife")
 
+		#print(str(peer_id) + " gladiator_data[level]: " + all_gladiators[peer_id]["level"])
+		
 		name_label.text = str(gladiator_data.get("name", "Unknown"))
-		race_label.text = str(gladiator_data.get("race", "???"))
+		race_label.text = str(gladiator_data.get("race", "???")) + "       Lvl " + all_gladiators[peer_id]["level"]
 		life_label.text = "❤️ %d" % int(gladiator_data.get("player_life", 0))
 
 func update_gold(amount: int):
 	label_gold.text = "💰" + str(amount)
 
 func update_experience(amount: int):
-	label_xp.text = "       🔹" + str(amount)
+	if player_gladiator_data["level"] == max_lvl:
+		label_xp.text = "       🔹" + "-"
+	else: 
+		label_xp.text = "       🔹" + str(amount) + "/" + str(exp_for_level[str(int(player_gladiator_data["level"])+1)]) + " Lv." + player_gladiator_data["level"]
