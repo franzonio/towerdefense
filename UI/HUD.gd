@@ -7,12 +7,15 @@ extends CanvasLayer
 @onready var endurance_card = preload("res://ShopCards/AttributeCards/EnduranceCard.tscn")
 @onready var quickness_card = preload("res://ShopCards/AttributeCards/QuicknessCard.tscn")
 @onready var resilience_card = preload("res://ShopCards/AttributeCards/ResilienceCard.tscn")
-@onready var weapon_mastery_card = preload("res://ShopCards/AttributeCards/WeaponMasteryCard.tscn")
+@onready var sword_mastery_card = preload("res://ShopCards/AttributeCards/SwordMasteryCard.tscn")
+@onready var axe_mastery_card = preload("res://ShopCards/AttributeCards/AxeMasteryCard.tscn")
+@onready var shield_mastery_card = preload("res://ShopCards/AttributeCards/ShieldMasteryCard.tscn")
 
 @onready var simple_sword_card = preload("res://ShopCards/EquipmentCards/Sword/1h/SimpleSword.tscn")
 @onready var light_axe_card = preload("res://ShopCards/EquipmentCards/Axe/1h/LightAxe.tscn")
 @onready var wooden_buckler_card = preload("res://ShopCards/EquipmentCards/Shield/WoodenBuckler.tscn")
 @onready var sturdy_blade_card = preload("res://ShopCards/EquipmentCards/Sword/2h/SturdyBlade.tscn")
+
 
 var equipment_card_scenes = {
 	"simple_sword": simple_sword_card
@@ -81,14 +84,17 @@ var equipment_button_parent_name
 @onready var ring2_slot = $EquipmentPanel/Ring2Slot
 
 @onready var attribute_panel = $AttributePanel
-@onready var health_panel = $AttributePanel/GridContainer/Health
-@onready var strength_panel = $AttributePanel/GridContainer/Strength
-@onready var weapon_skill_panel = $AttributePanel/GridContainer/WeaponSkill
-@onready var endurance_panel = $AttributePanel/GridContainer/Endurance
-@onready var criticality_panel = $AttributePanel/GridContainer/Criticality
-@onready var avoidance_panel = $AttributePanel/GridContainer/Avoidance
-@onready var quickness_panel = $AttributePanel/GridContainer/Quickness
-@onready var resilience_panel = $AttributePanel/GridContainer/Resilience
+@onready var health_panel = $AttributePanel/VBoxContainer/Health
+@onready var strength_panel = $AttributePanel/VBoxContainer/Strength
+@onready var endurance_panel = $AttributePanel/VBoxContainer/Endurance
+@onready var criticality_panel = $AttributePanel/VBoxContainer/Criticality
+@onready var avoidance_panel = $AttributePanel/VBoxContainer/Avoidance
+@onready var quickness_panel = $AttributePanel/VBoxContainer/Quickness
+@onready var resilience_panel = $AttributePanel/VBoxContainer/Resilience
+@onready var sword_mastery_panel = $AttributePanel/VBoxContainer/SwordMastery
+@onready var axe_mastery_panel = $AttributePanel/VBoxContainer/AxeMastery
+@onready var shield_mastery_panel = $AttributePanel/VBoxContainer/ShieldMastery
+@onready var unarmed_mastery_panel = $AttributePanel/VBoxContainer/UnarmedMastery
 
 var exp_for_level = {"1": 0, "2": 10, "3": 12, "4": 14, "5": 18, "6": 22, "7": 26, "8": 30, "9": 34, "10": 36}
 var max_lvl
@@ -309,12 +315,15 @@ func update_attribute_ui():
 	var attributes = player_gladiator_data.get("attributes", {})
 	health_panel.text = "Health: " + str(int(attributes["health"]))
 	strength_panel.text = "Strength: " + str(int(attributes["strength"]))
-	weapon_skill_panel.text = "Weapon Mastery " + str(int(attributes["weapon_skill"]))
-	endurance_panel.text = "Endurance " + str(int(attributes["endurance"]))
-	criticality_panel.text = "Criticality " + str(int(attributes["crit_rating"]))
-	avoidance_panel.text = "Avoidance " + str(int(attributes["avoidance"]))
-	quickness_panel.text = "Quickness " + str(int(attributes["quickness"]))
-	resilience_panel.text = "Resilience " + str(int(attributes["resilience"]))
+	endurance_panel.text = "Endurance: " + str(int(attributes["endurance"]))
+	criticality_panel.text = "Criticality: " + str(int(attributes["crit_rating"]))
+	avoidance_panel.text = "Avoidance: " + str(int(attributes["avoidance"]))
+	quickness_panel.text = "Quickness: " + str(int(attributes["quickness"]))
+	resilience_panel.text = "Resilience: " + str(int(attributes["resilience"]))
+	sword_mastery_panel.text = "Sword Mastery: " + str(int(attributes["sword_mastery"]))
+	axe_mastery_panel.text = "Axe Mastery: " + str(int(attributes["axe_mastery"]))
+	shield_mastery_panel.text = "Shield Mastery: " + str(int(attributes["shield_mastery"]))
+	unarmed_mastery_panel.text = "Unarmed: " + str(int(attributes["unarmed_mastery"]))
 	
 func update_equipment_ui(): 
 	for slot in equipment_panel.get_children():
@@ -543,8 +552,13 @@ func get_all_cards():
 	all_cards = [[strength_card, "strength", card_stock["strength"]], [health_card, "health", card_stock["health"]], 
 		[criticality_card, "crit_rating", card_stock["crit_rating"]], [endurance_card, "endurance", card_stock["endurance"]], 
 		[quickness_card, "quickness", card_stock["quickness"]], [resilience_card, "resilience", card_stock["resilience"]], 
-		[avoidance_card, "avoidance", card_stock["avoidance"]], [weapon_mastery_card, "weapon_skill", card_stock["weapon_skill"]], 
+		[avoidance_card, "avoidance", card_stock["avoidance"]], 
 		
+		### WEAPON MASTERY ###
+		[sword_mastery_card, "sword_mastery", card_stock["sword_mastery"]], [axe_mastery_card, "axe_mastery", card_stock["axe_mastery"]],
+		[shield_mastery_card, "shield_mastery", card_stock["shield_mastery"]],
+		
+		### EQUIPMENT ###
 		[simple_sword_card, "simple_sword", card_stock["simple_sword"]], [light_axe_card, "light_axe", card_stock["light_axe"]],
 		[wooden_buckler_card, "wooden_buckler", card_stock["wooden_buckler"]], [sturdy_blade_card, "sturdy_blade", card_stock["sturdy_blade"]]
 		]

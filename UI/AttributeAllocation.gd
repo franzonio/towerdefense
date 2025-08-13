@@ -41,6 +41,7 @@ var no_wep = {"hands": 1,
 			"price": 0,
 			"stock": 500,
 			"type": "weapon",
+			"category": "unarmed",
 			"str_req": 20,
 			"skill_req": 30,
 			"level": 1,
@@ -229,13 +230,16 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 func _initialize_attributes():
 	attributes = {
 		"strength": 25.0,
-		"weapon_skill": 41.0,
 		"quickness": 81.0,
 		"crit_rating": 1.0,
 		"avoidance": 31.0,
 		"health": 110.0,
 		"resilience": 1.0,
 		"endurance": 1.0,
+		"sword_mastery": 40.0,
+		"axe_mastery": 20.0,
+		"shield_mastery": 20.0,
+		"unarmed_mastery": 10.0,
 	}
 	# Override with starting values if any
 	for attr in starting_values:

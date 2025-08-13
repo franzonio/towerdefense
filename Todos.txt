@@ -60,7 +60,7 @@ Implement equipment system
     ☆ Apply attribute bonuses to gladiator attribute dict on equip/unequip
 	☆ Weapons
 		#☆ Dual wield (alternating weapon hits)
-        ☆ Weapon type attributes (mace/dagger/sword mastery)
+        #☆ Weapon type attributes (mace/dagger/sword mastery)
 		#☆ Two-handed
 		#☆ Shield (block)
 		#☆ Parry

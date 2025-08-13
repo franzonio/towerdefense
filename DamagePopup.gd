@@ -10,7 +10,7 @@ func show_damage(amount: float, raw_damage, hit_success, dodge_success, crit, pa
 	elif dodge_success:
 		customize_popup_font(Color.WHITE, 30, "DODGE", spawn_point)
 	elif block_success and defender_weapon2_broken == 0:
-		customize_popup_font(Color.WHITE, 30, "BLOCK (" + str(int(raw_damage-shield_absorb)) + ")", spawn_point)
+		customize_popup_font(Color.WHITE, 30, "BLOCK (" + str(int(clamp(raw_damage - shield_absorb, 0, 9999))) + ")", spawn_point)
 	elif block_success and defender_weapon2_broken == 1:
 		customize_popup_font(Color.RED, 30, "🛡️DESTROYED", spawn_point)
 	elif parry_success and defender_weapon1_broken == 0 and defender_weapon2_broken == 0:
@@ -20,7 +20,7 @@ func show_damage(amount: float, raw_damage, hit_success, dodge_success, crit, pa
 	elif parry_success and defender_weapon1_broken == 0 and defender_weapon2_broken == 1:
 		customize_popup_font(Color.RED, 30, "🗡️DESTROYED", spawn_point)
 	else:
-		if crit == 2:
+		if crit != 1:
 			customize_popup_font(Color.RED, 55, str(int(amount)), spawn_point)
 		else:
 			customize_popup_font(Color.YELLOW, 44, str(int(amount)), spawn_point)

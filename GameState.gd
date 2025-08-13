@@ -50,43 +50,55 @@ var player_colors := {}
 const RACE_MODIFIERS = {
 	"Orc": {
 		"strength": 1.25,
-		"weapon_skill": 1.0,
 		"quickness": 0.7,
 		"crit_rating": 1.2,
 		"avoidance": 0.6,
 		"health": 1.25,
 		"resilience": 1.35,
-		"endurance": 0.9
+		"endurance": 0.9,
+		"sword_mastery": 1.0,
+		"axe_mastery": 1.1,
+		"shield_mastery": 0.95,
+		"unarmed_mastery": 1.0
 	},
 	"Elf": {
 		"strength": 0.7,
-		"weapon_skill": 1.3,
 		"quickness": 1.4,
 		"crit_rating": 1.2,
 		"avoidance": 1.55,
 		"health": 0.8,
 		"resilience": 0.7,
-		"endurance": 1.35
+		"endurance": 1.35,
+		"sword_mastery": 1.15,
+		"axe_mastery": 1.0,
+		"shield_mastery": 1.2,
+		"unarmed_mastery": 1.0
 	},
 	"Human": {
 		"strength": 1.0,
-		"weapon_skill": 1.15,
 		"quickness": 1.1,
 		"crit_rating": 1.0,
 		"avoidance": 1.1,
 		"health": 1.1,
 		"resilience": 1.1,
-		"endurance": 1.2
+		"endurance": 1.2,
+		"sword_mastery": 1.1,
+		"axe_mastery": 1.1,
+		"shield_mastery": 1.1,
+		"unarmed_mastery": 1.0
 	},
 	"Troll": {
 		"strength": 1.5,
-		"weapon_skill": 0.8,
 		"quickness": 0.6,
 		"crit_rating": 1.0,
 		"avoidance": 0.5,
 		"health": 1.5,
 		"resilience": 1.4,
-		"endurance": 0.8
+		"endurance": 0.8,
+		"sword_mastery": 0.7,
+		"axe_mastery": 0.8,
+		"shield_mastery": 0.7,
+		"unarmed_mastery": 1.0
 	}
 }
 
@@ -104,13 +116,15 @@ func _ready():
 func create_card_pool():
 	attr_cards_stock = {
 		"strength": 100,
-		"weapon_skill": 100,
 		"quickness": 50,
 		"crit_rating": 50,
 		"avoidance": 50,
 		"health": 100,
 		"resilience": 50,
 		"endurance": 100,
+		"sword_mastery": 100,
+		"axe_mastery": 100,
+		"shield_mastery": 100
 	}
 	var _all_cards_stock = {}  # Create a fresh dictionary
 

@@ -16,6 +16,7 @@ var no_wep = {"hands": 1,
 			"price": 0,
 			"stock": 500,
 			"type": "weapon",
+			"category": "unarmed",
 			"str_req": 20,
 			"skill_req": 30,
 			"level": 1,
@@ -26,6 +27,7 @@ var no_wep = {"hands": 1,
 var no_wep_hit_chance = 0.7
 var no_wep_crit_chance = no_wep["crit_chance"]
 var no_wep_crit_multi = no_wep["crit_multi"]
+var no_wep_attack_speed = no_wep["speed"]
 
 @onready var nav = $NavigationAgent2D
 @onready var sprite = $Sprite
@@ -52,20 +54,22 @@ var no_wep_crit_multi = no_wep["crit_multi"]
 var input_vector := Vector2.ZERO
 
 ####
-@export var weapon1_dmg_min := 3.0
-@export var weapon1_dmg_max := 5.0
-@export var weapon1_req := 2.0
-@export var weapon1_speed := 1.0
+@export var weapon1_dmg_min: float
+@export var weapon1_dmg_max: float
+@export var weapon1_str_req: float
+@export var weapon1_skill_req: float
+@export var weapon1_speed: float
 @export var weapon1_range = 150.0
-@export var weapon1_crit_chance := 0.1
-@export var weapon1_crit_multi := 0.1
-@export var weapon2_dmg_min := 3.0
-@export var weapon2_dmg_max := 5.0
-@export var weapon2_req := 2.0
-@export var weapon2_speed := 1.0
+@export var weapon1_crit_chance: float
+@export var weapon1_crit_multi: float
+@export var weapon2_dmg_min: float
+@export var weapon2_dmg_max: float
+@export var weapon2_str_req: float
+@export var weapon2_skill_req: float
+@export var weapon2_speed: float
 @export var weapon2_range = 150.0
-@export var weapon2_crit_chance := 0.1
-@export var weapon2_crit_multi := 0.1
+@export var weapon2_crit_chance: float
+@export var weapon2_crit_multi: float
 @export var weapon1_durability: int
 @export var weapon2_durability: int
 @export var weapon1_can_parry: bool
@@ -87,10 +91,10 @@ var input_vector := Vector2.ZERO
 @export var resilience := 1.0
 @export var endurance := 1.0
 @export var weapon_skill := 1.0
-@export var sword_skill := 1.0
-@export var dagger_skill := 1.0
-@export var axe_skill := 1.0
-@export var hammer_skill := 1.0
+@export var sword_mastery := 1.0
+@export var dagger_mastery := 1.0
+@export var axe_mastery := 1.0
+@export var hammer_mastery := 1.0
  
 #var weapon: Dictionary
 
@@ -277,8 +281,11 @@ func check_for_attack(delta: float):
 						_crit_multi = no_wep_crit_multi
 					next_attack_weapon = 0
 					
-				print("Peer parry chance: " + str(parry_chance))
-				print("Opponent parry chance: " + str(opponent.parry_chance))
+				#print("Peer parry chance: " + str(parry_chance))
+				#print("Opponent parry chance: " + str(opponent.parry_chance))
+				#print("Crit? " + str(next_attack_critical))
+				#if multiplayer.is_server(): print("before deal_attack crit_multi:" + str(crit_multi))
+				#if multiplayer.is_server(): print("before deal_attack _crit_multi:" + str(_crit_multi))
 				deal_attack(self, opponent, weapon, _hit_chance, _crit_chance, _crit_multi)
 				attack_charge_time = 0.0
 		else:
@@ -290,31 +297,34 @@ func check_for_attack(delta: float):
 
 func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_chance, _crit_multi):
 	#defender.current_health = 0
+	#if multiplayer.is_server(): print(_weapon)
 	var block_success = 0
 	var parry_success = 0	# default 0 means defender did not parry
 	var dodge_success = 0	# default 0 means defender did not dodge
 	var hit_success = 1		# default 1 means attacker hit successfully
 	var crit = 1.0
-	var defender_weapon1_broken = 0
-	var defender_weapon2_broken = 0
+	var defender_weapon1_destroyed = 0
+	var defender_weapon2_destroyed = 0
 	
-	print("defender.weapon1_can_parry: " + str(defender.weapon1_can_parry))
-	print("defender.weapon2_can_parry: " + str(defender.weapon2_can_parry))
+	#print("defender.weapon1_can_parry: " + str(defender.weapon1_can_parry))
+	#print("defender.weapon2_can_parry: " + str(defender.weapon2_can_parry))
 	
-#	print("defender.weapon1_can_block: " + str(defender.weapon1_can_block))
-	print("defender.weapon2_can_block: " + str(defender.weapon2_can_block))
+	#print("defender.weapon1_can_block: " + str(defender.weapon1_can_block))
+	#print("defender.weapon2_can_block: " + str(defender.weapon2_can_block))
 	
 	if randf() > _hit_chance:
 		hit_success = 0
-		attacker.next_taken_hit_critical = true
-		defender.next_attack_critical = true
+		#print("next_attack_critical")
+		#attacker.next_taken_hit_critical = true
+		#defender.next_attack_critical = true
 			
 		
 	if randf() < _crit_chance or attacker.next_attack_critical:
+		#print("Landed crit!")
 		crit = _crit_multi
 		attacker.next_attack_critical = false  # reset after use
-
-	var raw_damage = (randf_range(_weapon["min_dmg"], _weapon["max_dmg"])*crit+attacker.strength/15)
+	
+	var raw_damage = (randf_range(_weapon["min_dmg"], _weapon["max_dmg"])*crit+attacker.strength/15.0)
 	
 	if raw_damage > 0 and randf() < defender.dodge_chance:
 		dodge_success = 1
@@ -325,28 +335,28 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 		block_success = 1
 		defender.weapon2_durability -= clamp(raw_damage - defender.shield_absorb, 0, 9999)
 		if defender.weapon2_durability <= 0:
-			defender.weapon2 = no_wep
-			defender_weapon2_broken = 1
+			#defender.weapon2 = no_wep
+			defender_weapon2_destroyed = 1
 	elif defender.weapon2_can_parry and defender.weapon2_durability > 0 and raw_damage > 0 and randf() < defender.parry_chance[1]:
 		parry_success = 1
 		defender.weapon2_durability -= raw_damage
 		if defender.weapon2_durability <= 0:
-			defender.weapon2 = no_wep
-			defender_weapon2_broken = 1
+			#defender.weapon2 = no_wep
+			defender_weapon2_destroyed = 1
 		print(defender.name + " parried with weapon2, durability: " + str(defender.weapon2_durability))
 	elif defender.weapon1_can_parry and defender.weapon2_durability < 0 and defender.weapon1_durability > 0 and raw_damage > 0 and randf() < defender.parry_chance[0]:
 		parry_success = 1
 		defender.weapon1_durability -= raw_damage
 		if defender.weapon1_durability <= 0:
-			defender.weapon1 = no_wep
-			defender_weapon1_broken = 1
+			#defender.weapon1 = no_wep
+			defender_weapon1_destroyed = 1
 		print(defender.name + " parried with weapon1, durability: " + str(defender.weapon1_durability))
 	
 	var final_damage = hit_success*(1-dodge_success)*(1-parry_success)*(1-block_success)*roundf(raw_damage - defender.armor)
 
 	if defender.has_method("receive_damage"):
 		defender.rpc_id(defender.get_multiplayer_authority(), "receive_damage", final_damage, raw_damage, 
-		hit_success, dodge_success, crit, parry_success, defender_weapon1_broken, defender_weapon2_broken, 
+		hit_success, dodge_success, crit, parry_success, defender_weapon1_destroyed, defender_weapon2_destroyed, 
 		defender.weapon1_durability, defender.weapon2_durability, block_success, defender.shield_absorb)
 		return true
 	else:
@@ -508,13 +518,15 @@ func update_gladiator(data: Dictionary):
 	#print("asd data: " + str(data))
 	#print("weapon1_name: " + str(weapon1_name))
 	#print("weapon2_name: " + str(weapon2_name))
-	weapon1_req = data["weapon1"][weapon1_name]["str_req"]
+	weapon1_skill_req = data["weapon1"][weapon1_name]["skill_req"]
+	weapon1_str_req = data["weapon1"][weapon1_name]["str_req"]
 	weapon1_speed = data["weapon1"][weapon1_name]["speed"]
 	weapon1_range = data["weapon1"][weapon1_name]["range"]
 	weapon1_crit_chance = data["weapon1"][weapon1_name]["crit_chance"]
 	weapon1_crit_multi = data["weapon1"][weapon1_name]["crit_multi"]
 	
-	weapon2_req = data["weapon2"][weapon2_name]["str_req"]
+	weapon2_skill_req = data["weapon2"][weapon2_name]["skill_req"]
+	weapon2_str_req = data["weapon2"][weapon2_name]["str_req"]
 	weapon2_speed = data["weapon2"][weapon2_name]["speed"]
 	weapon2_range = data["weapon2"][weapon2_name]["range"]
 	weapon2_crit_chance = data["weapon2"][weapon2_name]["crit_chance"]
@@ -531,53 +543,58 @@ func update_gladiator(data: Dictionary):
 	$Name.add_theme_color_override("font_color", data.color)
 	
 	strength = data["attributes"]["strength"]
-	weapon_skill = data["attributes"]["weapon_skill"]
 	quickness = data["attributes"]["quickness"]
 	crit_rating = data["attributes"]["crit_rating"]
 	avoidance = data["attributes"]["avoidance"]
 	max_health = data["attributes"]["health"]
 	resilience = data["attributes"]["resilience"]
 	endurance = data["attributes"]["endurance"]
+	sword_mastery = data["attributes"]["sword_mastery"]
+	axe_mastery = data["attributes"]["axe_mastery"]
+	
 	weapon1 = data["weapon1"][weapon1_name]
 	weapon2 = data["weapon2"][weapon2_name]
-	#print(weapon1)
-	#print(weapon2)
-	#print("Update gladiator")
 	weapon1_durability = data["weapon1"][weapon1_name]["durability"]
 	weapon2_durability = data["weapon2"][weapon2_name]["durability"]
 	
 	shield_absorb = data["weapon2"][weapon2_name].get("absorb", -1)
-	#print(data["weapon1"][weapon1_name])
-	#print(data["weapon2"][weapon2_name])
-	#print(weapon1_can_parry)
-	#print(weapon2_can_parry)
 	weapon1_can_parry = data["weapon1"][weapon1_name]["parry"]
 	weapon2_can_parry = data["weapon2"][weapon2_name]["parry"]
 	weapon2_can_block = data["weapon2"][weapon2_name]["block"]
 	weapon_hands_to_carry = data["weapon1"][weapon1_name]["hands"]
 	
-	if weapon2_can_block: block_chance = 0.5
-	else: block_chance = 0
+	# Determine which weapon type is used, and set weapon_skill to players weapon_mastery
+	var weapon1_category = data["weapon1"][weapon1_name].get("category", "")
+	var weapon2_category = data["weapon2"][weapon2_name].get("category", "")
+	var glad_weapon1_category_skill = data["attributes"][weapon1_category + "_mastery"]
+	var glad_weapon2_category_skill = data["attributes"][weapon2_category + "_mastery"]
+	
+	if weapon2_can_block: 
+		block_chance = 0.8 - exp(-0.4*(2*glad_weapon2_category_skill / weapon2_skill_req-1.0))
+		crit_multi = [weapon1_crit_multi, weapon1_crit_multi]
+		crit_chance = [weapon1_crit_chance*crit_rating/20.0, weapon1_crit_chance*crit_rating/20.0]
+		hit_chance = [(glad_weapon1_category_skill/weapon1_skill_req) - 0.20*glad_weapon1_category_skill/100, 
+					(glad_weapon1_category_skill/weapon2_skill_req) - 0.20*glad_weapon1_category_skill/100]
+	else: 
+		block_chance = 0
+		crit_multi = [weapon1_crit_multi, weapon2_crit_multi]
+		crit_chance = [weapon1_crit_chance*crit_rating/20.0, weapon2_crit_chance*crit_rating/20.0]
+		hit_chance = [(glad_weapon1_category_skill/weapon1_skill_req) - 0.20*glad_weapon1_category_skill/100, 
+					(glad_weapon2_category_skill/weapon2_skill_req) - 0.20*glad_weapon2_category_skill/100]
  # === Damage calculations ===
 	if weapon_hands_to_carry == 1: 
 		attack_speed = (1/(weapon1_speed+weapon2_speed))/(log(10+sqrt(quickness))/log(10))
 		
-		var ratio1 = weapon_skill / weapon1_req
-		var ratio2 = weapon_skill / weapon2_req
+		var ratio1 = glad_weapon1_category_skill / weapon1_skill_req
+		var ratio2 = glad_weapon2_category_skill / weapon2_skill_req
 		parry_chance = [0.8 - exp(-0.4*(2*ratio1-1.0)), 0.8 - exp(-0.4*(2*ratio2-1.0))]
 	else: 
 		attack_speed = (1/(weapon1_speed))/(log(10+sqrt(quickness))/log(10))
 		
-		var ratio1 = weapon_skill / weapon1_req
+		var ratio1 = glad_weapon1_category_skill / weapon1_skill_req
 		parry_chance = [(0.8 - exp(-0.4*(2*ratio1-1.0)))/2, (0.8 - exp(-0.4*(2*ratio1-1.0)))/2]
 
-	  # Seconds between attacks
-	time_since_last_attack = 0.0
-	
-	crit_chance = [weapon1_crit_chance*crit_rating/20.0, weapon2_crit_chance*crit_rating/20.0]
-	crit_multi = [weapon1_crit_multi, weapon2_crit_multi]
-	hit_chance = [(weapon_skill/weapon1_req) - 0.20*weapon_skill/100, (weapon_skill/weapon2_req) - 0.20*weapon_skill/100]
-	
+
 	if weapon1_durability == 1:		# THIS MEANS EQUIPPING NO WEP IN SLOT
 		crit_chance[0] = no_wep_crit_chance
 		crit_multi[0] = no_wep_crit_multi
@@ -587,6 +604,8 @@ func update_gladiator(data: Dictionary):
 		crit_multi[1] = no_wep_crit_multi
 		hit_chance[1] = no_wep_hit_chance
 	
+  	# Seconds between attacks
+	time_since_last_attack = 0.0
 	next_attack_critical = false
 	next_taken_hit_critical = false
 	next_attack_weapon = 0
