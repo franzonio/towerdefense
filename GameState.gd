@@ -34,6 +34,7 @@ signal send_gladiator_data_to_peer_signal(peer_id: int, gladiator_data: Dictiona
 signal card_buy_result(peer_id: int, success: bool)
 signal broadcast_log_signal(message: String)
 signal send_player_colors_to_peer_signal(id: int, colors: Dictionary)
+signal send_equipment_dict_to_peer_signal(id: int, dict: Dictionary)
 
 var attr_cards_stock
 var all_cards_stock
@@ -99,6 +100,33 @@ func _ready():
 	
 	all_cards_stock = create_card_pool()
 	initialize_card_stock()
+
+func create_card_pool():
+	attr_cards_stock = {
+		"strength": 100,
+		"weapon_skill": 100,
+		"quickness": 50,
+		"crit_rating": 50,
+		"avoidance": 50,
+		"health": 100,
+		"resilience": 50,
+		"endurance": 100,
+	}
+	var _all_cards_stock = {}  # Create a fresh dictionary
+
+	# Copy original attr_cards_stock values into it
+	for key in attr_cards_stock.keys():
+		_all_cards_stock[key] = attr_cards_stock[key]
+
+	# Now add stock values from equipment_data
+	for category in equipment_data.keys():
+		for item_name in equipment_data[category].keys():
+			var item_data = equipment_data[category][item_name]
+			if item_data.has("stock"):
+				_all_cards_stock[item_name] = item_data["stock"]
+				
+	#print("asdasd" + str(_all_cards_stock))
+	return _all_cards_stock
 
 @rpc("any_peer", "call_local")
 func grant_exp_for_peer(id: int, amount: int, cost: int):
@@ -278,12 +306,19 @@ func broadcast_countdown(time_left: int):
 	emit_signal("countdown_updated", time_left)
 	#initialize_card_stock()
 
-func get_equipment_by_name(item_name: String):
+@rpc("any_peer", "call_local")
+func send_equipment_dict_to_peer(id, dict: Dictionary) -> void:
+	emit_signal("send_equipment_dict_to_peer_signal", id, dict)
+
+@rpc("any_peer", "call_local")
+func get_equipment_by_name(id, item_name: String):
 	for category in equipment_data.keys():
 		var items = equipment_data[category]
 		if items.has(item_name):
 			var result := {}
 			result[item_name] = items[item_name]
+			#print("Sending to peer " + str(id) + ": " + str(result))
+			rpc_id(id, "send_equipment_dict_to_peer", id, result)
 			return result
 	return {}  # Return empty if not found
 
@@ -292,8 +327,9 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name):
 	#print("Unqeuip equipment not implemented yet")
 	# 1. Remove from all_gladiators[peer_id][equipment_button_parent_name]
 	# 2. Add to 
-	var item_dict = get_equipment_by_name(equipment)
-	var _type = item_dict[equipment]["type"] # to be implemented
+	var item_dict = get_equipment_by_name(peer_id, equipment)
+	var type = item_dict[equipment]["type"] # to be implemented
+	var hands = item_dict[equipment].get("hands", -1)
 	var item = equipment_button_parent_name.replace("Slot", "").to_lower()
 	
 	
@@ -301,7 +337,10 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name):
 		if all_gladiators[peer_id]["inventory"][slot_name] == {}:
 			all_gladiators[peer_id]["inventory"][slot_name] = item_dict
 			
-			if item == "weapon1" or item == "weapon2": all_gladiators[peer_id][item] = get_equipment_by_name("unarmed")
+			if hands == 2:
+				all_gladiators[peer_id]["weapon1"] = get_equipment_by_name(peer_id, "unarmed")
+				all_gladiators[peer_id]["weapon2"] = get_equipment_by_name(peer_id, "unarmed")
+			elif item == "weapon1" or item == "weapon2": all_gladiators[peer_id][item] = get_equipment_by_name(peer_id, "unarmed")
 			else: all_gladiators[peer_id][item] = {}
 			
 			rpc_id(peer_id, "send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
@@ -313,24 +352,32 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name):
 
 @rpc("any_peer", "call_local")
 func equip_item(peer_id, equipment):
-	var item_dict = get_equipment_by_name(equipment)
+	var item_dict = get_equipment_by_name(peer_id, equipment)
 	var type = item_dict[equipment]["type"]
+	var category = item_dict[equipment]["category"]
 	var str_req = item_dict[equipment].get("str_req", 0) 
 	var lvl_req = item_dict[equipment].get("level", 0) 
+	
 	if int(all_gladiators[peer_id]["level"]) >= lvl_req:
 		if all_gladiators[peer_id]["attributes"]["strength"] >= str_req:
-			if type == "weapon":
+			if type == "weapon" and category != "shield":
 				var _hands = item_dict[equipment]["hands"] # to be implemented
-				
 				var _skill_req = item_dict[equipment]["skill_req"] # to be implemented
 				
-				if all_gladiators[peer_id]["weapon1"].keys()[0] == "unarmed": all_gladiators[peer_id]["weapon1"] = item_dict
-				elif all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed": all_gladiators[peer_id]["weapon2"] = item_dict
+				if _hands == 2 and all_gladiators[peer_id]["weapon1"].keys()[0] == "unarmed" and all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed":
+					all_gladiators[peer_id]["weapon1"] = item_dict
+					all_gladiators[peer_id]["weapon2"] = item_dict
+				elif _hands == 1 and all_gladiators[peer_id]["weapon1"].keys()[0] == "unarmed": all_gladiators[peer_id]["weapon1"] = item_dict
+				elif _hands == 1 and all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed": all_gladiators[peer_id]["weapon2"] = item_dict
 				else: add_to_peer_log(peer_id, "[INFO] ❌Cannot equip more weapons!")
+					
+			elif category == "shield":
+				if all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed": all_gladiators[peer_id]["weapon2"] = item_dict
+				else: add_to_peer_log(peer_id, "[INFO] ❌Can only wear shield in off-hand!")
 					
 			elif type == "head":
 				if all_gladiators[peer_id]["head"] == {}: all_gladiators[peer_id]["head"] = item_dict
-				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing a head")
+				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing a helmet")
 				
 			elif type == "chest":
 				if all_gladiators[peer_id]["chest"] == {}: all_gladiators[peer_id]["chest"] = item_dict
@@ -357,6 +404,7 @@ func equip_item(peer_id, equipment):
 			rpc_id(peer_id, "send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
 		else: add_to_peer_log(peer_id, "[INFO] ❌Need " + str(str_req) + " strength to equip item, you have " + str(int(all_gladiators[peer_id]["attributes"]["strength"])) + "!")
 	else: add_to_peer_log(peer_id, "[INFO] ❌Item requires level " + str(lvl_req) + " to equip, you are level " + str(all_gladiators[peer_id]["level"]))
+
 @rpc("any_peer", "call_local")
 func peer_concede(id, threshold): 
 	all_gladiators[id]["concede"] = threshold
@@ -380,7 +428,7 @@ func buy_equipment_card(id: int, equipment: String, cost: int):
 	var success := false
 	if all_cards_stock[equipment] >= 1:
 		if all_gladiators[id]["gold"] >= cost:
-			var item_dict = get_equipment_by_name(equipment)
+			var item_dict = get_equipment_by_name(id, equipment)
 			
 			for slot_name in all_gladiators[id]["inventory"].keys():
 				if all_gladiators[id]["inventory"][slot_name] == {}:
@@ -403,13 +451,13 @@ func buy_equipment_card(id: int, equipment: String, cost: int):
 func sell_from_equipment(id: int, equipment: String, equipment_button_parent_name): 
 	# 1 remove from slot, increase gold
 	# replace with unarmed if weapon is sold
-	var item_dict = get_equipment_by_name(equipment)
+	var item_dict = get_equipment_by_name(id, equipment)
 	var price = item_dict[equipment]["price"]
 	var item = equipment_button_parent_name.replace("Slot", "").to_lower()
 	var type = item_dict[equipment]["type"]
 	
 	if type == "weapon":
-		all_gladiators[id][item] = get_equipment_by_name("unarmed")
+		all_gladiators[id][item] = get_equipment_by_name(id, "unarmed")
 	else: 
 		all_gladiators[id][item] = {}
 	
@@ -422,7 +470,7 @@ func sell_from_equipment(id: int, equipment: String, equipment_button_parent_nam
 					
 @rpc("any_peer", "call_local")
 func sell_from_inventory(id: int, equipment: String): 
-	var item_dict = get_equipment_by_name(equipment)
+	var item_dict = get_equipment_by_name(id, equipment)
 	#print("item_dict: " + str(item_dict))
 	var price = item_dict[equipment]["price"]
 	for slot_name in all_gladiators[id]["inventory"].keys():
@@ -462,32 +510,6 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int):
 		add_to_peer_log(id, "[INFO] ❌No " + attribute + " cards left in stock!")
 		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 		
-func create_card_pool():
-	attr_cards_stock = {
-		"strength": 100,
-		"weapon_skill": 100,
-		"quickness": 50,
-		"crit_rating": 50,
-		"avoidance": 50,
-		"health": 100,
-		"resilience": 50,
-		"endurance": 100,
-	}
-	var _all_cards_stock = {}  # Create a fresh dictionary
-
-	# Copy original attr_cards_stock values into it
-	for key in attr_cards_stock.keys():
-		_all_cards_stock[key] = attr_cards_stock[key]
-
-	# Now add stock values from equipment_data
-	for category in equipment_data.keys():
-		for item_name in equipment_data[category].keys():
-			var item_data = equipment_data[category][item_name]
-			if item_data.has("stock"):
-				_all_cards_stock[item_name] = item_data["stock"]
-				
-	#print("asdasd" + str(_all_cards_stock))
-	return _all_cards_stock
 		
 @rpc("any_peer")
 func initialize_card_stock():

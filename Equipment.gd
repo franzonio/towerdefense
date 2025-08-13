@@ -8,8 +8,9 @@ extends Node
 			"hands": 1,
 			"min_dmg": 1, 
 			"max_dmg": 3,
-			"durability": 1,
-			"crit": 0.1,
+			"durability": INF,
+			"crit_chance": 0.1,
+			"crit_multi": 1.1,
 			"speed": 0.25,
 			"range": 150,
 			"parry": false,
@@ -24,19 +25,99 @@ extends Node
 			{
 				"weapon_skill": 0,
 			}
-		
-		}
+			}
+			
 	},
 	"sword": {
 		"simple_sword": {
 			"price": 20,
-			"stock": 500,
+			"stock": 250,
 			"type": "weapon",
+			"category": "sword",
+			"weight": 3,
 			"hands": 1,
 			"min_dmg": 3, 
 			"max_dmg": 6,
 			"durability": 30,
 			"str_req": 20,
+			"skill_req": 30,
+			"level": 3,
+			"crit_chance": 0.1,
+			"crit_multi": 1.2,
+			"speed": 0.25,
+			"range": 150,
+			"parry": true,
+			"block": false,
+			"modifications": 
+			{
+				"weapon_skill": 5,
+				"avoidance": 5
+			}
+		},
+		"sturdy_blade": {
+			"price": 20,
+			"stock": 250,
+			"type": "weapon",
+			"category": "sword",
+			"weight": 8,
+			"hands": 2,
+			"min_dmg": 10, 
+			"max_dmg": 12,
+			"durability": 50,
+			"str_req": 40,
+			"skill_req": 30,
+			"level": 3,
+			"crit_chance": 0.3,
+			"crit_multi": 1.4,
+			"speed": 0.25,
+			"range": 150,
+			"parry": true,
+			"block": false,
+			"modifications": 
+			{
+				"weapon_skill": 5,
+				"avoidance": 5
+			}
+		}
+	},
+	
+	"axe": {
+		"light_axe": {
+			"price": 20,
+			"stock": 250,
+			"type": "weapon",
+			"category": "axe",
+			"weight": 3,
+			"hands": 1,
+			"min_dmg": 4, 
+			"max_dmg": 10,
+			"durability": 30,
+			"str_req": 30,
+			"skill_req": 30,
+			"level": 3,
+			"crit_chance": 0.1,
+			"crit_multi": 1.2,
+			"speed": 0.25,
+			"range": 150,
+			"parry": true,
+			"block": false,
+			"modifications": 
+			{
+				"weapon_skill": 5,
+				"avoidance": 5
+			}
+		},
+		"copper_axe": {
+			"price": 20,
+			"stock": 250,
+			"type": "weapon",
+			"category": "axe",
+			"weight": 4,
+			"hands": 1,
+			"min_dmg": 4, 
+			"max_dmg": 10,
+			"durability": 30,
+			"str_req": 30,
 			"skill_req": 30,
 			"level": 3,
 			"crit": 0.1,
@@ -46,74 +127,41 @@ extends Node
 			"block": false,
 			"attributes": 
 			{
-				"weapon_skill": 0,
-				"avoidance": 0
-			}
-		},
-		"iron_sword": {
-			"stock": 20,
-			"type": "weapon",
-			"hands": 1,
-			"min_dmg": 4, 
-			"max_dmg": 7,
-			"durability": 40,
-			"req": 30,
-			"level": 1,
-			"crit": 0.1,
-			"speed": 1,
-			"range": 150,
-			"parry": true,
-			"block": false,
-			"attributes": 
-			{
-				"weapon_skill": 0,
+				"weapon_skill": 5,
 				"avoidance": 5
 			}
-		
 		}
 	},
-	
-	"axe": {
-		"light_axe": {
-			"stock": 20,
+
+	"shield": {
+		"wooden_buckler": {
+			"price": 20,
+			"stock": 250,
 			"type": "weapon",
+			"category": "shield",
+			"weight": 3,
 			"hands": 1,
-			"min_dmg": 2, 
-			"max_dmg": 6,
+			"min_dmg": 0, 
+			"max_dmg": 0,
 			"durability": 30,
-			"req": 20,
-			"level": 1,
-			"crit": 0.1,
-			"speed": 1,
-			"range": 150,
-			"parry": true,
-			"block": false,
-			"attributes": 
+			"absorb": 5,
+			"str_req": 20,
+			"skill_req": 30,
+			"level": 3,
+			"crit_chance": 0,
+			"crit_multi": 0,
+			"speed": 0,
+			"range": 0,
+			"parry": false,
+			"block": true,
+			"modifications": 
 			{
-				"weapon_skill": 0,
-				"avoidance": 0
-			}
-		},
-		"copper_axe": {
-			"stock": 20,
-			"type": "weapon",
-			"hands": 1,
-			"min_dmg": 4, 
-			"max_dmg": 8,
-			"durability": 40,
-			"req": 30,
-			"level": 1,
-			"crit": 0.1,
-			"speed": 1,
-			"range": 150,
-			"parry": true,
-			"block": false,
-			"attributes": 
-			{
-				"weapon_skill": 0,
+				"weapon_skill": 5,
 				"avoidance": 5
 			}
 		
+			
 		}
-	},
+		
+	}
 }

@@ -774,4 +774,4 @@ script = ExtResource("3_4n7mi")
 [connection signal="pressed" from="ShopButton" to="." method="_on_shop_button_pressed"]
 [connection signal="toggled" from="ShopButton" to="." method="_on_shop_button_toggled"]
 [connection signal="pressed" from="Shop/VBoxContainer/HBoxContainer/RefreshButton" to="." method="_on_refresh_button_pressed"]
-[connection signal="button_up" from="ExpButton" to="ExpButton" method="_on_button_up"]
+[connection signal="button_up" from="ExpButton" to="." method="_on_exp_button_button_up"]

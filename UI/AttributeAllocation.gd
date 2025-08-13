@@ -28,19 +28,26 @@ var inventory_slot4: Dictionary
 @onready var send_button = $HBoxContainer/SendButton
 @onready var chat_scroll = $ChatPanel/ChatScroll
 
-var no_weapon := {
-	"hands": 1,
-	"min_dmg": 1, 
-	"max_dmg": 3,
-	"durability": 1,
-	"req": 1,
-	"crit": 0.1,
-	"speed": 0.25,
-	"range": 150,
-	"parry": false,
-	"block": false,
-	"attributes": 0
-	}
+var no_wep = {"hands": 1,
+			"min_dmg": 1, 
+			"max_dmg": 3,
+			"durability": 1,
+			"crit_chance": 0.1,
+			"crit_multi": 1.1,
+			"speed": 0.25,
+			"range": 150,
+			"parry": false,
+			"block": false,
+			"price": 0,
+			"stock": 500,
+			"type": "weapon",
+			"str_req": 20,
+			"skill_req": 30,
+			"level": 1,
+			"attributes": 
+			{
+				"weapon_skill": 0,
+			}}
 
 					 
 var attributes := {}
@@ -221,14 +228,14 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 	
 func _initialize_attributes():
 	attributes = {
-		"strength": 25,
-		"weapon_skill": 41,
-		"quickness": 81,
-		"crit_rating": 1,
-		"avoidance": 31,
-		"health": 110,
-		"resilience": 1,
-		"endurance": 1,
+		"strength": 25.0,
+		"weapon_skill": 41.0,
+		"quickness": 81.0,
+		"crit_rating": 1.0,
+		"avoidance": 31.0,
+		"health": 110.0,
+		"resilience": 1.0,
+		"endurance": 1.0,
 	}
 	# Override with starting values if any
 	for attr in starting_values:
@@ -274,7 +281,7 @@ func _update_ui():
 		var final_label = $GridContainer.get_node(attr.capitalize() + "_Final")
 		
 		if value_label:
-			value_label.text = str(attributes[attr]) 
+			value_label.text = str(int(attributes[attr])) 
 
 		if mod_label:
 			var multiplier = race_modifiers.get(attr, 1.0)
@@ -328,53 +335,11 @@ func _on_confirm():
 		
 		"weapon1": {
 			"unarmed": 
-				{
-					"hands": 1,
-					"min_dmg": 1, 
-					"max_dmg": 3,
-					"durability": 1,
-					"crit": 0.1,
-					"speed": 0.25,
-					"range": 150,
-					"parry": false,
-					"block": false,
-					"price": 0,
-					"stock": 500,
-					"type": "weapon",
-					"str_req": 0,
-					"skill_req": 0,
-					"lvl": 1,
-					"attributes": 
-					{
-						"weapon_skill": 0,
-					}
-		
-				}
+				no_wep
 		},
 		"weapon2": {
 			"unarmed": 
-				{
-					"hands": 1,
-					"min_dmg": 1, 
-					"max_dmg": 3,
-					"durability": 1,
-					"crit": 0.1,
-					"speed": 0.25,
-					"range": 150,
-					"parry": false,
-					"block": false,
-					"price": 0,
-					"stock": 500,
-					"type": "weapon",
-					"str_req": 20,
-					"skill_req": 30,
-					"lvl": 1,
-					"attributes": 
-					{
-						"weapon_skill": 0,
-					}
-		
-				}
+				no_wep
 		},
 		
 		"head": {},
@@ -410,7 +375,7 @@ func apply_race_modifiers(race: String) -> Dictionary:
 
 	for attr in modifiers:
 		if modified_attributes.has(attr):
-			modified_attributes[attr] = round(modified_attributes[attr] * modifiers[attr])
+			modified_attributes[attr] = modified_attributes[attr] * modifiers[attr]
 
 	return modified_attributes
 

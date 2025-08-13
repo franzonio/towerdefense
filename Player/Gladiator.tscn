@@ -386,6 +386,18 @@ properties/19/replication_mode = 2
 properties/20/path = NodePath(".:weapon2_can_parry")
 properties/20/spawn = true
 properties/20/replication_mode = 2
+properties/21/path = NodePath(".:parry_chance")
+properties/21/spawn = true
+properties/21/replication_mode = 2
+properties/22/path = NodePath(".:block_chance")
+properties/22/spawn = true
+properties/22/replication_mode = 2
+properties/23/path = NodePath(".:shield_absorb")
+properties/23/spawn = true
+properties/23/replication_mode = 2
+properties/24/path = NodePath(".:weapon2_can_block")
+properties/24/spawn = true
+properties/24/replication_mode = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l0fom"]
 bg_color = Color(0, 0, 0, 0.443137)

@@ -9,7 +9,10 @@ extends CanvasLayer
 @onready var resilience_card = preload("res://ShopCards/AttributeCards/ResilienceCard.tscn")
 @onready var weapon_mastery_card = preload("res://ShopCards/AttributeCards/WeaponMasteryCard.tscn")
 
-@onready var simple_sword_card = preload("res://ShopCards/EquipmentCards/Sword/SimpleSword.tscn")
+@onready var simple_sword_card = preload("res://ShopCards/EquipmentCards/Sword/1h/SimpleSword.tscn")
+@onready var light_axe_card = preload("res://ShopCards/EquipmentCards/Axe/1h/LightAxe.tscn")
+@onready var wooden_buckler_card = preload("res://ShopCards/EquipmentCards/Shield/WoodenBuckler.tscn")
+@onready var sturdy_blade_card = preload("res://ShopCards/EquipmentCards/Sword/2h/SturdyBlade.tscn")
 
 var equipment_card_scenes = {
 	"simple_sword": simple_sword_card
@@ -169,7 +172,9 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("refresh_cards") and not chat_input.has_focus():
 		if $EquipmentButton:
 			$Shop/VBoxContainer/HBoxContainer/RefreshButton.emit_signal("pressed")
-	
+	if Input.is_action_just_pressed("buy_exp") and not chat_input.has_focus():
+		if $ExpButton:
+			$ExpButton.emit_signal("button_up")
 	
 func get_equipment_by_name(item_name: String):
 	for category in equipment_data.keys():
@@ -540,7 +545,9 @@ func get_all_cards():
 		[quickness_card, "quickness", card_stock["quickness"]], [resilience_card, "resilience", card_stock["resilience"]], 
 		[avoidance_card, "avoidance", card_stock["avoidance"]], [weapon_mastery_card, "weapon_skill", card_stock["weapon_skill"]], 
 		
-		[simple_sword_card, "simple_sword", card_stock["simple_sword"]]]
+		[simple_sword_card, "simple_sword", card_stock["simple_sword"]], [light_axe_card, "light_axe", card_stock["light_axe"]],
+		[wooden_buckler_card, "wooden_buckler", card_stock["wooden_buckler"]], [sturdy_blade_card, "sturdy_blade", card_stock["sturdy_blade"]]
+		]
 	return all_cards
 
 func roll_cards():
@@ -556,11 +563,11 @@ func roll_cards():
 		card_instance.modulate.a = 0
 		card_instance.scale = Vector2(0.8, 0.8)
 		shop_grid.add_child(card_instance)
-
 		var tween := get_tree().create_tween()
 		tween.tween_property(card_instance, "modulate:a", 1.0, 0.3).set_delay(i * 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		tween.tween_property(card_instance, "scale", Vector2.ONE, 0.3).set_delay(i * 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)		
 		i += 1
+		#await get_tree().create_timer(0.5).timeout
 
 func reroll_cards():
 	await clear_shop_grid()
@@ -579,6 +586,8 @@ func weighted_random_selection(_all_cards: Array, count: int = 5):
 		var stock = int(pair[2])
 		
 		var item_dict = get_equipment_by_name(item_name)
+		#print("item_dict: " + str(item_dict))
+		#print("all_gladiators: " + str(all_gladiators))
 		if item_dict != {}:
 			# Only add cards that are below player level + 1
 			if item_dict[item_name]["level"] > int(all_gladiators[multiplayer.get_unique_id()]["level"]) + 1: 
@@ -595,6 +604,7 @@ func weighted_random_selection(_all_cards: Array, count: int = 5):
 		selected.append(pool[index])
 	
 	return selected
+
 
 
 func _on_refresh_button_pressed():
@@ -709,3 +719,12 @@ func update_experience(amount: int):
 		label_xp.text = "       🔹" + "-"
 	else: 
 		label_xp.text = "       🔹" + str(amount) + "/" + str(exp_for_level[str(int(player_gladiator_data["level"])+1)]) + " Lv." + player_gladiator_data["level"]
+
+
+func _on_exp_button_button_up():
+	var amount = 4
+	var cost = 5
+	if multiplayer.is_server():
+		GameState_.grant_exp_for_peer(multiplayer.get_unique_id(), amount, cost)
+	else:
+		GameState_.rpc_id(1, "grant_exp_for_peer", multiplayer.get_unique_id(), amount, cost)

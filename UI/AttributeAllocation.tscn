@@ -102,38 +102,6 @@ text = "-"
 layout_mode = 2
 text = "+"
 
-[node name="Weapon Skill_Modifier" type="Label" parent="GridContainer"]
-layout_mode = 2
-
-[node name="Weapon Skill" type="Label" parent="GridContainer"]
-layout_mode = 2
-tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
-mouse_filter = 1
-text = "Weapon Mastery"
-
-[node name="Weapon Skill_Value" type="Label" parent="GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-text = "0"
-
-[node name="Weapon Skill_Final" type="Label" parent="GridContainer"]
-visible = false
-layout_mode = 2
-size_flags_horizontal = 6
-text = "0"
-
-[node name="Weapon Skill_Buttons" type="HBoxContainer" parent="GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 10
-
-[node name="Weapon Skill_Sub" type="Button" parent="GridContainer/Weapon Skill_Buttons"]
-layout_mode = 2
-text = "-"
-
-[node name="Weapon Skill_Add" type="Button" parent="GridContainer/Weapon Skill_Buttons"]
-layout_mode = 2
-text = "+"
-
 [node name="Quickness_Modifier" type="Label" parent="GridContainer"]
 layout_mode = 2
 
@@ -327,6 +295,38 @@ text = "-"
 layout_mode = 2
 text = "+"
 
+[node name="Weapon Skill_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Weapon Skill" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
+mouse_filter = 1
+text = "Weapon Mastery"
+
+[node name="Weapon Skill_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Weapon Skill_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Weapon Skill_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Weapon Skill_Sub" type="Button" parent="GridContainer/Weapon Skill_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Weapon Skill_Add" type="Button" parent="GridContainer/Weapon Skill_Buttons"]
+layout_mode = 2
+text = "+"
+
 [node name="RemainingLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 5
@@ -459,9 +459,9 @@ layout_mode = 2
 text = "Troll"
 
 [connection signal="pressed" from="GridContainer/Strength_Buttons/Strength_Sub" to="." method="_on_strength_sub_pressed"]
-[connection signal="pressed" from="GridContainer/Weapon Skill_Buttons/Weapon Skill_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Quickness_Buttons/Quickness_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Crit Rating_Buttons/Crit Rating_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Avoidance_Buttons/Avoidance_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Resilience_Buttons/Resilience_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Endurance_Buttons/Endurance_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Weapon Skill_Buttons/Weapon Skill_Sub" to="." method="_on_strength_sub_pressed"]

@@ -21,18 +21,10 @@ func _on_mouse_exited():
 	var tween := get_tree().create_tween()
 	tween.tween_property(self, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 
-func _on_button_up():
+'func _on_button_up():
 	if mouse_inside_button:
 		if multiplayer.is_server():
 			GameState_.grant_exp_for_peer(multiplayer.get_unique_id(), amount, cost)
 		else:
 			GameState_.rpc_id(1, "grant_exp_for_peer", multiplayer.get_unique_id(), amount, cost)
-	
-
-
-#func handle_inventory(): pass
-
-#func buy_card():
-
-
-		#await get_tree().create_timer(0.15).timeout
+	'
