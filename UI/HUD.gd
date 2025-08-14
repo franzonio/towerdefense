@@ -10,6 +10,9 @@ extends CanvasLayer
 @onready var sword_mastery_card = preload("res://ShopCards/AttributeCards/SwordMasteryCard.tscn")
 @onready var axe_mastery_card = preload("res://ShopCards/AttributeCards/AxeMasteryCard.tscn")
 @onready var shield_mastery_card = preload("res://ShopCards/AttributeCards/ShieldMasteryCard.tscn")
+@onready var hammer_mastery_card = preload("res://ShopCards/AttributeCards/HammerMasteryCard.tscn")
+@onready var dagger_mastery_card = preload("res://ShopCards/AttributeCards/DaggerMasteryCard.tscn")
+@onready var chain_mastery_card = preload("res://ShopCards/AttributeCards/ChainMasteryCard.tscn")
 
 @onready var simple_sword_card = preload("res://ShopCards/EquipmentCards/Sword/1h/SimpleSword.tscn")
 @onready var light_axe_card = preload("res://ShopCards/EquipmentCards/Axe/1h/LightAxe.tscn")
@@ -43,6 +46,7 @@ const MAX_LENGTH = 255
 @export var name_label: Node
 @export var race_label: Node
 @export var life_label: Node
+@export var inspect_label: Node
 
 var player_gladiator_data
 var all_gladiators
@@ -93,8 +97,15 @@ var equipment_button_parent_name
 @onready var resilience_panel = $AttributePanel/VBoxContainer/Resilience
 @onready var sword_mastery_panel = $AttributePanel/VBoxContainer/SwordMastery
 @onready var axe_mastery_panel = $AttributePanel/VBoxContainer/AxeMastery
+@onready var dagger_mastery_panel = $AttributePanel/VBoxContainer/DaggerMastery
+@onready var hammer_mastery_panel = $AttributePanel/VBoxContainer/HammerMastery
+@onready var chain_mastery_panel = $AttributePanel/VBoxContainer/ChainMastery
 @onready var shield_mastery_panel = $AttributePanel/VBoxContainer/ShieldMastery
 @onready var unarmed_mastery_panel = $AttributePanel/VBoxContainer/UnarmedMastery
+
+var physique_limits = {"Low": 70, "Good": 140, "Excellent": 210, "Outstanding": 280, "Legendary": 350}
+var agility_limits = {"Low": 60, "Good": 120, "Excellent": 180, "Outstanding": 240, "Legendary": 300}
+var weight_limits = {"Weightless": 10, "Lightweight": 18, "Midweight": 28, "Heavyweight": 36, "Massive": 48}
 
 var exp_for_level = {"1": 0, "2": 10, "3": 12, "4": 14, "5": 18, "6": 22, "7": 26, "8": 30, "9": 34, "10": 36}
 var max_lvl
@@ -205,9 +216,10 @@ func _on_send_pressed(): #submitted_text = ""):
 	var sender_id = get_tree().get_multiplayer().get_unique_id()
 	var now = Time.get_datetime_dict_from_system()
 	var timestamp = "[%02d:%02d]" % [now.hour, now.minute]
+	var name = all_gladiators[multiplayer.get_unique_id()]["name"]
 
 	chat_input.clear()
-	rpc("broadcast_message", sender_id, str(player_gladiator_data["name"]), timestamp, msg)
+	rpc("broadcast_message", sender_id, name, timestamp, msg)
 
 
 func _on_log_received(message):
@@ -283,22 +295,19 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
 	all_gladiators = _all_gladiators
 	if peer_id == multiplayer.get_unique_id():
-		#print("streak for peer " + str(peer_id) + ": " + str(all_gladiators[peer_id]["streak"]))
-		#print("_player_gladiator_data: " + _player_gladiator_data["name"] + ", exp: " + str(_player_gladiator_data["exp"]) + ", lvl: " + _player_gladiator_data["level"])
 		player_gladiator_data = _player_gladiator_data
 		update_inventory_ui(peer_id)
 		update_equipment_ui()
 		update_attribute_ui()
 		update_concede_ui()
-		update_gold(player_gladiator_data["gold"])
-		update_experience(player_gladiator_data["exp"])
-	#print("_on_send_gladiator_data_to_peer_signal: " + str(multiplayer.get_unique_id()))
+		update_gold(all_gladiators[peer_id]["gold"])
+		update_experience(all_gladiators[peer_id]["exp"])
 	populate_hud()
 	
 func update_concede_ui():
 	var previous_index = concede_threshold_menu.get_selected_id()
 	#print(previous_index)
-	var attributes = player_gladiator_data.get("attributes", {})
+	var attributes = all_gladiators[multiplayer.get_unique_id()].get("attributes", {})
 	var options = ["50% (" + str(int(round(0.5*attributes["health"]))) + " hp)", 
 					"40% (" + str(int(round(0.4*attributes["health"]))) + " hp)", 
 					"30% (" + str(int(round(0.3*attributes["health"]))) + " hp)", 
@@ -312,7 +321,7 @@ func update_concede_ui():
 	else: concede_threshold_menu.select(previous_index)
 	
 func update_attribute_ui(): 
-	var attributes = player_gladiator_data.get("attributes", {})
+	var attributes = all_gladiators[multiplayer.get_unique_id()].get("attributes", {})
 	health_panel.text = "Health: " + str(int(attributes["health"]))
 	strength_panel.text = "Strength: " + str(int(attributes["strength"]))
 	endurance_panel.text = "Endurance: " + str(int(attributes["endurance"]))
@@ -322,6 +331,9 @@ func update_attribute_ui():
 	resilience_panel.text = "Resilience: " + str(int(attributes["resilience"]))
 	sword_mastery_panel.text = "Sword Mastery: " + str(int(attributes["sword_mastery"]))
 	axe_mastery_panel.text = "Axe Mastery: " + str(int(attributes["axe_mastery"]))
+	dagger_mastery_panel.text = "Dagger Mastery: " + str(int(attributes["dagger_mastery"]))
+	hammer_mastery_panel.text = "Hammer Mastery: " + str(int(attributes["hammer_mastery"]))
+	chain_mastery_panel.text = "Chain Mastery: " + str(int(attributes["chain_mastery"]))
 	shield_mastery_panel.text = "Shield Mastery: " + str(int(attributes["shield_mastery"]))
 	unarmed_mastery_panel.text = "Unarmed: " + str(int(attributes["unarmed_mastery"]))
 	
@@ -338,38 +350,38 @@ func update_equipment_ui():
 	var ring2_name 
 			
 	var all_equipment_slots = [head_slot, chest_slot, weapon1_slot, weapon2_slot, ring1_slot, ring2_slot]
-	if player_gladiator_data["head"] != {}:
-		head_name = player_gladiator_data["head"].keys()[0]
+	if all_gladiators[multiplayer.get_unique_id()]["head"] != {}:
+		head_name = all_gladiators[multiplayer.get_unique_id()]["head"].keys()[0]
 	else:
 		head_name = "empty"
 	
-	if player_gladiator_data["chest"] != {}:
-		chest_name = player_gladiator_data["chest"].keys()[0]
+	if all_gladiators[multiplayer.get_unique_id()]["chest"] != {}:
+		chest_name = all_gladiators[multiplayer.get_unique_id()]["chest"].keys()[0]
 	else:
 		chest_name = "empty"
 	
-	if player_gladiator_data["weapon1"] != {}:
-		weapon1_name = player_gladiator_data["weapon1"].keys()[0]
+	if all_gladiators[multiplayer.get_unique_id()]["weapon1"] != {}:
+		weapon1_name = all_gladiators[multiplayer.get_unique_id()]["weapon1"].keys()[0]
 	else:
 		weapon1_name = "empty"
 		
-	if player_gladiator_data["weapon1"] != {}:
-		weapon1_name = player_gladiator_data["weapon1"].keys()[0]
+	if all_gladiators[multiplayer.get_unique_id()]["weapon1"] != {}:
+		weapon1_name = all_gladiators[multiplayer.get_unique_id()]["weapon1"].keys()[0]
 	else:
 		weapon1_name = "empty"
 		
-	if player_gladiator_data["weapon2"] != {}:
-		weapon2_name = player_gladiator_data["weapon2"].keys()[0]
+	if all_gladiators[multiplayer.get_unique_id()]["weapon2"] != {}:
+		weapon2_name = all_gladiators[multiplayer.get_unique_id()]["weapon2"].keys()[0]
 	else:
 		weapon2_name = "empty"
 		
-	if player_gladiator_data["ring1"] != {}:
-		ring1_name = player_gladiator_data["ring1"].keys()[0]
+	if all_gladiators[multiplayer.get_unique_id()]["ring1"] != {}:
+		ring1_name = all_gladiators[multiplayer.get_unique_id()]["ring1"].keys()[0]
 	else:
 		ring1_name = "empty"
 	
-	if player_gladiator_data["ring2"] != {}:
-		ring2_name = player_gladiator_data["ring2"].keys()[0]
+	if all_gladiators[multiplayer.get_unique_id()]["ring2"] != {}:
+		ring2_name = all_gladiators[multiplayer.get_unique_id()]["ring2"].keys()[0]
 	else:
 		ring2_name = "empty"
 	
@@ -408,7 +420,7 @@ func _on_equipment_pressed(parent_name: String):
 	#print("_on_equipment_pressed: " + str(parent_name))
 	
 func update_inventory_ui(glad_id: int):
-	var gladiator_inventory = player_gladiator_data["inventory"]
+	var gladiator_inventory = all_gladiators[glad_id]["inventory"]
 	#print("peer " + str(glad_id) + " inventory: " + str(gladiator_inventory))
 	
 	# Clear existing grid
@@ -556,7 +568,8 @@ func get_all_cards():
 		
 		### WEAPON MASTERY ###
 		[sword_mastery_card, "sword_mastery", card_stock["sword_mastery"]], [axe_mastery_card, "axe_mastery", card_stock["axe_mastery"]],
-		[shield_mastery_card, "shield_mastery", card_stock["shield_mastery"]],
+		[shield_mastery_card, "shield_mastery", card_stock["shield_mastery"]], [dagger_mastery_card, "dagger_mastery", card_stock["dagger_mastery"]],
+		[chain_mastery_card, "chain_mastery", card_stock["chain_mastery"]], [hammer_mastery_card, "hammer_mastery", card_stock["hammer_mastery"]],
 		
 		### EQUIPMENT ###
 		[simple_sword_card, "simple_sword", card_stock["simple_sword"]], [light_axe_card, "light_axe", card_stock["light_axe"]],
@@ -718,22 +731,74 @@ func populate_hud():
 		name_label = player_container.get_node("PlayerInfo/PlayerName")
 		race_label = player_container.get_node("PlayerInfo/PlayerRace")
 		life_label = player_container.get_node("PlayerLife")
-
+		inspect_label = player_container.get_node("Inspect")
 		#print(str(peer_id) + " gladiator_data[level]: " + all_gladiators[peer_id]["level"])
 		
 		name_label.text = str(gladiator_data.get("name", "Unknown"))
 		race_label.text = str(gladiator_data.get("race", "???")) + "       Lvl " + all_gladiators[peer_id]["level"]
 		life_label.text = "❤️ %d" % int(gladiator_data.get("player_life", 0))
+		inspect_label.text = "🔎"
+		
+		
+		var strength = all_gladiators[peer_id]["attributes"]["strength"]
+		var quickness = all_gladiators[peer_id]["attributes"]["quickness"]
+		var crit_rating = all_gladiators[peer_id]["attributes"]["crit_rating"]
+		var avoidance = all_gladiators[peer_id]["attributes"]["avoidance"]
+		var health = all_gladiators[peer_id]["attributes"]["health"]
+		var resilience = all_gladiators[peer_id]["attributes"]["resilience"]
+		var endurance = all_gladiators[peer_id]["attributes"]["endurance"]
+		var sword_mastery = all_gladiators[peer_id]["attributes"]["sword_mastery"]
+		var axe_mastery = all_gladiators[peer_id]["attributes"]["axe_mastery"]
+		var hammer_mastery = all_gladiators[peer_id]["attributes"]["hammer_mastery"]
+		var dagger_mastery = all_gladiators[peer_id]["attributes"]["dagger_mastery"]
+		var chain_mastery = all_gladiators[peer_id]["attributes"]["chain_mastery"]
+		var shield_mastery = all_gladiators[peer_id]["attributes"]["shield_mastery"]
+		var unarmed_mastery = all_gladiators[peer_id]["attributes"]["unarmed_mastery"]
+		
+		var weapon1_name = all_gladiators[peer_id]["weapon1"].keys()[0]
+		var weapon2_name = all_gladiators[peer_id]["weapon2"].keys()[0]
+		var hands = all_gladiators[peer_id]["weapon1"][weapon1_name]["hands"]
+		
+		var weight = all_gladiators[peer_id]["weight"]
+		var physique = strength + health + endurance/2
+		var agility = [quickness, crit_rating/2, avoidance, sword_mastery/3, axe_mastery/3, hammer_mastery/3, 
+						dagger_mastery/3, chain_mastery/3, shield_mastery/3, unarmed_mastery/3].reduce(func(a, b): return a + b)
+		
+		var gladiator_physique_class
+		for physique_class in physique_limits.keys():
+			if physique <= physique_limits[physique_class]:
+				gladiator_physique_class = physique_class
+				break
+			else: physique_class = "Legendary"
+		
+		var gladiator_agility_class
+		for agility_class in agility_limits.keys():
+			if agility <= agility_limits[agility_class]:
+				gladiator_agility_class = agility_class
+				break
+			else: gladiator_agility_class = "Legendary"
+		
+		var gladiator_weight_class
+		for weight_class in weight_limits.keys():
+			if weight <= weight_limits[weight_class]:
+				gladiator_weight_class = weight_class
+				break
+			else: gladiator_weight_class = "Massive"
+		
+		var inspect_text = ""
+		if hands == 2: inspect_text += format_name(weapon1_name)
+		else: inspect_text += format_name(weapon1_name) + "  |  " + format_name(weapon2_name)
+		inspect_text +=  "\nPhysique: %s \nAgility: %s \nWeight: %s" % [gladiator_physique_class, gladiator_agility_class, gladiator_weight_class]
 
+		inspect_label.tooltip_text = inspect_text
 func update_gold(amount: int):
 	label_gold.text = "💰" + str(amount)
 
 func update_experience(amount: int):
-	if player_gladiator_data["level"] == max_lvl:
+	if all_gladiators[multiplayer.get_unique_id()]["level"] == max_lvl:
 		label_xp.text = "       🔹" + "-"
 	else: 
-		label_xp.text = "       🔹" + str(amount) + "/" + str(exp_for_level[str(int(player_gladiator_data["level"])+1)]) + " Lv." + player_gladiator_data["level"]
-
+		label_xp.text = "       🔹" + str(amount) + "/" + str(exp_for_level[str(int(all_gladiators[multiplayer.get_unique_id()]["level"])+1)]) + " Lv." + all_gladiators[multiplayer.get_unique_id()]["level"]
 
 func _on_exp_button_button_up():
 	var amount = 4
@@ -742,3 +807,12 @@ func _on_exp_button_button_up():
 		GameState_.grant_exp_for_peer(multiplayer.get_unique_id(), amount, cost)
 	else:
 		GameState_.rpc_id(1, "grant_exp_for_peer", multiplayer.get_unique_id(), amount, cost)
+
+func format_name(raw_name: String) -> String:
+	var parts = raw_name.split("_")            # → ["simple", "sword"]
+	var joined = ""                            
+	for i in parts.size():
+		joined += parts[i]
+		if i < parts.size() - 1:
+			joined += " "
+	return joined.capitalize()                 # → "Simple Sword"

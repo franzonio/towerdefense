@@ -22,13 +22,15 @@ extends Node
 			"str_req": 20,
 			"skill_req": 30,
 			"level": 1,
-			"attributes": 
-			{
-				"weapon_skill": 0,
-			}
+			"modifiers": 
+				{
+				"attributes": {},
+				"alterations": {}
+				}
 			}
 			
 	},
+	
 	"sword": {
 		"simple_sword": {
 			"price": 20,
@@ -49,10 +51,15 @@ extends Node
 			"range": 150,
 			"parry": true,
 			"block": false,
-			"modifications": 
-			{
-				"weapon_skill": 5,
-				"avoidance": 5
+			"modifiers": 
+				{
+				"attributes": 
+					{
+					"sword_mastery": 5,
+					"avoidance": 5
+					},
+				"bonuses": {}
+				
 			}
 		},
 		"sturdy_blade": {
@@ -74,10 +81,15 @@ extends Node
 			"range": 150,
 			"parry": true,
 			"block": false,
-			"modifications": 
-			{
-				"weapon_skill": 5,
-				"avoidance": 5
+			"modifiers": 
+				{
+				"attributes": 
+					{
+					"sword_mastery": 5,
+					"avoidance": 5
+					},
+				"bonuses": {}
+				
 			}
 		}
 	},
@@ -102,10 +114,14 @@ extends Node
 			"range": 150,
 			"parry": true,
 			"block": false,
-			"modifications": 
-			{
-				"weapon_skill": 5,
-				"avoidance": 5
+			"modifiers": 
+				{
+				"attributes": 
+					{
+					"axe_mastery": 5,
+					"avoidance": 5
+					},
+				"bonuses": {}
 			}
 		},
 		"copper_axe": {
@@ -126,14 +142,118 @@ extends Node
 			"range": 150,
 			"parry": true,
 			"block": false,
-			"attributes": 
-			{
-				"weapon_skill": 5,
-				"avoidance": 5
+			"modifiers": 
+				{
+				"attributes": 
+					{
+					"axe_mastery": 5,
+					"avoidance": 5
+					},
+				"bonuses": {}
+				}
+				}
+	},
+
+	"hammer": {
+		"blunt_club": {
+			"price": 20,
+			"stock": 250,
+			"type": "weapon",
+			"category": "hammer",
+			"weight": 4,
+			"hands": 1,
+			"min_dmg": 4.0, 
+			"max_dmg": 5.0,
+			"durability": 40,
+			"str_req": 30,
+			"skill_req": 25,
+			"level": 3,
+			"crit_chance": 0.1,
+			"crit_multi": 1.15,
+			"speed": 0.35,
+			"range": 150,
+			"parry": true,
+			"block": false,
+			"modifiers": 
+				{
+				"attributes": 
+					{
+					"hammer_mastery": 5,
+					"health": 5
+					},
+				"bonuses": {}
+				
 			}
 		}
 	},
-
+	
+	"dagger": {
+		"small_dagger": {
+			"price": 20,
+			"stock": 250,
+			"type": "weapon",
+			"category": "dagger",
+			"weight": 2,
+			"hands": 1,
+			"min_dmg": 3.0, 
+			"max_dmg": 5.0,
+			"durability": 40,
+			"str_req": 20,
+			"skill_req": 30,
+			"level": 3,
+			"crit_chance": 0.2,
+			"crit_multi": 1.3,
+			"speed": 0.35,
+			"range": 150,
+			"parry": true,
+			"block": false,
+			"modifiers": 
+				{
+				"attributes": 
+					{
+					"dagger_mastery": 5,
+					"quickness": 5,
+					"crit_chance": 5
+					},
+				"bonuses": {}
+				
+			}
+		}
+	},
+	
+	"chain": {
+		"thin_whip": {
+			"price": 20,
+			"stock": 250,
+			"type": "weapon",
+			"category": "chain",
+			"weight": 3,
+			"hands": 1,
+			"min_dmg": 1.0, 
+			"max_dmg": 7.0,
+			"durability": 20,
+			"str_req": 30,
+			"skill_req": 20,
+			"level": 3,
+			"crit_chance": 0.15,
+			"crit_multi": 1.5,
+			"speed": 0.20,
+			"range": 150,
+			"parry": true,
+			"block": false,
+			"modifiers": 
+				{
+				"attributes": 
+					{
+					"chain_mastery": 5,
+					"crit_multi": 5
+					},
+				"bonuses": {}
+				
+			}
+		}
+	},
+	
 	"shield": {
 		"wooden_buckler": {
 			"price": 20,
@@ -155,14 +275,14 @@ extends Node
 			"range": 0,
 			"parry": false,
 			"block": true,
-			"modifications": 
-			{
-				"weapon_skill": 5,
-				"avoidance": 5
+			"modifiers": 
+				{
+				"attributes": {
+					"shield_mastery": 5,
+					"avoidance": 5
+				},
+				"bonuses": {}
+				}
 			}
-		
-			
-		}
-		
 	}
 }

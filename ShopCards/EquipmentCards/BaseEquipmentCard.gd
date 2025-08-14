@@ -115,12 +115,14 @@ func get_item_tooltip(item_data: Dictionary):
 	var crit_multi = item_data.get("crit_multi", -1)
 	var weight = item_data.get("weight", -1)
 	var category = item_data.get("category", "None")
+	var absorb = item_data.get("absorb", -1)
 
 	var tooltip = ""
 	#tooltip += "%Level %d\n" % [level]
 	if hands != -1: tooltip += "%s %s\n" % [hand_text, category.capitalize()]
-	if min_dmg != -1: tooltip += "%d–%d Damage\n" % [min_dmg, max_dmg]
+	if min_dmg != -1 and category != "shield": tooltip += "%d–%d Damage\n" % [min_dmg, max_dmg]
 	if durability != -1: tooltip += "Durability: %d\n" % durability
+	if absorb != -1: tooltip += "Block Absorb: %d\n" % absorb
 	if weight != -1: tooltip += "Weight: %d\n" % weight
 	if skill_req != -1 and str_req != -1: tooltip += "Requires: Lvl %d, %d Str, %d %s" % [level, str_req, skill_req, category.capitalize()]
 	elif skill_req != -1 and str_req == -1: tooltip += "Requires: Lvl %d, %d %s" % [level, skill_req, category.capitalize()]
@@ -137,22 +139,30 @@ func get_item_tooltip(item_data: Dictionary):
 	# Modifications
 	var mod_labels := {
 		"strength": "Strength",
-		"weapon_skill": "Weapon Mastery",
 		"quickness": "Quickness",
 		"crit_rating": "Criticality",
 		"avoidance": "Avoidance",
 		"health": "Health",
 		"resilience": "Resilience",
 		"endurance": "Endurance",
+		
+		"sword_mastery": "Sword Mastery",
+		"axe_mastery": "Axe Mastery",
+		"hammer_mastery": "Hammer Mastery",
+		"dagger_mastery": "Dagger Mastery",
+		"chain_mastery": "Chain Mastery",
+		"shield_mastery": "Shield Mastery",
+		"unarmed_mastery": "Unarmed Mastery",
 	# Add more as needed
 		}
 	
 	# Modifications
-	if item_data.has("modifications"):
-		var mods = item_data["modifications"]
+	if item_data.has("modifiers"):
+		var mods_attributes = item_data["modifiers"].get("attributes", {})
+		var mods_bonuses = item_data["modifiers"].get("bonuses", {})
 		var mod_lines = []
-		for key in mods.keys():
-			var value = mods[key]
+		for key in mods_attributes.keys():
+			var value = mods_attributes[key]
 			if value != 0:
 				var label = mod_labels.get(key, key.capitalize())
 				mod_lines.append("+%d %s " % [value, label])

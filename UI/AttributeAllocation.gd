@@ -94,7 +94,7 @@ func on_race_selected(race: String):
 	var formatted = "[color=%s]%s[/color]" % [hex_color, GameState_.selected_name]
 	rpc("broadcast_peer", multiplayer.get_unique_id(), formatted + " selected " + race.to_upper() + "!")
 	
-	print("Selected race:", race)
+	print("Selected race: ", race)
 	GameState_.selected_race = race
 	$GridContainer.visible = true
 	$RemainingLabel.visible = true
@@ -231,13 +231,16 @@ func _initialize_attributes():
 	attributes = {
 		"strength": 25.0,
 		"quickness": 81.0,
-		"crit_rating": 1.0,
+		"crit_rating": 10.0,
 		"avoidance": 31.0,
 		"health": 110.0,
 		"resilience": 1.0,
 		"endurance": 1.0,
 		"sword_mastery": 40.0,
 		"axe_mastery": 20.0,
+		"hammer_mastery": 20.0,
+		"dagger_mastery": 20.0,
+		"chain_mastery": 20.0,
 		"shield_mastery": 20.0,
 		"unarmed_mastery": 10.0,
 	}
@@ -325,6 +328,13 @@ func _on_confirm():
 	var formatted = "[color=%s]%s[/color] is ready!" % [hex_color, GameState_.selected_name]
 	rpc("broadcast_peer", multiplayer.get_unique_id(), formatted)
 	# Prepare your data
+	var race_weights = {
+		"Human": 12,
+		"Elf": 7,
+		"Troll": 30,
+		"Orc": 24,
+	}
+	
 	var gladiator = {
 		"color": Color.WHITE,
 		"name": GameState_.selected_name,
@@ -333,6 +343,7 @@ func _on_confirm():
 		"streak": 0,
 		"level": "1",
 		"race": GameState_.selected_race,
+		"weight": race_weights[GameState_.selected_race],
 		"concede": 0.5,
 		"attributes": final_attributes,
 		"player_life": player_life,

@@ -4,7 +4,9 @@ Combat/strategy
 	- Recovery time when being struck
 	#☆ Gladiator %health concede threshold
 	#	☆ Big player life loss if gladiator actually dies (< 0 HP, scale with how much below 0 HP)
-	- Gladiator combat strategy (light/heavy/normal attacks, def/off/normal tactic)
+	☆ Gladiator combat strategy (light/heavy/normal attacks, def/off/normal tactic)
+    - PVE with nice loot that can direct the progression of gladiator, example
+        - Talisman with +10% dodge -> maybe a troll will invest some in avoidance
 
 Cards
 	#☆ Reroll cards at start of new intermission phase
@@ -43,7 +45,8 @@ HUD/UI
     #☆ Log (informing what's happening in game)
     #    ☆ Announcing loss/winstreaks and a opponent's winstreak 
     #☆ Inspecting equipment
-    ☆ Enemy quick inspect (showing race, base weapon equipped)
+    #☆ Enemy quick inspect (showing race, base weapon equipped)
+    ☆ Same (custom) font for everything
 
 Attributes
 	☆ Making all stats impactful
@@ -51,14 +54,14 @@ Attributes
 	- Stun rating? (increase recovery time for opponent, scale with magnitute of the hit)
 	- Recovery rate (Hits should add a small recovery time for receiver, scaling with magnitute of hit)
 	- Health regen
-	☆ Weapon types (mace/dagger/sword mastery)
+	#☆ Weapon types (hammer/dagger/sword/chain/axe mastery)
 	
 Implement equipment system
     - Weight
     #☆ Str req for equipment
     #☆ Lvl req for equipment
-    ☆ Apply attribute bonuses to gladiator attribute dict on equip/unequip
-	☆ Weapons
+    #☆ Apply attribute bonuses to gladiator attribute dict on equip/unequip
+	☆ Weapons (need to add more)
 		#☆ Dual wield (alternating weapon hits)
         #☆ Weapon type attributes (mace/dagger/sword mastery)
 		#☆ Two-handed
@@ -92,6 +95,7 @@ Settings
 
 
 Future
+    PVE combat for juicy loot
 	Potions (long/short term boosts)
     Curses (long/short term debuffs for enemy)
 	Auction house for items (instead of selling)
@@ -112,3 +116,4 @@ Future
     Bonus round every X round where players gets a interesting selections similar to POE2 labyrinth. These can also be lategame cards!!
         - Draw and apply 5 attribute cards, each card has 25% chance of having opposite effect
         - During combat, take X dmg per sec, gain 1% damage per sec. Capped at 25%
+    Race specific items

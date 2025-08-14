@@ -58,6 +58,9 @@ const RACE_MODIFIERS = {
 		"endurance": 0.9,
 		"sword_mastery": 1.0,
 		"axe_mastery": 1.1,
+		"hammer_mastery": 1.2,
+		"dagger_mastery": 1.0,
+		"chain_mastery": 1.15,
 		"shield_mastery": 0.95,
 		"unarmed_mastery": 1.0
 	},
@@ -71,6 +74,9 @@ const RACE_MODIFIERS = {
 		"endurance": 1.35,
 		"sword_mastery": 1.15,
 		"axe_mastery": 1.0,
+		"hammer_mastery": 1.0,
+		"dagger_mastery": 1.3,
+		"chain_mastery": 1.1,
 		"shield_mastery": 1.2,
 		"unarmed_mastery": 1.0
 	},
@@ -84,6 +90,9 @@ const RACE_MODIFIERS = {
 		"endurance": 1.2,
 		"sword_mastery": 1.1,
 		"axe_mastery": 1.1,
+		"hammer_mastery": 1.1,
+		"dagger_mastery": 1.1,
+		"chain_mastery": 1.1,
 		"shield_mastery": 1.1,
 		"unarmed_mastery": 1.0
 	},
@@ -97,6 +106,9 @@ const RACE_MODIFIERS = {
 		"endurance": 0.8,
 		"sword_mastery": 0.7,
 		"axe_mastery": 0.8,
+		"hammer_mastery": 1.1,
+		"dagger_mastery": 0.7,
+		"chain_mastery": 1.15,
 		"shield_mastery": 0.7,
 		"unarmed_mastery": 1.0
 	}
@@ -124,6 +136,9 @@ func create_card_pool():
 		"endurance": 100,
 		"sword_mastery": 100,
 		"axe_mastery": 100,
+		"hammer_mastery": 100,
+		"dagger_mastery": 100,
+		"chain_mastery": 100,
 		"shield_mastery": 100
 	}
 	var _all_cards_stock = {}  # Create a fresh dictionary
@@ -345,11 +360,15 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name):
 	var type = item_dict[equipment]["type"] # to be implemented
 	var hands = item_dict[equipment].get("hands", -1)
 	var item = equipment_button_parent_name.replace("Slot", "").to_lower()
+	var modifier_attributes = item_dict[equipment]["modifiers"].get("attributes", {})
+	var modifier_bonuses = item_dict[equipment]["modifiers"].get("bonuses", {})
+	var unequip_success = 0
 	
 	
 	for slot_name in all_gladiators[peer_id]["inventory"].keys():
 		if all_gladiators[peer_id]["inventory"][slot_name] == {}:
 			all_gladiators[peer_id]["inventory"][slot_name] = item_dict
+			unequip_success = 1
 			
 			if hands == 2:
 				all_gladiators[peer_id]["weapon1"] = get_equipment_by_name(peer_id, "unarmed")
@@ -357,7 +376,15 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name):
 			elif item == "weapon1" or item == "weapon2": all_gladiators[peer_id][item] = get_equipment_by_name(peer_id, "unarmed")
 			else: all_gladiators[peer_id][item] = {}
 			
-			rpc_id(peer_id, "send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
+			# Remove item modifier attributes from items
+			if modifier_attributes != {}:
+				for attribute in modifier_attributes:
+					all_gladiators[peer_id]["attributes"][attribute] -= modifier_attributes[attribute]
+			
+			# TODO Remove item modifier bonuses
+			if modifier_bonuses != {}: 1 
+			
+			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
 			return
 	
 	add_to_peer_log(peer_id, "[INFO] ❌No inventory space!")
@@ -371,6 +398,9 @@ func equip_item(peer_id, equipment):
 	var category = item_dict[equipment]["category"]
 	var str_req = item_dict[equipment].get("str_req", 0) 
 	var lvl_req = item_dict[equipment].get("level", 0) 
+	var modifier_attributes = item_dict[equipment]["modifiers"].get("attributes", {})
+	var modifier_bonuses = item_dict[equipment]["modifiers"].get("bonuses", {})
+	var equip_success = 0
 	
 	if int(all_gladiators[peer_id]["level"]) >= lvl_req:
 		if all_gladiators[peer_id]["attributes"]["strength"] >= str_req:
@@ -381,29 +411,46 @@ func equip_item(peer_id, equipment):
 				if _hands == 2 and all_gladiators[peer_id]["weapon1"].keys()[0] == "unarmed" and all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed":
 					all_gladiators[peer_id]["weapon1"] = item_dict
 					all_gladiators[peer_id]["weapon2"] = item_dict
-				elif _hands == 1 and all_gladiators[peer_id]["weapon1"].keys()[0] == "unarmed": all_gladiators[peer_id]["weapon1"] = item_dict
-				elif _hands == 1 and all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed": all_gladiators[peer_id]["weapon2"] = item_dict
+					equip_success = 1
+				elif _hands == 1 and all_gladiators[peer_id]["weapon1"].keys()[0] == "unarmed": 
+					all_gladiators[peer_id]["weapon1"] = item_dict
+					equip_success = 1
+				elif _hands == 1 and all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed": 
+					all_gladiators[peer_id]["weapon2"] = item_dict
+					equip_success = 1
 				else: add_to_peer_log(peer_id, "[INFO] ❌Cannot equip more weapons!")
 					
 			elif category == "shield":
-				if all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed": all_gladiators[peer_id]["weapon2"] = item_dict
+				if all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed": 
+					all_gladiators[peer_id]["weapon2"] = item_dict
+					equip_success = 1
 				else: add_to_peer_log(peer_id, "[INFO] ❌Can only wear shield in off-hand!")
 					
 			elif type == "head":
-				if all_gladiators[peer_id]["head"] == {}: all_gladiators[peer_id]["head"] = item_dict
+				if all_gladiators[peer_id]["head"] == {}: 
+					all_gladiators[peer_id]["head"] = item_dict
+					equip_success = 1
 				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing a helmet")
 				
 			elif type == "chest":
-				if all_gladiators[peer_id]["chest"] == {}: all_gladiators[peer_id]["chest"] = item_dict
+				if all_gladiators[peer_id]["chest"] == {}: 
+					all_gladiators[peer_id]["chest"] = item_dict
+					equip_success = 1
 				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing a chest")
 				
 			elif type == "shoulder":
-				if all_gladiators[peer_id]["shoulder"] == {}: all_gladiators[peer_id]["shoulder"] = item_dict
+				if all_gladiators[peer_id]["shoulder"] == {}: 
+					all_gladiators[peer_id]["shoulder"] = item_dict
+					equip_success = 1
 				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing shoulders")
 				
 			elif type == "ring": 
-				if all_gladiators[peer_id]["ring1"].keys()[0] == {}: all_gladiators[peer_id]["ring1"] = item_dict
-				elif all_gladiators[peer_id]["ring2"].keys()[0] == {}: all_gladiators[peer_id]["ring2"] = item_dict
+				if all_gladiators[peer_id]["ring1"].keys()[0] == {}: 
+					all_gladiators[peer_id]["ring1"] = item_dict
+					equip_success = 1
+				elif all_gladiators[peer_id]["ring2"].keys()[0] == {}: 
+					all_gladiators[peer_id]["ring2"] = item_dict
+					equip_success = 1
 				else: add_to_peer_log(peer_id, "[INFO] ❌Cannot equip more rings!")
 				
 			else: add_to_peer_log(peer_id, "[INFO] ❌Invalid item type! Please report this as a bug.")
@@ -415,7 +462,15 @@ func equip_item(peer_id, equipment):
 					all_gladiators[peer_id]["inventory"][slot_name] = {}  # Clear slot
 					break
 
-			rpc_id(peer_id, "send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
+			# Apply item modifier attributes from items
+			if modifier_attributes != {}:
+				for attribute in modifier_attributes:
+					all_gladiators[peer_id]["attributes"][attribute] += modifier_attributes[attribute]
+			
+			# TODO Apply item modifier bonuses
+			if modifier_bonuses != {}: 1 
+			
+			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
 		else: add_to_peer_log(peer_id, "[INFO] ❌Need " + str(str_req) + " strength to equip item, you have " + str(int(all_gladiators[peer_id]["attributes"]["strength"])) + "!")
 	else: add_to_peer_log(peer_id, "[INFO] ❌Item requires level " + str(lvl_req) + " to equip, you are level " + str(all_gladiators[peer_id]["level"]))
 

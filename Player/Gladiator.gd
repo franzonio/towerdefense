@@ -94,6 +94,7 @@ var input_vector := Vector2.ZERO
 @export var sword_mastery := 1.0
 @export var dagger_mastery := 1.0
 @export var axe_mastery := 1.0
+@export var chain_mastery := 1.0
 @export var hammer_mastery := 1.0
  
 #var weapon: Dictionary
@@ -208,7 +209,7 @@ func _on_send_gladiator_data_to_peer_signal(_peer_id: int, _player_gladiator_dat
 		
 func _on_concede_threshold_changed(value: float):
 	concede_threshold = value
-	print("🛡️ " + str(owner_id) +  " updated concede threshold to: ", max_health*concede_threshold)
+	#print("🛡️ " + str(owner_id) +  " updated concede threshold to: ", max_health*concede_threshold)
 	#print("concede_threshold: " + str(concede_threshold))
 	#print("value: " + str(value))
 	
@@ -248,14 +249,14 @@ func check_for_attack(delta: float):
 				var _crit_chance
 				var _crit_multi
 				#print(str(owner_id) + " weapon: " + str(next_attack_weapon))
-				print("weapon1_durability: " + str(weapon1_durability))
-				print("weapon2_durability: " + str(weapon2_durability))
+				#print("weapon1_durability: " + str(weapon1_durability))
+				#print("weapon2_durability: " + str(weapon2_durability))
 				if weapon1_durability <= 0: 
 					weapon1 = no_wep
-					print("Switch to fists in weapon slot 1")
+					#print("Switch to fists in weapon slot 1")
 				if weapon2_durability <= 0: 
 					weapon2 = no_wep
-					print("Switch to fists in weapon slot 2")
+					#print("Switch to fists in weapon slot 2")
 				
 				if next_attack_weapon == 0: 
 					weapon = weapon1
@@ -343,14 +344,14 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 		if defender.weapon2_durability <= 0:
 			#defender.weapon2 = no_wep
 			defender_weapon2_destroyed = 1
-		print(defender.name + " parried with weapon2, durability: " + str(defender.weapon2_durability))
+		#print(defender.name + " parried with weapon2, durability: " + str(defender.weapon2_durability))
 	elif defender.weapon1_can_parry and defender.weapon2_durability < 0 and defender.weapon1_durability > 0 and raw_damage > 0 and randf() < defender.parry_chance[0]:
 		parry_success = 1
 		defender.weapon1_durability -= raw_damage
 		if defender.weapon1_durability <= 0:
 			#defender.weapon1 = no_wep
 			defender_weapon1_destroyed = 1
-		print(defender.name + " parried with weapon1, durability: " + str(defender.weapon1_durability))
+		#print(defender.name + " parried with weapon1, durability: " + str(defender.weapon1_durability))
 	
 	var final_damage = hit_success*(1-dodge_success)*(1-parry_success)*(1-block_success)*roundf(raw_damage - defender.armor)
 
@@ -551,6 +552,9 @@ func update_gladiator(data: Dictionary):
 	endurance = data["attributes"]["endurance"]
 	sword_mastery = data["attributes"]["sword_mastery"]
 	axe_mastery = data["attributes"]["axe_mastery"]
+	dagger_mastery = data["attributes"]["dagger_mastery"]
+	hammer_mastery = data["attributes"]["hammer_mastery"]
+	chain_mastery = data["attributes"]["chain_mastery"]
 	
 	weapon1 = data["weapon1"][weapon1_name]
 	weapon2 = data["weapon2"][weapon2_name]

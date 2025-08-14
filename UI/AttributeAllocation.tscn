@@ -53,21 +53,6 @@ grow_vertical = 2
 theme_override_constants/h_separation = 50
 columns = 4
 
-[node name="1" type="Label" parent="GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 4
-
-[node name="2" type="Label" parent="GridContainer"]
-layout_mode = 2
-
-[node name="3" type="Label" parent="GridContainer"]
-layout_mode = 2
-text = "             "
-
-[node name="4" type="Label" parent="GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 6
-
 [node name="Health_Modifier" type="Label" parent="GridContainer"]
 layout_mode = 2
 
@@ -295,37 +280,20 @@ text = "-"
 layout_mode = 2
 text = "+"
 
-[node name="Axe Mastery_Modifier" type="Label" parent="GridContainer"]
-layout_mode = 2
-
-[node name="Axe Mastery" type="Label" parent="GridContainer"]
-layout_mode = 2
-tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
-mouse_filter = 1
-text = "Axe Mastery"
-
-[node name="Axe Mastery_Value" type="Label" parent="GridContainer"]
+[node name="1" type="Label" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
-text = "0"
 
-[node name="Axe Mastery_Final" type="Label" parent="GridContainer"]
-visible = false
+[node name="2" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="3" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "             "
+
+[node name="4" type="Label" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 6
-text = "0"
-
-[node name="Axe Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 10
-
-[node name="Axe Skill_Sub" type="Button" parent="GridContainer/Axe Mastery_Buttons"]
-layout_mode = 2
-text = "-"
-
-[node name="Axe Skill_Add" type="Button" parent="GridContainer/Axe Mastery_Buttons"]
-layout_mode = 2
-text = "+"
 
 [node name="Sword Mastery_Modifier" type="Label" parent="GridContainer"]
 layout_mode = 2
@@ -351,11 +319,139 @@ text = "0"
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Sword Skill_Sub" type="Button" parent="GridContainer/Sword Mastery_Buttons"]
+[node name="Sword Mastery_Sub" type="Button" parent="GridContainer/Sword Mastery_Buttons"]
 layout_mode = 2
 text = "-"
 
-[node name="Sword Skill_Add" type="Button" parent="GridContainer/Sword Mastery_Buttons"]
+[node name="Sword Mastery_Add" type="Button" parent="GridContainer/Sword Mastery_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Axe Mastery_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Axe Mastery" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
+mouse_filter = 1
+text = "Axe Mastery"
+
+[node name="Axe Mastery_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Axe Mastery_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Axe Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Axe Mastery_Sub" type="Button" parent="GridContainer/Axe Mastery_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Axe Mastery_Add" type="Button" parent="GridContainer/Axe Mastery_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Dagger Mastery_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Dagger Mastery" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
+mouse_filter = 1
+text = "Dagger Mastery"
+
+[node name="Dagger Mastery_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Dagger Mastery_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Dagger Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Dagger Mastery_Sub" type="Button" parent="GridContainer/Dagger Mastery_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Dagger Mastery_Add" type="Button" parent="GridContainer/Dagger Mastery_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Hammer Mastery_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Hammer Mastery" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
+mouse_filter = 1
+text = "Hammer Mastery"
+
+[node name="Hammer Mastery_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Hammer Mastery_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Hammer Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Hammer Mastery_Sub" type="Button" parent="GridContainer/Hammer Mastery_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Hammer Mastery_Add" type="Button" parent="GridContainer/Hammer Mastery_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Chain Mastery_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Chain Mastery" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
+mouse_filter = 1
+text = "Chain Mastery"
+
+[node name="Chain Mastery_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Chain Mastery_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Chain Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Chain Mastery_Sub" type="Button" parent="GridContainer/Chain Mastery_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Chain Mastery_Add" type="Button" parent="GridContainer/Chain Mastery_Buttons"]
 layout_mode = 2
 text = "+"
 
@@ -383,11 +479,11 @@ text = "0"
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Shield Skill_Sub" type="Button" parent="GridContainer/Shield Mastery_Buttons"]
+[node name="Shield Mastery_Sub" type="Button" parent="GridContainer/Shield Mastery_Buttons"]
 layout_mode = 2
 text = "-"
 
-[node name="Shield Skill_Add" type="Button" parent="GridContainer/Shield Mastery_Buttons"]
+[node name="Shield Mastery_Add" type="Button" parent="GridContainer/Shield Mastery_Buttons"]
 layout_mode = 2
 text = "+"
 
@@ -415,11 +511,11 @@ text = "0"
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Unarmed Skill_Sub" type="Button" parent="GridContainer/Unarmed Mastery_Buttons"]
+[node name="Unarmed Mastery_Sub" type="Button" parent="GridContainer/Unarmed Mastery_Buttons"]
 layout_mode = 2
 text = "-"
 
-[node name="Unarmed Skill_Add" type="Button" parent="GridContainer/Unarmed Mastery_Buttons"]
+[node name="Unarmed Mastery_Add" type="Button" parent="GridContainer/Unarmed Mastery_Buttons"]
 layout_mode = 2
 text = "+"
 
@@ -560,7 +656,10 @@ text = "Troll"
 [connection signal="pressed" from="GridContainer/Avoidance_Buttons/Avoidance_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Resilience_Buttons/Resilience_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Endurance_Buttons/Endurance_Sub" to="." method="_on_strength_sub_pressed"]
-[connection signal="pressed" from="GridContainer/Axe Mastery_Buttons/Axe Skill_Sub" to="." method="_on_strength_sub_pressed"]
-[connection signal="pressed" from="GridContainer/Sword Mastery_Buttons/Sword Skill_Sub" to="." method="_on_strength_sub_pressed"]
-[connection signal="pressed" from="GridContainer/Shield Mastery_Buttons/Shield Skill_Sub" to="." method="_on_strength_sub_pressed"]
-[connection signal="pressed" from="GridContainer/Unarmed Mastery_Buttons/Unarmed Skill_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Sword Mastery_Buttons/Sword Mastery_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Axe Mastery_Buttons/Axe Mastery_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Dagger Mastery_Buttons/Dagger Mastery_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Hammer Mastery_Buttons/Hammer Mastery_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Chain Mastery_Buttons/Chain Mastery_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Shield Mastery_Buttons/Shield Mastery_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Unarmed Mastery_Buttons/Unarmed Mastery_Sub" to="." method="_on_strength_sub_pressed"]
