@@ -30,8 +30,8 @@ func _on_send_equipment_dict_to_peer(id, _item_dict):
 		if item_dict.has(equipment_name):
 			var item = item_dict[equipment_name]
 			tooltip_text = get_item_tooltip(item)
-		else:
-			print("⚠️ Equipment name not found: " + equipment_name)
+		else: 1
+			#print("⚠️ Equipment name not found: " + equipment_name)
 
 
 func format_name(raw_name: String) -> String:

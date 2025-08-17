@@ -171,7 +171,7 @@ func _ready():
 		var hud = get_node("/root/Main/HUD")
 		if hud:
 			hud.concede_threshold_changed.connect(_on_concede_threshold_changed)
-	await get_tree().create_timer(1.0).timeout # 11
+	await get_tree().create_timer(11.0).timeout # 11
 	time_passed = 0
 	# Intermission phase where players buy upgrades
 	
@@ -681,14 +681,18 @@ func update_gladiator(data: Dictionary):
 	
 	if weapon2_can_block: 
 		block_chance = stance_parry_block_mod*(0.8 - exp(-0.4*(2*glad_weapon2_category_skill / weapon2_skill_req-1.0)))
-		crit_multi = [stance_crit_multi_mod*weapon1_crit_multi, stance_crit_multi_mod*weapon1_crit_multi]
-		crit_chance = [stance_crit_chance_mod*weapon1_crit_chance*crit_rating/20.0, stance_crit_chance_mod*weapon1_crit_chance*crit_rating/20.0]
+		crit_multi = [stance_crit_multi_mod*((weapon1_crit_multi+(((1+weapon1_crit_multi)**weapon1_crit_multi)*crit_rating)/(weapon1_crit_multi*crit_rating+400))), 
+					stance_crit_multi_mod*((weapon1_crit_multi+(((1+weapon1_crit_multi)**weapon1_crit_multi)*crit_rating)/(weapon1_crit_multi*crit_rating+400)))]
+		crit_chance = [stance_crit_chance_mod*((weapon1_crit_chance**4)*crit_rating/(((weapon1_crit_chance**4)*crit_rating)+400)), 
+					stance_crit_chance_mod*((weapon1_crit_chance**4)*crit_rating/(((weapon1_crit_chance**4)*crit_rating)+400))]
 		hit_chance = [attack_type_hit_mod*(wep1_difficulty + 1/(hit_base_per_lvl + hit_skill_weight_1**hit_curve_smoothness)), 
 					attack_type_hit_mod*(wep1_difficulty + 1/(hit_base_per_lvl + hit_skill_weight_1**hit_curve_smoothness))]
 	else: 
 		block_chance = 0
-		crit_multi = [stance_crit_multi_mod*weapon1_crit_multi, stance_crit_multi_mod*weapon2_crit_multi]
-		crit_chance = [stance_crit_chance_mod*weapon1_crit_chance*crit_rating/20.0, stance_crit_chance_mod*weapon2_crit_chance*crit_rating/20.0]
+		crit_multi = [stance_crit_multi_mod*((weapon1_crit_multi+(((1+weapon1_crit_multi)**weapon1_crit_multi)*crit_rating)/(weapon1_crit_multi*crit_rating+400))), 
+					stance_crit_multi_mod*((weapon2_crit_multi+(((1+weapon2_crit_multi)**weapon2_crit_multi)*crit_rating)/(weapon2_crit_multi*crit_rating+400)))]
+		crit_chance = [stance_crit_chance_mod*((weapon1_crit_chance**4)*crit_rating/(((weapon1_crit_chance**4)*crit_rating)+400)), 
+					stance_crit_chance_mod*((weapon2_crit_chance**4)*crit_rating/(((weapon2_crit_chance**4)*crit_rating)+400))]
 		hit_chance = [attack_type_hit_mod*(wep1_difficulty + 1/(hit_base_per_lvl + hit_skill_weight_1**hit_curve_smoothness)), 
 					  attack_type_hit_mod*(wep2_difficulty + 1/(hit_base_per_lvl + hit_skill_weight_2**hit_curve_smoothness))]
 		
@@ -696,18 +700,27 @@ func update_gladiator(data: Dictionary):
 		#			(glad_weapon2_category_skill/weapon2_skill_req) - 0.20*glad_weapon2_category_skill/100]
  # === Damage calculations ===
 	if weapon_hands_to_carry == 1: 
-		attack_speed = stance_attack_speed_mod*(1/(weapon1_speed+weapon2_speed))/(log(10+sqrt(quickness))/log(10))
+		var as_wep_base = 1/(weapon1_speed+weapon2_speed)
+		var as_exp_p1 = -(0.01+(weapon1_speed+weapon2_speed)/250)
+		var as_exp_p2 = (weapon1_speed+weapon2_speed)*quickness**(1-weight/250)
+		attack_speed = as_wep_base*exp(as_exp_p1*as_exp_p2)
+		#attack_speed = stance_attack_speed_mod*(1/(weapon1_speed+weapon2_speed))/(log(10+sqrt(quickness))/log(10))
 		
 		var ratio1 = glad_weapon1_category_skill / weapon1_skill_req
 		var ratio2 = glad_weapon2_category_skill / weapon2_skill_req
 		parry_chance = [stance_parry_block_mod*(0.8 - exp(-0.4*(2*ratio1-1.0))), stance_parry_block_mod*(0.8 - exp(-0.4*(2*ratio2-1.0)))]
 	else: 
-		attack_speed = stance_attack_speed_mod*(1/(weapon1_speed))/(log(10+sqrt(quickness))/log(10))
+		var as_wep_base = 1/weapon1_speed
+		var as_exp_p1 = -(0.01+weapon1_speed/250)
+		var as_exp_p2 = weapon1_speed*quickness**(1-weight/250)
+		attack_speed = as_wep_base*exp(as_exp_p1*as_exp_p2)
+		#attack_speed = stance_attack_speed_mod*(1/(weapon1_speed))/(log(10+sqrt(quickness))/log(10))
 		
 		var ratio1 = glad_weapon1_category_skill / weapon1_skill_req
 		parry_chance = [stance_parry_block_mod*(0.8 - exp(-0.4*(2*ratio1-1.0)))/2, stance_parry_block_mod*(0.8 - exp(-0.4*(2*ratio1-1.0)))/2]
 
-
+	print("    - attack_speed: " + str(attack_speed))
+	
 	if weapon1_durability == 1:		# THIS MEANS EQUIPPING NO WEP IN SLOT
 		crit_chance[0] = no_wep_crit_chance
 		crit_multi[0] = no_wep_crit_multi

@@ -61,8 +61,8 @@ HUD/UI
 Attributes
 	☆ Making all stats impactful
         #☆ Endurance (gladiator gives up after some time)
-        ☆ Quickness
-        ☆ Criticality
+        #☆ Quickness
+        #☆ Criticality
         ☆ Resilience (reduce chance being crit, effectiveness of defensive armor+shield)
 	- Stun rating? (increase recovery time for opponent, scale with magnitute of the hit)
 	- Recovery rate (Hits should add a small recovery time for receiver, scaling with magnitute of hit)
@@ -82,10 +82,10 @@ Implement equipment system
 		#☆ Parry
 		#☆ Durability (destroyed weapon -> replace with fists, no parry chance)
 	☆ Armor
-	- Trinkets
-	- Ring
-	- Amulet
-    - Back
+	- Trinkets (unique stats like hit recovery?)
+	- Ring (unique stats like hit recovery?)
+	- Amulet (unique stats like hit recovery?)
+    - Back (unique stats like hit recovery?)
 	- etc
 	
 Races

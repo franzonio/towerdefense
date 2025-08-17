@@ -229,20 +229,20 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 	
 func _initialize_attributes():
 	attributes = {
-		"strength": 25.0,
+		"strength": 45.0,
 		"quickness": 81.0,
 		"crit_rating": 10.0,
 		"avoidance": 31.0,
 		"health": 100.0,
 		"resilience": 1.0,
-		"endurance": 1.0,
+		"endurance": 100.0,
 		"sword_mastery": 40.0,
-		"axe_mastery": 20.0,
-		"hammer_mastery": 20.0,
-		"dagger_mastery": 20.0,
-		"chain_mastery": 20.0,
-		"shield_mastery": 20.0,
-		"unarmed_mastery": 10.0,
+		"axe_mastery": 40.0,
+		"hammer_mastery": 40.0,
+		"dagger_mastery": 40.0,
+		"chain_mastery": 40.0,
+		"shield_mastery": 40.0,
+		"unarmed_mastery": 40.0,
 	}
 	# Override with starting values if any
 	for attr in starting_values:
