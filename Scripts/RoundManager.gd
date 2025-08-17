@@ -199,13 +199,12 @@ func spawn_duel_between(peer1, peer2, index: int):
 	var spawn_point_left = GameState_.spawn_points["left"][index]
 	var spawn_point_right = GameState_.spawn_points["right"][index]
 	var meeting_point = GameState_.meeting_points[index % 4].global_position
-	
+	var glad1
+	var glad2
 	if peer1 != null and peer2 != null:
 		var data1 = data[peer1]
 		var data2 = data[peer2]
-		#print(data1)
-		#print(data2)
-		var glad1 = gladiator_spawner.spawn({
+		glad1 = gladiator_spawner.spawn({
 			"scene": "res://Player/Gladiator.tscn",
 			"peer_id": peer1,
 			"gladiator_data": data1,
@@ -213,7 +212,27 @@ func spawn_duel_between(peer1, peer2, index: int):
 			"spawn_point": spawn_point_left,
 			"meeting_point": meeting_point
 		})
-		var glad2 = gladiator_spawner.spawn({
+		glad2 = gladiator_spawner.spawn({
+			"scene": "res://Player/Gladiator.tscn",
+			"peer_id": peer2,
+			"gladiator_data": data2,
+			"opponent_id": peer1,
+			"spawn_point": spawn_point_right,
+			"meeting_point": meeting_point
+		})
+	elif peer1 != null and peer2 == null:
+		var data1 = GameState_.all_gladiators[peer1]
+		glad1 = gladiator_spawner.spawn({
+			"scene": "res://Player/Gladiator.tscn",
+			"peer_id": peer1,
+			"gladiator_data": data1,
+			"opponent_id": peer2,
+			"spawn_point": spawn_point_left,
+			"meeting_point": meeting_point
+		})
+	elif peer1 == null and peer2 != null:
+		var data2 = GameState_.all_gladiators[peer2]
+		glad2 = gladiator_spawner.spawn({
 			"scene": "res://Player/Gladiator.tscn",
 			"peer_id": peer2,
 			"gladiator_data": data2,
@@ -222,42 +241,19 @@ func spawn_duel_between(peer1, peer2, index: int):
 			"meeting_point": meeting_point
 		})
 		
-		glad1.died.connect(func(): _on_duel_finished(peer2, peer1))
-		glad2.died.connect(func(): _on_duel_finished(peer1, peer2))
-	if peer1 != null and peer2 == null:
-		var data1 = GameState_.all_gladiators[peer1]
-		var glad1 = gladiator_spawner.spawn({
-			"scene": "res://Player/Gladiator.tscn",
-			"peer_id": peer1,
-			"gladiator_data": data1,
-			"opponent_id": peer2,
-			"spawn_point": spawn_point_left,
-			"meeting_point": meeting_point
-		})
-		glad1.died.connect(func(): _on_duel_finished(peer2, peer1))
-	if peer1 == null and peer2 != null:
-		var data2 = GameState_.all_gladiators[peer2]
-		var glad2 = gladiator_spawner.spawn({
-			"scene": "res://Player/Gladiator.tscn",
-			"peer_id": peer2,
-			"gladiator_data": data2,
-			"opponent_id": peer1,
-			"spawn_point": spawn_point_right,
-			"meeting_point": meeting_point
-		})
-		glad2.died.connect(func(): _on_duel_finished(peer1, peer2))
-
-
-	#active_duels.append([glad1, glad2])
+	glad1.died.connect(func(): _on_duel_finished(peer2, peer1))
+	glad2.died.connect(func(): _on_duel_finished(peer1, peer2))
 
 func _on_duel_finished(winner_id: int, loser_id: int): #yes
+	print("winner_id: " + str(winner_id))
 	if duel_results.has(winner_id): return  # Already processed
 	
 	duel_results[winner_id] = true
 	duel_results[loser_id] = false
-	var base_gold = 3
-
 	
+	print(duel_results)
+	
+	var base_gold = 3
 	var winner_current_streak = GameState_.all_gladiators[winner_id]["streak"]
 	var loser_current_streak = GameState_.all_gladiators[loser_id]["streak"]
 	
@@ -300,7 +296,11 @@ func _on_duel_finished(winner_id: int, loser_id: int): #yes
 				var formatted = "[color=%s]%s[/color]" % [color, name]
 				GameState_.add_to_log(get_multiplayer_authority(), "❌" + formatted + " is eliminated!❌")
 				print("⭐ " + formatted + " WON THE GAME! ⭐")
-
+				
+				if multiplayer.is_server():
+					GameState_.add_to_peer_log(multiplayer.get_unique_id(), "⭐ " + formatted + " WON THE GAME! ⭐")
+				else:
+					GameState_.rpc_id(1, "add_to_peer_log", multiplayer.get_unique_id(), "⭐ " + formatted + " WON THE GAME! ⭐")
 func remove_eliminated_from_rounds(eliminated_id: int):
 	for _round in rounds:
 		for pair in _round:

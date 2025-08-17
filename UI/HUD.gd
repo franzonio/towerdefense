@@ -78,6 +78,8 @@ var equipment_button_parent_name
 @onready var countdown_label = $IntermissionTimerLabel
 @onready var shop = $Shop
 @onready var concede_threshold_menu = $ConcedePanel/ConcedeThresholdMenu
+@onready var stance_menu = $StancePanel/StanceMenu
+@onready var attack_menu = $AttackPanel/AttackMenu
 @onready var exp_button = $ExpButton
 
 @onready var head_slot = $EquipmentPanel/HeadSlot
@@ -115,6 +117,8 @@ var equipment_instance
 var equipment_data 
 #@onready var all_equipment_slots = [head_slot, chest_slot, weapon1_slot, weapon2_slot, ring1_slot, ring2_slot]
 signal concede_threshold_changed(value: int)
+signal stance_changed(value: int)
+signal attack_changed(value: int)
 
 func _ready():
 	#refresh_button.visible = false
@@ -164,6 +168,8 @@ func _ready():
 	refresh_button.disabled = false
 	
 	concede_threshold_menu.connect("item_selected", Callable(self, "_on_threshold_selected"))
+	stance_menu.connect("item_selected", Callable(self, "_on_stance_selected"))
+	attack_menu.connect("item_selected", Callable(self, "_on_attack_type_selected"))
 	
 	var keys = exp_for_level.keys()
 	var int_keys = []
@@ -177,8 +183,14 @@ func _process(delta: float) -> void:
 	time_passed += delta
 	#print("mouse position: " + str(get_viewport().get_mouse_position()))
 	if !intermission: label_round.text = "Day " + str(round_now) + " | " + str(int(time_passed))
-	if intermission: concede_threshold_menu.disabled = false
-	else: concede_threshold_menu.disabled = true
+	if intermission: 
+		concede_threshold_menu.disabled = false
+		stance_menu.disabled = false
+		attack_menu.disabled = false
+	else: 
+		concede_threshold_menu.disabled = true
+		stance_menu.disabled = true
+		attack_menu.disabled = true
 	
 	if Input.is_action_just_pressed("toggle_shop") and not chat_input.has_focus():
 		if $ShopButton:
@@ -300,9 +312,32 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data
 		update_equipment_ui()
 		update_attribute_ui()
 		update_concede_ui()
+		update_stance_ui()
+		update_attack_ui()
 		update_gold(all_gladiators[peer_id]["gold"])
 		update_experience(all_gladiators[peer_id]["exp"])
 	populate_hud()
+	
+func update_stance_ui():
+	var previous_index = stance_menu.get_selected_id()
+	var options = ["Normal", 
+					"Defensive", 
+					"Offensive", 
+					"Jester"]
+	stance_menu.clear()
+	for option in options: stance_menu.add_item(option)
+	if previous_index == -1: stance_menu.select(0)
+	else: stance_menu.select(previous_index)
+	
+func update_attack_ui():
+	var previous_index = attack_menu.get_selected_id()
+	var options = ["Normal", 
+					"Light", 
+					"Heavy"]
+	attack_menu.clear()
+	for option in options: attack_menu.add_item(option)
+	if previous_index == -1: attack_menu.select(0)
+	else: attack_menu.select(previous_index)
 	
 func update_concede_ui():
 	var previous_index = concede_threshold_menu.get_selected_id()
@@ -446,6 +481,34 @@ func update_inventory_ui(glad_id: int):
 				inventory_grid.add_child(card_instance)
 			else:
 				print("⚠️ No matching scene for item:", item_name)
+
+func _on_attack_type_selected(index: int):
+	var selected_text = attack_menu.get_item_text(index)
+	var type = ""
+	
+	if selected_text == "Normal": type = "normal"
+	elif selected_text == "Light": type = "light"
+	elif selected_text == "Heavy": type = "heavy"
+	
+	if multiplayer.is_server():
+		GameState_.peer_attack_type(multiplayer.get_unique_id(), type)
+	else:
+		GameState_.rpc_id(1, "peer_attack_type", multiplayer.get_unique_id(), type)
+
+
+func _on_stance_selected(index: int): 
+	var selected_text = stance_menu.get_item_text(index)
+	var stance = ""
+	
+	if selected_text == "Normal": stance = "normal"
+	elif selected_text == "Defensive": stance = "defensive"
+	elif selected_text == "Offensive": stance = "offensive"
+	elif selected_text == "Jester": stance = "jester"
+	
+	if multiplayer.is_server():
+		GameState_.peer_stance(multiplayer.get_unique_id(), stance)
+	else:
+		GameState_.rpc_id(1, "peer_stance", multiplayer.get_unique_id(), stance)
 
 func _on_threshold_selected(index: int):
 	var selected_text = concede_threshold_menu.get_item_text(index)

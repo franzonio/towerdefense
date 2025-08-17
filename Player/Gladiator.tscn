@@ -398,6 +398,9 @@ properties/23/replication_mode = 2
 properties/24/path = NodePath(".:weapon2_can_block")
 properties/24/spawn = true
 properties/24/replication_mode = 2
+properties/25/path = NodePath(".:dead")
+properties/25/spawn = true
+properties/25/replication_mode = 2
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l0fom"]
 bg_color = Color(0, 0, 0, 0.443137)

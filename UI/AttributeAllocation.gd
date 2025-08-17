@@ -56,7 +56,7 @@ var remaining_points := 0
 
 @onready var remaining_label = $RemainingLabel
 @onready var confirm_button = $ConfirmButton
-@onready var player_life = 200
+@onready var player_life = 2000
 
 func _ready():
 	get_node("VBoxContainer/Human").pressed.connect(func(): on_race_selected("Human"))
@@ -233,7 +233,7 @@ func _initialize_attributes():
 		"quickness": 81.0,
 		"crit_rating": 10.0,
 		"avoidance": 31.0,
-		"health": 110.0,
+		"health": 100.0,
 		"resilience": 1.0,
 		"endurance": 1.0,
 		"sword_mastery": 40.0,
@@ -331,8 +331,8 @@ func _on_confirm():
 	var race_weights = {
 		"Human": 12,
 		"Elf": 7,
-		"Troll": 30,
-		"Orc": 24,
+		"Troll": 20,
+		"Orc": 16,
 	}
 	
 	var gladiator = {
@@ -343,8 +343,10 @@ func _on_confirm():
 		"streak": 0,
 		"level": "1",
 		"race": GameState_.selected_race,
-		"weight": race_weights[GameState_.selected_race],
+		"weight": race_weights[GameState_.selected_race.capitalize()],
 		"concede": 0.5,
+		"stance": "normal",
+		"attack_type": "normal",
 		"attributes": final_attributes,
 		"player_life": player_life,
 		

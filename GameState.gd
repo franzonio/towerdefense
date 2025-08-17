@@ -349,7 +349,7 @@ func get_equipment_by_name(id, item_name: String):
 			#print("Sending to peer " + str(id) + ": " + str(result))
 			rpc_id(id, "send_equipment_dict_to_peer", id, result)
 			return result
-	return {}  # Return empty if not found
+	#return {}  # Return empty if not found
 
 @rpc("any_peer", "call_local")
 func unequip_item(peer_id, equipment, equipment_button_parent_name):
@@ -362,6 +362,7 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name):
 	var item = equipment_button_parent_name.replace("Slot", "").to_lower()
 	var modifier_attributes = item_dict[equipment]["modifiers"].get("attributes", {})
 	var modifier_bonuses = item_dict[equipment]["modifiers"].get("bonuses", {})
+	var weight = item_dict[equipment].get("weight", 0)
 	var unequip_success = 0
 	
 	
@@ -384,6 +385,9 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name):
 			# TODO Remove item modifier bonuses
 			if modifier_bonuses != {}: 1 
 			
+			# Remove weight of item
+			if weight: all_gladiators[peer_id]["weight"] += weight
+			
 			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
 			return
 	
@@ -400,6 +404,7 @@ func equip_item(peer_id, equipment):
 	var lvl_req = item_dict[equipment].get("level", 0) 
 	var modifier_attributes = item_dict[equipment]["modifiers"].get("attributes", {})
 	var modifier_bonuses = item_dict[equipment]["modifiers"].get("bonuses", {})
+	var weight = item_dict[equipment].get("weight", 0)
 	var equip_success = 0
 	
 	if int(all_gladiators[peer_id]["level"]) >= lvl_req:
@@ -470,9 +475,23 @@ func equip_item(peer_id, equipment):
 			# TODO Apply item modifier bonuses
 			if modifier_bonuses != {}: 1 
 			
+			# Add weight of item
+			if weight: all_gladiators[peer_id]["weight"] += weight
+				
+			
 			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
 		else: add_to_peer_log(peer_id, "[INFO] ❌Need " + str(str_req) + " strength to equip item, you have " + str(int(all_gladiators[peer_id]["attributes"]["strength"])) + "!")
 	else: add_to_peer_log(peer_id, "[INFO] ❌Item requires level " + str(lvl_req) + " to equip, you are level " + str(all_gladiators[peer_id]["level"]))
+
+@rpc("any_peer", "call_local")
+func peer_attack_type(id, type): 
+	all_gladiators[id]["attack_type"] = type
+	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+	
+@rpc("any_peer", "call_local")
+func peer_stance(id, stance): 
+	all_gladiators[id]["stance"] = stance
+	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 
 @rpc("any_peer", "call_local")
 func peer_concede(id, threshold): 
