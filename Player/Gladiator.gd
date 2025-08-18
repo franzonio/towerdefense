@@ -80,6 +80,8 @@ var input_vector := Vector2.ZERO
 @export var weapon2: Dictionary
 @export var weapon_hands_to_carry: int
 
+@export var absorb_after_resilience: float
+@export var combined_avg_absorb: float
 @export var shield_absorb: int
 @export var armor_absorb := 1.0
 @export var endurance_sec: float
@@ -395,7 +397,9 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 		if defender.weapon1_durability <= 0:
 			defender_weapon1_destroyed = 1
 	
-	var final_damage = hit_success*(1-dodge_success)*(1-parry_success)*(1-block_success)*roundf(raw_damage - defender.armor)
+	print("defender.absorb_after_resilience: " + str(defender.absorb_after_resilience))
+	
+	var final_damage = hit_success*(1-dodge_success)*(1-parry_success)*(1-block_success)*roundf(clamp(raw_damage - defender.absorb_after_resilience, 0, 9999))
 
 	if defender.has_method("receive_damage"):
 		defender.rpc_id(defender.get_multiplayer_authority(), "receive_damage", final_damage, raw_damage, 
@@ -570,8 +574,24 @@ func update_gladiator_after_strategy(hit_chance_penalty, dodge_mod):
 @rpc("any_peer", "call_local")
 func update_gladiator(data: Dictionary):
 	#print("update_gladiator: " + str(data))
+	var chest_absorb = 0
+	var head_absorb = 0
+	var shoulders_absorb = 0
+	if data.has("chest") and data["chest"].size() > 0:
+		var chest_name = data["chest"].keys()[0]
+		chest_absorb = data["chest"][chest_name].get("absorb", 0)
+	if data.has("shoulders") and data["shoulders"].size() > 0:
+		var shoulders_name = data["shoulders"].keys()[0]
+		shoulders_absorb = data["shoulders"][shoulders_name].get("absorb", 0)
+	if data.has("head") and data["head"].size() > 0:
+		var head_name = data["head"].keys()[0]
+		head_absorb = data["head"][head_name].get("absorb", 0)
+	#var shoulders_name = data["shoulders"].keys()[0]
+	#var head_name = data["head"].keys()[0]
+	
 	var stance = data["stance"]
 	var attack_type = data["attack_type"]
+	
 	strength = data["attributes"]["strength"]
 	quickness = data["attributes"]["quickness"]
 	crit_rating = data["attributes"]["crit_rating"]
@@ -641,7 +661,7 @@ func update_gladiator(data: Dictionary):
 	armor_absorb = 1.0
 	concede_threshold = data["concede"]
 	#print(str(owner_id) + " concede: " + str(concede_threshold))
-	#print("\ndata" + str(data) + "\n")
+	print("\ndata" + str(data) + "\n")
 	
 	gladiator_name = data.name
 	#$Name.label_settings.set_font_color(data["color"])
@@ -654,7 +674,7 @@ func update_gladiator(data: Dictionary):
 	var endurance_weight = 1 - weight/(100+weight) # less endurance with more weight
 	var endurance_decay = endurance/75 + 1
 	endurance_sec = randf_range(2,3) + stance_endurance_mod*endurance*endurance_weight/endurance_decay
-	print("Should live " + str(endurance_sec) + " seconds")
+	#print("Should live " + str(endurance_sec) + " seconds")
 	weapon1 = data["weapon1"][weapon1_name]
 	weapon2 = data["weapon2"][weapon2_name]
 	weapon1_durability = data["weapon1"][weapon1_name]["durability"]
@@ -719,7 +739,7 @@ func update_gladiator(data: Dictionary):
 		var ratio1 = glad_weapon1_category_skill / weapon1_skill_req
 		parry_chance = [stance_parry_block_mod*(0.8 - exp(-0.4*(2*ratio1-1.0)))/2, stance_parry_block_mod*(0.8 - exp(-0.4*(2*ratio1-1.0)))/2]
 
-	print("    - attack_speed: " + str(attack_speed))
+	#print("    - attack_speed: " + str(attack_speed))
 	
 	if weapon1_durability == 1:		# THIS MEANS EQUIPPING NO WEP IN SLOT
 		crit_chance[0] = no_wep_crit_chance
@@ -732,7 +752,9 @@ func update_gladiator(data: Dictionary):
 
 	move_speed = 500
 	current_health = max_health
-	armor = (1+sqrt(resilience)/10.0) * armor_absorb				# flat damage reduction
+	
+	combined_avg_absorb = (head_absorb + shoulders_absorb + chest_absorb)#/3.0
+	absorb_after_resilience = combined_avg_absorb#(1+sqrt(resilience)/10.0) * combined_avg_absorb				# flat damage reduction
 	dodge_chance = stance_dodge_mod*((2*avoidance/((1.1+0.05*weight)**1.5))/200) / ((2*avoidance/(1.1+0.05*weight)/200)+1)
 	
 	#dodge_chance = (avoidance/200.0) / ((avoidance/200.0)+1)		# decaying dodge_chance -> 1

@@ -18,7 +18,7 @@ script = ExtResource("2_3wu4n")
 equipment_name = "sturdy_blade"
 cost = 30
 
-[node name="WeaponNameLabel" type="Label" parent="."]
+[node name="NameLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0

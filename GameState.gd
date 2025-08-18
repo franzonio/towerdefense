@@ -386,7 +386,7 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name):
 			if modifier_bonuses != {}: 1 
 			
 			# Remove weight of item
-			if weight: all_gladiators[peer_id]["weight"] += weight
+			if weight: all_gladiators[peer_id]["weight"] -= weight
 			
 			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
 			return
@@ -431,25 +431,25 @@ func equip_item(peer_id, equipment):
 					equip_success = 1
 				else: add_to_peer_log(peer_id, "[INFO] ❌Can only wear shield in off-hand!")
 					
-			elif type == "head":
+			elif category == "head":
 				if all_gladiators[peer_id]["head"] == {}: 
 					all_gladiators[peer_id]["head"] = item_dict
 					equip_success = 1
 				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing a helmet")
 				
-			elif type == "chest":
+			elif category == "chest":
 				if all_gladiators[peer_id]["chest"] == {}: 
 					all_gladiators[peer_id]["chest"] = item_dict
 					equip_success = 1
 				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing a chest")
 				
-			elif type == "shoulder":
-				if all_gladiators[peer_id]["shoulder"] == {}: 
-					all_gladiators[peer_id]["shoulder"] = item_dict
+			elif category == "shoulders":
+				if all_gladiators[peer_id]["shoulders"] == {}: 
+					all_gladiators[peer_id]["shoulders"] = item_dict
 					equip_success = 1
 				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing shoulders")
 				
-			elif type == "ring": 
+			elif category == "ring": 
 				if all_gladiators[peer_id]["ring1"].keys()[0] == {}: 
 					all_gladiators[peer_id]["ring1"] = item_dict
 					equip_success = 1
@@ -463,7 +463,7 @@ func equip_item(peer_id, equipment):
 			for slot_name in all_gladiators[peer_id]["inventory"].keys():
 				var item = all_gladiators[peer_id]["inventory"][slot_name]
 
-				if typeof(item) == TYPE_DICTIONARY and item.has(equipment):
+				if equip_success and typeof(item) == TYPE_DICTIONARY and item.has(equipment):
 					all_gladiators[peer_id]["inventory"][slot_name] = {}  # Clear slot
 					break
 
@@ -536,23 +536,41 @@ func buy_equipment_card(id: int, equipment: String, cost: int):
 		rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 
 @rpc("any_peer", "call_local")
-func sell_from_equipment(id: int, equipment: String, equipment_button_parent_name): 
+func sell_from_equipment(peer_id: int, equipment: String, equipment_button_parent_name): 
 	# 1 remove from slot, increase gold
 	# replace with unarmed if weapon is sold
-	var item_dict = get_equipment_by_name(id, equipment)
+	var item_dict = get_equipment_by_name(peer_id, equipment)
 	var price = item_dict[equipment]["price"]
+	var type = item_dict[equipment]["type"] # to be implemented
+	var hands = item_dict[equipment].get("hands", -1)
 	var item = equipment_button_parent_name.replace("Slot", "").to_lower()
-	var type = item_dict[equipment]["type"]
+	var modifier_attributes = item_dict[equipment]["modifiers"].get("attributes", {})
+	var modifier_bonuses = item_dict[equipment]["modifiers"].get("bonuses", {})
+	var weight = item_dict[equipment].get("weight", 0)
+	var sell_success = 0
 	
-	if type == "weapon":
-		all_gladiators[id][item] = get_equipment_by_name(id, "unarmed")
-	else: 
-		all_gladiators[id][item] = {}
+	if hands == 2:
+		all_gladiators[peer_id]["weapon1"] = get_equipment_by_name(peer_id, "unarmed")
+		all_gladiators[peer_id]["weapon2"] = get_equipment_by_name(peer_id, "unarmed")
+	elif item == "weapon1" or item == "weapon2": all_gladiators[peer_id][item] = get_equipment_by_name(peer_id, "unarmed")
+	else: all_gladiators[peer_id][item] = {}
 	
-	all_gladiators[id]["gold"] += int(price/2)
-	#print("gold: " + str(all_gladiators[id]["gold"]))
+	# Remove item modifier attributes from items
+	if modifier_attributes != {}:
+		for attribute in modifier_attributes:
+			all_gladiators[peer_id]["attributes"][attribute] -= modifier_attributes[attribute]
+	
+	# TODO Remove item modifier bonuses
+	if modifier_bonuses != {}: 1 
+	
+	# Remove weight of item
+	if weight: all_gladiators[peer_id]["weight"] -= weight
+	
+	all_gladiators[peer_id]["gold"] += int(price/2)
 	adjust_card_stock(equipment, "add")  # Restore stock
-	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+	
+	rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
+	return
 
 	#print("Item not found in equipment panel!")
 					

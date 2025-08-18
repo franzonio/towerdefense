@@ -360,7 +360,7 @@ func _on_confirm():
 		},
 		
 		"head": {},
-		"shoulder": {},
+		"shoulders": {},
 		"chest": {},
 
 		"ring1": {},

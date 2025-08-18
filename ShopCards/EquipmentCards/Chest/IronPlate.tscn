@@ -1,9 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://b3oogekjo5wj4"]
+[gd_scene load_steps=2 format=3 uid="uid://bxnltm7lspfkp"]
 
-[ext_resource type="Texture2D" uid="uid://bmpixjy0r3m6n" path="res://Assets/CardAssets/wooden_buckler.png" id="1_njwbd"]
-[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="2_kiket"]
+[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="1_ps8db"]
 
-[node name="WoodenBuckler" type="Button"]
+[node name="IronPlate" type="Button"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -12,11 +11,10 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_icons/icon = ExtResource("1_njwbd")
 expand_icon = true
-script = ExtResource("2_kiket")
-equipment_name = "wooden_buckler"
-cost = 20
+script = ExtResource("1_ps8db")
+equipment_name = "iron_plate"
+cost = 25
 
 [node name="NameLabel" type="Label" parent="."]
 layout_mode = 1

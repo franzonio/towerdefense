@@ -12,6 +12,7 @@ var added := false
 signal button_parent(parent_name: String)
 
 func _ready():
+	#ProjectSettings.set_setting("gui/timers/tooltip_delay_sec", 5.0)
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	GameState_.connect("card_buy_result", Callable(self, "_on_card_buy_result"))
@@ -20,7 +21,7 @@ func _ready():
 	parent_name = get_parent().name
 	if parent_name == "ShopGridContainer":
 		var label_display = format_name(equipment_name)
-		name_label = $WeaponNameLabel
+		name_label = $NameLabel
 		name_label.text = label_display+"\n💰" + str(cost)
 	#await get_tree().create_timer(0.5).timeout
 
@@ -102,6 +103,7 @@ func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data):
 
 
 func get_item_tooltip(item_data: Dictionary):
+	var name = format_name(equipment_name)
 	var level = item_data.get("level", -1)
 	var hands = item_data.get("hands", -1)
 	var hand_text = "One-Handed" if hands == 1 else "Two-Handed"
@@ -115,14 +117,16 @@ func get_item_tooltip(item_data: Dictionary):
 	var crit_multi = item_data.get("crit_multi", -1)
 	var weight = item_data.get("weight", -1)
 	var category = item_data.get("category", "None")
+	var type = item_data.get("type", "None")
 	var absorb = item_data.get("absorb", -1)
 
-	var tooltip = ""
+	var tooltip = name + "\n\n"
 	#tooltip += "%Level %d\n" % [level]
 	if hands != -1: tooltip += "%s %s\n" % [hand_text, category.capitalize()]
 	if min_dmg != -1 and category != "shield": tooltip += "%d–%d Damage\n" % [min_dmg, max_dmg]
 	if durability != -1: tooltip += "Durability: %d\n" % durability
-	if absorb != -1: tooltip += "Block Absorb: %d\n" % absorb
+	if absorb != -1 and category == "shield": tooltip += "Block Absorb: %d\n" % absorb
+	elif absorb != -1 and type == "armor": tooltip += "Absorb: %d\n" % absorb
 	if weight != -1: tooltip += "Weight: %d\n" % weight
 	if skill_req != -1 and str_req != -1: tooltip += "Requires: Lvl %d, %d Str, %d %s" % [level, str_req, skill_req, category.capitalize()]
 	elif skill_req != -1 and str_req == -1: tooltip += "Requires: Lvl %d, %d %s" % [level, skill_req, category.capitalize()]

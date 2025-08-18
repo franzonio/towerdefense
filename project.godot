@@ -25,6 +25,10 @@ GameState_="*res://GameState.tscn"
 window/size/mode=2
 window/dpi/allow_hidpi=false
 
+[gui]
+
+timers/tooltip_delay_sec=0.1
+
 [input]
 
 ui_left={

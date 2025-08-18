@@ -1,25 +1,5 @@
 extends CanvasLayer
 
-@onready var strength_card = preload("res://ShopCards/AttributeCards/StrengthCard.tscn")
-@onready var health_card = preload("res://ShopCards/AttributeCards/HealthCard.tscn")
-@onready var avoidance_card = preload("res://ShopCards/AttributeCards/AvoidanceCard.tscn")
-@onready var criticality_card = preload("res://ShopCards/AttributeCards/CriticalityCard.tscn")
-@onready var endurance_card = preload("res://ShopCards/AttributeCards/EnduranceCard.tscn")
-@onready var quickness_card = preload("res://ShopCards/AttributeCards/QuicknessCard.tscn")
-@onready var resilience_card = preload("res://ShopCards/AttributeCards/ResilienceCard.tscn")
-@onready var sword_mastery_card = preload("res://ShopCards/AttributeCards/SwordMasteryCard.tscn")
-@onready var axe_mastery_card = preload("res://ShopCards/AttributeCards/AxeMasteryCard.tscn")
-@onready var shield_mastery_card = preload("res://ShopCards/AttributeCards/ShieldMasteryCard.tscn")
-@onready var hammer_mastery_card = preload("res://ShopCards/AttributeCards/HammerMasteryCard.tscn")
-@onready var dagger_mastery_card = preload("res://ShopCards/AttributeCards/DaggerMasteryCard.tscn")
-@onready var chain_mastery_card = preload("res://ShopCards/AttributeCards/ChainMasteryCard.tscn")
-
-@onready var simple_sword_card = preload("res://ShopCards/EquipmentCards/Sword/1h/SimpleSword.tscn")
-@onready var light_axe_card = preload("res://ShopCards/EquipmentCards/Axe/1h/LightAxe.tscn")
-@onready var wooden_buckler_card = preload("res://ShopCards/EquipmentCards/Shield/WoodenBuckler.tscn")
-@onready var sturdy_blade_card = preload("res://ShopCards/EquipmentCards/Sword/2h/SturdyBlade.tscn")
-
-
 var equipment_card_scenes = {
 	"simple_sword": simple_sword_card
 }
@@ -84,6 +64,7 @@ var equipment_button_parent_name
 
 @onready var head_slot = $EquipmentPanel/HeadSlot
 @onready var chest_slot = $EquipmentPanel/ChestSlot
+@onready var shoulders_slot = $EquipmentPanel/ShouldersSlot
 @onready var weapon1_slot = $EquipmentPanel/Weapon1Slot
 @onready var weapon2_slot = $EquipmentPanel/Weapon2Slot
 @onready var ring1_slot = $EquipmentPanel/Ring1Slot
@@ -119,6 +100,47 @@ var equipment_data
 signal concede_threshold_changed(value: int)
 signal stance_changed(value: int)
 signal attack_changed(value: int)
+
+@onready var strength_card = preload("res://ShopCards/AttributeCards/StrengthCard.tscn")
+@onready var health_card = preload("res://ShopCards/AttributeCards/HealthCard.tscn")
+@onready var avoidance_card = preload("res://ShopCards/AttributeCards/AvoidanceCard.tscn")
+@onready var criticality_card = preload("res://ShopCards/AttributeCards/CriticalityCard.tscn")
+@onready var endurance_card = preload("res://ShopCards/AttributeCards/EnduranceCard.tscn")
+@onready var quickness_card = preload("res://ShopCards/AttributeCards/QuicknessCard.tscn")
+@onready var resilience_card = preload("res://ShopCards/AttributeCards/ResilienceCard.tscn")
+@onready var sword_mastery_card = preload("res://ShopCards/AttributeCards/SwordMasteryCard.tscn")
+@onready var axe_mastery_card = preload("res://ShopCards/AttributeCards/AxeMasteryCard.tscn")
+@onready var shield_mastery_card = preload("res://ShopCards/AttributeCards/ShieldMasteryCard.tscn")
+@onready var hammer_mastery_card = preload("res://ShopCards/AttributeCards/HammerMasteryCard.tscn")
+@onready var dagger_mastery_card = preload("res://ShopCards/AttributeCards/DaggerMasteryCard.tscn")
+@onready var chain_mastery_card = preload("res://ShopCards/AttributeCards/ChainMasteryCard.tscn")
+
+@onready var simple_sword_card = preload("res://ShopCards/EquipmentCards/Sword/1h/SimpleSword.tscn")
+@onready var light_axe_card = preload("res://ShopCards/EquipmentCards/Axe/1h/LightAxe.tscn")
+@onready var wooden_buckler_card = preload("res://ShopCards/EquipmentCards/Shield/WoodenBuckler.tscn")
+@onready var sturdy_blade_card = preload("res://ShopCards/EquipmentCards/Sword/2h/SturdyBlade.tscn")
+
+@onready var padded_tunic_card = preload("res://ShopCards/EquipmentCards/Chest/PaddedTunic.tscn")
+@onready var chain_mail_shirt_card = preload("res://ShopCards/EquipmentCards/Chest/ChainMailShirt.tscn")
+@onready var iron_plate_card = preload("res://ShopCards/EquipmentCards/Chest/IronPlate.tscn")
+@onready var leather_vest_card = preload("res://ShopCards/EquipmentCards/Chest/LeatherVest.tscn")
+@onready var obsidian_bulwark_card = preload("res://ShopCards/EquipmentCards/Chest/ObsidianBulwark.tscn")
+@onready var reinforced_leather_vest_card = preload("res://ShopCards/EquipmentCards/Chest/ReinforcedLeatherVest.tscn")
+
+@onready var padded_hood_card = preload("res://ShopCards/EquipmentCards/Head/PaddedHood.tscn")
+@onready var chain_mail_coif_card = preload("res://ShopCards/EquipmentCards/Head/ChainMailCoif.tscn")
+@onready var iron_helm_card = preload("res://ShopCards/EquipmentCards/Head/IronHelm.tscn")
+@onready var leather_cap_card = preload("res://ShopCards/EquipmentCards/Head/LeatherCap.tscn")
+@onready var obsidian_mask_card = preload("res://ShopCards/EquipmentCards/Head/ObsidianMask.tscn")
+@onready var reinforced_leather_cap_card = preload("res://ShopCards/EquipmentCards/Head/ReinforcedLeatherCap.tscn")
+
+@onready var padded_wraps_card = preload("res://ShopCards/EquipmentCards/Shoulders/PaddedWraps.tscn")
+@onready var chain_mail_shoulderguards_card = preload("res://ShopCards/EquipmentCards/Shoulders/ChainMailShoulderguards.tscn")
+@onready var iron_shoulders_card = preload("res://ShopCards/EquipmentCards/Shoulders/IronShoulders.tscn")
+@onready var leather_pads_card = preload("res://ShopCards/EquipmentCards/Shoulders/LeatherPads.tscn")
+@onready var obsidian_spikes_card = preload("res://ShopCards/EquipmentCards/Shoulders/ObsidianSpikes.tscn")
+@onready var reinforced_leather_pads_card = preload("res://ShopCards/EquipmentCards/Shoulders/ReinforcedLeatherPads.tscn")
+
 
 func _ready():
 	#refresh_button.visible = false
@@ -204,6 +226,42 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("buy_exp") and not chat_input.has_focus():
 		if $ExpButton:
 			$ExpButton.emit_signal("button_up")
+	
+func get_all_cards():
+	all_cards = [
+		### ATTRIBUTES ###
+		[strength_card, "strength", card_stock["strength"]], [health_card, "health", card_stock["health"]], 
+		[criticality_card, "crit_rating", card_stock["crit_rating"]], [endurance_card, "endurance", card_stock["endurance"]], 
+		[quickness_card, "quickness", card_stock["quickness"]], [resilience_card, "resilience", card_stock["resilience"]], 
+		[avoidance_card, "avoidance", card_stock["avoidance"]], 
+		
+		### WEAPON MASTERY ###
+		[sword_mastery_card, "sword_mastery", card_stock["sword_mastery"]], [axe_mastery_card, "axe_mastery", card_stock["axe_mastery"]],
+		[shield_mastery_card, "shield_mastery", card_stock["shield_mastery"]], [dagger_mastery_card, "dagger_mastery", card_stock["dagger_mastery"]],
+		[chain_mastery_card, "chain_mastery", card_stock["chain_mastery"]], [hammer_mastery_card, "hammer_mastery", card_stock["hammer_mastery"]],
+		
+		### CHESTS ###
+		[padded_tunic_card, "padded_tunic", card_stock["padded_tunic"]], [chain_mail_shirt_card, "chain_mail_shirt", card_stock["chain_mail_shirt"]],
+		[iron_plate_card, "iron_plate", card_stock["iron_plate"]], [leather_vest_card, "leather_vest", card_stock["leather_vest"]],
+		[obsidian_bulwark_card, "obsidian_bulwark", card_stock["obsidian_bulwark"]], [reinforced_leather_vest_card, "reinforced_leather_vest", card_stock["reinforced_leather_vest"]],
+		
+		### HEADS ###
+		[padded_hood_card, "padded_hood", card_stock["padded_hood"]], [chain_mail_coif_card, "chain_mail_coif", card_stock["chain_mail_coif"]],
+		[iron_helm_card, "iron_helm", card_stock["iron_helm"]], [leather_cap_card, "leather_cap", card_stock["leather_cap"]],
+		[obsidian_mask_card, "obsidian_mask", card_stock["obsidian_mask"]], [reinforced_leather_cap_card, "reinforced_leather_cap", card_stock["reinforced_leather_cap"]],
+		
+		### SHOULDER ###
+		[padded_wraps_card, "padded_wraps", card_stock["padded_wraps"]], [chain_mail_shoulderguards_card, "chain_mail_shoulderguards", card_stock["chain_mail_shoulderguards"]],
+		[iron_shoulders_card, "iron_shoulders", card_stock["iron_shoulders"]], [leather_pads_card, "leather_pads", card_stock["leather_pads"]],
+		[obsidian_spikes_card, "obsidian_spikes", card_stock["obsidian_spikes"]], [reinforced_leather_pads_card, "reinforced_leather_pads", card_stock["reinforced_leather_pads"]],
+		
+		### ETC ###
+		
+		### WEAPONS ###
+		[simple_sword_card, "simple_sword", card_stock["simple_sword"]], [light_axe_card, "light_axe", card_stock["light_axe"]],
+		[wooden_buckler_card, "wooden_buckler", card_stock["wooden_buckler"]], [sturdy_blade_card, "sturdy_blade", card_stock["sturdy_blade"]]
+		]
+	return all_cards
 	
 func get_equipment_by_name(item_name: String):
 	for category in equipment_data.keys():
@@ -379,16 +437,21 @@ func update_equipment_ui():
 			
 	var head_name
 	var chest_name 
+	var shoulders_name
 	var weapon1_name
 	var weapon2_name
 	var ring1_name 
 	var ring2_name 
-			
-	var all_equipment_slots = [head_slot, chest_slot, weapon1_slot, weapon2_slot, ring1_slot, ring2_slot]
+	
 	if all_gladiators[multiplayer.get_unique_id()]["head"] != {}:
 		head_name = all_gladiators[multiplayer.get_unique_id()]["head"].keys()[0]
 	else:
 		head_name = "empty"
+	
+	if all_gladiators[multiplayer.get_unique_id()]["shoulders"] != {}:
+		shoulders_name = all_gladiators[multiplayer.get_unique_id()]["shoulders"].keys()[0]
+	else:
+		shoulders_name = "empty"
 	
 	if all_gladiators[multiplayer.get_unique_id()]["chest"] != {}:
 		chest_name = all_gladiators[multiplayer.get_unique_id()]["chest"].keys()[0]
@@ -420,8 +483,8 @@ func update_equipment_ui():
 	else:
 		ring2_name = "empty"
 	
-	
-	var all_equipped_items_name = [head_name, chest_name, weapon1_name, weapon2_name, ring1_name, ring2_name]
+	var all_equipment_slots = [head_slot, chest_slot, shoulders_slot, weapon1_slot, weapon2_slot, ring1_slot, ring2_slot]
+	var all_equipped_items_name = [head_name, chest_name, shoulders_name, weapon1_name, weapon2_name, ring1_name, ring2_name]
 	
 	for i in all_equipped_items_name.size()-1: 
 		var item_slot = all_equipment_slots[i]
@@ -623,22 +686,6 @@ func clear_shop_grid():
 	if tweens.size() > 0:
 		await tweens[-1].finished
 
-func get_all_cards():
-	all_cards = [[strength_card, "strength", card_stock["strength"]], [health_card, "health", card_stock["health"]], 
-		[criticality_card, "crit_rating", card_stock["crit_rating"]], [endurance_card, "endurance", card_stock["endurance"]], 
-		[quickness_card, "quickness", card_stock["quickness"]], [resilience_card, "resilience", card_stock["resilience"]], 
-		[avoidance_card, "avoidance", card_stock["avoidance"]], 
-		
-		### WEAPON MASTERY ###
-		[sword_mastery_card, "sword_mastery", card_stock["sword_mastery"]], [axe_mastery_card, "axe_mastery", card_stock["axe_mastery"]],
-		[shield_mastery_card, "shield_mastery", card_stock["shield_mastery"]], [dagger_mastery_card, "dagger_mastery", card_stock["dagger_mastery"]],
-		[chain_mastery_card, "chain_mastery", card_stock["chain_mastery"]], [hammer_mastery_card, "hammer_mastery", card_stock["hammer_mastery"]],
-		
-		### EQUIPMENT ###
-		[simple_sword_card, "simple_sword", card_stock["simple_sword"]], [light_axe_card, "light_axe", card_stock["light_axe"]],
-		[wooden_buckler_card, "wooden_buckler", card_stock["wooden_buckler"]], [sturdy_blade_card, "sturdy_blade", card_stock["sturdy_blade"]]
-		]
-	return all_cards
 
 func roll_cards():
 	#print("\n" + str(multiplayer.get_unique_id()) + "🃏reroll_cards: " + str(card_stock))

@@ -702,6 +702,15 @@ grow_horizontal = 2
 texture = ExtResource("2_ijstf")
 expand_mode = 4
 
+[node name="ShouldersSlot" type="TextureRect" parent="EquipmentPanel"]
+layout_mode = 1
+offset_left = 76.0
+offset_top = 36.0
+offset_right = 116.0
+offset_bottom = 76.0
+texture = ExtResource("2_ijstf")
+expand_mode = 4
+
 [node name="ChestSlot" type="TextureRect" parent="EquipmentPanel"]
 layout_mode = 1
 anchors_preset = 8

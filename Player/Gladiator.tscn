@@ -401,6 +401,9 @@ properties/24/replication_mode = 2
 properties/25/path = NodePath(".:dead")
 properties/25/spawn = true
 properties/25/replication_mode = 2
+properties/26/path = NodePath(".:absorb_after_resilience")
+properties/26/spawn = true
+properties/26/replication_mode = 1
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l0fom"]
 bg_color = Color(0, 0, 0, 0.443137)
