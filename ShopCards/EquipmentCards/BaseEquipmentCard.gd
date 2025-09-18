@@ -6,6 +6,7 @@ extends Button
 var name_label
 var parent_name
 var item_dict
+var all_gladiators
 
 var mouse_inside_button := false
 var added := false
@@ -17,6 +18,12 @@ func _ready():
 	mouse_exited.connect(_on_mouse_exited)
 	GameState_.connect("card_buy_result", Callable(self, "_on_card_buy_result"))
 	GameState_.connect("send_equipment_dict_to_peer_signal", Callable(self, "_on_send_equipment_dict_to_peer"))
+	GameState_.connect("send_gladiator_data_to_peer_card_signal", Callable(self, "_on_send_gladiator_data_to_peer_card_signal"))
+	
+	if multiplayer.is_server():
+		GameState_.refresh_gladiator_data_card(multiplayer.get_unique_id())
+	else:
+		GameState_.rpc_id(1, "refresh_gladiator_data_card", multiplayer.get_unique_id())
 	
 	parent_name = get_parent().name
 	if parent_name == "ShopGridContainer":
@@ -34,6 +41,8 @@ func _on_send_equipment_dict_to_peer(id, _item_dict):
 		else: 1
 			#print("⚠️ Equipment name not found: " + equipment_name)
 
+func _on_send_gladiator_data_to_peer_card_signal(peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
+	all_gladiators = _all_gladiators
 
 func format_name(raw_name: String) -> String:
 	var parts = raw_name.split("_")            # → ["simple", "sword"]
@@ -45,6 +54,7 @@ func format_name(raw_name: String) -> String:
 	return joined.capitalize()                 # → "Simple Sword"
 
 func _on_mouse_entered():
+	var my_id = multiplayer.get_unique_id()
 	mouse_inside_button = true
 	if parent_name == "ShopGridContainer":
 		var tween := get_tree().create_tween()

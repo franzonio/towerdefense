@@ -504,10 +504,10 @@ label_settings = SubResource("LabelSettings_uk570")
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -250.5
-offset_top = 49.0
-offset_right = 376.5
-offset_bottom = 271.0
+offset_left = -576.0
+offset_top = 76.0
+offset_right = 854.0
+offset_bottom = 471.0
 grow_horizontal = 2
 scale = Vector2(0.8, 0.8)
 

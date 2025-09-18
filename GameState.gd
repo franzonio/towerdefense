@@ -35,6 +35,7 @@ signal card_buy_result(peer_id: int, success: bool)
 signal broadcast_log_signal(message: String)
 signal send_player_colors_to_peer_signal(id: int, colors: Dictionary)
 signal send_equipment_dict_to_peer_signal(id: int, dict: Dictionary)
+signal send_gladiator_data_to_peer_card_signal(id: int, dict: Dictionary)
 
 var attr_cards_stock
 var all_cards_stock
@@ -135,7 +136,7 @@ func create_card_pool():
 		"resilience": 50,
 		"endurance": 100,
 		"sword_mastery": 100,
-		"axe_mastery": 100,
+		"axe_mastery": 10000,
 		"hammer_mastery": 100,
 		"dagger_mastery": 100,
 		"chain_mastery": 100,
@@ -497,6 +498,15 @@ func peer_stance(id, stance):
 func peer_concede(id, threshold): 
 	all_gladiators[id]["concede"] = threshold
 	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+	
+@rpc("any_peer", "call_local")
+func send_gladiator_data_to_peer_card(id: int, _gladiator_data, _all_gladiators) -> void:
+	emit_signal("send_gladiator_data_to_peer_card_signal", id, _gladiator_data, _all_gladiators)
+
+@rpc("any_peer", "call_local")
+func refresh_gladiator_data_card(id: int) -> void:
+	#print("asdasdasd: " + str(all_gladiators[id]))
+	rpc_id(id, "send_gladiator_data_to_peer_card", id, all_gladiators[id], all_gladiators)
 	
 @rpc("any_peer", "call_local")
 func send_gladiator_data_to_peer(id: int, _gladiator_data, _all_gladiators) -> void:

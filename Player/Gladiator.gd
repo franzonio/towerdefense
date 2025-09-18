@@ -756,7 +756,7 @@ func update_gladiator(data: Dictionary):
 	combined_avg_absorb = (head_absorb + shoulders_absorb + chest_absorb)#/3.0
 	absorb_after_resilience = combined_avg_absorb#(1+sqrt(resilience)/10.0) * combined_avg_absorb				# flat damage reduction
 	dodge_chance = stance_dodge_mod*((2*avoidance/((1.1+0.05*weight)**1.5))/200) / ((2*avoidance/(1.1+0.05*weight)/200)+1)
-	
+	print(dodge_chance)
 	#dodge_chance = (avoidance/200.0) / ((avoidance/200.0)+1)		# decaying dodge_chance -> 1
 	seconds_to_live = endurance/3.0
 

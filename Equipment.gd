@@ -444,6 +444,7 @@ extends Node
 				"bonuses": {}
 			}
 		},
+		
 		"leather_cap": {
 			"price": 8,
 			"stock": 250,

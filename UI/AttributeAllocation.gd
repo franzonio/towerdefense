@@ -3,7 +3,7 @@ class_name AttributeAllocation
 
 signal confirmed(attributes: Dictionary)
 
-@export var max_points := 148
+@export var max_points := 164
 @export var starting_values: Dictionary = {}
 
 const MAX_MESSAGES = 50
