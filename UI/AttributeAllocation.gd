@@ -233,7 +233,7 @@ func _initialize_attributes():
 		"quickness": 81.0,
 		"crit_rating": 10.0,
 		"avoidance": 31.0,
-		"health": 100.0,
+		"health": 1.0,
 		"resilience": 1.0,
 		"endurance": 100.0,
 		"sword_mastery": 40.0,

@@ -2075,7 +2075,7 @@ spawn_path = NodePath(".")
 [node name="SpawnPoints" type="Node2D" parent="."]
 
 [node name="SpawnPoint0" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(-639, -123)
+position = Vector2(-931, -149)
 
 [node name="SpawnPoint1" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(19, -17)
@@ -2087,7 +2087,7 @@ position = Vector2(-571, 186)
 position = Vector2(64, 96)
 
 [node name="SpawnPoint4" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(-104, -141)
+position = Vector2(-18, -78)
 
 [node name="SpawnPoint5" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(524, -118)

@@ -135,7 +135,7 @@ var spawn_point
 var all_gladiators
 var target_position: Vector2 = Vector2.ZERO
 
-const ATTACK_RANGE := 160.0
+const ATTACK_RANGE := 120.0
 @export var last_attack_time := -999.0
 
 var current_attack_target: Node = null
@@ -450,28 +450,40 @@ func die():
 
 func handle_ai_movement(delta):
 	direction = (target_position - global_position).normalized()
+	var reached_target = false
 	
 	if !in_combat: velocity = direction * move_speed
-	else: velocity = Vector2.ZERO
-		
+	elif in_combat: 
+		velocity = Vector2.ZERO
+		reached_target = true
+	
+	if global_position.distance_to(target_position) < ATTACK_RANGE/2.0: # Stop when close enough
+		velocity = Vector2.ZERO
+		reached_target = true
+		#target_position = Vector2.ZERO
+	
 	position += velocity * delta
 
+	if multiplayer.is_server(): 
+		print("\nvelocity: " + str(velocity))
+		print("global_position: " + str(global_position) + " | target_position: " + str(target_position) + " | delta: " + str(global_position.distance_to(target_position)))
+		print("in_combat: " + str(in_combat) + " | reached_target: " + str(reached_target))
+		print("current_animation: " + str(current_animation))
+
 	if !current_animation.begins_with("attack"):# or current_animation != "N/A":
-		if !in_combat:
+		if !reached_target:
+			
 			if abs(direction.x) > abs(direction.y): current_animation = "walk_right" if direction.x > 0 else "walk_left"
 			else: current_animation = "walk_down" if direction.y > 0 else "walk_up"
 			prev_animation = current_animation
-		else:
+		elif reached_target:
 			# Stop at idle direction depending on last move
 			if prev_animation == "walk_right": current_animation = "idle_right"
 			elif prev_animation == "walk_left": current_animation = "idle_left"
 			elif prev_animation == "walk_up": current_animation = "idle_up"
 			elif prev_animation == "walk_down": current_animation = "idle_down"
 
-	# Stop when close enough
-	if global_position.distance_to(target_position) < 10:
-		velocity = Vector2.ZERO
-		target_position = Vector2.ZERO
+
 
 
 # Called by the server to initialize this gladiator
