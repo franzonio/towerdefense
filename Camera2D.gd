@@ -24,7 +24,7 @@ func _input(event):
 		
 		if rect.has_point(mouse_pos):
 			return  # Cursor is outside chat window, ignore input
-	
+'''
 	# Zoom with mouse wheel
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
@@ -45,6 +45,7 @@ func _input(event):
 		var delta = event.position - last_mouse_position
 		global_position -= delta * zoom
 		last_mouse_position = event.position
+'''
 
 func _process(delta):
 	

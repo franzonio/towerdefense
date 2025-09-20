@@ -278,7 +278,7 @@ func _input(event):
 			chat_input.release_focus()
 
 	
-func _on_send_pressed(): #submitted_text = ""):
+func _on_send_pressed(submitted_text = ""):
 	var msg = chat_input.text.strip_edges()
 	if msg.length() == 0 or msg.length() > MAX_LENGTH:
 		return

@@ -42,7 +42,7 @@ animations = [{
 }],
 "loop": true,
 "name": &"default",
-"speed": 3.0
+"speed": 2.0
 }]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_1bvp3"]
@@ -2060,6 +2060,10 @@ position = Vector2(1, 0)
 navigation_polygon = SubResource("NavigationPolygon_fssbs")
 
 [node name="Camera2D" type="Camera2D" parent="."]
+limit_left = -960
+limit_top = -540
+limit_right = 960
+limit_bottom = 540
 script = ExtResource("3_84ssy")
 
 [node name="PauseMenu" parent="." instance=ExtResource("10_efxa6")]
@@ -2080,7 +2084,7 @@ position = Vector2(19, -17)
 position = Vector2(-571, 186)
 
 [node name="SpawnPoint3" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(31, 224)
+position = Vector2(64, 96)
 
 [node name="SpawnPoint4" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(-104, -141)
@@ -2097,13 +2101,13 @@ position = Vector2(549, 138)
 [node name="MeetingPoints" type="Node2D" parent="."]
 
 [node name="MeetingPoint0" type="Marker2D" parent="MeetingPoints"]
-position = Vector2(-356, -113)
+position = Vector2(-329, -113)
 
 [node name="MeetingPoint1" type="Marker2D" parent="MeetingPoints"]
-position = Vector2(279, -81)
+position = Vector2(311, -117)
 
 [node name="MeetingPoint2" type="Marker2D" parent="MeetingPoints"]
-position = Vector2(-310, 132)
+position = Vector2(-288, 160)
 
 [node name="MeetingPoint3" type="Marker2D" parent="MeetingPoints"]
-position = Vector2(289, 170)
+position = Vector2(306, 147)

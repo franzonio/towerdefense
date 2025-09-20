@@ -111,7 +111,7 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data
 	if peer_id == multiplayer.get_unique_id():
 		player_gladiator_data = _player_gladiator_data
 	
-func _on_send_pressed():#submitted_text = ""):
+func _on_send_pressed(submitted_text = ""):
 	var msg = chat_input.text.strip_edges()
 	if msg.length() == 0 or msg.length() > MAX_LENGTH:
 		return
