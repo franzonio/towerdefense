@@ -1,9 +1,27 @@
-[gd_scene load_steps=3 format=3 uid="uid://dq5vc2nol8y18"]
+[gd_scene load_steps=7 format=3 uid="uid://dq5vc2nol8y18"]
 
 [ext_resource type="Script" uid="uid://dsjfojqx1xb5k" path="res://Scripts/LobbyManager.gd" id="1_bpe3w"]
 
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_bpe3w"]
+properties/0/path = NodePath(".:players")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ers0q"]
 load_path = "res://.godot/imported/battlefield_grass.png-e5cddb3c47484e286f5272d6124ff1c1.ctex"
+
+[sub_resource type="LabelSettings" id="LabelSettings_lolwk"]
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_bpe3w"]
+font_size = 11
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_wgubu"]
+outline_size = 4
+outline_color = Color(0, 0, 0, 1)
 
 [node name="Lobby" type="Control"]
 layout_mode = 3
@@ -13,6 +31,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_bpe3w")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_bpe3w")
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1
@@ -38,41 +59,88 @@ offset_bottom = 62.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="NameLabel" type="Label" parent="VBoxContainer"]
-layout_mode = 2
-text = "Enter your name: "
-
-[node name="LineEdit" type="LineEdit" parent="VBoxContainer"]
+[node name="PreJoinOrHostMenu" type="VBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
 
-[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
+[node name="LineEdit" type="LineEdit" parent="VBoxContainer/PreJoinOrHostMenu"]
+layout_mode = 2
+placeholder_text = "Your name..."
+alignment = 1
+max_length = 12
+expand_to_text_length = true
+
+[node name="SelectHostJoinContainer" type="HBoxContainer" parent="VBoxContainer/PreJoinOrHostMenu"]
 layout_mode = 2
 
-[node name="HostButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="SelectHostButton" type="Button" parent="VBoxContainer/PreJoinOrHostMenu/SelectHostJoinContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Host"
 
-[node name="JoinButton" type="Button" parent="VBoxContainer/HBoxContainer"]
+[node name="SelectJoinButton" type="Button" parent="VBoxContainer/PreJoinOrHostMenu/SelectHostJoinContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "Join"
 
-[node name="LobbyPlayersLabel" type="Label" parent="VBoxContainer"]
+[node name="PostJoinOrHostMenu" type="VBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
-text = "Lobby Players:"
 
-[node name="PlayerList" type="ItemList" parent="VBoxContainer"]
-layout_mode = 2
-auto_height = true
-
-[node name="StartGameButton" type="Button" parent="VBoxContainer"]
+[node name="StartGameButton" type="Button" parent="VBoxContainer/PostJoinOrHostMenu"]
 layout_mode = 2
 text = "Start Game"
 
-[node name="Refresh" type="Button" parent="VBoxContainer"]
+[node name="LobbyPlayersLabel" type="Label" parent="VBoxContainer/PostJoinOrHostMenu"]
 layout_mode = 2
-text = "Refresh
-"
+text = "
+Lobby Players"
+label_settings = SubResource("LabelSettings_lolwk")
+horizontal_alignment = 1
 
-[connection signal="pressed" from="VBoxContainer/Refresh" to="." method="_on_refresh_pressed"]
+[node name="PlayerList" type="ItemList" parent="VBoxContainer/PostJoinOrHostMenu"]
+layout_mode = 2
+tooltip_auto_translate_mode = 2
+auto_height = true
+
+[node name="HostContainer" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+
+[node name="PlayerCountContainer" type="HBoxContainer" parent="VBoxContainer/HostContainer"]
+layout_mode = 2
+
+[node name="SizeText" type="Label" parent="VBoxContainer/HostContainer/PlayerCountContainer"]
+layout_mode = 2
+tooltip_text = "How much health your gladiator has when starting a duel."
+mouse_filter = 1
+text = "Lobby size"
+label_settings = SubResource("LabelSettings_bpe3w")
+
+[node name="SizeNumber" type="Label" parent="VBoxContainer/HostContainer/PlayerCountContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+text = " 4 "
+label_settings = SubResource("LabelSettings_wgubu")
+
+[node name="PlusMinusContainer" type="HBoxContainer" parent="VBoxContainer/HostContainer/PlayerCountContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Sub" type="Button" parent="VBoxContainer/HostContainer/PlayerCountContainer/PlusMinusContainer"]
+layout_mode = 2
+text = "-"
+
+[node name="Add" type="Button" parent="VBoxContainer/HostContainer/PlayerCountContainer/PlusMinusContainer"]
+layout_mode = 2
+text = "+"
+
+[node name="HostButton" type="Button" parent="VBoxContainer/HostContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Create Lobby"
+
+[node name="GoBack" type="Button" parent="."]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 73.0
+offset_bottom = 39.0
+text = "Disconnect"

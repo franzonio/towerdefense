@@ -18,17 +18,21 @@ var all_pairs: Array[Array] = []
 var rounds: Array = []
 var current_round
 var current_round_index := 0
+var global_round_counter = 0
 
 var completed_duels := 0
 var player_ids = GameState_.all_gladiators.keys()
 var countdown_time := 10
 var intermission_timer #:= get_parent().get_node("HUD/IntermissionTimer")
 
+
 var data
 
 func _ready():
+	player_ids.erase(1)
 	add_to_group("round_manager")
 	GameState_.connect("gladiator_attribute_changed", Callable(self, "_on_gladiator_attribute_changed"))
+	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	if multiplayer.is_server():
 		hud_scene = get_parent().get_node("HUD")
 		intermission_timer = get_tree().get_root().get_node("Main/HUD/IntermissionTimer")
@@ -113,11 +117,15 @@ func regenerate_null_pairs(_current_round: Array) -> Array:
 
 @rpc("any_peer", "call_local")
 func start_next_round():
+	global_round_counter += 1
 	GameState_.add_to_log(get_multiplayer_authority(), "🔄 Preparation...")
 	#print("🔄 Preparation...")
+	#print("all_gladiators: " + str (GameState_.all_gladiators))
 	
 	# Get active player IDs (players still in the game)
 	var active_players = player_ids
+	
+	print("active_players: " + str(active_players))
 
 	if active_players.size() <= 1:
 		print("🏆 Game over or only one player left.")
@@ -168,6 +176,8 @@ func start_next_round():
 		elif p1 == null and p2 == null: total_duels -= 1
 
 	current_round_index += 1
+	print("current_round_index: " + str(current_round_index))
+	if global_round_counter >= 2: GameState_.reroll_cards_new_round(active_players)
 	
 	# INTERMISSION PHASE
 	if intermission_timer == null:
@@ -177,6 +187,8 @@ func start_next_round():
 		intermission_timer.start()
 	else:
 		push_warning("⚠️ IntermissionTimer not found!")
+		
+	
 
 func too_many_null_duels(_round: Array) -> bool:
 	var null_duel_count := 0
@@ -241,17 +253,19 @@ func spawn_duel_between(peer1, peer2, index: int):
 			"meeting_point": meeting_point
 		})
 		
-	glad1.died.connect(func(): _on_duel_finished(peer2, peer1))
-	glad2.died.connect(func(): _on_duel_finished(peer1, peer2))
+	if glad1 and peer1 and peer2: glad1.died.connect(func(): _on_duel_finished(peer2, peer1))
+	if glad2 and peer1 and peer2: glad2.died.connect(func(): _on_duel_finished(peer1, peer2))
 
 func _on_duel_finished(winner_id: int, loser_id: int): #yes
+	await get_tree().process_frame
 	print("winner_id: " + str(winner_id))
 	if duel_results.has(winner_id): return  # Already processed
+	if winner_id == -1 or loser_id == -1: return
 	
 	duel_results[winner_id] = true
 	duel_results[loser_id] = false
 	
-	print(duel_results)
+	print("duel_results: " + str(duel_results))
 	
 	var base_gold = 3
 	var winner_current_streak = GameState_.all_gladiators[winner_id]["streak"]
@@ -266,22 +280,34 @@ func _on_duel_finished(winner_id: int, loser_id: int): #yes
 	GameState_.grant_exp_for_peer(winner_id, 4, 0)
 	GameState_.grant_exp_for_peer(loser_id, 4, 0)
 	
+	var ids_to_eliminate = []
 	if multiplayer.is_server(): 
 		if loser_id != -1:
 			
+			#print("player_ids: " + str(player_ids))
+			#print("all_gladiators: " + str (GameState_.all_gladiators))
 			for id in player_ids: 
+				print("life for " + str(id) + ": " + str(GameState_.all_gladiators[id]["player_life"]))
 				if id != null:
 					if GameState_.all_gladiators[id]["player_life"] <= 0:
-						var name = GameState_.all_gladiators[id]["name"]
-						var color = GameState_.all_gladiators[id]["color"].to_html()
-						var formatted = "[color=%s]%s[/color]" % [color, name]
-						GameState_.add_to_log(get_multiplayer_authority(), "❌" + formatted + " is eliminated!❌")
-						GameState_.all_gladiators.erase(id)
-						player_ids.erase(id)
-						remove_eliminated_from_rounds(id)
-						
+						ids_to_eliminate.append(id)
+
+			#print("ids_to_eliminate: " + str(ids_to_eliminate))
+			for id in ids_to_eliminate:
+				var name = GameState_.all_gladiators[id]["name"]
+				var color = GameState_.all_gladiators[id]["color"].to_html()
+				var formatted = "[color=%s]%s[/color]" % [color, name]
+				GameState_.add_to_log(get_multiplayer_authority(), "❌" + formatted + " is eliminated!❌")
+				#GameState_.all_gladiators.erase(id)
+				player_ids.erase(id)
+				remove_eliminated_from_rounds(id)
+				#await get_tree().process_frame
+				#await get_tree().process_frame
+				#await get_tree().process_frame
+			print("all_gladiators after erase: " + str (GameState_.all_gladiators))
+				
 	if multiplayer.is_server():
-		if duel_results.size() >= total_duels*2:
+		if duel_results.size() >= len(player_ids)/2: #total_duels*2:
 			#GameState_.add_to_log(get_multiplayer_authority(), "✅ All duels finished")
 			await get_tree().create_timer(4.0).timeout  # Short break
 			despawn_all_gladiators()
@@ -294,13 +320,14 @@ func _on_duel_finished(winner_id: int, loser_id: int): #yes
 				var name = GameState_.all_gladiators[player_ids[0]]["name"]
 				var color = GameState_.all_gladiators[player_ids[0]]["color"].to_html()
 				var formatted = "[color=%s]%s[/color]" % [color, name]
-				GameState_.add_to_log(get_multiplayer_authority(), "❌" + formatted + " is eliminated!❌")
-				print("⭐ " + formatted + " WON THE GAME! ⭐")
+				#GameState_.add_to_log(get_multiplayer_authority(), "⭐ " + formatted + " WON THE GAME! ⭐")
+				#print("⭐ " + formatted + " WON THE GAME! ⭐")
 				
 				if multiplayer.is_server():
-					GameState_.add_to_peer_log(multiplayer.get_unique_id(), "⭐ " + formatted + " WON THE GAME! ⭐")
+					GameState_.add_to_log(multiplayer.get_unique_id(), "⭐ " + formatted + " WON THE GAME! ⭐")
 				else:
-					GameState_.rpc_id(1, "add_to_peer_log", multiplayer.get_unique_id(), "⭐ " + formatted + " WON THE GAME! ⭐")
+					GameState_.rpc("add_to_log", multiplayer.get_unique_id(), "⭐ " + formatted + " WON THE GAME! ⭐")
+
 func remove_eliminated_from_rounds(eliminated_id: int):
 	for _round in rounds:
 		for pair in _round:
@@ -338,3 +365,18 @@ func despawn_all_gladiators():  #yes
 		await get_tree().create_timer(0.1).timeout
 		if is_instance_valid(g): 
 			g.queue_free() 
+
+@rpc("any_peer")
+func _on_peer_disconnected(id: int):
+	print("Player disconnected: ", id)
+	var name = GameState_.all_gladiators[id].get("name", "")
+	if name == "": 
+		return
+	var color = GameState_.all_gladiators[id]["color"].to_html()
+	var formatted = "[color=%s]%s[/color]" % [color, name]
+	GameState_.kill_peer(id)
+	GameState_.add_to_log(get_multiplayer_authority(), "❌" + formatted + " disconnected!❌")
+	#GameState_.all_gladiators.erase(id)
+	player_ids.erase(id)
+	remove_eliminated_from_rounds(id)
+	#_update_player_list()

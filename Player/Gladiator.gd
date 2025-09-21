@@ -168,6 +168,8 @@ func _ready():
 	add_to_group("gladiators")
 	sprite.play("idle_down")
 	GameState_.connect("send_gladiator_data_to_peer_signal", Callable(self, "_on_send_gladiator_data_to_peer_signal"))
+	GameState_.connect("killed_by_server_signal", Callable(self, "_on_killed_by_server_signal"))
+	
 	if is_multiplayer_authority():
 		
 		var hud = get_node("/root/Main/HUD")
@@ -212,7 +214,7 @@ func _process(delta: float) -> void:
 			opponent_dead = true
 		if !dead and time_passed > endurance_sec and !opponent_dead:
 			dead = 1
-			print("_process peer " + str(multiplayer.get_unique_id()) + " died")
+			#print("_process peer " + str(multiplayer.get_unique_id()) + " died")
 			rpc("die")
 
 func _physics_process(delta):
@@ -397,7 +399,7 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 		if defender.weapon1_durability <= 0:
 			defender_weapon1_destroyed = 1
 	
-	print("defender.absorb_after_resilience: " + str(defender.absorb_after_resilience))
+	#print("defender.absorb_after_resilience: " + str(defender.absorb_after_resilience))
 	
 	var final_damage = hit_success*(1-dodge_success)*(1-parry_success)*(1-block_success)*roundf(clamp(raw_damage - defender.absorb_after_resilience, 0, 9999))
 
@@ -425,6 +427,10 @@ func receive_damage(amount: int, raw_damage, hit_success, dodge_success, crit, p
 	 						defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb)
 	if current_health <= concede_threshold*max_health and is_multiplayer_authority(): rpc("die")
 
+func _on_killed_by_server_signal(id):
+	if get_multiplayer_authority() == id: 
+		die()
+		print(str(id) + " was killed by host.")
 
 @rpc("any_peer", "call_local")
 func die():
@@ -444,7 +450,7 @@ func die():
 	if not sprite.is_playing():
 		sprite.play("die")
 		
-	print("die()  |  peer " + str(multiplayer.get_unique_id()) + " emits died signal")
+	#print("die()  |  peer " + str(multiplayer.get_unique_id()) + " emits died signal")
 	emit_signal("died")
 	
 
@@ -465,10 +471,12 @@ func handle_ai_movement(delta):
 	position += velocity * delta
 
 	if multiplayer.is_server(): 
+		'''
 		print("\nvelocity: " + str(velocity))
 		print("global_position: " + str(global_position) + " | target_position: " + str(target_position) + " | delta: " + str(global_position.distance_to(target_position)))
 		print("in_combat: " + str(in_combat) + " | reached_target: " + str(reached_target))
 		print("current_animation: " + str(current_animation))
+		'''
 
 	if !current_animation.begins_with("attack"):# or current_animation != "N/A":
 		if !reached_target:
@@ -673,7 +681,7 @@ func update_gladiator(data: Dictionary):
 	armor_absorb = 1.0
 	concede_threshold = data["concede"]
 	#print(str(owner_id) + " concede: " + str(concede_threshold))
-	print("\ndata" + str(data) + "\n")
+	#print("\ndata" + str(data) + "\n")
 	
 	gladiator_name = data.name
 	#$Name.label_settings.set_font_color(data["color"])
@@ -768,7 +776,7 @@ func update_gladiator(data: Dictionary):
 	combined_avg_absorb = (head_absorb + shoulders_absorb + chest_absorb)#/3.0
 	absorb_after_resilience = combined_avg_absorb#(1+sqrt(resilience)/10.0) * combined_avg_absorb				# flat damage reduction
 	dodge_chance = stance_dodge_mod*((2*avoidance/((1.1+0.05*weight)**1.5))/200) / ((2*avoidance/(1.1+0.05*weight)/200)+1)
-	print(dodge_chance)
+	#print(dodge_chance)
 	#dodge_chance = (avoidance/200.0) / ((avoidance/200.0)+1)		# decaying dodge_chance -> 1
 	seconds_to_live = endurance/3.0
 

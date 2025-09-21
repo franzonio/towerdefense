@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dutn6wxx1oapc"]
+[gd_scene load_steps=11 format=3 uid="uid://dutn6wxx1oapc"]
 
 [ext_resource type="Script" uid="uid://cpvmnjflyi4ln" path="res://UI/HUD.gd" id="1_yixhe"]
 [ext_resource type="Texture2D" uid="uid://b3rcyrl5mceea" path="res://Assets/MenuAssets/Menu Buttons/Square Buttons/Square Buttons/Questionmark Square Button.png" id="2_ijstf"]
@@ -93,6 +93,10 @@ font_size = 26
 
 [sub_resource type="LabelSettings" id="LabelSettings_f2wx0"]
 font_size = 33
+
+[sub_resource type="LabelSettings" id="LabelSettings_gppie"]
+outline_size = 6
+outline_color = Color(0, 0, 0, 1)
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_yixhe")
@@ -960,8 +964,61 @@ grow_horizontal = 2
 grow_vertical = 0
 tooltip_text = "Concede threshold"
 
+[node name="EscMenu" type="VBoxContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Resume" type="Button" parent="EscMenu"]
+layout_mode = 2
+text = "Resume"
+
+[node name="Options" type="Button" parent="EscMenu"]
+layout_mode = 2
+text = "Options
+"
+
+[node name="Disconnect" type="Button" parent="EscMenu"]
+layout_mode = 2
+text = "Disconnect"
+
+[node name="ConfirmDisconnect" type="VBoxContainer" parent="EscMenu"]
+layout_mode = 2
+
+[node name="ConfirmDisconnectLabel" type="Label" parent="EscMenu/ConfirmDisconnect"]
+layout_mode = 2
+text = "Are you sure you want to disconnect?"
+label_settings = SubResource("LabelSettings_gppie")
+horizontal_alignment = 1
+
+[node name="ConfirmDisconnectContainer" type="HBoxContainer" parent="EscMenu/ConfirmDisconnect"]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Yes" type="Button" parent="EscMenu/ConfirmDisconnect/ConfirmDisconnectContainer"]
+layout_mode = 2
+text = "✅ Yes"
+
+[node name="No" type="Button" parent="EscMenu/ConfirmDisconnect/ConfirmDisconnectContainer"]
+layout_mode = 2
+text = "❌ No"
+
 [connection signal="pressed" from="EquipmentButton" to="." method="_on_equipment_button_pressed"]
 [connection signal="pressed" from="ShopButton" to="." method="_on_shop_button_pressed"]
 [connection signal="toggled" from="ShopButton" to="." method="_on_shop_button_toggled"]
 [connection signal="pressed" from="Shop/VBoxContainer/HBoxContainer/RefreshButton" to="." method="_on_refresh_button_pressed"]
 [connection signal="button_up" from="ExpButton" to="." method="_on_exp_button_button_up"]
+[connection signal="pressed" from="EscMenu/Resume" to="." method="_on_resume_pressed"]
+[connection signal="pressed" from="EscMenu/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="EscMenu/Disconnect" to="." method="_on_disconnect_pressed"]
+[connection signal="button_up" from="EscMenu/ConfirmDisconnect/ConfirmDisconnectContainer/Yes" to="." method="_on_yes_button_up"]
+[connection signal="button_up" from="EscMenu/ConfirmDisconnect/ConfirmDisconnectContainer/No" to="." method="_on_no_button_up"]

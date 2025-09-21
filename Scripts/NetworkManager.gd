@@ -6,8 +6,9 @@ var port := 12345
 var server_ip := "127.0.0.1"
 var is_host := false
 
-func host_game():
+func host_game(players):
 	var peer = ENetMultiplayerPeer.new()
+	max_players = players
 	peer.create_server(port, max_players)
 	multiplayer.multiplayer_peer = peer
 	is_host = true
@@ -21,3 +22,5 @@ func join_game(ip: String):
 	is_host = false
 	#multiplayer.set_root_node(get_tree().get_root())
 	print("Joining game at ", ip)
+	#get_tree().create_timer(2.0).timeout
+	

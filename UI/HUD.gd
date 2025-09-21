@@ -1,5 +1,11 @@
 extends CanvasLayer
 
+@onready var esc_menu = $EscMenu
+@onready var resume_button = $EscMenu/Resume
+@onready var options_button = $EscMenu/Options
+@onready var disconnect_button = $EscMenu/Disconnect
+@onready var confirm_disconnect = $EscMenu/ConfirmDisconnect
+
 var equipment_card_scenes = {
 	"simple_sword": simple_sword_card
 }
@@ -143,6 +149,8 @@ signal attack_changed(value: int)
 
 
 func _ready():
+	esc_menu.visible = false
+	confirm_disconnect.visible = false
 	#refresh_button.visible = false
 	equipment_script = load("res://Equipment.gd")
 	equipment_instance = equipment_script.new()
@@ -153,8 +161,8 @@ func _ready():
 	GameState_.connect("countdown_updated", Callable(self, "_on_countdown_updated"))
 	GameState_.connect("card_stock_changed", Callable(self, "_on_card_stock_changed"))
 	GameState_.connect("send_gladiator_data_to_peer_signal", Callable(self, "_on_send_gladiator_data_to_peer_signal"))
-	GameState_.connect("broadcast_log_signal", Callable(self, "_on_log_received"))
-	
+	GameState_.connect("broadcast_log_signal", Callable(self, "_on_log_received"))	
+	GameState_.connect("reroll_cards_new_round_signal", Callable(self, "_on_reroll_cards_new_round_signal"))	
 
 	send_button.pressed.connect(_on_send_pressed)
 	chat_input.text_submitted.connect(_on_send_pressed)
@@ -226,6 +234,13 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("buy_exp") and not chat_input.has_focus():
 		if $ExpButton:
 			$ExpButton.emit_signal("button_up")
+	
+func _unhandled_input(event):
+	if event.is_action_pressed("ui_cancel"):  # ESC by default
+		if esc_menu.visible:
+			esc_menu.visible = false
+		else:
+			esc_menu.visible = true
 	
 func get_all_cards():
 	all_cards = [
@@ -365,7 +380,7 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
 	all_gladiators = _all_gladiators
 	if peer_id == multiplayer.get_unique_id():
-		player_gladiator_data = _player_gladiator_data
+		player_gladiator_data = all_gladiators[peer_id]
 		update_inventory_ui(peer_id)
 		update_equipment_ui()
 		update_attribute_ui()
@@ -706,6 +721,14 @@ func roll_cards():
 		i += 1
 		#await get_tree().create_timer(0.5).timeout
 
+func _on_reroll_cards_new_round_signal(active_players: Array):
+	if !multiplayer.is_server():
+		print("Received active players from host: " + str(active_players))
+		await get_tree().process_frame 
+		for player in active_players:
+			if multiplayer.get_unique_id() == player:
+				reroll_cards()
+
 func reroll_cards():
 	await clear_shop_grid()
 	roll_cards()
@@ -786,10 +809,7 @@ func _on_countdown_updated(time_left: int):
 	if intermission: 
 		label_round.text = "Day " + str(round_now)
 		if reroll_start_of_intermission:
-			#print("New round!")
-			#print("time_passed: " + str(time_passed))
 			round_now += 1
-			if time_passed > 5: reroll_cards()
 			reroll_start_of_intermission = 0
 		#update_countdown_labels(time_left)
 		if countdown_label: countdown_label.text = "⏳ %d" % time_left
@@ -830,6 +850,7 @@ func populate_hud():
 
 	for i in range(min(peer_ids.size(), 8)):  # Clamp to available HUD slots
 		var peer_id = peer_ids[i]
+		if peer_id == 1: continue
 		var gladiator_data = all_gladiators[peer_id]
 		var container_name = "Player%d" % (i + 1)
 
@@ -926,3 +947,52 @@ func format_name(raw_name: String) -> String:
 		if i < parts.size() - 1:
 			joined += " "
 	return joined.capitalize()                 # → "Simple Sword"
+
+
+func _on_resume_pressed() -> void:
+	esc_menu.visible = false
+
+func _on_options_pressed() -> void:
+	print("Options not implemented yet.")
+
+func _on_disconnect_pressed() -> void:
+	resume_button.visible = false
+	options_button.visible = false
+	disconnect_button.visible = false
+	confirm_disconnect.visible = true
+
+func _on_yes_button_up() -> void:
+	if !multiplayer.is_server():
+		var gladiator = all_gladiators.get(multiplayer.get_unique_id(), {})
+		if gladiator == {}:
+			var color = gladiator.get("color", Color.WHITE)
+			var hex_color = color.to_html()
+			var formatted = "[color=%s]%s[/color][color=%s] disconnected![/color]" % [hex_color, GameState_.selected_name, Color.RED.to_html()]
+			rpc("broadcast_message", multiplayer.get_unique_id(), formatted)
+			
+		await get_tree().create_timer(1.0).timeout # 11
+		
+		multiplayer.multiplayer_peer.close()
+		get_tree().set_multiplayer(null)
+		get_tree().change_scene_to_file("res://UI/MainMenu.tscn")
+	else: 
+		var gladiator = all_gladiators.get(multiplayer.get_unique_id(), {})
+		if gladiator == {}:
+			var color = gladiator.get("color", Color.WHITE)
+			var hex_color = color.to_html()
+			var formatted = "[color=%s]%s[/color][color=%s] (host) disconnected![/color]" % [hex_color, GameState_.selected_name, Color.RED.to_html()]
+			rpc("broadcast_message", multiplayer.get_unique_id(), formatted)
+			await get_tree().create_timer(1.0).timeout # 11
+			
+		GameState_.erase_all_data()
+		
+		
+		multiplayer.multiplayer_peer.close()
+		get_tree().set_multiplayer(null)
+		get_tree().change_scene_to_file("res://UI/MainMenu.tscn")
+
+func _on_no_button_up() -> void:
+	resume_button.visible = true
+	options_button.visible = true
+	disconnect_button.visible = true
+	confirm_disconnect.visible = false

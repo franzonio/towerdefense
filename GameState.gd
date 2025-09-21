@@ -36,6 +36,9 @@ signal broadcast_log_signal(message: String)
 signal send_player_colors_to_peer_signal(id: int, colors: Dictionary)
 signal send_equipment_dict_to_peer_signal(id: int, dict: Dictionary)
 signal send_gladiator_data_to_peer_card_signal(id: int, dict: Dictionary)
+signal broadcast_players_ready_signal(players_ready: int)
+signal killed_by_server_signal(id: int)
+signal reroll_cards_new_round_signal(active_players)
 
 var attr_cards_stock
 var all_cards_stock
@@ -45,8 +48,10 @@ var exp_for_level = {"1": 0, "2": 10, "3": 12, "4": 14, "5": 18, "6": 22, "7": 2
 var peer_colors = [Color.ANTIQUE_WHITE, Color.AQUAMARINE, Color.CHOCOLATE, Color.DEEP_PINK,
 				   Color.DODGER_BLUE,   Color.KHAKI,      Color.YELLOW,    Color.RED]
 var player_colors := {}
-
-
+var _players = []
+var players_ready_list = []
+var players_ready = 0
+var active_players = []
 
 const RACE_MODIFIERS = {
 	"Orc": {
@@ -269,9 +274,11 @@ func grant_gold_for_peer(id: int, base_amount: int, opponent_id: int, winner: bo
 			break
 	
 	total_bonus = streak_bonus + streak_break_bonus + income_bonus
+	if winner: total_bonus += 1
 	#print(all_gladiators[id]["name"] + " total_bonus: " + str(total_bonus))
 	# 4. Final gold addition
 	all_gladiators[id]["gold"] += base_amount + int(total_bonus)
+	print(str(base_amount + int(total_bonus)) + " gold for peer " + str(id))
 	rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 
 
@@ -300,6 +307,7 @@ func get_player_colors(id: int) -> void:
 	rpc_id(id, "send_player_colors_to_peer", id, player_colors)
 	
 func assign_peer_colors(players): 
+	_players = players
 	var shuffled_colors = peer_colors.duplicate()
 	shuffled_colors.shuffle()
 
@@ -311,7 +319,20 @@ func assign_peer_colors(players):
 		else:
 			push_error("Not enough colors for all players!")
 	#print(player_colors)
+	
+@rpc("any_peer", "call_local")
+func client_send_ready_to_host(id: int):
+	rpc("broadcast_players_ready", id)
 
+@rpc("any_peer", "call_local")
+func broadcast_players_ready(id: int):# -> void:
+	if id in players_ready_list: return
+	else: 
+		players_ready_list.append(id)
+		players_ready = len(players_ready_list)
+		print("players_ready_list: " + str(players_ready_list))
+		emit_signal("broadcast_players_ready_signal", players_ready)
+	
 @rpc("any_peer", "call_local")
 func broadcast_log(message: String) -> void:
 	emit_signal("broadcast_log_signal", message)
@@ -515,7 +536,7 @@ func send_gladiator_data_to_peer(id: int, _gladiator_data, _all_gladiators) -> v
 @rpc("any_peer", "call_local")
 func refresh_gladiator_data(id: int) -> void:
 	#print("asdasdasd: " + str(all_gladiators[id]))
-	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+	rpc("send_gladiator_data_to_peer", id, all_gladiators.get(id, {}), all_gladiators)
 
 @rpc("authority", "call_local")
 func notify_card_buy_result(id: int, success: bool, _gladiator_data) -> void:
@@ -685,8 +706,11 @@ func _store_gladiator(peer_id: int, data: Dictionary):
 	
 	#print("🎯 Gladiator stored for peer:", peer_id)
 	#print(all_gladiators)
-	
-	if all_gladiators.size() >= NetworkManager_.max_players + 1:
+	#print("all_gladiators.size(): " + str(all_gladiators.size()))
+	#print("len(_players): " + str(len(_players)))
+	players_ready += 1
+	print("all_gladiators.size(): " + str(all_gladiators.size()))
+	if all_gladiators.size() == len(_players):# >= NetworkManager_.max_players + 1:
 		
 		#await get_tree().create_timer(2).timeout
 		var countdown = 1
@@ -700,7 +724,11 @@ func _store_gladiator(peer_id: int, data: Dictionary):
 @rpc("authority")
 func _start_game():
 	print("All gladiators submitted! Starting game...")
+	players_ready_list = []
 	get_tree().change_scene_to_file("res://main.tscn")
+
+func erase_all_data():
+	all_gladiators = {}
 
 func _assign_authority():
 	if multiplayer.is_server():
@@ -710,3 +738,19 @@ func _assign_authority():
 		print("✅ Authority set to:", get_multiplayer_authority())
 	else:
 		print("ℹ️ Client does not assign authority")
+
+func kill_peer(id: int):
+	emit_signal("killed_by_server_signal", id)
+	
+@rpc("any_peer", "call_local")
+func reroll_cards_new_round(_active_players: Array):
+	active_players = _active_players
+	rpc("reroll_cards_new_round_send_signal", active_players)
+	
+@rpc("authority", "call_local")
+func reroll_cards_new_round_send_signal(active_players: Array):
+	print("Emitting signal reroll_cards_new_round, active_players = " + str(active_players))
+	emit_signal("reroll_cards_new_round_signal", active_players)
+	
+	
+	

@@ -22,11 +22,19 @@ var inventory_slot1: Dictionary
 var inventory_slot2: Dictionary
 var inventory_slot3: Dictionary
 var inventory_slot4: Dictionary
+@export var players_ready: int = 0
 
 @onready var chat_log = $ChatPanel/ChatScroll/ChatLog
 @onready var chat_input = $HBoxContainer/ChatInput
 @onready var send_button = $HBoxContainer/SendButton
 @onready var chat_scroll = $ChatPanel/ChatScroll
+
+@onready var players_ready_label = $StartGameContainer/PlayersReadyLabel
+#@onready var start_game_button = $StartGameContainer/StartGameLabel
+
+@onready var time = 0
+var sec = 0
+var prev_sec = 0
 
 var no_wep = {"hands": 1,
 			"min_dmg": 1, 
@@ -56,15 +64,18 @@ var remaining_points := 0
 
 @onready var remaining_label = $RemainingLabel
 @onready var confirm_button = $ConfirmButton
-@onready var player_life = 2000
+@onready var player_life = 500
+
+
 
 func _ready():
 	get_node("VBoxContainer/Human").pressed.connect(func(): on_race_selected("Human"))
 	get_node("VBoxContainer/Elf").pressed.connect(func(): on_race_selected("Elf"))
 	get_node("VBoxContainer/Orc").pressed.connect(func(): on_race_selected("Orc"))
 	get_node("VBoxContainer/Troll").pressed.connect(func(): on_race_selected("Troll"))
-
-
+	
+	GameState_.connect("broadcast_players_ready_signal", Callable(self, "_on_players_ready_received"))
+	
 	$GridContainer.visible = false
 	$RemainingLabel.visible = false
 	$ConfirmButton.visible = false
@@ -86,7 +97,19 @@ func _ready():
 	
 	send_button.pressed.connect(_on_send_pressed)
 	chat_input.text_submitted.connect(_on_send_pressed)
+	players_ready_label.text = str(players_ready) + "/" + str(len(multiplayer.get_peers())+1) + " ready"
 	
+func _process(delta: float):
+	time += delta
+	prev_sec = sec
+	sec = int(time)
+	if sec != prev_sec:
+		#print(time)
+		#_update_player_list()
+		#players_ready_label.text = str(players_ready) + "/" + str(len(multiplayer.get_peers())+1) + " ready"
+		if multiplayer.is_server(): print("server - players ready: " + str(players_ready))
+		if !multiplayer.is_server(): print("client - players ready: " + str(players_ready))
+
 
 func on_race_selected(race: String):
 	var color = player_colors[multiplayer.get_unique_id()]
@@ -233,7 +256,7 @@ func _initialize_attributes():
 		"quickness": 81.0,
 		"crit_rating": 10.0,
 		"avoidance": 31.0,
-		"health": 1.0,
+		"health": 10.0,
 		"resilience": 1.0,
 		"endurance": 100.0,
 		"sword_mastery": 40.0,
@@ -312,7 +335,15 @@ func _update_ui():
 			final_label.text = str(final)
 		#value_label.text = str(attributes[attr])
 	remaining_label.text = "Remaining: %d" % remaining_points
-
+	
+func _on_players_ready_received(_players_ready):
+	if multiplayer.is_server(): print("server: " + str(_players_ready))
+	else: print("client: " + str(_players_ready))
+	players_ready = _players_ready
+	players_ready_label.text = str(players_ready) + "/" + str(len(multiplayer.get_peers())+1) + " ready"
+	
+	
+#@rpc("any_peer")
 func _on_confirm():
 	#print("✅ Client connected with ID:", multiplayer.get_unique_id())
 	#print("❓ Is server:", multiplayer.is_server())
@@ -321,6 +352,14 @@ func _on_confirm():
 		print("Distribute all points before continuing.")
 		return
 	# Store or emit
+	if multiplayer.is_server():
+		GameState_.client_send_ready_to_host(multiplayer.get_unique_id())
+	else:
+		GameState_.rpc_id(1, "client_send_ready_to_host", multiplayer.get_unique_id())
+	#players_ready += 1
+	#print(multiplayer.get_peers())
+	#players_ready_label.text = str(players_ready) + "/" + str(len(multiplayer.get_peers())+1) + " ready"
+	
 	var final_attributes = apply_race_modifiers(GameState_.selected_race).duplicate()
 	
 	var color = player_colors[multiplayer.get_unique_id()]
@@ -382,6 +421,7 @@ func _on_confirm():
 		GameState_.submit_gladiator(gladiator)
 		
 	#GameState_.gladiator_attributes = final_attributes.duplicate()
+	confirm_button.disabled = true
 	emit_signal("confirmed", attributes)
 	
 	#get_tree().change_scene_to_file("res://Main.tscn")
@@ -413,4 +453,20 @@ func _bind_scroll_input(button: Button, attr: String, is_add_button: bool):
 	)
 	
 func go_back():
-	get_tree().change_scene_to_file("res://UI/RaceSelection.tscn")
+	if !multiplayer.is_server():
+		var color = player_colors[multiplayer.get_unique_id()]
+		var hex_color = color.to_html()
+		var formatted = "[color=%s]%s[/color][color=%s] disconnected![/color]" % [hex_color, GameState_.selected_name, Color.RED.to_html()]
+		rpc("broadcast_peer", multiplayer.get_unique_id(), formatted)
+		await get_tree().create_timer(1.0).timeout # 11
+		
+		multiplayer.multiplayer_peer.close()
+		get_tree().set_multiplayer(null)
+	else: 
+		var color = player_colors[multiplayer.get_unique_id()]
+		var hex_color = color.to_html()
+		var formatted = "[color=%s]%s[/color][color=%s] (host) disconnected![/color]" % [hex_color, GameState_.selected_name, Color.RED.to_html()]
+		rpc("broadcast_peer", multiplayer.get_unique_id(), formatted)
+		await get_tree().create_timer(1.0).timeout # 11
+
+	get_tree().change_scene_to_file("res://UI/MainMenu.tscn")

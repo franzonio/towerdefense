@@ -1,4 +1,4 @@
-[gd_scene load_steps=26 format=4 uid="uid://caiuxrar36pdn"]
+[gd_scene load_steps=25 format=4 uid="uid://caiuxrar36pdn"]
 
 [ext_resource type="Texture2D" uid="uid://betf4klbavfj5" path="res://Assets/MapAssets/TX/TX Tileset Stone Ground.png" id="1_3bhhl"]
 [ext_resource type="Script" uid="uid://ddffo2pk1p66v" path="res://Main.gd" id="1_4c57u"]
@@ -7,7 +7,6 @@
 [ext_resource type="Script" uid="uid://cs4ijuksemqna" path="res://Camera2D.gd" id="3_84ssy"]
 [ext_resource type="Texture2D" uid="uid://d0i5jnkv7y03e" path="res://Assets/MapAssets/TX/TX Props.png" id="3_272bh"]
 [ext_resource type="Texture2D" uid="uid://cpeyca83eadit" path="res://Assets/MapAssets/TX/TX Plant.png" id="4_5vw27"]
-[ext_resource type="PackedScene" uid="uid://creeknovnevmu" path="res://UI/PauseMenu.tscn" id="10_efxa6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_5vw27"]
 atlas = ExtResource("2_5vw27")
@@ -2065,8 +2064,6 @@ limit_top = -540
 limit_right = 960
 limit_bottom = 540
 script = ExtResource("3_84ssy")
-
-[node name="PauseMenu" parent="." instance=ExtResource("10_efxa6")]
 
 [node name="GladiatorSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://bh10l06wi8flh")

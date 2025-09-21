@@ -1,7 +1,7 @@
 extends Node2D
 
 var gladiator_scene = preload("res://Player/Gladiator.tscn")
-@onready var pause_menu = $PauseMenu
+#@onready var pause_menu = $PauseMenu
 
 var weapon_dmg_min# := 3
 var weapon_dmg_max# := 5
@@ -43,13 +43,6 @@ var seconds_to_live #:= endurance/3.0
 @onready var meeting_points = $MeetingPoints.get_children()
 
 var round_manager_scene := preload("res://Scenes/RoundManager.tscn")
-
-func _unhandled_input(event):
-	if event.is_action_pressed("ui_cancel"):  # ESC by default
-		if pause_menu.visible:
-			pause_menu.hide_menu()
-		else:
-			pause_menu.show_menu()
 
 func _ready():
 	GameState_.spawn_points["left"] = [
