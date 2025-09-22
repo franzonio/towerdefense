@@ -98,8 +98,6 @@ func _on_select_host_pressed():
 	
 
 func _on_host_pressed():
-	#print("_on_host_pressed")
-	max_players = 3
 	NetworkManager_.host_game(max_players)
 	pre_join_or_host_menu.visible = false
 	host_container.visible = false
@@ -141,9 +139,11 @@ func _on_peer_disconnected(id: int):
 
 @rpc("any_peer", "call_local")
 func _update_player_list():
-	print("players: " + str(players))
+	#print("players: " + str(players))
+	#print("player_list: " + str(player_list))
 	player_list.clear()
 	for id in players:
+		if id == 1: continue
 		#print(players[id])
 		player_list.add_item(players[id])
 		#print(players[id])

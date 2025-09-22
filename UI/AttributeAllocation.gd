@@ -28,6 +28,7 @@ var inventory_slot4: Dictionary
 @onready var chat_input = $HBoxContainer/ChatInput
 @onready var send_button = $HBoxContainer/SendButton
 @onready var chat_scroll = $ChatPanel/ChatScroll
+@onready var attribute_container = $GridContainer
 
 @onready var players_ready_label = $StartGameContainer/PlayersReadyLabel
 #@onready var start_game_button = $StartGameContainer/StartGameLabel
@@ -35,6 +36,7 @@ var inventory_slot4: Dictionary
 @onready var time = 0
 var sec = 0
 var prev_sec = 0
+var confirmed_pressed = false
 
 var no_wep = {"hands": 1,
 			"min_dmg": 1, 
@@ -73,7 +75,7 @@ func _ready():
 	get_node("VBoxContainer/Elf").pressed.connect(func(): on_race_selected("Elf"))
 	get_node("VBoxContainer/Orc").pressed.connect(func(): on_race_selected("Orc"))
 	get_node("VBoxContainer/Troll").pressed.connect(func(): on_race_selected("Troll"))
-	
+
 	GameState_.connect("broadcast_players_ready_signal", Callable(self, "_on_players_ready_received"))
 	
 	$GridContainer.visible = false
@@ -97,7 +99,14 @@ func _ready():
 	
 	send_button.pressed.connect(_on_send_pressed)
 	chat_input.text_submitted.connect(_on_send_pressed)
-	players_ready_label.text = str(players_ready) + "/" + str(len(multiplayer.get_peers())+1) + " ready"
+	players_ready_label.text = str(players_ready) + "/" + str(len(multiplayer.get_peers())) + " ready"
+	
+	if multiplayer.is_server(): 
+		await get_tree().process_frame
+		remaining_points = 0
+		on_race_selected("Human")
+		await get_tree().process_frame
+		_on_confirm()#confirm_button.button_pressed == true
 	
 func _process(delta: float):
 	time += delta
@@ -115,7 +124,7 @@ func on_race_selected(race: String):
 	var color = player_colors[multiplayer.get_unique_id()]
 	var hex_color = color.to_html()
 	var formatted = "[color=%s]%s[/color]" % [hex_color, GameState_.selected_name]
-	rpc("broadcast_peer", multiplayer.get_unique_id(), formatted + " selected " + race.to_upper() + "!")
+	if !multiplayer.is_server(): rpc("broadcast_peer", multiplayer.get_unique_id(), formatted + " selected " + race.to_upper() + "!")
 	
 	print("Selected race: ", race)
 	GameState_.selected_race = race
@@ -289,14 +298,14 @@ func _setup_buttons():
 
 
 func _increase(attr):
-	if remaining_points <= 0:
+	if remaining_points <= 0 or confirmed_pressed:
 		return
 	attributes[attr] += 1
 	remaining_points -= 1
 	_update_ui()
 
 func _decrease(attr):
-	if attributes[attr] <= 1:
+	if attributes[attr] <= 1 or confirmed_pressed:
 		return
 	attributes[attr] -= 1
 	remaining_points += 1
@@ -340,7 +349,7 @@ func _on_players_ready_received(_players_ready):
 	if multiplayer.is_server(): print("server: " + str(_players_ready))
 	else: print("client: " + str(_players_ready))
 	players_ready = _players_ready
-	players_ready_label.text = str(players_ready) + "/" + str(len(multiplayer.get_peers())+1) + " ready"
+	players_ready_label.text = str(players_ready) + "/" + str(len(multiplayer.get_peers())) + " ready"
 	
 	
 #@rpc("any_peer")
@@ -365,7 +374,7 @@ func _on_confirm():
 	var color = player_colors[multiplayer.get_unique_id()]
 	var hex_color = color.to_html()
 	var formatted = "[color=%s]%s[/color] is ready!" % [hex_color, GameState_.selected_name]
-	rpc("broadcast_peer", multiplayer.get_unique_id(), formatted)
+	if !multiplayer.is_server(): rpc("broadcast_peer", multiplayer.get_unique_id(), formatted)
 	# Prepare your data
 	var race_weights = {
 		"Human": 12,
@@ -412,15 +421,21 @@ func _on_confirm():
 			"slot4": {}
 		}
 	}
+	
 	if multiplayer.is_server():
-		print("✅ Server created gladiator")
 		GameState_._submit_gladiator_remote.rpc(gladiator)
-			
-	if !multiplayer.is_server():
-		print("✅ Client created gladiator")
+	elif !multiplayer.is_server():
 		GameState_.submit_gladiator(gladiator)
 		
 	#GameState_.gladiator_attributes = final_attributes.duplicate()
+	
+	for attr in attributes.keys():
+		var add = $GridContainer.find_child(attr.capitalize() + "_Add", true, false)
+		var sub = $GridContainer.find_child(attr.capitalize() + "_Sub", true, false)
+		add.disabled = true
+		sub.disabled = true
+	
+	confirmed_pressed = true
 	confirm_button.disabled = true
 	emit_signal("confirmed", attributes)
 	
@@ -438,6 +453,7 @@ func apply_race_modifiers(race: String) -> Dictionary:
 
 
 func _bind_scroll_input(button: Button, attr: String, is_add_button: bool):
+	if confirmed_pressed: return
 	button.gui_input.connect(func(event):
 		if event is InputEventMouseButton and event.pressed:
 			if event.button_index == MOUSE_BUTTON_WHEEL_UP:

@@ -326,7 +326,7 @@ func client_send_ready_to_host(id: int):
 
 @rpc("any_peer", "call_local")
 func broadcast_players_ready(id: int):# -> void:
-	if id in players_ready_list: return
+	if id in players_ready_list or id == 1: return
 	else: 
 		players_ready_list.append(id)
 		players_ready = len(players_ready_list)
@@ -709,7 +709,7 @@ func _store_gladiator(peer_id: int, data: Dictionary):
 	#print("all_gladiators.size(): " + str(all_gladiators.size()))
 	#print("len(_players): " + str(len(_players)))
 	players_ready += 1
-	print("all_gladiators.size(): " + str(all_gladiators.size()))
+	print("all_gladiators.size(): " + str(all_gladiators.size()) + " | _players: " + str(_players))
 	if all_gladiators.size() == len(_players):# >= NetworkManager_.max_players + 1:
 		
 		#await get_tree().create_timer(2).timeout

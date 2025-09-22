@@ -703,6 +703,7 @@ func clear_shop_grid():
 
 
 func roll_cards():
+	if multiplayer.is_server(): return
 	#print("\n" + str(multiplayer.get_unique_id()) + "🃏reroll_cards: " + str(card_stock))
 	
 	all_cards = get_all_cards()
@@ -730,6 +731,7 @@ func _on_reroll_cards_new_round_signal(active_players: Array):
 				reroll_cards()
 
 func reroll_cards():
+	if multiplayer.is_server(): return
 	await clear_shop_grid()
 	roll_cards()
 	
