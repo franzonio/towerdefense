@@ -67,7 +67,9 @@ layout_mode = 2
 placeholder_text = "Your name..."
 alignment = 1
 max_length = 12
+keep_editing_on_text_submit = true
 expand_to_text_length = true
+selecting_enabled = false
 
 [node name="SelectHostJoinContainer" type="HBoxContainer" parent="VBoxContainer/PreJoinOrHostMenu"]
 layout_mode = 2
