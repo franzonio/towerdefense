@@ -703,7 +703,7 @@ func clear_shop_grid():
 
 
 func roll_cards():
-	if multiplayer.is_server(): return
+	#if multiplayer.is_server(): return
 	#print("\n" + str(multiplayer.get_unique_id()) + "🃏reroll_cards: " + str(card_stock))
 	
 	all_cards = get_all_cards()
@@ -723,15 +723,15 @@ func roll_cards():
 		#await get_tree().create_timer(0.5).timeout
 
 func _on_reroll_cards_new_round_signal(active_players: Array):
-	if !multiplayer.is_server():
-		print("Received active players from host: " + str(active_players))
-		await get_tree().process_frame 
-		for player in active_players:
-			if multiplayer.get_unique_id() == player:
-				reroll_cards()
+	#if !multiplayer.is_server():
+	#print("Received active players from host: " + str(active_players))
+	await get_tree().process_frame 
+	for player in active_players:
+		if multiplayer.get_unique_id() == player:
+			reroll_cards()
 
 func reroll_cards():
-	if multiplayer.is_server(): return
+	#if multiplayer.is_server(): return
 	await clear_shop_grid()
 	roll_cards()
 	
@@ -852,7 +852,7 @@ func populate_hud():
 
 	for i in range(min(peer_ids.size(), 8)):  # Clamp to available HUD slots
 		var peer_id = peer_ids[i]
-		if peer_id == 1: continue
+		#if peer_id == 1: continue
 		var gladiator_data = all_gladiators[peer_id]
 		var container_name = "Player%d" % (i + 1)
 
@@ -974,6 +974,7 @@ func _on_yes_button_up() -> void:
 			
 		await get_tree().create_timer(1.0).timeout # 11
 		
+		NetworkManager_.leave_game()
 		multiplayer.multiplayer_peer.close()
 		get_tree().set_multiplayer(null)
 		get_tree().change_scene_to_file("res://UI/MainMenu.tscn")
@@ -988,7 +989,7 @@ func _on_yes_button_up() -> void:
 			
 		GameState_.erase_all_data()
 		
-		
+		NetworkManager_.leave_game()
 		multiplayer.multiplayer_peer.close()
 		get_tree().set_multiplayer(null)
 		get_tree().change_scene_to_file("res://UI/MainMenu.tscn")

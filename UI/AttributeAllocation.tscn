@@ -1,6 +1,11 @@
-[gd_scene load_steps=4 format=3 uid="uid://bt21imgkgrpjm"]
+[gd_scene load_steps=5 format=3 uid="uid://bt21imgkgrpjm"]
 
 [ext_resource type="Script" uid="uid://bfpo3nty4nyn7" path="res://UI/AttributeAllocation.gd" id="1_tvy0e"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_tvy0e"]
+properties/0/path = NodePath(".:total_peers")
+properties/0/spawn = true
+properties/0/replication_mode = 2
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ers0q"]
 load_path = "res://.godot/imported/battlefield_grass.png-e5cddb3c47484e286f5272d6124ff1c1.ctex"
@@ -19,6 +24,9 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_tvy0e")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_tvy0e")
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1

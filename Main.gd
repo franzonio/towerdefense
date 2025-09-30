@@ -45,6 +45,7 @@ var seconds_to_live #:= endurance/3.0
 var round_manager_scene := preload("res://Scenes/RoundManager.tscn")
 
 func _ready():
+	
 	GameState_.spawn_points["left"] = [
 		$SpawnPoints/SpawnPoint0.position,
 		$SpawnPoints/SpawnPoint1.position,

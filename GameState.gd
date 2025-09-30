@@ -307,6 +307,7 @@ func get_player_colors(id: int) -> void:
 	rpc_id(id, "send_player_colors_to_peer", id, player_colors)
 	
 func assign_peer_colors(players): 
+	print("In GameState | players: " + str(players))
 	_players = players
 	var shuffled_colors = peer_colors.duplicate()
 	shuffled_colors.shuffle()
@@ -318,7 +319,7 @@ func assign_peer_colors(players):
 			i += 1
 		else:
 			push_error("Not enough colors for all players!")
-	#print(player_colors)
+	print(player_colors)
 	
 @rpc("any_peer", "call_local")
 func client_send_ready_to_host(id: int):
@@ -326,7 +327,7 @@ func client_send_ready_to_host(id: int):
 
 @rpc("any_peer", "call_local")
 func broadcast_players_ready(id: int):# -> void:
-	if id in players_ready_list or id == 1: return
+	if id in players_ready_list: return# or id == 1: return
 	else: 
 		players_ready_list.append(id)
 		players_ready = len(players_ready_list)
@@ -350,7 +351,7 @@ func add_to_peer_log(id: int, message: String) -> void:
 @rpc("any_peer", "call_local")
 func add_to_log(_id: int, message: String) -> void:
 	#print("asdasdasd: " + str(all_gladiators[id]))
-	rpc("broadcast_log", message)
+	rpc("broadcast_log", str(_id) + " " + message)
 
 @rpc("any_peer", "call_local")
 func broadcast_countdown(time_left: int):
@@ -709,8 +710,14 @@ func _store_gladiator(peer_id: int, data: Dictionary):
 	#print("all_gladiators.size(): " + str(all_gladiators.size()))
 	#print("len(_players): " + str(len(_players)))
 	players_ready += 1
-	print("all_gladiators.size(): " + str(all_gladiators.size()) + " | _players: " + str(_players))
-	if all_gladiators.size() == len(_players):# >= NetworkManager_.max_players + 1:
+	
+	var total_peers = 0
+	#if multiplayer.is_server(): 
+	for i in multiplayer.get_peers():
+		if i == 0: continue
+		total_peers += 1
+	print("all_gladiators.size(): " + str(all_gladiators.size()) + " | multiplayer.get_peers(): " + str(multiplayer.get_peers()))
+	if all_gladiators.size() == total_peers+1:# and len(multiplayer.get_peers()) > 1:  # >= NetworkManager_.max_players + 1:
 		
 		#await get_tree().create_timer(2).timeout
 		var countdown = 1
@@ -725,7 +732,7 @@ func _store_gladiator(peer_id: int, data: Dictionary):
 func _start_game():
 	print("All gladiators submitted! Starting game...")
 	players_ready_list = []
-	get_tree().change_scene_to_file("res://main.tscn")
+	get_tree().change_scene_to_file.bind("res://main.tscn").call_deferred()
 
 func erase_all_data():
 	all_gladiators = {}

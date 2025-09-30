@@ -23,6 +23,7 @@ var inventory_slot2: Dictionary
 var inventory_slot3: Dictionary
 var inventory_slot4: Dictionary
 @export var players_ready: int = 0
+@export var total_peers: int = 0
 
 @onready var chat_log = $ChatPanel/ChatScroll/ChatLog
 @onready var chat_input = $HBoxContainer/ChatInput
@@ -71,6 +72,8 @@ var remaining_points := 0
 
 
 func _ready():
+	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
+	
 	get_node("VBoxContainer/Human").pressed.connect(func(): on_race_selected("Human"))
 	get_node("VBoxContainer/Elf").pressed.connect(func(): on_race_selected("Elf"))
 	get_node("VBoxContainer/Orc").pressed.connect(func(): on_race_selected("Orc"))
@@ -92,21 +95,34 @@ func _ready():
 	GameState_.connect("send_player_colors_to_peer_signal", Callable(self, "_on_colors_received"))
 	GameState_.connect("broadcast_log_signal", Callable(self, "_on_log_received"))
 	
+	
 	if multiplayer.is_server():
 		GameState_.get_player_colors(multiplayer.get_unique_id())
 	else:
 		GameState_.rpc_id(1, "get_player_colors", multiplayer.get_unique_id())
 	
+	#await get_tree().create_timer(1).timeout
+	#print("colors: " + str(player_colors))
+	
+	total_peers = 0
+	#if multiplayer.is_server(): 
+	for i in multiplayer.get_peers():
+		if i == 0: continue
+		total_peers += 1
+		#total_players = len(multiplayer.get_peers())
+	
 	send_button.pressed.connect(_on_send_pressed)
 	chat_input.text_submitted.connect(_on_send_pressed)
-	players_ready_label.text = str(players_ready) + "/" + str(len(multiplayer.get_peers())) + " ready"
+	players_ready_label.text = str(players_ready) + "/" + str(total_peers+1) + " ready"
 	
+	'''
 	if multiplayer.is_server(): 
 		await get_tree().process_frame
 		remaining_points = 0
 		on_race_selected("Human")
 		await get_tree().process_frame
 		_on_confirm()#confirm_button.button_pressed == true
+	'''
 	
 func _process(delta: float):
 	time += delta
@@ -115,16 +131,31 @@ func _process(delta: float):
 	if sec != prev_sec:
 		#print(time)
 		#_update_player_list()
-		#players_ready_label.text = str(players_ready) + "/" + str(len(multiplayer.get_peers())+1) + " ready"
-		if multiplayer.is_server(): print("server - players ready: " + str(players_ready))
-		if !multiplayer.is_server(): print("client - players ready: " + str(players_ready))
+		print("multiplayer.get_peers():" + str(multiplayer.get_peers()))
+		if multiplayer.is_server(): 
+			#print("server peer id: " + str(multiplayer.get_unique_id()))
+			total_peers = 0
+			#if multiplayer.is_server(): 
+			for i in multiplayer.get_peers():
+				if i == 0: continue
+				total_peers += 1
+		players_ready_label.text = str(players_ready) + "/" + str(total_peers+1) + " ready"
+		#if multiplayer.is_server(): print("server - players ready: " + str(players_ready) + " | len(multiplayer.get_peers()): " + str(len(multiplayer.get_peers())))
+		#if !multiplayer.is_server(): print("client - players ready: " + str(players_ready) + " | len(multiplayer.get_peers()): " + str(len(multiplayer.get_peers())))
 
+
+#@rpc("any_peer")
+func _on_peer_disconnected(id: int):
+	print("Player left: ", id)
+	multiplayer.disconnect_peer(id)
 
 func on_race_selected(race: String):
+	#print("multiplayer.get_unique_id(): " + str(multiplayer.get_unique_id()))
 	var color = player_colors[multiplayer.get_unique_id()]
 	var hex_color = color.to_html()
 	var formatted = "[color=%s]%s[/color]" % [hex_color, GameState_.selected_name]
-	if !multiplayer.is_server(): rpc("broadcast_peer", multiplayer.get_unique_id(), formatted + " selected " + race.to_upper() + "!")
+	rpc("broadcast_peer", multiplayer.get_unique_id(), formatted + " selected " + race.to_upper() + "!")
+	#if !multiplayer.is_server(): rpc("broadcast_peer", multiplayer.get_unique_id(), formatted + " selected " + race.to_upper() + "!")
 	
 	print("Selected race: ", race)
 	GameState_.selected_race = race
@@ -144,6 +175,7 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data
 		player_gladiator_data = _player_gladiator_data
 	
 func _on_send_pressed(submitted_text = ""):
+	print("_on_send_pressed")
 	var msg = chat_input.text.strip_edges()
 	if msg.length() == 0 or msg.length() > MAX_LENGTH:
 		return
@@ -224,9 +256,11 @@ func _add_message_peer(_sender_id, message: String):
 @rpc("any_peer", "call_local")
 func broadcast_message(sender_id, sender_name: String, timestamp: String, message: String):
 	_add_message(sender_id, sender_name, timestamp, message)
-
+	#Steam.run_callbacks()
+	print("broadcast_message")
 
 func _add_message(sender_id, sender_name: String, timestamp: String, message: String):
+	print("_add_message")
 	#var gladiator = all_gladiators.get(sender_id)
 	var color = player_colors[sender_id]#Color.WHITE#gladiator.get("color", Color.WHITE)
 	var hex_color = color.to_html()
@@ -349,7 +383,7 @@ func _on_players_ready_received(_players_ready):
 	if multiplayer.is_server(): print("server: " + str(_players_ready))
 	else: print("client: " + str(_players_ready))
 	players_ready = _players_ready
-	players_ready_label.text = str(players_ready) + "/" + str(len(multiplayer.get_peers())) + " ready"
+	players_ready_label.text = str(players_ready) + "/" + str(total_peers+1) + " ready"
 	
 	
 #@rpc("any_peer")
@@ -476,6 +510,7 @@ func go_back():
 		rpc("broadcast_peer", multiplayer.get_unique_id(), formatted)
 		await get_tree().create_timer(1.0).timeout # 11
 		
+		NetworkManager_.leave_game()
 		multiplayer.multiplayer_peer.close()
 		get_tree().set_multiplayer(null)
 	else: 
@@ -484,5 +519,8 @@ func go_back():
 		var formatted = "[color=%s]%s[/color][color=%s] (host) disconnected![/color]" % [hex_color, GameState_.selected_name, Color.RED.to_html()]
 		rpc("broadcast_peer", multiplayer.get_unique_id(), formatted)
 		await get_tree().create_timer(1.0).timeout # 11
+		
+		NetworkManager_.leave_game()
+		multiplayer.multiplayer_peer.close()
 
 	get_tree().change_scene_to_file("res://UI/MainMenu.tscn")
