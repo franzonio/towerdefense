@@ -12,6 +12,7 @@ var equipment_card_scenes = {
 
 @onready var inventory_popup := $InventoryPopup
 @onready var equipment_popup := $EquipmentPopup
+@onready var craft_bench_popup := $CraftbenchPopup
 @onready var label_round = $MarginContainer/HBoxContainer/Label_Round
 @onready var label_gold = $MarginContainer/HBoxContainer/Label_Gold
 @onready var label_xp = $MarginContainer/HBoxContainer/Label_Experience
@@ -92,6 +93,11 @@ var equipment_button_parent_name
 @onready var shield_mastery_panel = $AttributePanel/VBoxContainer/ShieldMastery
 @onready var unarmed_mastery_panel = $AttributePanel/VBoxContainer/UnarmedMastery
 
+@onready var chaos_orb = $CraftingContainer/CraftingMats/ChaosOrb
+@onready var vaal_orb = $CraftingContainer/CraftingMats/VaalOrb
+@onready var crafting_bench = $CraftingContainer/CraftingBench
+@onready var crafting_container = $CraftingContainer
+
 var physique_limits = {"Low": 70, "Good": 140, "Excellent": 210, "Outstanding": 280, "Legendary": 350}
 var agility_limits = {"Low": 60, "Good": 120, "Excellent": 180, "Outstanding": 240, "Legendary": 300}
 var weight_limits = {"Weightless": 10, "Lightweight": 18, "Midweight": 28, "Heavyweight": 36, "Massive": 48}
@@ -106,6 +112,7 @@ var equipment_data
 signal concede_threshold_changed(value: int)
 signal stance_changed(value: int)
 signal attack_changed(value: int)
+var craft_active = ""
 
 @onready var strength_card = preload("res://ShopCards/AttributeCards/StrengthCard.tscn")
 @onready var health_card = preload("res://ShopCards/AttributeCards/HealthCard.tscn")
@@ -163,6 +170,12 @@ func _ready():
 	GameState_.connect("send_gladiator_data_to_peer_signal", Callable(self, "_on_send_gladiator_data_to_peer_signal"))
 	GameState_.connect("broadcast_log_signal", Callable(self, "_on_log_received"))	
 	GameState_.connect("reroll_cards_new_round_signal", Callable(self, "_on_reroll_cards_new_round_signal"))	
+	
+	GameState_.connect("add_item_to_inventory", Callable(self, "_on_add_item_to_inventory"))
+	GameState_.connect("remove_item_from_inventory", Callable(self, "_on_remove_item_from_inventory"))
+	GameState_.connect("add_item_to_equipment", Callable(self, "_on_add_item_to_equipment"))
+	GameState_.connect("remove_item_from_equipment", Callable(self, "_on_remove_item_from_equipment"))
+	
 
 	send_button.pressed.connect(_on_send_pressed)
 	chat_input.text_submitted.connect(_on_send_pressed)
@@ -178,6 +191,10 @@ func _ready():
 	equipment_popup.add_item("Unequip", 0)
 	equipment_popup.add_item("Sell", 1)
 	equipment_popup.id_pressed.connect(_on_equipment_popup_pressed)
+	
+	craft_bench_popup.clear()
+	craft_bench_popup.add_item("Move to inventory", 0)
+	craft_bench_popup.id_pressed.connect(_on_craft_bench_popup_pressed)
 
 	shop.visible = false
 	equipment_panel.visible = false
@@ -374,15 +391,82 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 	await get_tree().process_frame
 	chat_scroll.scroll_vertical = chat_scroll.get_v_scroll_bar().max_value
 
+func _on_add_item_to_equipment(id, item_dict, category):
+	if multiplayer.get_unique_id() != id: return
+	
+	var card_scene_map := {}
+	for card in all_cards:
+		card_scene_map[card[1]] = card[0]  # card[1] is name, card[0] is scene
+	
+	var item_name = item_dict.keys()[0]
 
+	# Find corresponding scene
+	if card_scene_map.has(item_name):
+		var card_instance = card_scene_map[item_name].instantiate()
+		
+		var item_slot = $EquipmentPanel.find_child(category.capitalize()+"Slot", true, false)
+		
+		card_instance.button_parent.connect(_on_equipment_pressed)
+		card_instance.pressed.connect(_on_equipment_item_pressed.bind(item_name, category))
+		card_instance.set_multiplayer_authority(multiplayer.get_unique_id())
+		item_slot.add_child(card_instance)
+		card_instance.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+		card_instance.custom_minimum_size = item_slot.size
+		
+		#print("category: " + category)
+		#print(item_slot)
+		#print(item_slot.get_child(0))
+	else:
+		print("⚠️ No matching scene for item:", item_name)
 
+func _on_add_item_to_inventory(id, item_dict, slot_name):
+	if id != multiplayer.get_unique_id():
+		return
+	var card_scene_map := {}
+	for card in all_cards:
+		card_scene_map[card[1]] = card[0]  # card[1] is name, card[0] is scene
+	
+	var item_name = item_dict.keys()[0]
+
+	# Find corresponding scene
+	if card_scene_map.has(item_name):
+		var card_instance = card_scene_map[item_name].instantiate()
+		card_instance.pressed.connect(_on_inventory_item_pressed.bind(item_name, slot_name))
+		card_instance.set_multiplayer_authority(multiplayer.get_unique_id())  # Optional, for sync
+		$Inventory/InventoryGridContainer.find_child(slot_name, true, false).add_child(card_instance)
+		#print("slot_name: " + slot_name)
+		#print($Inventory/InventoryGridContainer.find_child(slot_name, true, false))
+		#print($Inventory/InventoryGridContainer.find_child(slot_name, true, false).get_child(0))
+	else:
+		print("⚠️ No matching scene for item:", item_name)
+
+func _on_remove_item_from_equipment(id, item_dict, category):
+	if multiplayer.get_unique_id() != id: return
+	var item_slot = $EquipmentPanel.find_child(category.capitalize()+"Slot", true, false)
+	
+	#print("category: " + category)
+	#print(item_slot)
+	#print(item_slot.get_child(0))
+	item_slot.get_child(0).queue_free()
+
+func _on_remove_item_from_inventory(id, item_dict, slot_name):
+	#print("asd")
+	if multiplayer.get_unique_id() != id: return
+	#print("slot_name: " + slot_name)
+	#print($Inventory/InventoryGridContainer.find_child(slot_name, true, false))
+	#print($Inventory/InventoryGridContainer.find_child(slot_name, true, false).get_child(0))
+	$Inventory/InventoryGridContainer.find_child(slot_name, true, false).get_child(0).queue_free()
+		#print(child)
+		#child.
 	
 func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
 	all_gladiators = _all_gladiators
 	if peer_id == multiplayer.get_unique_id():
 		player_gladiator_data = all_gladiators[peer_id]
-		update_inventory_ui(peer_id)
-		update_equipment_ui()
+		print(player_gladiator_data.get("head", ""))
+		update_craft_ui()
+		#update_inventory_ui(peer_id)
+		#update_equipment_ui()
 		update_attribute_ui()
 		update_concede_ui()
 		update_stance_ui()
@@ -390,6 +474,12 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data
 		update_gold(all_gladiators[peer_id]["gold"])
 		update_experience(all_gladiators[peer_id]["exp"])
 	populate_hud()
+	
+func update_craft_ui():
+	var crafting_mats = all_gladiators[multiplayer.get_unique_id()].get("crafting_mats", {})
+	
+	chaos_orb.text = str(crafting_mats["chaos_orb"])
+	vaal_orb.text = str(crafting_mats["vaal_orb"])
 	
 func update_stance_ui():
 	var previous_index = stance_menu.get_selected_id()
@@ -530,6 +620,7 @@ func update_equipment_ui():
 			
 func _on_equipment_pressed(parent_name: String):
 	equipment_button_parent_name = parent_name
+	
 	#print("_on_equipment_pressed: " + str(parent_name))
 	
 func update_inventory_ui(glad_id: int):
@@ -618,9 +709,9 @@ func _on_equipment_popup_pressed(id: int):
 				return
 			
 			if multiplayer.is_server():
-				GameState_.unequip_item(multiplayer.get_unique_id(), selected_item_name, equipment_button_parent_name)
+				GameState_.unequip_item(multiplayer.get_unique_id(), selected_item_name, equipment_button_parent_name, selected_slot)
 			else:
-				GameState_.rpc_id(1, "unequip_item", multiplayer.get_unique_id(), selected_item_name, equipment_button_parent_name)
+				GameState_.rpc_id(1, "unequip_item", multiplayer.get_unique_id(), selected_item_name, equipment_button_parent_name, selected_slot)
 			
 			
 			await get_tree().create_timer(0.2).timeout
@@ -635,9 +726,9 @@ func _on_equipment_popup_pressed(id: int):
 				
 			#print("Sell from equipment not implemented yet")
 			if multiplayer.is_server():
-				GameState_.sell_from_equipment(multiplayer.get_unique_id(), selected_item_name, equipment_button_parent_name)
+				GameState_.sell_from_equipment(multiplayer.get_unique_id(), selected_item_name, equipment_button_parent_name, selected_slot)
 			else:
-				GameState_.rpc_id(1, "sell_from_equipment", multiplayer.get_unique_id(), selected_item_name, equipment_button_parent_name)
+				GameState_.rpc_id(1, "sell_from_equipment", multiplayer.get_unique_id(), selected_item_name, equipment_button_parent_name, selected_slot)
 
 func _on_inventory_popup_pressed(id: int):
 	match id:
@@ -652,22 +743,29 @@ func _on_inventory_popup_pressed(id: int):
 				return
 			
 			if multiplayer.is_server():
-				GameState_.equip_item(multiplayer.get_unique_id(), selected_item_name)
+				GameState_.equip_item(multiplayer.get_unique_id(), selected_item_name, selected_slot)
 			else:
-				GameState_.rpc_id(1, "equip_item", multiplayer.get_unique_id(), selected_item_name)
+				GameState_.rpc_id(1, "equip_item", multiplayer.get_unique_id(), selected_item_name, selected_slot)
 			
 			await get_tree().create_timer(0.2).timeout
 			
 		1:
 			#print("Sell requested for ", selected_item_name, " from ", selected_slot)
 			if multiplayer.is_server():
-				GameState_.sell_from_inventory(multiplayer.get_unique_id(), selected_item_name)
+				GameState_.sell_from_inventory(multiplayer.get_unique_id(), selected_item_name, selected_slot)
 			else:
-				GameState_.rpc_id(1, "sell_from_inventory", multiplayer.get_unique_id(), selected_item_name)
+				GameState_.rpc_id(1, "sell_from_inventory", multiplayer.get_unique_id(), selected_item_name, selected_slot)
 
 
-func _on_equipment_item_pressed(item_name: String):
+func _on_craft_bench_popup_pressed(id: int):
+	match id:
+		0: 1
+			
+	
+
+func _on_equipment_item_pressed(item_name: String, category):
 	# Store selected item info (you can make these class vars if needed)
+	selected_slot = category
 	selected_item_name = item_name
 
 	# Show popup near mouse
@@ -675,13 +773,28 @@ func _on_equipment_item_pressed(item_name: String):
 	equipment_popup.popup()
 
 func _on_inventory_item_pressed(item_name: String, slot_name: String):
-	# Store selected item info (you can make these class vars if needed)
+	#print(card_instance)
 	selected_item_name = item_name
 	selected_slot = slot_name
+	print("\nslot1: " + str(all_gladiators[multiplayer.get_unique_id()]["inventory"]["slot1"]))
+	print("slot2: " + str(all_gladiators[multiplayer.get_unique_id()]["inventory"]["slot2"]))
+	print("slot3: " + str(all_gladiators[multiplayer.get_unique_id()]["inventory"]["slot3"]))
+	print("slot4: " + str(all_gladiators[multiplayer.get_unique_id()]["inventory"]["slot4"]))
+	print("Pressed " + str(selected_slot))
 
 	# Show popup near mouse
 	inventory_popup.set_position(get_viewport().get_mouse_position())
 	inventory_popup.popup()
+	
+	if craft_active:
+		print("Requesting to use " + craft_active + " on " + selected_item_name)
+		
+		if multiplayer.is_server():
+			GameState_.use_craft_mat_on_item(multiplayer.get_unique_id(), craft_active, selected_item_name, selected_slot)
+		else:
+			GameState_.rpc_id(1, "use_craft_mat_on_item", multiplayer.get_unique_id(), craft_active, selected_item_name, selected_slot)
+			
+		craft_active = ""
 
 	
 func clear_shop_grid():
@@ -715,6 +828,7 @@ func roll_cards():
 		card_instance.set_multiplayer_authority(multiplayer.get_unique_id())
 		card_instance.modulate.a = 0
 		card_instance.scale = Vector2(0.8, 0.8)
+		#card_instance.unique_id = str(card_instance)
 		shop_grid.add_child(card_instance)
 		var tween := get_tree().create_tween()
 		tween.tween_property(card_instance, "modulate:a", 1.0, 0.3).set_delay(i * 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
@@ -818,7 +932,7 @@ func _on_countdown_updated(time_left: int):
 		
 		if time_left == 0:
 			reroll_start_of_intermission = 1
-			intermission = false
+			#intermission = false
 			time_passed = 0
 			await get_tree().create_timer(1.0).timeout
 			countdown_label.text = ""
@@ -999,3 +1113,22 @@ func _on_no_button_up() -> void:
 	options_button.visible = true
 	disconnect_button.visible = true
 	confirm_disconnect.visible = false
+
+func enable_craft_with_material(crafting_mat, toggled_on):
+	craft_active = crafting_mat
+'''	if toggled_on: 
+		print("Started crafting with " + crafting_mat)
+	else: 
+		print("Stopped crafting with " + crafting_mat)'''
+	
+
+func _on_chaos_orb_toggled(toggled_on: bool):
+	#print("Chaos orb active: " + str(toggled_on))
+	enable_craft_with_material("chaos_orb", toggled_on)
+	
+	for item in inventory_grid.get_children():
+		1#print(item)
+
+
+func _on_vaal_orb_toggled(toggled_on: bool) -> void:
+	pass # Replace with function body.

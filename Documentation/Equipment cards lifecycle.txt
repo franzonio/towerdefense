@@ -1,0 +1,29 @@
+roll item card
+	- item is instantiated and added as a scene
+
+
+buy item card
+	- item_dict is initialized and added to the first available slot in inventory key in all_gladiators dict
+	- item card scene is added based on item_name to that slot in inventory_grid
+	- write to item_dict which slot in inventory it was assigned
+	
+		
+craft item
+	- peer asks server to use craft_mat on item in inventory_grid 
+	- server performs the craft and updates item_dict in all_gladiators
+	- server sends data to HUD and emits_signal to card scene with item_dict_after_craft
+	- tooltip_text is updated with data in item_dict_after_craft
+		
+		
+equip item
+	- peer asks server to equip item based on selected_slot (inventory) 
+	- server takes item_dict from selected_slot
+	- server sets all_gladiators[id]["item"] = item_dict
+	- server emit_signal("remove_item_from_inventory", peer_id, item_dict, selected_slot)
+	- server emit_signal("add_item_to_equipment", peer_id, item_dict, category)
+	- server emit_signal("update_equipment_card", peer_id, all_gladiators[peer_id][category], category, equipment)
+	- server sends all_gladiators to peers
+	
+	
+unequip item
+	- 

@@ -420,7 +420,7 @@ func _on_confirm():
 	var gladiator = {
 		"color": Color.WHITE,
 		"name": GameState_.selected_name,
-		"gold": 100,
+		"gold": 1000,
 		"exp": 0,
 		"streak": 0,
 		"level": "1",
@@ -453,6 +453,11 @@ func _on_confirm():
 			"slot2": {},
 			"slot3": {},
 			"slot4": {}
+		},
+		
+		"crafting_mats": {
+			"chaos_orb": 100,
+			"vaal_orb": 100
 		}
 	}
 	

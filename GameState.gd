@@ -40,6 +40,13 @@ signal broadcast_players_ready_signal(players_ready: int)
 signal killed_by_server_signal(id: int)
 signal reroll_cards_new_round_signal(active_players)
 
+signal update_equipment_card(id, item_dict_to_craft, slot, item)
+signal add_item_to_inventory(id, item_dict, slot_name)
+signal remove_item_from_inventory(id, item_dict, slot_name)
+signal add_item_to_equipment(peer_id, item_dict, category)
+signal remove_item_from_equipment(peer_id, item_dict, category)
+
+
 var attr_cards_stock
 var all_cards_stock
 
@@ -141,7 +148,7 @@ func create_card_pool():
 		"resilience": 50,
 		"endurance": 100,
 		"sword_mastery": 100,
-		"axe_mastery": 10000,
+		"axe_mastery": 100,
 		"hammer_mastery": 100,
 		"dagger_mastery": 100,
 		"chain_mastery": 100,
@@ -186,7 +193,7 @@ func grant_exp_for_peer(id: int, amount: int, cost: int):
 		all_gladiators[id]["level"] = current_level
 		all_gladiators[id]["exp"] = current_exp
 		rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
-	else: add_to_log(id, "Not enough gold!")
+	else: add_to_peer_log(id, "Not enough gold!")
 
 @rpc("any_peer", "call_local")
 func grant_gold_for_peer(id: int, base_amount: int, opponent_id: int, winner: bool):
@@ -351,7 +358,7 @@ func add_to_peer_log(id: int, message: String) -> void:
 @rpc("any_peer", "call_local")
 func add_to_log(_id: int, message: String) -> void:
 	#print("asdasdasd: " + str(all_gladiators[id]))
-	rpc("broadcast_log", str(_id) + " " + message)
+	rpc("broadcast_log", message)
 
 @rpc("any_peer", "call_local")
 func broadcast_countdown(time_left: int):
@@ -375,11 +382,11 @@ func get_equipment_by_name(id, item_name: String):
 	#return {}  # Return empty if not found
 
 @rpc("any_peer", "call_local")
-func unequip_item(peer_id, equipment, equipment_button_parent_name):
+func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 	#print("Unqeuip equipment not implemented yet")
 	# 1. Remove from all_gladiators[peer_id][equipment_button_parent_name]
 	# 2. Add to 
-	var item_dict = get_equipment_by_name(peer_id, equipment)
+	var item_dict = all_gladiators[peer_id][category] #get_equipment_by_name(peer_id, equipment)
 	var type = item_dict[equipment]["type"] # to be implemented
 	var hands = item_dict[equipment].get("hands", -1)
 	var item = equipment_button_parent_name.replace("Slot", "").to_lower()
@@ -411,6 +418,10 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name):
 			# Remove weight of item
 			if weight: all_gladiators[peer_id]["weight"] -= weight
 			
+			print("add to inventory " + str(slot_name))
+			emit_signal("add_item_to_inventory", peer_id, item_dict, slot_name)
+			emit_signal("remove_item_from_equipment", peer_id, item_dict, category)
+			emit_signal("update_equipment_card", peer_id, all_gladiators[peer_id]["inventory"][slot_name], slot_name, equipment)
 			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
 			return
 	
@@ -419,8 +430,8 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name):
 	
 
 @rpc("any_peer", "call_local")
-func equip_item(peer_id, equipment):
-	var item_dict = get_equipment_by_name(peer_id, equipment)
+func equip_item(peer_id, equipment, selected_slot):
+	var item_dict = all_gladiators[peer_id]["inventory"][selected_slot] #get_equipment_by_name(peer_id, equipment)
 	var type = item_dict[equipment]["type"]
 	var category = item_dict[equipment]["category"]
 	var str_req = item_dict[equipment].get("str_req", 0) 
@@ -483,12 +494,17 @@ func equip_item(peer_id, equipment):
 				
 			else: add_to_peer_log(peer_id, "[INFO] ❌Invalid item type! Please report this as a bug.")
 
-			for slot_name in all_gladiators[peer_id]["inventory"].keys():
-				var item = all_gladiators[peer_id]["inventory"][slot_name]
+			#for slot_name in all_gladiators[peer_id]["inventory"].keys():
+				#var item = all_gladiators[peer_id]["inventory"][slot_name]
 
-				if equip_success and typeof(item) == TYPE_DICTIONARY and item.has(equipment):
-					all_gladiators[peer_id]["inventory"][slot_name] = {}  # Clear slot
-					break
+			if equip_success:# and typeof(item) == TYPE_DICTIONARY and item.has(equipment):
+				all_gladiators[peer_id]["inventory"][selected_slot] = {}  # Clear slot
+				print("Removing " + selected_slot + " from inventory")
+				emit_signal("remove_item_from_inventory", peer_id, item_dict, selected_slot)
+				emit_signal("add_item_to_equipment", peer_id, item_dict, category)
+				emit_signal("update_equipment_card", peer_id, all_gladiators[peer_id][category], category, equipment)
+				
+				
 
 			# Apply item modifier attributes from items
 			if modifier_attributes != {}:
@@ -544,34 +560,39 @@ func notify_card_buy_result(id: int, success: bool, _gladiator_data) -> void:
 	emit_signal("card_buy_result", id, success, _gladiator_data)
 
 @rpc("any_peer", "call_local")
-func buy_equipment_card(id: int, equipment: String, cost: int): 
+func buy_equipment_card(id: int, equipment: String, cost: int, ): 
 	var success := false
 	if all_cards_stock[equipment] >= 1:
 		if all_gladiators[id]["gold"] >= cost:
-			var item_dict = get_equipment_by_name(id, equipment)
+			var item_dict = get_equipment_by_name(id, equipment).duplicate(true)
 			
 			for slot_name in all_gladiators[id]["inventory"].keys():
 				if all_gladiators[id]["inventory"][slot_name] == {}:
+					#print(slot_name + " is empty, putting item there")
+					item_dict[equipment]["inventory_slot"] = slot_name
+					#print(item_dict)
 					all_gladiators[id]["inventory"][slot_name] = item_dict
 					all_gladiators[id]["gold"] -= cost
 					adjust_card_stock(equipment, "remove")
 					success = true
+					emit_signal("add_item_to_inventory", id, item_dict, slot_name)
 					rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 					rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 					return
 			add_to_peer_log(id, "[INFO] ❌No inventory space!")
 		else: add_to_peer_log(id, "[INFO] ❌Not enough gold!")
 	else: 
-		add_to_log(id, "No " + equipment + " cards left in stock!")
+		add_to_peer_log(id, "No " + equipment + " cards left in stock!")
 		
 		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 		rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 
 @rpc("any_peer", "call_local")
-func sell_from_equipment(peer_id: int, equipment: String, equipment_button_parent_name): 
+func sell_from_equipment(peer_id: int, equipment: String, equipment_button_parent_name, category): 
 	# 1 remove from slot, increase gold
 	# replace with unarmed if weapon is sold
-	var item_dict = get_equipment_by_name(peer_id, equipment)
+	var item_dict = all_gladiators[peer_id][category]#get_equipment_by_name(peer_id, equipment)
+	var slot_name = item_dict.get("inventory_slot", "")
 	var price = item_dict[equipment]["price"]
 	var type = item_dict[equipment]["type"] # to be implemented
 	var hands = item_dict[equipment].get("hands", -1)
@@ -599,32 +620,46 @@ func sell_from_equipment(peer_id: int, equipment: String, equipment_button_paren
 	if weight: all_gladiators[peer_id]["weight"] -= weight
 	
 	all_gladiators[peer_id]["gold"] += int(price/2)
-	adjust_card_stock(equipment, "add")  # Restore stock
 	
+	adjust_card_stock(equipment, "add")  # Restore stock
+	emit_signal("remove_item_from_equipment", peer_id, item_dict, category)
 	rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
 	return
 
 	#print("Item not found in equipment panel!")
 					
 @rpc("any_peer", "call_local")
-func sell_from_inventory(id: int, equipment: String): 
+func sell_from_inventory(id: int, equipment: String, selected_slot): 
+	if all_gladiators[id]["inventory"][selected_slot] == {}:
+		add_to_peer_log(id, "[INFO] ❌Item not found in inventory!")
+		return
+	
 	var item_dict = get_equipment_by_name(id, equipment)
-	#print("item_dict: " + str(item_dict))
 	var price = item_dict[equipment]["price"]
+	
+	all_gladiators[id]["inventory"][selected_slot] = {}  # Clear slot
+	all_gladiators[id]["gold"] += int(price/2)
+	emit_signal("remove_item_from_inventory", id, item_dict, selected_slot)
+	adjust_card_stock(equipment, "add")  # Restore stock
+	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+	
+
+'''
 	for slot_name in all_gladiators[id]["inventory"].keys():
 		var item = all_gladiators[id]["inventory"][slot_name]
+		
 
 		# Check if the item is a dictionary and contains the equipment name
-		if typeof(item) == TYPE_DICTIONARY and item.has(equipment):
+		if typeof(item) == TYPE_DICTIONARY and item.has(equipment) and item[equipment]["inventory_slot"] == slot_name:
+			print("item to sell: " + str(item))
 			all_gladiators[id]["inventory"][slot_name] = {}  # Clear slot
 			all_gladiators[id]["gold"] += int(price/2)
 			#print("gold: " + str(all_gladiators[id]["gold"]))
+			emit_signal("sell_item_from_inventory", id, item_dict, slot_name)
 			adjust_card_stock(equipment, "add")  # Restore stock
 			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 			return  # Exit after first match
-
-	add_to_peer_log(id, "[INFO] ❌Item not found in inventory!")
-	
+'''
 	
 @rpc("any_peer", "call_local")
 func buy_attribute_card(id: int, amount: int, attribute: String, cost: int):
@@ -643,7 +678,7 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int):
 				success = true
 				rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 				rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
-		else: add_to_log(id, "Not enough gold!")
+		else: add_to_peer_log(id, "[INFO] ❌Not enough gold!")
 	else: 
 		add_to_peer_log(id, "[INFO] ❌No " + attribute + " cards left in stock!")
 		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
@@ -759,5 +794,18 @@ func reroll_cards_new_round_send_signal(active_players: Array):
 	print("Emitting signal reroll_cards_new_round, active_players = " + str(active_players))
 	emit_signal("reroll_cards_new_round_signal", active_players)
 	
+@rpc("any_peer", "call_local")
+func use_craft_mat_on_item(id, craft_mat, item, slot):
+	var item_dict_to_craft = all_gladiators[id]["inventory"][slot].duplicate(true)
+	print("item before craft: " + str(item_dict_to_craft))
+	
+	# == CRAFT HERE ==
+	item_dict_to_craft[item]["modifiers"]["attributes"]["strength"] = 5
+	# == CRAFT HERE ==
 	
 	
+	print("item after craft: " + str(item_dict_to_craft))
+	all_gladiators[id]["inventory"][slot] = item_dict_to_craft.duplicate(true)
+	emit_signal("update_equipment_card", id, all_gladiators[id]["inventory"][slot], slot, item)
+	#print(all_gladiators[id]["inventory"][slot])
+	rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)

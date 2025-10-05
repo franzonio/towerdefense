@@ -428,8 +428,9 @@ extends Node
 	
 	"head": {
 		"padded_hood": {
+			"inventory_slot": "",
 			"price": 6,
-			"stock": 300,
+			"stock": 30000,
 			"type": "armor",
 			"category": "head",
 			"weight": 1,
