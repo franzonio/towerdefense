@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b3rcyrl5mceea" path="res://Assets/MenuAssets/Menu Buttons/Square Buttons/Square Buttons/Questionmark Square Button.png" id="2_ijstf"]
 [ext_resource type="Texture2D" uid="uid://bk716263khlx" path="res://Assets/CardAssets/CraftCardAssets/chaos_orb.png" id="2_uk570"]
 [ext_resource type="Script" uid="uid://cd4mgamt3dion" path="res://UI/ExpButton.gd" id="3_4n7mi"]
+[ext_resource type="Texture2D" uid="uid://1flqxbu5nk15" path="res://Assets/CardAssets/CraftCardAssets/exalted_orb.png" id="3_f2wx0"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_yixhe"]
 properties/0/path = NodePath("GridContainer/VBoxContainer/Player1/PlayerInfo/PlayerName:text")
@@ -91,9 +92,6 @@ font_size = 13
 
 [sub_resource type="LabelSettings" id="LabelSettings_uk570"]
 font_size = 26
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_uk570"]
-bg_color = Color(0.6468713, 0.16213676, 0, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_f2wx0"]
 font_size = 33
@@ -566,7 +564,7 @@ custom_minimum_size = Vector2(30, 30)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ChaosOrb" type="Button" parent="CraftingContainer/CraftingMats"]
+[node name="TomeOfChaos" type="Button" parent="CraftingContainer/CraftingMats"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 11
@@ -576,7 +574,7 @@ autowrap_mode = 2
 autowrap_trim_flags = 0
 expand_icon = true
 
-[node name="Label" type="Label" parent="CraftingContainer/CraftingMats/ChaosOrb"]
+[node name="Label" type="Label" parent="CraftingContainer/CraftingMats/TomeOfChaos"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -590,14 +588,29 @@ grow_vertical = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VaalOrb" type="Button" parent="CraftingContainer/CraftingMats"]
+[node name="TomeOfInjection" type="Button" parent="CraftingContainer/CraftingMats"]
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_font_sizes/font_size = 11
-theme_override_styles/normal = SubResource("StyleBoxFlat_uk570")
 toggle_mode = true
+icon = ExtResource("3_f2wx0")
 autowrap_mode = 2
 autowrap_trim_flags = 0
+expand_icon = true
+
+[node name="Label" type="Label" parent="CraftingContainer/CraftingMats/TomeOfInjection"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_top = -23.0
+grow_horizontal = 0
+grow_vertical = 0
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="VaalOrb2" type="Button" parent="CraftingContainer/CraftingMats"]
 layout_mode = 2
@@ -606,6 +619,7 @@ theme_override_font_sizes/font_size = 11
 toggle_mode = true
 autowrap_mode = 2
 autowrap_trim_flags = 0
+expand_icon = true
 
 [node name="VaalOrb3" type="Button" parent="CraftingContainer/CraftingMats"]
 layout_mode = 2
@@ -614,6 +628,7 @@ theme_override_font_sizes/font_size = 11
 toggle_mode = true
 autowrap_mode = 2
 autowrap_trim_flags = 0
+expand_icon = true
 
 [node name="VaalOrb4" type="Button" parent="CraftingContainer/CraftingMats"]
 layout_mode = 2
@@ -622,6 +637,7 @@ theme_override_font_sizes/font_size = 11
 toggle_mode = true
 autowrap_mode = 2
 autowrap_trim_flags = 0
+expand_icon = true
 
 [node name="VaalOrb5" type="Button" parent="CraftingContainer/CraftingMats"]
 layout_mode = 2
@@ -630,6 +646,7 @@ theme_override_font_sizes/font_size = 11
 toggle_mode = true
 autowrap_mode = 2
 autowrap_trim_flags = 0
+expand_icon = true
 
 [node name="VaalOrb6" type="Button" parent="CraftingContainer/CraftingMats"]
 layout_mode = 2
@@ -638,6 +655,7 @@ theme_override_font_sizes/font_size = 11
 toggle_mode = true
 autowrap_mode = 2
 autowrap_trim_flags = 0
+expand_icon = true
 
 [node name="Inventory" type="VBoxContainer" parent="."]
 anchors_preset = 7
@@ -1144,8 +1162,8 @@ text = "❌ No"
 [connection signal="pressed" from="ShopButton" to="." method="_on_shop_button_pressed"]
 [connection signal="toggled" from="ShopButton" to="." method="_on_shop_button_toggled"]
 [connection signal="pressed" from="Shop/VBoxContainer/HBoxContainer/RefreshButton" to="." method="_on_refresh_button_pressed"]
-[connection signal="toggled" from="CraftingContainer/CraftingMats/ChaosOrb" to="." method="_on_chaos_orb_toggled"]
-[connection signal="toggled" from="CraftingContainer/CraftingMats/VaalOrb" to="." method="_on_vaal_orb_toggled"]
+[connection signal="toggled" from="CraftingContainer/CraftingMats/TomeOfChaos" to="." method="_on_tome_of_chaos_toggled"]
+[connection signal="toggled" from="CraftingContainer/CraftingMats/TomeOfInjection" to="." method="_on_tome_of_injection_toggled"]
 [connection signal="button_up" from="ExpButton" to="." method="_on_exp_button_button_up"]
 [connection signal="pressed" from="EscMenu/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="EscMenu/Options" to="." method="_on_options_pressed"]

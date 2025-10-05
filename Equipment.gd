@@ -409,7 +409,7 @@ extends Node
 
 		"obsidian_bulwark": {
 			"price": 90,
-			"stock": 50,
+			"stock": 30,
 			"type": "armor",
 			"category": "chest",
 			"weight": 12,
@@ -430,7 +430,7 @@ extends Node
 		"padded_hood": {
 			"inventory_slot": "",
 			"price": 6,
-			"stock": 30000,
+			"stock": 30,
 			"type": "armor",
 			"category": "head",
 			"weight": 1,

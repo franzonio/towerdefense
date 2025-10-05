@@ -93,8 +93,8 @@ var equipment_button_parent_name
 @onready var shield_mastery_panel = $AttributePanel/VBoxContainer/ShieldMastery
 @onready var unarmed_mastery_panel = $AttributePanel/VBoxContainer/UnarmedMastery
 
-@onready var chaos_orb = $CraftingContainer/CraftingMats/ChaosOrb
-@onready var vaal_orb = $CraftingContainer/CraftingMats/VaalOrb
+@onready var tome_of_chaos = $CraftingContainer/CraftingMats/TomeOfChaos
+@onready var tome_of_injection = $CraftingContainer/CraftingMats/TomeOfInjection
 @onready var crafting_bench = $CraftingContainer/CraftingBench
 @onready var crafting_container = $CraftingContainer
 
@@ -128,7 +128,8 @@ var craft_active = ""
 @onready var dagger_mastery_card = preload("res://ShopCards/AttributeCards/DaggerMasteryCard.tscn")
 @onready var chain_mastery_card = preload("res://ShopCards/AttributeCards/ChainMasteryCard.tscn")
 
-@onready var chaos_orb_card = preload("res://ShopCards/CraftCards/ChaosOrbCard.tscn")
+@onready var tome_of_chaos_card = preload("res://ShopCards/CraftCards/TomeOfChaosCard.tscn")
+@onready var tome_of_injection_card = preload("res://ShopCards/CraftCards/TomeOfInjectionCard.tscn")
 
 @onready var simple_sword_card = preload("res://ShopCards/EquipmentCards/Sword/1h/SimpleSword.tscn")
 @onready var light_axe_card = preload("res://ShopCards/EquipmentCards/Axe/1h/LightAxe.tscn")
@@ -173,10 +174,10 @@ func _ready():
 	GameState_.connect("broadcast_log_signal", Callable(self, "_on_log_received"))	
 	GameState_.connect("reroll_cards_new_round_signal", Callable(self, "_on_reroll_cards_new_round_signal"))	
 	
-	GameState_.connect("add_item_to_inventory", Callable(self, "_on_add_item_to_inventory"))
-	GameState_.connect("remove_item_from_inventory", Callable(self, "_on_remove_item_from_inventory"))
-	GameState_.connect("add_item_to_equipment", Callable(self, "_on_add_item_to_equipment"))
-	GameState_.connect("remove_item_from_equipment", Callable(self, "_on_remove_item_from_equipment"))
+	GameState_.connect("add_item_to_inventory_signal", Callable(self, "_on_add_item_to_inventory"))
+	GameState_.connect("remove_item_from_inventory_signal", Callable(self, "_on_remove_item_from_inventory"))
+	GameState_.connect("add_item_to_equipment_signal", Callable(self, "_on_add_item_to_equipment"))
+	GameState_.connect("remove_item_from_equipment_signal", Callable(self, "_on_remove_item_from_equipment"))
 	
 
 	send_button.pressed.connect(_on_send_pressed)
@@ -273,7 +274,7 @@ func get_all_cards():
 		[avoidance_card, "avoidance", card_stock["avoidance"]], 
 		
 		### CRAFTING MATERIALS ###
-		[chaos_orb_card, "chaos_orb", card_stock["chaos_orb"]],
+		[tome_of_chaos_card, "tome_of_chaos", card_stock["tome_of_chaos"]], [tome_of_injection_card, "tome_of_injection", card_stock["tome_of_injection"]],
 		
 		### WEAPON MASTERY ###
 		[sword_mastery_card, "sword_mastery", card_stock["sword_mastery"]], [axe_mastery_card, "axe_mastery", card_stock["axe_mastery"]],
@@ -320,8 +321,10 @@ func _input(event):
 
 	if event is InputEventMouseButton and craft_active != "":
 		await get_tree().create_timer(0.1).timeout
-		chaos_orb.button_pressed = false
-		chaos_orb.release_focus()
+		tome_of_chaos.button_pressed = false
+		tome_of_chaos.release_focus()
+		tome_of_injection.button_pressed = false
+		tome_of_injection.release_focus()
 	
 func _on_send_pressed(submitted_text = ""):
 	var msg = chat_input.text.strip_edges()
@@ -435,6 +438,7 @@ func _on_add_item_to_equipment(id, item_dict, category):
 func _on_add_item_to_inventory(id, item_dict, slot_name):
 	if id != multiplayer.get_unique_id():
 		return
+	print("_on_add_item_to_inventory")
 	var card_scene_map := {}
 	for card in all_cards:
 		card_scene_map[card[1]] = card[0]  # card[1] is name, card[0] is scene
@@ -444,7 +448,7 @@ func _on_add_item_to_inventory(id, item_dict, slot_name):
 	# Find corresponding scene
 	if card_scene_map.has(item_name):
 		var card_instance = card_scene_map[item_name].instantiate()
-		card_instance.pressed.connect(_on_inventory_item_pressed.bind(item_name, slot_name))
+		card_instance.button_down.connect(_on_inventory_item_pressed.bind(item_name, slot_name))
 		card_instance.set_multiplayer_authority(multiplayer.get_unique_id())  # Optional, for sync
 		$Inventory/InventoryGridContainer.find_child(slot_name, true, false).add_child(card_instance)
 		#print("slot_name: " + slot_name)
@@ -490,22 +494,19 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data
 func update_craft_ui():
 	var crafting_mats = all_gladiators[multiplayer.get_unique_id()].get("crafting_mats", {})
 	
-	#chaos_orb.text = str(crafting_mats["chaos_orb"])
-	#vaal_orb.text = str(crafting_mats["vaal_orb"])
-	
-	if crafting_mats["chaos_orb"] == 0:
-		chaos_orb.get_child(0).text = ""
-		chaos_orb.disabled = true
+	if crafting_mats["tome_of_chaos"] == 0:
+		tome_of_chaos.get_child(0).text = ""
+		tome_of_chaos.disabled = true
 	else:
-		chaos_orb.get_child(0).text = str(crafting_mats["chaos_orb"])
-		chaos_orb.disabled = false
-		
-	if crafting_mats["vaal_orb"] == 0:
-		vaal_orb.text = ""
-		vaal_orb.disabled = true
+		tome_of_chaos.get_child(0).text = str(crafting_mats["tome_of_chaos"])
+		tome_of_chaos.disabled = false
+
+	if crafting_mats["tome_of_injection"] == 0:
+		tome_of_injection.get_child(0).text = ""
+		tome_of_injection.disabled = true
 	else:
-		vaal_orb.text = str(crafting_mats["vaal_orb"])
-		vaal_orb.disabled = false
+		tome_of_injection.get_child(0).text = str(crafting_mats["tome_of_injection"])
+		tome_of_injection.disabled = false
 	
 func update_stance_ui():
 	var previous_index = stance_menu.get_selected_id()
@@ -819,8 +820,8 @@ func _on_inventory_item_pressed(item_name: String, slot_name: String):
 		else:
 			GameState_.rpc_id(1, "use_craft_mat_on_item", multiplayer.get_unique_id(), craft_active, selected_item_name, selected_slot)
 			
-		#_on_chaos_orb_toggled(false)
-		chaos_orb.button_pressed = false
+		tome_of_chaos.button_pressed = false
+		tome_of_injection.button_pressed = false
 		craft_active = ""
 	else:
 		inventory_popup.set_position(get_viewport().get_mouse_position())
@@ -962,7 +963,7 @@ func _on_countdown_updated(time_left: int):
 		
 		if time_left == 0:
 			reroll_start_of_intermission = 1
-			#intermission = false
+			intermission = false
 			time_passed = 0
 			await get_tree().create_timer(1.0).timeout
 			countdown_label.text = ""
@@ -1154,13 +1155,11 @@ func enable_craft_with_material(crafting_mat, toggled_on):
 		craft_active = ""
 	
 
-func _on_chaos_orb_toggled(toggled_on: bool):
-	#print("Chaos orb active: " + str(toggled_on))
-	enable_craft_with_material("chaos_orb", toggled_on)
+
+func _on_tome_of_chaos_toggled(toggled_on: bool):
+	enable_craft_with_material("tome_of_chaos", toggled_on)
 	
-	for item in inventory_grid.get_children():
-		1#print(item)
 
 
-func _on_vaal_orb_toggled(toggled_on: bool) -> void:
-	pass # Replace with function body.
+func _on_tome_of_injection_toggled(toggled_on: bool) -> void:
+	enable_craft_with_material("tome_of_injection", toggled_on)

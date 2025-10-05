@@ -460,8 +460,8 @@ func _on_confirm():
 		},
 		
 		"crafting_mats": {
-			"chaos_orb": 5,
-			"vaal_orb": 5
+			"tome_of_chaos": 5,
+			"tome_of_injection": 5
 		}
 	}
 	

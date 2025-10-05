@@ -8,7 +8,8 @@ var self_name
 var parent_name
 var item_dict
 var all_gladiators
-@onready var initial_tooltip_received = 0
+var initial_tooltip_received = 0
+
 #@export var unique_id : String
 
 var mouse_inside_button := false
@@ -19,12 +20,13 @@ signal mouse_inside_equipment_card_signal(mouse_inside_equipment_card: bool)
 func _ready():
 	#ProjectSettings.set_setting("gui/timers/tooltip_delay_sec", 5.0)
 	#print("_ready()")
+	initial_tooltip_received = 0
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	GameState_.connect("card_buy_result", Callable(self, "_on_card_buy_result"))
 	GameState_.connect("send_equipment_dict_to_peer_signal", Callable(self, "_on_send_equipment_dict_to_peer"))
 	GameState_.connect("send_gladiator_data_to_peer_card_signal", Callable(self, "_on_send_gladiator_data_to_peer_card_signal"))
-	GameState_.connect("update_equipment_card", Callable(self, "_on_equipment_card_updated"))
+	GameState_.connect("update_equipment_card_signal", Callable(self, "_on_equipment_card_updated"))
 	
 	if multiplayer.is_server():
 		GameState_.refresh_gladiator_data_card(multiplayer.get_unique_id())
@@ -43,39 +45,25 @@ func _ready():
 	else:
 		GameState_.rpc_id(1, "get_equipment_by_name", multiplayer.get_unique_id(), equipment_name)
 	
-	if item_dict.has(equipment_name):
-		var item = item_dict[equipment_name].duplicate(true)
-		#print("_on_send_equipment_dict_to_peer " + str(item))
-		tooltip_text = get_item_tooltip(item)
-		#initial_tooltip_received = 1
-	else: 1
+
 
 func _on_equipment_card_updated(id, updated_item_dict, slot, item):
+	
 	if id != multiplayer.get_unique_id(): return
+
+	
 	if "slot" in slot: 
 		if parent_name != slot: return
-		#print("slot: " + str(slot))
-		#print("item: " + str(item))
-		#print("parent_name: " + str(parent_name))
-		#print("updated_item_dict[item][inventory_slot]: " + str(updated_item_dict[item]["inventory_slot"]))
+		#await get_tree().create_timer(0.1).timeout
+		#await get_tree().create_timer(0.2).timeout
 		tooltip_text = ""
-		#if parent_name == slot:
-			#if item_dict_after_craft[item]["inventory_slot"] == slot:
-			#print(get_node())
-			#print("parent_name: " + str(parent_name))
-				#print("item_dict before update: " + str(item_dict))
-		#print("_on_equipment_card_updated " + str(updated_item_dict[item]))
 		tooltip_text = get_item_tooltip(updated_item_dict[item])
-				#print(tooltip_text)
-	else: 
-		if slot.capitalize() in parent_name:
-			#print("Updating scene after equipping")
-			#print("slot: " + str(slot))
-			#print("item: " + str(item))
-			#print("parent_name: " + str(parent_name))
-			#print("updated_item_dict[item][inventory_slot]: " + str(updated_item_dict[item]["inventory_slot"]))
-			tooltip_text = ""
-			tooltip_text = get_item_tooltip(updated_item_dict[item])
+	elif slot.capitalize() in parent_name:
+		#await get_tree().create_timer(0.1).timeout
+		print("_on_equipment_card_updated: " + str(updated_item_dict[item]))
+		print("slot: " + str(slot))
+		tooltip_text = ""
+		tooltip_text = get_item_tooltip(updated_item_dict[item])
 	
 
 
@@ -87,6 +75,11 @@ func _on_send_equipment_dict_to_peer(id, _item_dict):
 	if initial_tooltip_received == 1: return
 	#if id == multiplayer.get_unique_id():
 	item_dict = _item_dict.duplicate(true)
+	if item_dict.has(equipment_name):
+		var item = item_dict[equipment_name].duplicate(true)
+		print("_on_send_equipment_dict_to_peer " + str(item))
+		if tooltip_text == "": tooltip_text = get_item_tooltip(item)
+		#initial_tooltip_received = 1
 	
 '''	
 if item_dict.has(equipment_name):

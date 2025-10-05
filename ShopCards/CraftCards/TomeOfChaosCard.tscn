@@ -1,19 +1,19 @@
 [gd_scene load_steps=3 format=3 uid="uid://bd6km2f5v3r2j"]
 
-[ext_resource type="Script" uid="uid://c4d57lsma72lf" path="res://ShopCards/CraftCards/BaseCraftCards.gd" id="1_46e1q"]
+[ext_resource type="Script" uid="uid://c4d57lsma72lf" path="res://ShopCards/CraftCards/BaseCraftCards.gd" id="1_rlgp7"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_4p5m8"]
 font_size = 12
 
-[node name="ChaosOrbcard" type="Button"]
+[node name="TomeOfChaosCard" type="Button"]
 offset_right = 306.0
 offset_bottom = 458.0
 scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 expand_icon = true
-script = ExtResource("1_46e1q")
-craft_name = "chaos_orb"
+script = ExtResource("1_rlgp7")
+craft_name = "tome_of_chaos"
 cost = 5
 
 [node name="Label" type="Label" parent="."]

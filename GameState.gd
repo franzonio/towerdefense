@@ -40,11 +40,11 @@ signal broadcast_players_ready_signal(players_ready: int)
 signal killed_by_server_signal(id: int)
 signal reroll_cards_new_round_signal(active_players)
 
-signal update_equipment_card(id, item_dict_to_craft, slot, item)
-signal add_item_to_inventory(id, item_dict, slot_name)
-signal remove_item_from_inventory(id, item_dict, slot_name)
-signal add_item_to_equipment(peer_id, item_dict, category)
-signal remove_item_from_equipment(peer_id, item_dict, category)
+signal update_equipment_card_signal(id, item_dict_to_craft, slot, item)
+signal add_item_to_inventory_signal(id, item_dict, slot_name)
+signal remove_item_from_inventory_signal(id, item_dict, slot_name)
+signal add_item_to_equipment_signal(peer_id, item_dict, category)
+signal remove_item_from_equipment_signal(peer_id, item_dict, category)
 
 var craft_cards_stock
 var attr_cards_stock
@@ -140,7 +140,8 @@ func _ready():
 
 func create_card_pool():
 	craft_cards_stock = {
-		"chaos_orb": 30000
+		"tome_of_chaos": 300,
+		"tome_of_injection": 300
 	}
 	
 	attr_cards_stock = {
@@ -425,9 +426,9 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 			if weight: all_gladiators[peer_id]["weight"] -= weight
 			
 			print("add to inventory " + str(slot_name))
-			emit_signal("add_item_to_inventory", peer_id, item_dict, slot_name)
-			emit_signal("remove_item_from_equipment", peer_id, item_dict, category)
-			emit_signal("update_equipment_card", peer_id, all_gladiators[peer_id]["inventory"][slot_name], slot_name, equipment)
+			rpc_id(peer_id, "add_item_to_inventory", peer_id, item_dict, slot_name)
+			rpc_id(peer_id, "remove_item_from_equipment", peer_id, item_dict, category)
+			rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id]["inventory"][slot_name], slot_name, equipment)
 			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
 			return
 	
@@ -506,9 +507,9 @@ func equip_item(peer_id, equipment, selected_slot):
 			if equip_success:# and typeof(item) == TYPE_DICTIONARY and item.has(equipment):
 				all_gladiators[peer_id]["inventory"][selected_slot] = {}  # Clear slot
 				print("Removing " + selected_slot + " from inventory")
-				emit_signal("remove_item_from_inventory", peer_id, item_dict, selected_slot)
-				emit_signal("add_item_to_equipment", peer_id, item_dict, category)
-				emit_signal("update_equipment_card", peer_id, all_gladiators[peer_id][category], category, equipment)
+				rpc_id(peer_id, "remove_item_from_inventory", peer_id, item_dict, selected_slot)
+				rpc_id(peer_id, "add_item_to_equipment", peer_id, item_dict, category)
+				rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id][category], category, equipment)
 				
 				
 
@@ -565,6 +566,35 @@ func refresh_gladiator_data(id: int) -> void:
 func notify_card_buy_result(id: int, success: bool, _gladiator_data) -> void:
 	emit_signal("card_buy_result", id, success, _gladiator_data)
 
+
+@rpc("any_peer", "call_local")
+func update_equipment_card(id, item_dict_to_craft, slot, item):
+	emit_signal("update_equipment_card_signal", id, item_dict_to_craft, slot, item)
+	
+@rpc("any_peer", "call_local")
+func add_item_to_inventory(id, item_dict, slot_name):
+	emit_signal("add_item_to_inventory_signal", id, item_dict, slot_name)
+	
+@rpc("any_peer", "call_local")
+func remove_item_from_inventory(id, item_dict, slot_name):
+	emit_signal("remove_item_from_inventory_signal", id, item_dict, slot_name)
+
+@rpc("any_peer", "call_local")
+func add_item_to_equipment(peer_id, item_dict, category):
+	emit_signal("add_item_to_equipment_signal", peer_id, item_dict, category)
+	
+@rpc("any_peer", "call_local")
+func remove_item_from_equipment(peer_id, item_dict, category):
+	emit_signal("remove_item_from_equipment_signal", peer_id, item_dict, category)
+	
+'''
+signal update_equipment_card_signal(id, item_dict_to_craft, slot, item)
+signal add_item_to_inventory_signal(id, item_dict, slot_name)
+signal remove_item_from_inventory_signal(id, item_dict, slot_name)
+signal add_item_to_equipment_signal(peer_id, item_dict, category)
+signal remove_item_from_equipment_signal(peer_id, item_dict, category)
+'''
+
 @rpc("any_peer", "call_local")
 func buy_equipment_card(id: int, equipment: String, cost: int, ): 
 	var success := false
@@ -581,7 +611,7 @@ func buy_equipment_card(id: int, equipment: String, cost: int, ):
 					all_gladiators[id]["gold"] -= cost
 					adjust_card_stock(equipment, "remove")
 					success = true
-					emit_signal("add_item_to_inventory", id, item_dict, slot_name)
+					rpc_id(id, "add_item_to_inventory", id, item_dict, slot_name)
 					rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 					rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 					return
@@ -628,7 +658,7 @@ func sell_from_equipment(peer_id: int, equipment: String, equipment_button_paren
 	all_gladiators[peer_id]["gold"] += int(price/2)
 	
 	adjust_card_stock(equipment, "add")  # Restore stock
-	emit_signal("remove_item_from_equipment", peer_id, item_dict, category)
+	rpc_id(peer_id, "remove_item_from_equipment", peer_id, item_dict, category)
 	rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
 	return
 
@@ -645,7 +675,7 @@ func sell_from_inventory(id: int, equipment: String, selected_slot):
 	
 	all_gladiators[id]["inventory"][selected_slot] = {}  # Clear slot
 	all_gladiators[id]["gold"] += int(price/2)
-	emit_signal("remove_item_from_inventory", id, item_dict, selected_slot)
+	rpc_id(id, "remove_item_from_inventory", id, item_dict, selected_slot)
 	adjust_card_stock(equipment, "add")  # Restore stock
 	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 	
@@ -820,16 +850,110 @@ func reroll_cards_new_round_send_signal(active_players: Array):
 func use_craft_mat_on_item(id, craft_mat, item, slot):
 	var item_dict_to_craft = all_gladiators[id]["inventory"][slot].duplicate(true)
 	print("item before craft: " + str(item_dict_to_craft))
+	var possible_attributes = attr_cards_stock.keys()
+	var roll_interval_max = 3+2*item_dict_to_craft[item]["level"]
 	
-	# == CRAFT HERE ==
-	item_dict_to_craft[item]["modifiers"]["attributes"]["strength"] = 5
-	# == CRAFT HERE ==
+	# == TOME OF CHAOS ==
+	if craft_mat == "tome_of_chaos": # Roll 3 attributes
+		
+		var nbr_of_attributes_pool = [1,1,1,1,2,2,3]
+		var nbr_of_attributes = randi() % nbr_of_attributes_pool.size()
+		var nbr_of_attributes_to_roll = nbr_of_attributes_pool[nbr_of_attributes]
+		var random_attributes = get_tome_of_chaos_rolls(possible_attributes, nbr_of_attributes_to_roll, roll_interval_max)
+		print("random_attributes: " + str(random_attributes))
+		item_dict_to_craft[item]["modifiers"]["attributes"] = random_attributes.duplicate(true)
+		
+	if craft_mat == "tome_of_injection": # Add 1 new attribute
+		var existing_attributes_on_item = item_dict_to_craft[item]["modifiers"]["attributes"].keys().size()
+		if existing_attributes_on_item >= 3: 
+			add_to_peer_log(id, "[INFO] ❌Cannot add more attributes!")
+			return
+		var random_attribute = get_tome_of_injection_roll(item_dict_to_craft[item]["modifiers"]["attributes"], possible_attributes, roll_interval_max)
+		print("random_attribute: " + str(random_attribute) + str(random_attribute.keys()[0]))
+		item_dict_to_craft[item]["modifiers"]["attributes"][random_attribute.keys()[0]] = random_attribute[random_attribute.keys()[0]]
+		
+	if craft_mat == "tome_of_liberty": print("") # Remove all modifiers
+			
+			
+			
+			
 			
 	all_gladiators[id]["crafting_mats"][craft_mat] -= 1
 	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
-	
-	print("item after craft: " + str(item_dict_to_craft))
 	all_gladiators[id]["inventory"][slot] = item_dict_to_craft.duplicate(true)
-	emit_signal("update_equipment_card", id, all_gladiators[id]["inventory"][slot], slot, item)
-	#print(all_gladiators[id]["inventory"][slot])
+	rpc_id(id, "update_equipment_card", id, all_gladiators[id]["inventory"][slot], slot, item)
 	rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+
+func get_tome_of_injection_roll(item_dict_to_craft: Dictionary, attribute_list: Array, roll_interval_max: int) -> Dictionary:
+	var result := {}
+
+	# Filter out attributes that already exist
+	var available_attrs := []
+	for attr in attribute_list:
+		if not item_dict_to_craft.has(attr):
+			available_attrs.append(attr)
+
+	# If no new attributes are available, return empty
+	if available_attrs.is_empty():
+		return result
+
+	# Pick one attribute randomly
+	var chosen_attr = available_attrs.pick_random()
+
+	# Roll value with exponential bias
+	var raw = randf()
+	var curved = pow(raw, 1)  # Bias toward lower values
+	var roll = int(ceil(curved * roll_interval_max))
+	roll = clamp(roll, 1, roll_interval_max)
+
+	result[chosen_attr] = roll
+	return result
+
+
+
+func get_tome_of_chaos_rolls(attribute_list: Array, amount: int, roll_interval_max: int) -> Dictionary:
+	var result := {}
+	var mastery_attrs := []
+	var non_mastery_attrs := []
+
+	# Separate mastery and non-mastery attributes
+	for attr in attribute_list:
+		if "mastery" in attr:
+			mastery_attrs.append(attr)
+		else:
+			non_mastery_attrs.append(attr)
+
+	# Build weighted pool
+	var weighted_pool := non_mastery_attrs.duplicate()
+	if mastery_attrs.size() > 0:
+		# Add one mastery placeholder to represent all mastery attributes
+		weighted_pool.append("mastery_group")
+
+	# Select attributes
+	var selected := []
+	var pool = weighted_pool.duplicate()
+	pool.shuffle()
+
+	for i in range(amount):
+		if pool.is_empty():
+			break
+		var pick = pool.pop_front()
+		if pick == "mastery_group":
+			selected.append(mastery_attrs.pick_random())
+		else:
+			selected.append(pick)
+
+	# Roll values with exponential bias
+	for attr in selected:
+		var raw = randf()
+		var curved = pow(raw, 1.2) # higher -> harder to get good rolls
+		var roll = int(ceil(curved * roll_interval_max))
+		roll = clamp(roll, 1, roll_interval_max)
+		result[attr] = roll
+
+	return result
+
+
+
+
+	
