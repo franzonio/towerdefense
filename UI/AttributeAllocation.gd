@@ -125,6 +125,10 @@ func _ready():
 	'''
 	
 func _process(delta: float):
+	
+	if Input.is_action_just_pressed("focus_chat"):# and not chat_input.has_focus():
+		chat_input.grab_focus()
+	
 	time += delta
 	prev_sec = sec
 	sec = int(time)
@@ -175,7 +179,7 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data
 		player_gladiator_data = _player_gladiator_data
 	
 func _on_send_pressed(submitted_text = ""):
-	print("_on_send_pressed")
+	#print("_on_send_pressed")
 	var msg = chat_input.text.strip_edges()
 	if msg.length() == 0 or msg.length() > MAX_LENGTH:
 		return
@@ -456,8 +460,8 @@ func _on_confirm():
 		},
 		
 		"crafting_mats": {
-			"chaos_orb": 100,
-			"vaal_orb": 100
+			"chaos_orb": 5,
+			"vaal_orb": 5
 		}
 	}
 	

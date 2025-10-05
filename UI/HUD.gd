@@ -128,6 +128,8 @@ var craft_active = ""
 @onready var dagger_mastery_card = preload("res://ShopCards/AttributeCards/DaggerMasteryCard.tscn")
 @onready var chain_mastery_card = preload("res://ShopCards/AttributeCards/ChainMasteryCard.tscn")
 
+@onready var chaos_orb_card = preload("res://ShopCards/CraftCards/ChaosOrbCard.tscn")
+
 @onready var simple_sword_card = preload("res://ShopCards/EquipmentCards/Sword/1h/SimpleSword.tscn")
 @onready var light_axe_card = preload("res://ShopCards/EquipmentCards/Axe/1h/LightAxe.tscn")
 @onready var wooden_buckler_card = preload("res://ShopCards/EquipmentCards/Shield/WoodenBuckler.tscn")
@@ -239,6 +241,8 @@ func _process(delta: float) -> void:
 		stance_menu.disabled = true
 		attack_menu.disabled = true
 	
+	if Input.is_action_just_pressed("focus_chat"):# and not chat_input.has_focus():
+		chat_input.grab_focus()
 	if Input.is_action_just_pressed("toggle_shop") and not chat_input.has_focus():
 		if $ShopButton:
 			$ShopButton.emit_signal("pressed")
@@ -253,6 +257,7 @@ func _process(delta: float) -> void:
 			$ExpButton.emit_signal("button_up")
 	
 func _unhandled_input(event):
+	
 	if event.is_action_pressed("ui_cancel"):  # ESC by default
 		if esc_menu.visible:
 			esc_menu.visible = false
@@ -266,6 +271,9 @@ func get_all_cards():
 		[criticality_card, "crit_rating", card_stock["crit_rating"]], [endurance_card, "endurance", card_stock["endurance"]], 
 		[quickness_card, "quickness", card_stock["quickness"]], [resilience_card, "resilience", card_stock["resilience"]], 
 		[avoidance_card, "avoidance", card_stock["avoidance"]], 
+		
+		### CRAFTING MATERIALS ###
+		[chaos_orb_card, "chaos_orb", card_stock["chaos_orb"]],
 		
 		### WEAPON MASTERY ###
 		[sword_mastery_card, "sword_mastery", card_stock["sword_mastery"]], [axe_mastery_card, "axe_mastery", card_stock["axe_mastery"]],
@@ -305,10 +313,15 @@ func get_equipment_by_name(item_name: String):
 	return {}  # Return empty if not found
 	
 func _input(event):
+	
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if not chat_input.get_global_rect().has_point(event.position):
 			chat_input.release_focus()
 
+	if event is InputEventMouseButton and craft_active != "":
+		await get_tree().create_timer(0.1).timeout
+		chaos_orb.button_pressed = false
+		chaos_orb.release_focus()
 	
 func _on_send_pressed(submitted_text = ""):
 	var msg = chat_input.text.strip_edges()
@@ -463,7 +476,6 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data
 	all_gladiators = _all_gladiators
 	if peer_id == multiplayer.get_unique_id():
 		player_gladiator_data = all_gladiators[peer_id]
-		print(player_gladiator_data.get("head", ""))
 		update_craft_ui()
 		#update_inventory_ui(peer_id)
 		#update_equipment_ui()
@@ -478,8 +490,22 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data
 func update_craft_ui():
 	var crafting_mats = all_gladiators[multiplayer.get_unique_id()].get("crafting_mats", {})
 	
-	chaos_orb.text = str(crafting_mats["chaos_orb"])
-	vaal_orb.text = str(crafting_mats["vaal_orb"])
+	#chaos_orb.text = str(crafting_mats["chaos_orb"])
+	#vaal_orb.text = str(crafting_mats["vaal_orb"])
+	
+	if crafting_mats["chaos_orb"] == 0:
+		chaos_orb.get_child(0).text = ""
+		chaos_orb.disabled = true
+	else:
+		chaos_orb.get_child(0).text = str(crafting_mats["chaos_orb"])
+		chaos_orb.disabled = false
+		
+	if crafting_mats["vaal_orb"] == 0:
+		vaal_orb.text = ""
+		vaal_orb.disabled = true
+	else:
+		vaal_orb.text = str(crafting_mats["vaal_orb"])
+		vaal_orb.disabled = false
 	
 func update_stance_ui():
 	var previous_index = stance_menu.get_selected_id()
@@ -783,8 +809,7 @@ func _on_inventory_item_pressed(item_name: String, slot_name: String):
 	print("Pressed " + str(selected_slot))
 
 	# Show popup near mouse
-	inventory_popup.set_position(get_viewport().get_mouse_position())
-	inventory_popup.popup()
+
 	
 	if craft_active:
 		print("Requesting to use " + craft_active + " on " + selected_item_name)
@@ -794,7 +819,12 @@ func _on_inventory_item_pressed(item_name: String, slot_name: String):
 		else:
 			GameState_.rpc_id(1, "use_craft_mat_on_item", multiplayer.get_unique_id(), craft_active, selected_item_name, selected_slot)
 			
+		#_on_chaos_orb_toggled(false)
+		chaos_orb.button_pressed = false
 		craft_active = ""
+	else:
+		inventory_popup.set_position(get_viewport().get_mouse_position())
+		inventory_popup.popup()
 
 	
 func clear_shop_grid():
@@ -1115,11 +1145,13 @@ func _on_no_button_up() -> void:
 	confirm_disconnect.visible = false
 
 func enable_craft_with_material(crafting_mat, toggled_on):
-	craft_active = crafting_mat
-'''	if toggled_on: 
+	
+	if toggled_on: 
 		print("Started crafting with " + crafting_mat)
+		craft_active = crafting_mat
 	else: 
-		print("Stopped crafting with " + crafting_mat)'''
+		print("Stopped crafting with " + crafting_mat)
+		craft_active = ""
 	
 
 func _on_chaos_orb_toggled(toggled_on: bool):

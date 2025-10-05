@@ -46,7 +46,7 @@ signal remove_item_from_inventory(id, item_dict, slot_name)
 signal add_item_to_equipment(peer_id, item_dict, category)
 signal remove_item_from_equipment(peer_id, item_dict, category)
 
-
+var craft_cards_stock
 var attr_cards_stock
 var all_cards_stock
 
@@ -139,6 +139,10 @@ func _ready():
 	initialize_card_stock()
 
 func create_card_pool():
+	craft_cards_stock = {
+		"chaos_orb": 30000
+	}
+	
 	attr_cards_stock = {
 		"strength": 100,
 		"quickness": 50,
@@ -156,7 +160,9 @@ func create_card_pool():
 	}
 	var _all_cards_stock = {}  # Create a fresh dictionary
 
-	# Copy original attr_cards_stock values into it
+	for key in craft_cards_stock.keys():
+		_all_cards_stock[key] = craft_cards_stock[key]
+		
 	for key in attr_cards_stock.keys():
 		_all_cards_stock[key] = attr_cards_stock[key]
 
@@ -661,6 +667,22 @@ func sell_from_inventory(id: int, equipment: String, selected_slot):
 			return  # Exit after first match
 '''
 	
+	
+@rpc("any_peer", "call_local")
+func buy_craft_card(id, craft_name, cost):
+	var success := false
+	if all_cards_stock[craft_name] >= 1:
+		if all_gladiators[id]["gold"] >= cost:
+			all_gladiators[id]["crafting_mats"][craft_name] += 1
+			all_gladiators[id]["gold"] -= cost
+			adjust_card_stock(craft_name, "remove")
+			success = true
+			rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
+			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+		else: add_to_peer_log(id, "[INFO] ❌Not enough gold!")
+	else: 
+		add_to_peer_log(id, "[INFO] ❌No " + craft_name + " cards left in stock!")
+	
 @rpc("any_peer", "call_local")
 func buy_attribute_card(id: int, amount: int, attribute: String, cost: int):
 	var success := false
@@ -802,7 +824,9 @@ func use_craft_mat_on_item(id, craft_mat, item, slot):
 	# == CRAFT HERE ==
 	item_dict_to_craft[item]["modifiers"]["attributes"]["strength"] = 5
 	# == CRAFT HERE ==
-	
+			
+	all_gladiators[id]["crafting_mats"][craft_mat] -= 1
+	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 	
 	print("item after craft: " + str(item_dict_to_craft))
 	all_gladiators[id]["inventory"][slot] = item_dict_to_craft.duplicate(true)
