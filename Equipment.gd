@@ -33,7 +33,7 @@ extends Node
 	"sword": {
 		"simple_sword": {
 			"price": 20,
-			"stock": 250,
+			"stock": 2500,
 			"type": "weapon",
 			"category": "sword",
 			"weight": 3,
@@ -63,7 +63,7 @@ extends Node
 		},
 		"sturdy_blade": {
 			"price": 20,
-			"stock": 250,
+			"stock": 2500,
 			"type": "weapon",
 			"category": "sword",
 			"weight": 8,
@@ -642,6 +642,28 @@ extends Node
 				"bonuses": {}
 			}
 		}
+	},
+
+	"rings": {
+		"thin_ring": {
+			"price": 25,
+			"stock": 50,
+			"type": "jewellery",
+			"category": "ring",
+			"weight": 0,
+			"absorb": 0,
+			"str_req": 0,
+			"level": 1,
+			"modifiers": {
+				"attributes": {
+					"resilience": 5,
+					"endurance": 5,
+					"health": 5
+				},
+				"bonuses": {}
+			}
+		}
 	}
+
 }
 	

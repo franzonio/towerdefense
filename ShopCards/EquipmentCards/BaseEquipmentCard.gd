@@ -51,21 +51,27 @@ func _on_equipment_card_updated(id, updated_item_dict, slot, item):
 	
 	if id != multiplayer.get_unique_id(): return
 
-	
+
+	if parent_name == "Weapon1Slot":
+		print("slot.capitalize(): " + slot.capitalize() + " | parent_name: " + str(parent_name) + " | " + str(slot.capitalize() in parent_name))
+		
 	if "slot" in slot: 
 		if parent_name != slot: return
 		#await get_tree().create_timer(0.1).timeout
 		#await get_tree().create_timer(0.2).timeout
 		tooltip_text = ""
 		tooltip_text = get_item_tooltip(updated_item_dict[item])
-	elif slot.capitalize() in parent_name:
+	elif ucfirst(slot) in parent_name:
 		#await get_tree().create_timer(0.1).timeout
 		print("_on_equipment_card_updated: " + str(updated_item_dict[item]))
 		print("slot: " + str(slot))
 		tooltip_text = ""
 		tooltip_text = get_item_tooltip(updated_item_dict[item])
 	
-
+func ucfirst(text: String) -> String:
+	if text.length() == 0:
+		return text
+	return text[0].to_upper() + text.substr(1)
 
 
 func _on_send_equipment_dict_to_peer(id, _item_dict):
@@ -77,7 +83,7 @@ func _on_send_equipment_dict_to_peer(id, _item_dict):
 	item_dict = _item_dict.duplicate(true)
 	if item_dict.has(equipment_name):
 		var item = item_dict[equipment_name].duplicate(true)
-		print("_on_send_equipment_dict_to_peer " + str(item))
+		#print("_on_send_equipment_dict_to_peer " + str(item))
 		if tooltip_text == "": tooltip_text = get_item_tooltip(item)
 		#initial_tooltip_received = 1
 	
@@ -168,8 +174,20 @@ func get_item_tooltip(item_data: Dictionary):
 	var level = item_data.get("level", -1)
 	var hands = item_data.get("hands", -1)
 	var hand_text = "One-Handed" if hands == 1 else "Two-Handed"
-	var min_dmg = item_data.get("min_dmg", -1)
-	var max_dmg = item_data.get("max_dmg", -1)
+	
+	var added_min_dmg = 0
+	var added_max_dmg = 0
+	var min_base_dmg = item_data.get("min_dmg", -1)
+	var max_base_dmg = item_data.get("max_dmg", -1)
+	var added_dmg = item_data["modifiers"]["bonuses"].get("added_dmg", "0").split("-")
+	if added_dmg.size() > 1:
+		added_min_dmg = int(added_dmg[0])
+		added_max_dmg = int(added_dmg[1])
+		
+	var increased_dmg = 1.0 + float(item_data["modifiers"]["bonuses"].get("increased_dmg", "0"))/100.0
+	var min_dmg = int(round((min_base_dmg+added_min_dmg)*increased_dmg))
+	var max_dmg = int(round((max_base_dmg+added_max_dmg)*increased_dmg))
+	
 	var str_req = item_data.get("str_req", -1)
 	var skill_req = item_data.get("skill_req", -1)
 	var durability = item_data.get("durability", -1)
@@ -218,19 +236,37 @@ func get_item_tooltip(item_data: Dictionary):
 		"chain_mastery": "Chain Mastery",
 		"shield_mastery": "Shield Mastery",
 		"unarmed_mastery": "Unarmed Mastery",
+		
+		"added_dmg": " additional weapon damage",
+		"increased_dmg": "% increased weapon damage",
+		"added_hit_chance": "% additional hit chance",
+		"increased_attack_speed": "% increased attack speed",
+		"increased_crit_multi": "% increased critical multiplier",
+		"increased_crit_chance": "% increased critical strike chance",
+		"life_on_hit": " life on hit"
 	# Add more as needed
 		}
 	
 	# Modifications
 	if item_data.has("modifiers"):
 		var mods_attributes = item_data["modifiers"].get("attributes", {})
-		var mods_bonuses = item_data["modifiers"].get("bonuses", {})
 		var mod_lines = []
 		for key in mods_attributes.keys():
 			var value = mods_attributes[key]
-			if value != 0:
+			if value != 0 or value != "0":
 				var label = mod_labels.get(key, key.capitalize())
 				mod_lines.append("+%d %s " % [value, label])
+		if mod_lines.size() > 0:
+			tooltip += "\n\n" + "\n".join(mod_lines)
+			
+		#tooltip += "\n"
+			
+		var mods_bonuses = item_data["modifiers"].get("bonuses", {})
+		mod_lines = []
+		for key in mods_bonuses.keys():
+			var value = mods_bonuses[key]
+			var label = mod_labels.get(key, key.capitalize())
+			mod_lines.append("%s%s" % [value, label])
 		if mod_lines.size() > 0:
 			tooltip += "\n\n" + "\n".join(mod_lines)
 

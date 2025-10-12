@@ -56,10 +56,11 @@ var no_wep = {"hands": 1,
 			"str_req": 20,
 			"skill_req": 30,
 			"level": 1,
-			"attributes": 
-			{
-				"weapon_skill": 0,
-			}}
+			"modifiers": {
+				"attributes": {},
+				"bonuses": {}
+				}
+			}
 
 					 
 var attributes := {}
@@ -299,7 +300,7 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 	
 func _initialize_attributes():
 	attributes = {
-		"strength": 45.0,
+		"strength": 60.0,
 		"quickness": 81.0,
 		"crit_rating": 10.0,
 		"avoidance": 31.0,
@@ -460,8 +461,8 @@ func _on_confirm():
 		},
 		
 		"crafting_mats": {
-			"tome_of_chaos": 5,
-			"tome_of_injection": 5
+			"tome_of_chaos": 5000,
+			"tome_of_injection": 5000
 		}
 	}
 	

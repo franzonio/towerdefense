@@ -127,6 +127,8 @@ const RACE_MODIFIERS = {
 	}
 }
 
+
+
 func _ready():
 	#print("🆔 Peer:", multiplayer.get_unique_id(), " Is server:", multiplayer.is_server())
 	await get_tree().process_frame
@@ -425,7 +427,7 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 			# Remove weight of item
 			if weight: all_gladiators[peer_id]["weight"] -= weight
 			
-			print("add to inventory " + str(slot_name))
+			#print(all_gladiators[peer_id])
 			rpc_id(peer_id, "add_item_to_inventory", peer_id, item_dict, slot_name)
 			rpc_id(peer_id, "remove_item_from_equipment", peer_id, item_dict, category)
 			rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id]["inventory"][slot_name], slot_name, equipment)
@@ -448,6 +450,9 @@ func equip_item(peer_id, equipment, selected_slot):
 	var weight = item_dict[equipment].get("weight", 0)
 	var equip_success = 0
 	
+	if category in ["sword", "axe", "chain", "dagger", "hammer"]:
+		category = "weapon"
+	
 	if int(all_gladiators[peer_id]["level"]) >= lvl_req:
 		if all_gladiators[peer_id]["attributes"]["strength"] >= str_req:
 			if type == "weapon" and category != "shield":
@@ -457,18 +462,22 @@ func equip_item(peer_id, equipment, selected_slot):
 				if _hands == 2 and all_gladiators[peer_id]["weapon1"].keys()[0] == "unarmed" and all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed":
 					all_gladiators[peer_id]["weapon1"] = item_dict
 					all_gladiators[peer_id]["weapon2"] = item_dict
+					category = "weapon1"
 					equip_success = 1
 				elif _hands == 1 and all_gladiators[peer_id]["weapon1"].keys()[0] == "unarmed": 
 					all_gladiators[peer_id]["weapon1"] = item_dict
+					category = "weapon1"
 					equip_success = 1
 				elif _hands == 1 and all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed": 
 					all_gladiators[peer_id]["weapon2"] = item_dict
 					equip_success = 1
+					category = "weapon2"
 				else: add_to_peer_log(peer_id, "[INFO] ❌Cannot equip more weapons!")
 					
 			elif category == "shield":
 				if all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed": 
 					all_gladiators[peer_id]["weapon2"] = item_dict
+					category = "weapon2"
 					equip_success = 1
 				else: add_to_peer_log(peer_id, "[INFO] ❌Can only wear shield in off-hand!")
 					
@@ -491,11 +500,13 @@ func equip_item(peer_id, equipment, selected_slot):
 				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing shoulders")
 				
 			elif category == "ring": 
-				if all_gladiators[peer_id]["ring1"].keys()[0] == {}: 
+				if all_gladiators[peer_id]["ring1"] == {}: 
 					all_gladiators[peer_id]["ring1"] = item_dict
+					category = "ring1"
 					equip_success = 1
-				elif all_gladiators[peer_id]["ring2"].keys()[0] == {}: 
+				elif all_gladiators[peer_id]["ring2"] == {}: 
 					all_gladiators[peer_id]["ring2"] = item_dict
+					category = "ring2"
 					equip_success = 1
 				else: add_to_peer_log(peer_id, "[INFO] ❌Cannot equip more rings!")
 				
@@ -524,7 +535,7 @@ func equip_item(peer_id, equipment, selected_slot):
 			# Add weight of item
 			if weight: all_gladiators[peer_id]["weight"] += weight
 				
-			
+			#print(all_gladiators[peer_id])
 			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
 		else: add_to_peer_log(peer_id, "[INFO] ❌Need " + str(str_req) + " strength to equip item, you have " + str(int(all_gladiators[peer_id]["attributes"]["strength"])) + "!")
 	else: add_to_peer_log(peer_id, "[INFO] ❌Item requires level " + str(lvl_req) + " to equip, you are level " + str(all_gladiators[peer_id]["level"]))
@@ -846,45 +857,141 @@ func reroll_cards_new_round_send_signal(active_players: Array):
 	print("Emitting signal reroll_cards_new_round, active_players = " + str(active_players))
 	emit_signal("reroll_cards_new_round_signal", active_players)
 	
+	
+
+	
+	
+	
 @rpc("any_peer", "call_local")
 func use_craft_mat_on_item(id, craft_mat, item, slot):
+	
 	var item_dict_to_craft = all_gladiators[id]["inventory"][slot].duplicate(true)
-	print("item before craft: " + str(item_dict_to_craft))
 	var possible_attributes = attr_cards_stock.keys()
 	var roll_interval_max = 3+2*item_dict_to_craft[item]["level"]
 	
 	# == TOME OF CHAOS ==
 	if craft_mat == "tome_of_chaos": # Roll 3 attributes
 		
+		var nbr_of_bonuses_pool = [0,0,1,1,2,2,3]
+		var nbr_of_bonuses = randi() % nbr_of_bonuses_pool.size()
+		var nbr_of_bonuses_to_roll = nbr_of_bonuses_pool[nbr_of_bonuses]
+		var random_bonuses = get_bonuses_rolls(id, slot, nbr_of_bonuses_to_roll)
+		print("random_bonuses: " + str(random_bonuses))
+		item_dict_to_craft[item]["modifiers"]["bonuses"] = random_bonuses.duplicate(true)
+		
 		var nbr_of_attributes_pool = [1,1,1,1,2,2,3]
 		var nbr_of_attributes = randi() % nbr_of_attributes_pool.size()
 		var nbr_of_attributes_to_roll = nbr_of_attributes_pool[nbr_of_attributes]
-		var random_attributes = get_tome_of_chaos_rolls(possible_attributes, nbr_of_attributes_to_roll, roll_interval_max)
+		var random_attributes = get_attribute_rolls(possible_attributes, nbr_of_attributes_to_roll, roll_interval_max)
 		print("random_attributes: " + str(random_attributes))
 		item_dict_to_craft[item]["modifiers"]["attributes"] = random_attributes.duplicate(true)
 		
+	# == TOME OF INJECTION ==
 	if craft_mat == "tome_of_injection": # Add 1 new attribute
 		var existing_attributes_on_item = item_dict_to_craft[item]["modifiers"]["attributes"].keys().size()
-		if existing_attributes_on_item >= 3: 
-			add_to_peer_log(id, "[INFO] ❌Cannot add more attributes!")
-			return
-		var random_attribute = get_tome_of_injection_roll(item_dict_to_craft[item]["modifiers"]["attributes"], possible_attributes, roll_interval_max)
-		print("random_attribute: " + str(random_attribute) + str(random_attribute.keys()[0]))
-		item_dict_to_craft[item]["modifiers"]["attributes"][random_attribute.keys()[0]] = random_attribute[random_attribute.keys()[0]]
+		var existing_bonuses_on_item = item_dict_to_craft[item]["modifiers"]["bonuses"].keys().size()
 		
+		var random_bonus = get_tome_of_injection_bonus_roll(id, item, slot)
+		var random_attribute = get_tome_of_injection_attribute_roll(item_dict_to_craft[item]["modifiers"]["attributes"], possible_attributes, roll_interval_max)
+		
+		if existing_attributes_on_item >= 3 and existing_bonuses_on_item < 3: 
+			if random_bonus == {}:
+				add_to_peer_log(id, "[INFO] No more bonuses exists for this item!")
+				return
+			item_dict_to_craft[item]["modifiers"]["bonuses"][random_bonus.keys()[0]] = random_bonus[random_bonus.keys()[0]]
+			
+		elif existing_attributes_on_item < 3 and existing_bonuses_on_item >= 3: 
+			item_dict_to_craft[item]["modifiers"]["attributes"][random_attribute.keys()[0]] = random_attribute[random_attribute.keys()[0]]
+			
+		elif existing_attributes_on_item < 3 and existing_bonuses_on_item < 3: 
+			var coin_flip = randi() % 2
+			if random_bonus == {}:
+				coin_flip = 1
+			
+			if coin_flip == 0:
+				item_dict_to_craft[item]["modifiers"]["bonuses"][random_bonus.keys()[0]] = random_bonus[random_bonus.keys()[0]]
+			elif coin_flip == 1: 
+				item_dict_to_craft[item]["modifiers"]["attributes"][random_attribute.keys()[0]] = random_attribute[random_attribute.keys()[0]]
+			
+		else:
+			add_to_peer_log(id, "[INFO] ❌Item is full on modifiers!")
+			return
+		
+	# == TOME OF LIBERTY ==
 	if craft_mat == "tome_of_liberty": print("") # Remove all modifiers
 			
 			
-			
-			
-			
 	all_gladiators[id]["crafting_mats"][craft_mat] -= 1
-	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 	all_gladiators[id]["inventory"][slot] = item_dict_to_craft.duplicate(true)
-	rpc_id(id, "update_equipment_card", id, all_gladiators[id]["inventory"][slot], slot, item)
+	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 	rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+	rpc_id(id, "update_equipment_card", id, all_gladiators[id]["inventory"][slot], slot, item)
+	
+	print(all_gladiators[id])
 
-func get_tome_of_injection_roll(item_dict_to_craft: Dictionary, attribute_list: Array, roll_interval_max: int) -> Dictionary:
+
+
+
+
+func get_attribute_rolls(attribute_list: Array, nbr_of_rolls: int, roll_interval_max: int) -> Dictionary:
+	var result := {}
+	var mastery_attrs := []
+	var non_mastery_attrs := []
+
+	# Separate mastery and non-mastery attributes
+	for attr in attribute_list:
+		if "mastery" in attr:
+			mastery_attrs.append(attr)
+		else:
+			non_mastery_attrs.append(attr)
+
+	# Build weighted pool
+	var weighted_pool := non_mastery_attrs.duplicate()
+	if mastery_attrs.size() > 0:
+		# Add one mastery placeholder to represent all mastery attributes
+		weighted_pool.append("mastery_group")
+
+	# Select attributes
+	var selected := []
+	var pool = weighted_pool.duplicate()
+	pool.shuffle()
+
+	for i in range(nbr_of_rolls):
+		if pool.is_empty():
+			break
+		var pick = pool.pop_front()
+		if pick == "mastery_group":
+			selected.append(mastery_attrs.pick_random())
+		else:
+			selected.append(pick)
+
+	# Roll values with exponential bias
+	for attr in selected:
+		var raw = randf()
+		var curved = pow(raw, 1.2) # higher -> harder to get good rolls
+		var roll = int(ceil(curved * roll_interval_max))
+		roll = clamp(roll, 1, roll_interval_max)
+		result[attr] = roll
+
+	return result
+
+
+func get_bonuses_rolls(id, slot, nbr_of_rolls):
+	var item_dict_to_craft = all_gladiators[id]["inventory"][slot].duplicate(true)
+	var possible_bonuses = get_possible_bonuses_for_item(item_dict_to_craft)
+			
+	var keys = possible_bonuses.keys()
+	keys.shuffle()
+
+	var selected := {}
+	for i in range(min(nbr_of_rolls, keys.size())):
+		var key = keys[i]
+		selected[key] = possible_bonuses[key]
+
+	return selected
+		
+		
+func get_tome_of_injection_attribute_roll(item_dict_to_craft: Dictionary, attribute_list: Array, roll_interval_max: int) -> Dictionary:
 	var result := {}
 
 	# Filter out attributes that already exist
@@ -908,52 +1015,57 @@ func get_tome_of_injection_roll(item_dict_to_craft: Dictionary, attribute_list: 
 
 	result[chosen_attr] = roll
 	return result
+			
+			
+func get_tome_of_injection_bonus_roll(id, item, slot):
+	var item_dict_to_craft = all_gladiators[id]["inventory"][slot].duplicate(true)
+	var existing_bonuses = item_dict_to_craft[item]["modifiers"].get("bonuses", {})
+	var possible_bonuses = get_possible_bonuses_for_item(item_dict_to_craft)
+	
+	var available_keys := []
+	for key in possible_bonuses.keys():
+		if not existing_bonuses.has(key):
+			available_keys.append(key)
 
+	if available_keys.is_empty():
+		return {}  # No new bonuses available
 
+	var chosen_key = available_keys.pick_random()
+	return {chosen_key: possible_bonuses[chosen_key]}
 
-func get_tome_of_chaos_rolls(attribute_list: Array, amount: int, roll_interval_max: int) -> Dictionary:
-	var result := {}
-	var mastery_attrs := []
-	var non_mastery_attrs := []
+			
+			
+func get_possible_bonuses_for_item(item_dict):
+	var item = item_dict.keys()[0]
+	var item_level = item_dict[item]["level"]
+	var type = item_dict[item]["type"]
+	var hands = item_dict[item].get("hands", "")
+			
+	var possible_bonuses = {}
+	
+	if type == "weapon":
+		if hands == 1:
+			possible_bonuses = {
+				"added_dmg": str(randi_range(1, item_dict[item]["min_dmg"]/2)) + "-" + 
+							str(randi_range(item_dict[item]["min_dmg"]/2, item_dict[item]["max_dmg"]/2)),
+				"increased_dmg": str(randi_range(2*item_level, 10*item_level)),
+				"added_hit_chance": str(randi_range(1, 7)),
+				"increased_attack_speed": str(randi_range(item_level, 3*item_level)),
+				"increased_crit_multi": str(randi_range(item_level, 4*item_level)),
+				"increased_crit_chance": str(randi_range(item_level, 4*item_level)),
+				"life_on_hit": str(randi_range(1, item_level))
+			}
+		elif hands == 2:
+			possible_bonuses = {
+				"added_dmg": str(2*randi_range(1, item_dict[item]["min_dmg"]/2)) + "-" + 
+							str(2*randi_range(item_dict[item]["min_dmg"]/2, item_dict[item]["max_dmg"]/2)),
+				"increased_dmg": str(2*randi_range(2*item_level, 10*item_level)),
+				"added_hit_chance": str(randi_range(1, 12)),
+				"increased_attack_speed": str(2*randi_range(item_level, 3*item_level)),
+				"increased_crit_multi": str(2*randi_range(item_level, 4*item_level)),
+				"increased_crit_chance": str(2*randi_range(item_level, 4*item_level)),
+				"life_on_hit": str(2*randi_range(1, item_level))
+			}
 
-	# Separate mastery and non-mastery attributes
-	for attr in attribute_list:
-		if "mastery" in attr:
-			mastery_attrs.append(attr)
-		else:
-			non_mastery_attrs.append(attr)
-
-	# Build weighted pool
-	var weighted_pool := non_mastery_attrs.duplicate()
-	if mastery_attrs.size() > 0:
-		# Add one mastery placeholder to represent all mastery attributes
-		weighted_pool.append("mastery_group")
-
-	# Select attributes
-	var selected := []
-	var pool = weighted_pool.duplicate()
-	pool.shuffle()
-
-	for i in range(amount):
-		if pool.is_empty():
-			break
-		var pick = pool.pop_front()
-		if pick == "mastery_group":
-			selected.append(mastery_attrs.pick_random())
-		else:
-			selected.append(pick)
-
-	# Roll values with exponential bias
-	for attr in selected:
-		var raw = randf()
-		var curved = pow(raw, 1.2) # higher -> harder to get good rolls
-		var roll = int(ceil(curved * roll_interval_max))
-		roll = clamp(roll, 1, roll_interval_max)
-		result[attr] = roll
-
-	return result
-
-
-
-
+	return possible_bonuses
 	

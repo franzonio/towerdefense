@@ -6,10 +6,6 @@ extends CanvasLayer
 @onready var disconnect_button = $EscMenu/Disconnect
 @onready var confirm_disconnect = $EscMenu/ConfirmDisconnect
 
-var equipment_card_scenes = {
-	"simple_sword": simple_sword_card
-}
-
 @onready var inventory_popup := $InventoryPopup
 @onready var equipment_popup := $EquipmentPopup
 @onready var craft_bench_popup := $CraftbenchPopup
@@ -157,6 +153,7 @@ var craft_active = ""
 @onready var obsidian_spikes_card = preload("res://ShopCards/EquipmentCards/Shoulders/ObsidianSpikes.tscn")
 @onready var reinforced_leather_pads_card = preload("res://ShopCards/EquipmentCards/Shoulders/ReinforcedLeatherPads.tscn")
 
+@onready var thin_ring_card = preload("res://ShopCards/EquipmentCards/Ring/ThinRing.tscn")
 
 func _ready():
 	esc_menu.visible = false
@@ -295,12 +292,13 @@ func get_all_cards():
 		[padded_wraps_card, "padded_wraps", card_stock["padded_wraps"]], [chain_mail_shoulderguards_card, "chain_mail_shoulderguards", card_stock["chain_mail_shoulderguards"]],
 		[iron_shoulders_card, "iron_shoulders", card_stock["iron_shoulders"]], [leather_pads_card, "leather_pads", card_stock["leather_pads"]],
 		[obsidian_spikes_card, "obsidian_spikes", card_stock["obsidian_spikes"]], [reinforced_leather_pads_card, "reinforced_leather_pads", card_stock["reinforced_leather_pads"]],
-		
-		### ETC ###
-		
+
 		### WEAPONS ###
 		[simple_sword_card, "simple_sword", card_stock["simple_sword"]], [light_axe_card, "light_axe", card_stock["light_axe"]],
-		[wooden_buckler_card, "wooden_buckler", card_stock["wooden_buckler"]], [sturdy_blade_card, "sturdy_blade", card_stock["sturdy_blade"]]
+		[wooden_buckler_card, "wooden_buckler", card_stock["wooden_buckler"]], [sturdy_blade_card, "sturdy_blade", card_stock["sturdy_blade"]],
+		
+		### RINGS ###
+		[thin_ring_card, "thin_ring", card_stock["thin_ring"]],
 		]
 	return all_cards
 	
@@ -410,17 +408,30 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 func _on_add_item_to_equipment(id, item_dict, category):
 	if multiplayer.get_unique_id() != id: return
 	
+	var item_slot
 	var card_scene_map := {}
 	for card in all_cards:
 		card_scene_map[card[1]] = card[0]  # card[1] is name, card[0] is scene
 	
 	var item_name = item_dict.keys()[0]
+	var hands = item_dict[item_name].get("hands", "")
 
 	# Find corresponding scene
 	if card_scene_map.has(item_name):
 		var card_instance = card_scene_map[item_name].instantiate()
 		
-		var item_slot = $EquipmentPanel.find_child(category.capitalize()+"Slot", true, false)
+		if hands == 2 and get_node("EquipmentPanel/Weapon1Slot").get_children() == [] and get_node("EquipmentPanel/Weapon2Slot").get_children() == []:
+			item_slot = get_node("EquipmentPanel/Weapon1Slot")
+			$EquipmentPanel/Weapon2Slot.visible = false
+		
+		elif hands == 1 and category in ["weapon1", "weapon2"]:
+			item_slot = get_node("EquipmentPanel/Weapon" + category[-1] + "Slot")
+			
+		elif category in ["ring1", "ring2"]:
+			item_slot = get_node("EquipmentPanel/Ring" + category[-1] + "Slot")
+			
+		else: 
+			item_slot = $EquipmentPanel.find_child(category.capitalize()+"Slot", true, false)
 		
 		card_instance.button_parent.connect(_on_equipment_pressed)
 		card_instance.pressed.connect(_on_equipment_item_pressed.bind(item_name, category))
@@ -429,16 +440,13 @@ func _on_add_item_to_equipment(id, item_dict, category):
 		card_instance.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 		card_instance.custom_minimum_size = item_slot.size
 		
-		#print("category: " + category)
-		#print(item_slot)
-		#print(item_slot.get_child(0))
 	else:
 		print("⚠️ No matching scene for item:", item_name)
 
 func _on_add_item_to_inventory(id, item_dict, slot_name):
 	if id != multiplayer.get_unique_id():
 		return
-	print("_on_add_item_to_inventory")
+	#print("_on_add_item_to_inventory")
 	var card_scene_map := {}
 	for card in all_cards:
 		card_scene_map[card[1]] = card[0]  # card[1] is name, card[0] is scene
@@ -451,30 +459,35 @@ func _on_add_item_to_inventory(id, item_dict, slot_name):
 		card_instance.button_down.connect(_on_inventory_item_pressed.bind(item_name, slot_name))
 		card_instance.set_multiplayer_authority(multiplayer.get_unique_id())  # Optional, for sync
 		$Inventory/InventoryGridContainer.find_child(slot_name, true, false).add_child(card_instance)
-		#print("slot_name: " + slot_name)
-		#print($Inventory/InventoryGridContainer.find_child(slot_name, true, false))
-		#print($Inventory/InventoryGridContainer.find_child(slot_name, true, false).get_child(0))
 	else:
 		print("⚠️ No matching scene for item:", item_name)
 
+
 func _on_remove_item_from_equipment(id, item_dict, category):
 	if multiplayer.get_unique_id() != id: return
-	var item_slot = $EquipmentPanel.find_child(category.capitalize()+"Slot", true, false)
+	var item_slot
 	
-	#print("category: " + category)
-	#print(item_slot)
-	#print(item_slot.get_child(0))
+	var item_name = item_dict.keys()[0]
+	var hands = item_dict[item_name].get("hands", "")
+	
+	if hands == 2:
+		item_slot = get_node("EquipmentPanel/Weapon1Slot")
+		$EquipmentPanel/Weapon2Slot.visible = true
+	
+	elif hands == 1 and category in ["weapon1", "weapon2"]:
+		item_slot = get_node("EquipmentPanel/Weapon" + category[-1] + "Slot")
+		
+	elif category in ["ring1", "ring2"]:
+		item_slot = get_node("EquipmentPanel/Ring" + category[-1] + "Slot")
+		
+	else: 
+		item_slot = $EquipmentPanel.find_child(category.capitalize()+"Slot", true, false)
+	
 	item_slot.get_child(0).queue_free()
 
-func _on_remove_item_from_inventory(id, item_dict, slot_name):
-	#print("asd")
+func _on_remove_item_from_inventory(id, _item_dict, slot_name):
 	if multiplayer.get_unique_id() != id: return
-	#print("slot_name: " + slot_name)
-	#print($Inventory/InventoryGridContainer.find_child(slot_name, true, false))
-	#print($Inventory/InventoryGridContainer.find_child(slot_name, true, false).get_child(0))
 	$Inventory/InventoryGridContainer.find_child(slot_name, true, false).get_child(0).queue_free()
-		#print(child)
-		#child.
 	
 func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
 	all_gladiators = _all_gladiators
@@ -803,11 +816,11 @@ func _on_inventory_item_pressed(item_name: String, slot_name: String):
 	#print(card_instance)
 	selected_item_name = item_name
 	selected_slot = slot_name
-	print("\nslot1: " + str(all_gladiators[multiplayer.get_unique_id()]["inventory"]["slot1"]))
-	print("slot2: " + str(all_gladiators[multiplayer.get_unique_id()]["inventory"]["slot2"]))
-	print("slot3: " + str(all_gladiators[multiplayer.get_unique_id()]["inventory"]["slot3"]))
-	print("slot4: " + str(all_gladiators[multiplayer.get_unique_id()]["inventory"]["slot4"]))
-	print("Pressed " + str(selected_slot))
+	#print("\nslot1: " + str(all_gladiators[multiplayer.get_unique_id()]["inventory"]["slot1"]))
+	#print("slot2: " + str(all_gladiators[multiplayer.get_unique_id()]["inventory"]["slot2"]))
+	#print("slot3: " + str(all_gladiators[multiplayer.get_unique_id()]["inventory"]["slot3"]))
+	#print("slot4: " + str(all_gladiators[multiplayer.get_unique_id()]["inventory"]["slot4"]))
+	#print("Pressed " + str(selected_slot))
 
 	# Show popup near mouse
 
@@ -963,7 +976,7 @@ func _on_countdown_updated(time_left: int):
 		
 		if time_left == 0:
 			reroll_start_of_intermission = 1
-			intermission = false
+			#intermission = false
 			time_passed = 0
 			await get_tree().create_timer(1.0).timeout
 			countdown_label.text = ""
