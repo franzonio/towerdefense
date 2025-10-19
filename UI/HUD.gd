@@ -414,7 +414,7 @@ func _on_add_item_to_equipment(id, item_dict, category):
 		card_scene_map[card[1]] = card[0]  # card[1] is name, card[0] is scene
 	
 	var item_name = item_dict.keys()[0]
-	var hands = item_dict[item_name].get("hands", "")
+	var hands = item_dict[item_name].get("hands", -1)
 
 	# Find corresponding scene
 	if card_scene_map.has(item_name):
@@ -468,7 +468,7 @@ func _on_remove_item_from_equipment(id, item_dict, category):
 	var item_slot
 	
 	var item_name = item_dict.keys()[0]
-	var hands = item_dict[item_name].get("hands", "")
+	var hands = item_dict[item_name].get("hands", -1)
 	
 	if hands == 2:
 		item_slot = get_node("EquipmentPanel/Weapon1Slot")

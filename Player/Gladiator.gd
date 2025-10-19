@@ -121,6 +121,7 @@ var recalculated_hit_chance = 0
 @export var next_attack_critical: bool = false
 @export var next_taken_hit_critical: bool = false
 @export var next_attack_weapon: int
+@export var life_on_block: int
 
 var spawn_point
 
@@ -161,6 +162,7 @@ var opponent_dead = false
 @export var concede_threshold := 0.5
 
 var combined_gladiator_bonuses = {}
+
 
 signal died
 
@@ -343,6 +345,8 @@ func check_for_attack(delta: float):
 		attack_charge_time = 0.0
 
 func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_chance, _crit_multi):
+	# crit_chance = 1 + (wep_base_crit*local_wep_crit_bonus)*(1+global_crit_bonus)
+	
 	print("before bonuses: " + str(_hit_chance) + " | " + str(_crit_chance) + " | " + str(_crit_multi))
 	_hit_chance += combined_gladiator_bonuses.get("added_hit_chance", 0)/100.0
 	_crit_chance = _crit_chance*(1+combined_gladiator_bonuses.get("increased_crit_chance", 0)/100.0)
@@ -355,6 +359,7 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 	var min_base_dmg = _weapon["min_dmg"]
 	var max_base_dmg = _weapon["max_dmg"]
 	var added_dmg = _weapon["modifiers"]["bonuses"].get("added_dmg", "0").split("-")
+	
 	if added_dmg.size() > 1:
 		added_min_dmg = int(added_dmg[0])
 		added_max_dmg = int(added_dmg[1])
@@ -363,9 +368,6 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 	var wep_min_dmg = int(round((min_base_dmg+added_min_dmg)*increased_dmg))
 	var wep_max_dmg = int(round((max_base_dmg+added_max_dmg)*increased_dmg))
 	
-	
-	#var wep_min_dmg = _weapon["min_dmg"]
-	#var wep_max_dmg = _weapon["max_dmg"]
 	var wep_category = _weapon["category"]
 	var block_success = 0
 	var parry_success = 0	# default 0 means defender did not parry
@@ -452,7 +454,7 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 func receive_damage(amount: int, raw_damage, hit_success, dodge_success, crit, parry_success, defender_weapon1_broken, 
 					defender_weapon2_broken, wep1_new_durability, wep2_new_durability, block_success, shield_absorb):
 	if !hit_success or dodge_success: next_attack_critical = true
-	
+	if block_success: current_health += life_on_block
 	weapon1_durability = wep1_new_durability
 	weapon2_durability = wep2_new_durability
 	current_health -= amount
@@ -631,6 +633,9 @@ func update_gladiator_after_strategy(hit_chance_penalty, dodge_mod):
 
 @rpc("any_peer", "call_local")
 func update_gladiator(data: Dictionary):
+	combined_gladiator_bonuses = collect_gladiator_bonuses(data)
+	print("combined_gladiator_bonuses: " + str(combined_gladiator_bonuses))
+	
 	recalculated_hit_chance = 0
 	#print("update_gladiator: " + str(data))
 	var chest_absorb = 0
@@ -735,6 +740,7 @@ func update_gladiator(data: Dictionary):
 	weapon1_durability = data["weapon1"][weapon1_name]["durability"]
 	weapon2_durability = data["weapon2"][weapon2_name]["durability"]
 	
+	life_on_block = combined_gladiator_bonuses.get("life_on_block", 0)
 	shield_absorb = data["weapon2"][weapon2_name].get("absorb", -1)
 	weapon1_can_parry = data["weapon1"][weapon1_name]["parry"]
 	weapon2_can_parry = data["weapon2"][weapon2_name]["parry"]
@@ -753,15 +759,16 @@ func update_gladiator(data: Dictionary):
 	var hit_curve_smoothness = 6+float(level)/4 # In low level, hit curve is more smooth (exponential part)
 	var wep1_difficulty = 1 # vary around 1 -> higher makes it easier to handle
 	var wep2_difficulty = 1 # vary around 1 -> higher makes it easier to handle
+
 	
 	if weapon2_can_block: 
-		block_chance = stance_parry_block_mod*(0.8 - exp(-0.4*(2*glad_weapon2_category_skill / weapon2_skill_req-1.0)))
+		block_chance = stance_parry_block_mod*(0.8 - exp(-0.4*(2*glad_weapon2_category_skill / weapon2_skill_req-1.0))) + combined_gladiator_bonuses.get("increased_block_chance", 0)/100.0
 		
 		crit_multi = [stance_crit_multi_mod*((weapon1_crit_multi+(((1+weapon1_crit_multi)**weapon1_crit_multi)*crit_rating)/(weapon1_crit_multi*crit_rating+400))), 
 					stance_crit_multi_mod*((weapon1_crit_multi+(((1+weapon1_crit_multi)**weapon1_crit_multi)*crit_rating)/(weapon1_crit_multi*crit_rating+400)))]
 					
-		crit_chance = [stance_crit_chance_mod*((weapon1_crit_chance**4)*crit_rating/(((weapon1_crit_chance**4)*crit_rating)+400)), 
-					stance_crit_chance_mod*((weapon1_crit_chance**4)*crit_rating/(((weapon1_crit_chance**4)*crit_rating)+400))]
+		crit_chance = [(weapon1_crit_chance-1)+stance_crit_chance_mod*((weapon1_crit_chance**4)*crit_rating/(((weapon1_crit_chance**4)*crit_rating)+400)), 
+					(weapon1_crit_chance-1)+stance_crit_chance_mod*((weapon1_crit_chance**4)*crit_rating/(((weapon1_crit_chance**4)*crit_rating)+400))]
 		
 		hit_chance = [attack_type_hit_mod*(wep1_difficulty + 1/(hit_base_per_lvl - (hit_skill_weight_1**hit_curve_smoothness))), 
 					attack_type_hit_mod*(wep1_difficulty + 1/(hit_base_per_lvl - (hit_skill_weight_1**hit_curve_smoothness)))]
@@ -770,8 +777,8 @@ func update_gladiator(data: Dictionary):
 		crit_multi = [stance_crit_multi_mod*((weapon1_crit_multi+(((1+weapon1_crit_multi)**weapon1_crit_multi)*crit_rating)/(weapon1_crit_multi*crit_rating+400))), 
 					stance_crit_multi_mod*((weapon2_crit_multi+(((1+weapon2_crit_multi)**weapon2_crit_multi)*crit_rating)/(weapon2_crit_multi*crit_rating+400)))]
 		
-		crit_chance = [stance_crit_chance_mod*((weapon1_crit_chance**4)*crit_rating/(((weapon1_crit_chance**4)*crit_rating)+400)), 
-					stance_crit_chance_mod*((weapon2_crit_chance**4)*crit_rating/(((weapon2_crit_chance**4)*crit_rating)+400))]
+		crit_chance = [(weapon1_crit_chance-1)+stance_crit_chance_mod*((weapon1_crit_chance**4)*crit_rating/(((weapon1_crit_chance**4)*crit_rating)+400)), 
+					(weapon2_crit_chance-1)+stance_crit_chance_mod*((weapon2_crit_chance**4)*crit_rating/(((weapon2_crit_chance**4)*crit_rating)+400))]
 		
 		hit_chance = [attack_type_hit_mod*(wep1_difficulty + 1/(hit_base_per_lvl - (hit_skill_weight_1**hit_curve_smoothness))), 
 					  attack_type_hit_mod*(wep2_difficulty + 1/(hit_base_per_lvl - (hit_skill_weight_2**hit_curve_smoothness)))]
@@ -825,10 +832,6 @@ func update_gladiator(data: Dictionary):
 	$HealthBar.value = max_health
 	$HealthBar/HealthBarText.text = str(int(max_health))
 
-	combined_gladiator_bonuses = collect_gladiator_bonuses(data)
-	print("combined_gladiator_bonuses: " + str(combined_gladiator_bonuses))
-	#hit_chance[0] += combined_gladiator_bonuses.get("added_hit_chance", 0)
-	#hit_chance[1] += combined_gladiator_bonuses.get("added_hit_chance", 0)
 
 
 func collect_gladiator_bonuses(gladiator: Dictionary) -> Dictionary:

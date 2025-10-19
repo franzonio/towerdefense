@@ -68,10 +68,10 @@ func _on_equipment_card_updated(id, updated_item_dict, slot, item):
 		tooltip_text = ""
 		tooltip_text = get_item_tooltip(updated_item_dict[item])
 	
-func ucfirst(text: String) -> String:
-	if text.length() == 0:
-		return text
-	return text[0].to_upper() + text.substr(1)
+func ucfirst(_text: String) -> String:
+	if _text.length() == 0:
+		return _text
+	return _text[0].to_upper() + _text.substr(1)
 
 
 func _on_send_equipment_dict_to_peer(id, _item_dict):
@@ -98,7 +98,7 @@ if item_dict.has(equipment_name):
 
 			#print("⚠️ Equipment name not found: " + equipment_name)
 
-func _on_send_gladiator_data_to_peer_card_signal(peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
+func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
 	all_gladiators = _all_gladiators
 
 func format_name(raw_name: String) -> String:
@@ -112,7 +112,7 @@ func format_name(raw_name: String) -> String:
 
 func _on_mouse_entered():
 	#print(unique_id)
-	var my_id = multiplayer.get_unique_id()
+	#var my_id = multiplayer.get_unique_id()
 	mouse_inside_button = true
 	emit_signal("mouse_inside_equipment_card_signal", mouse_inside_button)
 	if parent_name == "ShopGridContainer":
@@ -170,7 +170,7 @@ func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data):
 
 
 func get_item_tooltip(item_data: Dictionary):
-	var name = format_name(equipment_name)
+	var display_name = format_name(equipment_name)
 	var level = item_data.get("level", -1)
 	var hands = item_data.get("hands", -1)
 	var hand_text = "One-Handed" if hands == 1 else "Two-Handed"
@@ -188,18 +188,35 @@ func get_item_tooltip(item_data: Dictionary):
 	var min_dmg = int(round((min_base_dmg+added_min_dmg)*increased_dmg))
 	var max_dmg = int(round((max_base_dmg+added_max_dmg)*increased_dmg))
 	
+	# crit_chance = 1 + (wep_base_crit*local_wep_crit_bonus)*(1+global_crit_bonus)
+	'''
+	var wep_base_crit_chance = item_data.get("crit_chance", -1)
+	var local_wep_crit_chance_bonus = float(item_data["modifiers"]["bonuses"].get("local_increased_crit_chance", "0"))/100.0
+	var crit_chance = wep_base_crit_chance*(1+local_wep_crit_chance_bonus)
+	
+	var wep_base_crit_multi = item_data.get("crit_multi", -1)
+	var local_wep_crit_multi_bonus = float(item_data["modifiers"]["bonuses"].get("local_increased_crit_multi", "0"))/100.0
+	var crit_multi = wep_base_crit_multi*(1+local_wep_crit_multi_bonus)
+	
+	var wep_base_attack_speed = item_data.get("speed", -1)
+	var local_wep_attack_speed_bonus = float(item_data["modifiers"]["bonuses"].get("local_increased_attack_speed", "0"))/100.0
+	var speed = wep_base_attack_speed*(1+local_wep_attack_speed_bonus)
+	'''
+	
+	var crit_chance = item_data.get("crit_chance", -1)
+	var crit_multi = item_data.get("crit_multi", -1)
+	var speed = item_data.get("speed", -1)
+	
 	var str_req = item_data.get("str_req", -1)
 	var skill_req = item_data.get("skill_req", -1)
 	var durability = item_data.get("durability", -1)
-	var speed = item_data.get("speed", -1)
-	var crit_chance = item_data.get("crit_chance", -1)
-	var crit_multi = item_data.get("crit_multi", -1)
+
 	var weight = item_data.get("weight", -1)
 	var category = item_data.get("category", "None")
 	var type = item_data.get("type", "None")
 	var absorb = item_data.get("absorb", -1)
 
-	var tooltip = name + "\n\n"
+	var tooltip = display_name + "\n\n"
 	#tooltip += "%Level %d\n" % [level]
 	if hands != -1: tooltip += "%s %s\n" % [hand_text, category.capitalize()]
 	if min_dmg != -1 and category != "shield": tooltip += "%d–%d Damage\n" % [min_dmg, max_dmg]
@@ -240,12 +257,26 @@ func get_item_tooltip(item_data: Dictionary):
 		"added_dmg": " additional weapon damage",
 		"increased_dmg": "% increased weapon damage",
 		"added_hit_chance": "% additional hit chance",
-		"increased_attack_speed": "% increased attack speed",
-		"increased_crit_multi": "% increased critical multiplier",
-		"increased_crit_chance": "% increased critical strike chance",
-		"life_on_hit": " life on hit"
+		"local_increased_attack_speed": "% increased local attack speed",
+		"local_increased_crit_multi": "% increased local critical multiplier",
+		"local_increased_crit_chance": "% increased local critical strike chance",
+		"life_on_hit": " life on hit",
+		
+		"local_added_abs": " additional absorb",
+		"local_added_durability": " to durability",
+		"local_increased_durability": "% increased durability",
+		"added_block_chance": "% increased block chance",
+		"life_on_block": " life on block"
+		
 	# Add more as needed
 		}
+		
+					
+			#"added_abs": str(randi_range(1, item_level)),
+			#"added_durability": str(randi_range(durability/4, durability)),
+			#"increased_durability": str(randi_range(2*item_level, 10*item_level)),
+			#"added_block_chance": str(randi_range(1, item_level)),
+			#"life_on_block:": str(randi_range(item_level, 3*item_level)),
 	
 	# Modifications
 	if item_data.has("modifiers"):
@@ -258,8 +289,7 @@ func get_item_tooltip(item_data: Dictionary):
 				mod_lines.append("+%d %s " % [value, label])
 		if mod_lines.size() > 0:
 			tooltip += "\n\n" + "\n".join(mod_lines)
-			
-		#tooltip += "\n"
+
 			
 		var mods_bonuses = item_data["modifiers"].get("bonuses", {})
 		mod_lines = []

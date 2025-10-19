@@ -323,7 +323,7 @@ func get_player_colors(id: int) -> void:
 	rpc_id(id, "send_player_colors_to_peer", id, player_colors)
 	
 func assign_peer_colors(players): 
-	print("In GameState | players: " + str(players))
+	#print("In GameState | players: " + str(players))
 	_players = players
 	var shuffled_colors = peer_colors.duplicate()
 	shuffled_colors.shuffle()
@@ -335,7 +335,7 @@ func assign_peer_colors(players):
 			i += 1
 		else:
 			push_error("Not enough colors for all players!")
-	print(player_colors)
+	#print(player_colors)
 	
 @rpc("any_peer", "call_local")
 func client_send_ready_to_host(id: int):
@@ -396,19 +396,19 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 	# 1. Remove from all_gladiators[peer_id][equipment_button_parent_name]
 	# 2. Add to 
 	var item_dict = all_gladiators[peer_id][category] #get_equipment_by_name(peer_id, equipment)
-	var type = item_dict[equipment]["type"] # to be implemented
+	#var type = item_dict[equipment]["type"] # to be implemented
 	var hands = item_dict[equipment].get("hands", -1)
 	var item = equipment_button_parent_name.replace("Slot", "").to_lower()
 	var modifier_attributes = item_dict[equipment]["modifiers"].get("attributes", {})
 	var modifier_bonuses = item_dict[equipment]["modifiers"].get("bonuses", {})
 	var weight = item_dict[equipment].get("weight", 0)
-	var unequip_success = 0
+	#var unequip_success = 0
 	
 	
 	for slot_name in all_gladiators[peer_id]["inventory"].keys():
 		if all_gladiators[peer_id]["inventory"][slot_name] == {}:
 			all_gladiators[peer_id]["inventory"][slot_name] = item_dict
-			unequip_success = 1
+			#unequip_success = 1
 			
 			if hands == 2:
 				all_gladiators[peer_id]["weapon1"] = get_equipment_by_name(peer_id, "unarmed")
@@ -517,7 +517,7 @@ func equip_item(peer_id, equipment, selected_slot):
 
 			if equip_success:# and typeof(item) == TYPE_DICTIONARY and item.has(equipment):
 				all_gladiators[peer_id]["inventory"][selected_slot] = {}  # Clear slot
-				print("Removing " + selected_slot + " from inventory")
+				#print("Removing " + selected_slot + " from inventory")
 				rpc_id(peer_id, "remove_item_from_inventory", peer_id, item_dict, selected_slot)
 				rpc_id(peer_id, "add_item_to_equipment", peer_id, item_dict, category)
 				rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id][category], category, equipment)
@@ -639,15 +639,15 @@ func sell_from_equipment(peer_id: int, equipment: String, equipment_button_paren
 	# 1 remove from slot, increase gold
 	# replace with unarmed if weapon is sold
 	var item_dict = all_gladiators[peer_id][category]#get_equipment_by_name(peer_id, equipment)
-	var slot_name = item_dict.get("inventory_slot", "")
+	#var slot_name = item_dict.get("inventory_slot", "")
 	var price = item_dict[equipment]["price"]
-	var type = item_dict[equipment]["type"] # to be implemented
+	#var type = item_dict[equipment]["type"] # to be implemented
 	var hands = item_dict[equipment].get("hands", -1)
 	var item = equipment_button_parent_name.replace("Slot", "").to_lower()
 	var modifier_attributes = item_dict[equipment]["modifiers"].get("attributes", {})
 	var modifier_bonuses = item_dict[equipment]["modifiers"].get("bonuses", {})
 	var weight = item_dict[equipment].get("weight", 0)
-	var sell_success = 0
+	#var sell_success = 0
 	
 	if hands == 2:
 		all_gladiators[peer_id]["weapon1"] = get_equipment_by_name(peer_id, "unarmed")
@@ -853,9 +853,9 @@ func reroll_cards_new_round(_active_players: Array):
 	rpc("reroll_cards_new_round_send_signal", active_players)
 	
 @rpc("authority", "call_local")
-func reroll_cards_new_round_send_signal(active_players: Array):
-	print("Emitting signal reroll_cards_new_round, active_players = " + str(active_players))
-	emit_signal("reroll_cards_new_round_signal", active_players)
+func reroll_cards_new_round_send_signal(_active_players: Array):
+	print("Emitting signal reroll_cards_new_round, active_players = " + str(_active_players))
+	emit_signal("reroll_cards_new_round_signal", _active_players)
 	
 	
 
@@ -865,25 +865,27 @@ func reroll_cards_new_round_send_signal(active_players: Array):
 @rpc("any_peer", "call_local")
 func use_craft_mat_on_item(id, craft_mat, item, slot):
 	
+	var stock_item = get_equipment_by_name(id, item).duplicate(true)
 	var item_dict_to_craft = all_gladiators[id]["inventory"][slot].duplicate(true)
 	var possible_attributes = attr_cards_stock.keys()
 	var roll_interval_max = 3+2*item_dict_to_craft[item]["level"]
 	
 	# == TOME OF CHAOS ==
 	if craft_mat == "tome_of_chaos": # Roll 3 attributes
-		
+		item_dict_to_craft = stock_item.duplicate(true)
+		#print("stock item: " + str(item_dict_to_craft))
 		var nbr_of_bonuses_pool = [0,0,1,1,2,2,3]
 		var nbr_of_bonuses = randi() % nbr_of_bonuses_pool.size()
 		var nbr_of_bonuses_to_roll = nbr_of_bonuses_pool[nbr_of_bonuses]
 		var random_bonuses = get_bonuses_rolls(id, slot, nbr_of_bonuses_to_roll)
-		print("random_bonuses: " + str(random_bonuses))
+		#print("random_bonuses: " + str(random_bonuses))
 		item_dict_to_craft[item]["modifiers"]["bonuses"] = random_bonuses.duplicate(true)
 		
 		var nbr_of_attributes_pool = [1,1,1,1,2,2,3]
 		var nbr_of_attributes = randi() % nbr_of_attributes_pool.size()
 		var nbr_of_attributes_to_roll = nbr_of_attributes_pool[nbr_of_attributes]
 		var random_attributes = get_attribute_rolls(possible_attributes, nbr_of_attributes_to_roll, roll_interval_max)
-		print("random_attributes: " + str(random_attributes))
+		#print("random_attributes: " + str(random_attributes))
 		item_dict_to_craft[item]["modifiers"]["attributes"] = random_attributes.duplicate(true)
 		
 	# == TOME OF INJECTION ==
@@ -918,8 +920,33 @@ func use_craft_mat_on_item(id, craft_mat, item, slot):
 			return
 		
 	# == TOME OF LIBERTY ==
-	if craft_mat == "tome_of_liberty": print("") # Remove all modifiers
+	if craft_mat == "tome_of_liberty": print("") # Remove all/one modifiers
 			
+	var bonuses_after_craft = item_dict_to_craft[item]["modifiers"]["bonuses"]
+		
+	if "local_increased_attack_speed" in bonuses_after_craft:
+		var wep_base_attack_speed = stock_item[item].get("speed", -1)
+		item_dict_to_craft[item]["speed"] = wep_base_attack_speed*(1+float(bonuses_after_craft["local_increased_attack_speed"])/100.0)
+		
+	if "local_increased_crit_multi" in bonuses_after_craft:
+		var wep_base_crit_multi = stock_item[item].get("crit_multi", -1)
+		item_dict_to_craft[item]["crit_multi"] = wep_base_crit_multi*(1+float(bonuses_after_craft["local_increased_crit_multi"])/100.0)
+		
+	if "local_increased_crit_chance" in bonuses_after_craft:
+		var wep_base_crit_chance = stock_item[item].get("crit_chance", -1)
+		item_dict_to_craft[item]["crit_chance"] = wep_base_crit_chance*(1+float(bonuses_after_craft["local_increased_crit_chance"])/100.0)
+
+	if "local_added_abs" in bonuses_after_craft:
+		var base_abs = stock_item[item].get("absorb", -1)
+		item_dict_to_craft[item]["absorb"] = base_abs + float(bonuses_after_craft["local_added_abs"])
+		
+	if "local_added_durability" in bonuses_after_craft or "local_increased_durability" in bonuses_after_craft:
+		var base_durability = stock_item[item].get("durability", -1)
+		var added_durability = float(bonuses_after_craft.get("local_added_durability", 0))
+		var increased_durability = float(bonuses_after_craft.get("local_increased_durability", 0))
+		item_dict_to_craft[item]["durability"] = (base_durability + added_durability)*(1+increased_durability/100.0)
+				
+
 			
 	all_gladiators[id]["crafting_mats"][craft_mat] -= 1
 	all_gladiators[id]["inventory"][slot] = item_dict_to_craft.duplicate(true)
@@ -1039,33 +1066,49 @@ func get_possible_bonuses_for_item(item_dict):
 	var item = item_dict.keys()[0]
 	var item_level = item_dict[item]["level"]
 	var type = item_dict[item]["type"]
-	var hands = item_dict[item].get("hands", "")
+	var category = item_dict[item]["category"]
+	var hands = item_dict[item].get("hands", -1)
+	var durability = item_dict[item].get("durability", -1)
 			
 	var possible_bonuses = {}
 	
-	if type == "weapon":
+	if type == "weapon" and category != "shield":
 		if hands == 1:
 			possible_bonuses = {
 				"added_dmg": str(randi_range(1, item_dict[item]["min_dmg"]/2)) + "-" + 
 							str(randi_range(item_dict[item]["min_dmg"]/2, item_dict[item]["max_dmg"]/2)),
 				"increased_dmg": str(randi_range(2*item_level, 10*item_level)),
-				"added_hit_chance": str(randi_range(1, 7)),
-				"increased_attack_speed": str(randi_range(item_level, 3*item_level)),
-				"increased_crit_multi": str(randi_range(item_level, 4*item_level)),
-				"increased_crit_chance": str(randi_range(item_level, 4*item_level)),
-				"life_on_hit": str(randi_range(1, item_level))
+				"added_hit_chance": str(randi_range(1, item_level)),
+				"local_increased_attack_speed": str(randi_range(item_level, 3*item_level)),
+				"local_increased_crit_multi": str(randi_range(item_level, 4*item_level)),
+				"local_increased_crit_chance": str(randi_range(item_level, 4*item_level)),
+				"life_on_hit": str(randi_range(1, item_level)),
+				"local_added_durability": str(randi_range(durability/5, durability/1.5)),
+				"local_increased_durability": str(randi_range(2*item_level, 10*item_level))
 			}
 		elif hands == 2:
 			possible_bonuses = {
 				"added_dmg": str(2*randi_range(1, item_dict[item]["min_dmg"]/2)) + "-" + 
 							str(2*randi_range(item_dict[item]["min_dmg"]/2, item_dict[item]["max_dmg"]/2)),
 				"increased_dmg": str(2*randi_range(2*item_level, 10*item_level)),
-				"added_hit_chance": str(randi_range(1, 12)),
-				"increased_attack_speed": str(2*randi_range(item_level, 3*item_level)),
-				"increased_crit_multi": str(2*randi_range(item_level, 4*item_level)),
-				"increased_crit_chance": str(2*randi_range(item_level, 4*item_level)),
-				"life_on_hit": str(2*randi_range(1, item_level))
+				"added_hit_chance": str(randi_range(1, 2*item_level)),
+				"local_increased_attack_speed": str(2*randi_range(item_level, 3*item_level)),
+				"local_increased_crit_multi": str(2*randi_range(item_level, 4*item_level)),
+				"local_increased_crit_chance": str(2*randi_range(item_level, 4*item_level)),
+				"life_on_hit": str(2*randi_range(1, item_level)),
+				"local_added_durability": str(randi_range(durability/5, durability/1.5)),
+				"local_increased_durability": str(randi_range(4*item_level, 15*item_level))
 			}
+	if type == "weapon" and category == "shield":
+		possible_bonuses = {
+			"local_added_abs": str(randi_range(1, item_level)),
+			"local_added_durability": str(randi_range(durability/5, durability/1.5)),
+			"local_increased_durability": str(randi_range(2*item_level, 10*item_level)),
+			"added_block_chance": str(randi_range(1, item_level)),
+			"life_on_block": str(randi_range(item_level, 3*item_level))
+			
+		}
+		
 
 	return possible_bonuses
 	
