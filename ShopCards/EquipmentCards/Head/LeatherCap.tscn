@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://ebllrb8esfd"]
+[gd_scene load_steps=3 format=3 uid="uid://ebllrb8esfd"]
 
 [ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="1_6kgbq"]
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_syb6j"]
 
 [node name="LeatherCap" type="Button"]
 anchors_preset = 15
@@ -11,6 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("1_syb6j")
 expand_icon = true
 script = ExtResource("1_6kgbq")
 equipment_name = "leather_cap"

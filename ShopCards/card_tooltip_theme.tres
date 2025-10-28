@@ -1,0 +1,18 @@
+[gd_resource type="Theme" load_steps=2 format=3 uid="uid://pw4o330eyt7c"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_244px"]
+bg_color = Color(0.14342397, 0.19070339, 0.15201524, 1)
+border_width_left = 10
+border_width_top = 10
+border_width_right = 10
+border_width_bottom = 10
+border_color = Color(0.19159845, 0.15647578, 0.009152544, 1)
+border_blend = true
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+shadow_size = 6
+
+[resource]
+PopupPanel/styles/panel = SubResource("StyleBoxFlat_244px")

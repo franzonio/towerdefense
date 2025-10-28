@@ -180,6 +180,16 @@ func create_card_pool():
 	return _all_cards_stock
 
 @rpc("any_peer", "call_local")
+func update_all_equipment_cards(id):
+	#print("update_all_equipment_cards")
+	for slot_name in all_gladiators[id]["inventory"].keys():
+		var slot_data = all_gladiators[id]["inventory"][slot_name]
+		if slot_data.size() > 0:
+			var first_key = slot_data.keys()[0]
+			rpc_id(id, "update_equipment_card", id, slot_data, slot_name, first_key)
+
+
+@rpc("any_peer", "call_local")
 func grant_exp_for_peer(id: int, amount: int, cost: int):
 	if all_gladiators[id]["gold"] >= cost:
 		all_gladiators[id]["gold"] -= cost
@@ -196,12 +206,14 @@ func grant_exp_for_peer(id: int, amount: int, cost: int):
 			if current_exp >= required_exp:
 				current_exp -= required_exp
 				current_level = str(int(current_level) + 1)
+				
 			else:
 				break
 
 		all_gladiators[id]["level"] = current_level
 		all_gladiators[id]["exp"] = current_exp
 		rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+		update_all_equipment_cards(id)
 	else: add_to_peer_log(id, "Not enough gold!")
 
 @rpc("any_peer", "call_local")
@@ -432,6 +444,7 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 			rpc_id(peer_id, "remove_item_from_equipment", peer_id, item_dict, category)
 			rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id]["inventory"][slot_name], slot_name, equipment)
 			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
+			update_all_equipment_cards(peer_id)
 			return
 	
 	add_to_peer_log(peer_id, "[INFO] ❌No inventory space!")
@@ -521,6 +534,7 @@ func equip_item(peer_id, equipment, selected_slot):
 				rpc_id(peer_id, "remove_item_from_inventory", peer_id, item_dict, selected_slot)
 				rpc_id(peer_id, "add_item_to_equipment", peer_id, item_dict, category)
 				rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id][category], category, equipment)
+				#update_all_equipment_cards(peer_id)
 				
 				
 
@@ -537,6 +551,7 @@ func equip_item(peer_id, equipment, selected_slot):
 				
 			#print(all_gladiators[peer_id])
 			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
+			update_all_equipment_cards(peer_id)
 		else: add_to_peer_log(peer_id, "[INFO] ❌Need " + str(str_req) + " strength to equip item, you have " + str(int(all_gladiators[peer_id]["attributes"]["strength"])) + "!")
 	else: add_to_peer_log(peer_id, "[INFO] ❌Item requires level " + str(lvl_req) + " to equip, you are level " + str(all_gladiators[peer_id]["level"]))
 
@@ -580,6 +595,8 @@ func notify_card_buy_result(id: int, success: bool, _gladiator_data) -> void:
 
 @rpc("any_peer", "call_local")
 func update_equipment_card(id, item_dict_to_craft, slot, item):
+	#print("update_equipment_card")
+	#print(item)
 	emit_signal("update_equipment_card_signal", id, item_dict_to_craft, slot, item)
 	
 @rpc("any_peer", "call_local")
@@ -741,10 +758,12 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int):
 				success = true
 				rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 				rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+				update_all_equipment_cards(id)
 		else: add_to_peer_log(id, "[INFO] ❌Not enough gold!")
 	else: 
 		add_to_peer_log(id, "[INFO] ❌No " + attribute + " cards left in stock!")
 		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
+		
 		
 		
 @rpc("any_peer")

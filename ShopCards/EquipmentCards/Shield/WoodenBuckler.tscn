@@ -1,5 +1,6 @@
-[gd_scene load_steps=3 format=3 uid="uid://b3oogekjo5wj4"]
+[gd_scene load_steps=4 format=3 uid="uid://b3oogekjo5wj4"]
 
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_0y7y3"]
 [ext_resource type="Texture2D" uid="uid://bmpixjy0r3m6n" path="res://Assets/CardAssets/wooden_buckler.png" id="1_njwbd"]
 [ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="2_kiket"]
 
@@ -12,6 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("1_0y7y3")
 theme_override_icons/icon = ExtResource("1_njwbd")
 expand_icon = true
 script = ExtResource("2_kiket")

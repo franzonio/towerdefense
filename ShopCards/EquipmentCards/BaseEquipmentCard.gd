@@ -45,26 +45,45 @@ func _ready():
 	else:
 		GameState_.rpc_id(1, "get_equipment_by_name", multiplayer.get_unique_id(), equipment_name)
 	
+	'''
+	var style_box = StyleBoxFlat.new()
+	style_box.set_bg_color(Color(0.156, 0.151, 0.084))
+	style_box.set_border_width_all(6)
+	style_box.border_color = Color(0.655, 0.502, 0.027)
+	#style_box.set_expand_margin_all(10)
+	# We assume here that the `theme` property has been assigned a custom Theme beforehand.
+	theme.set_stylebox("panel", "TooltipPanel", style_box)
+	#theme.set_color("font_color", "TooltipLabel", Color(0, 1, 1))
+	'''
+	
+
+func _make_custom_tooltip(for_text):
+	
+	var label = RichTextLabel.new()
+	label.bbcode_enabled = true
+	label.bbcode_text = for_text
+	label.fit_content = true
+	label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.scroll_active = false
+	
+	return label
 
 
 func _on_equipment_card_updated(id, updated_item_dict, slot, item):
 	
 	if id != multiplayer.get_unique_id(): return
 
+	#print("updating equipment card for " + item)
 
 	if parent_name == "Weapon1Slot":
 		print("slot.capitalize(): " + slot.capitalize() + " | parent_name: " + str(parent_name) + " | " + str(slot.capitalize() in parent_name))
 		
 	if "slot" in slot: 
 		if parent_name != slot: return
-		#await get_tree().create_timer(0.1).timeout
-		#await get_tree().create_timer(0.2).timeout
 		tooltip_text = ""
 		tooltip_text = get_item_tooltip(updated_item_dict[item])
 	elif ucfirst(slot) in parent_name:
-		#await get_tree().create_timer(0.1).timeout
-		print("_on_equipment_card_updated: " + str(updated_item_dict[item]))
-		print("slot: " + str(slot))
 		tooltip_text = ""
 		tooltip_text = get_item_tooltip(updated_item_dict[item])
 	
@@ -170,6 +189,18 @@ func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data):
 
 
 func get_item_tooltip(item_data: Dictionary):
+	# Color definitions
+	#var custom_theme = preload("res://ShopCards/card_tooltip_theme.tres")
+	#theme.clear_color("bg_color", "PopupPanel/styles/panel")
+	#theme.set_color("bg_color", "PopupPanel/styles/panel", Color(0, 1, 1))
+	
+	var name_color := Color.GOLD.to_html(false)
+	var base_text_color := Color.DARK_GRAY.to_html(false)
+	var base_value_color := Color.WHITE_SMOKE.to_html(false)
+	var req_ok_color := Color.WHITE_SMOKE.to_html(false)
+	var req_nok_color := Color.RED.to_html(false)
+	var mod_color := Color.DODGER_BLUE.to_html(false)
+	
 	var display_name = format_name(equipment_name)
 	var level = item_data.get("level", -1)
 	var hands = item_data.get("hands", -1)
@@ -207,8 +238,8 @@ func get_item_tooltip(item_data: Dictionary):
 	var crit_multi = item_data.get("crit_multi", -1)
 	var speed = item_data.get("speed", -1)
 	
-	var str_req = item_data.get("str_req", -1)
-	var skill_req = item_data.get("skill_req", -1)
+	var str_req = item_data.get("str_req", 0)
+	var skill_req = item_data.get("skill_req", 0)
 	var durability = item_data.get("durability", -1)
 
 	var weight = item_data.get("weight", -1)
@@ -216,25 +247,48 @@ func get_item_tooltip(item_data: Dictionary):
 	var type = item_data.get("type", "None")
 	var absorb = item_data.get("absorb", -1)
 
-	var tooltip = display_name + "\n\n"
+	var tooltip = "[b][color=%s]%s[/color][/b]\n\n" % [name_color, display_name]
 	#tooltip += "%Level %d\n" % [level]
-	if hands != -1: tooltip += "%s %s\n" % [hand_text, category.capitalize()]
-	if min_dmg != -1 and category != "shield": tooltip += "%d–%d Damage\n" % [min_dmg, max_dmg]
-	if durability != -1: tooltip += "Durability: %d\n" % durability
-	if absorb != -1 and category == "shield": tooltip += "Block Absorb: %d\n" % absorb
-	elif absorb != -1 and type == "armor": tooltip += "Absorb: %d\n" % absorb
-	if weight != -1: tooltip += "Weight: %d\n" % weight
-	if skill_req != -1 and str_req != -1: tooltip += "Requires: Lvl %d, %d Str, %d %s" % [level, str_req, skill_req, category.capitalize()]
-	elif skill_req != -1 and str_req == -1: tooltip += "Requires: Lvl %d, %d %s" % [level, skill_req, category.capitalize()]
-	elif skill_req == -1 and str_req != -1: tooltip += "Requires: Lvl %d, %d Str" % [level, str_req]
-	elif skill_req == -1 and str_req == -1: tooltip += "Requires: Lvl %d" % [level]
+	if category == "shield": tooltip += "[color=%s]%s[/color]\n" % [base_text_color, category.capitalize()]
+	elif hands != -1: tooltip += "[color=%s]%s %s[/color]\n" % [base_text_color, hand_text, category.capitalize()]
+	if min_dmg != -1 and category != "shield": tooltip += "[color=%s]Damage:[/color] [color=%s]%d–%d[/color]\n" % [base_text_color, base_value_color, min_dmg, max_dmg]
+	if durability != -1: tooltip += "[color=%s]Durability:[/color] [color=%s]%d[/color]\n" % [base_text_color, base_value_color, durability]
+	if absorb != -1 and category == "shield": tooltip += "[color=%s]Block Absorb:[/color] [color=%s]%d[/color]\n" % [base_text_color, base_value_color, absorb]
+	elif absorb != -1 and type == "armor": tooltip += "[color=%s]Absorb:[/color] [color=%s]%d[/color]\n" % [base_text_color, base_value_color, absorb]
+	if weight != -1: tooltip += "[color=%s]Weight:[/color] [color=%s]%d[/color]\n" % [base_text_color, base_value_color, weight]
+	
+	var lvl_req_color
+	if int(all_gladiators[multiplayer.get_unique_id()]["level"]) >= int(level): lvl_req_color = req_ok_color
+	else: lvl_req_color = req_nok_color
+	
+	var str_req_color
+	if all_gladiators[multiplayer.get_unique_id()]["attributes"]["strength"] >= str_req: str_req_color = req_ok_color
+	else: str_req_color = req_nok_color
+	
+	var skill_req_color = req_ok_color
+	#if all_gladiators[multiplayer.get_unique_id()][level] >= level: skill_req_color = req_ok_color
+	#else: skill_req_color = req_nok_color
+	
+	if skill_req != 0 and str_req != 0: # SKILL REQ | LVL REQ
+		tooltip += "[color=%s]Requires: Lvl[/color] [color=%s]%d[/color][color=%s],[/color] [color=%s]Str[/color] [color=%s]%d[/color][color=%s],[/color] [color=%s]%s[/color] [color=%s]%d[/color]" % [base_text_color, lvl_req_color, level, base_text_color, 
+																base_text_color, str_req_color, str_req, base_text_color,
+																base_text_color, category.capitalize(), skill_req_color, skill_req]
+	elif skill_req != 0 and str_req == 0: # SKILL REQ | NO STR REQ
+		#print("no_str_req")
+		tooltip += "[color=%s]Requires: Lvl[/color] [color=%s]%d[/color][color=%s]%s[/color] [color=%s]%d[/color]" % [base_text_color, lvl_req_color, level,
+																base_text_color, category.capitalize(), skill_req_color, skill_req]
+	elif skill_req == 0 and str_req != 0: # NO SKILL REQ | STR REQ
+		tooltip += "[color=%s]Requires: Lvl[/color] [color=%s]%d[/color][color=%s],[/color] [color=%s]Str[/color] [color=%s]%d[/color]" % [base_text_color, lvl_req_color, level, base_text_color, 
+																base_text_color, str_req_color, str_req]
+	elif skill_req == 0 and str_req == 0: # NO SKILL REQ | NO STR REQ
+		tooltip += "[color=%s]Requires: Lvl [color=%s]%d" % [base_text_color, lvl_req_color, level]
 	else: "Requires: ???"
 	#if str_req != -1: tooltip += "\nStrength Requirement: %d\n" % str_req
 	#if skill_req != -1: tooltip += "Weapon Mastery Requirement: %d\n" % skill_req
 
-	if speed != -1: tooltip += "\nSpeed: %.2f Attacks Per Second\n" % speed
-	if crit_chance != -1: tooltip += "Critical Chance: %.0f%%\n" % (crit_chance * 100)
-	if crit_multi != -1: tooltip += "Critical Multiplier: ×%.1f" % crit_multi
+	if speed > 0: tooltip += "\n[color=%s]Attacks Per Second:[/color] [color=%s] %.2f [/color]\n" % [base_text_color, base_value_color, speed]#tooltip += "\nSpeed: %.2f Attacks Per Second\n" % speed
+	if crit_chance > 0: tooltip += "[color=%s]Critical Chance:[/color] [color=%s]%.1f%%[/color]\n" % [base_text_color, base_value_color, (crit_chance * 100)]
+	if crit_multi > 0: tooltip += "[color=%s]Critical Multiplier:[/color] [color=%s]×%.2f[/color]" % [base_text_color, base_value_color, crit_multi]
 
 	# Modifications
 	var mod_labels := {
@@ -267,16 +321,8 @@ func get_item_tooltip(item_data: Dictionary):
 		"local_increased_durability": "% increased durability",
 		"added_block_chance": "% increased block chance",
 		"life_on_block": " life on block"
-		
-	# Add more as needed
 		}
 		
-					
-			#"added_abs": str(randi_range(1, item_level)),
-			#"added_durability": str(randi_range(durability/4, durability)),
-			#"increased_durability": str(randi_range(2*item_level, 10*item_level)),
-			#"added_block_chance": str(randi_range(1, item_level)),
-			#"life_on_block:": str(randi_range(item_level, 3*item_level)),
 	
 	# Modifications
 	if item_data.has("modifiers"):
@@ -286,7 +332,7 @@ func get_item_tooltip(item_data: Dictionary):
 			var value = mods_attributes[key]
 			if value != 0 or value != "0":
 				var label = mod_labels.get(key, key.capitalize())
-				mod_lines.append("+%d %s " % [value, label])
+				mod_lines.append("[color=%s]+%d %s [/color]" % [mod_color, value, label])
 		if mod_lines.size() > 0:
 			tooltip += "\n\n" + "\n".join(mod_lines)
 
@@ -296,12 +342,13 @@ func get_item_tooltip(item_data: Dictionary):
 		for key in mods_bonuses.keys():
 			var value = mods_bonuses[key]
 			var label = mod_labels.get(key, key.capitalize())
-			mod_lines.append("%s%s" % [value, label])
+			mod_lines.append("[color=%s]%s%s[/color]" % [mod_color, value, label])
 		if mod_lines.size() > 0:
 			tooltip += "\n\n" + "\n".join(mod_lines)
 
 
 	return tooltip
+
 
 
 func cool_get_item_tooltip(item_data: Dictionary) -> String:

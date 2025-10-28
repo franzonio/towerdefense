@@ -1,5 +1,6 @@
-[gd_scene load_steps=2 format=3 uid="uid://bxnltm7lspfkp"]
+[gd_scene load_steps=3 format=3 uid="uid://bxnltm7lspfkp"]
 
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_h5583"]
 [ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="1_ps8db"]
 
 [node name="IronPlate" type="Button"]
@@ -11,6 +12,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("1_h5583")
 expand_icon = true
 script = ExtResource("1_ps8db")
 equipment_name = "iron_plate"

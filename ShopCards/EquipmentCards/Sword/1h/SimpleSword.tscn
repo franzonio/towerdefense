@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://w4fakuk8hqgk"]
+[gd_scene load_steps=4 format=3 uid="uid://w4fakuk8hqgk"]
 
 [ext_resource type="Texture2D" uid="uid://bdg4nnq18hw87" path="res://Assets/CardAssets/simple_sword.png" id="1_c8a8g"]
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_fl8yu"]
 [ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="2_fl8yu"]
 
 [node name="SimpleSword" type="Button"]
@@ -12,6 +13,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("1_fl8yu")
 theme_override_icons/icon = ExtResource("1_c8a8g")
 expand_icon = true
 script = ExtResource("2_fl8yu")
