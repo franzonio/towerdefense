@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=3 uid="uid://bfxkpkwpmlyy3"]
 
-[ext_resource type="Texture2D" uid="uid://d1flyb57j2b1m" path="res://Assets/CardAssets/StrengthCard2_small.png" id="1_egyka"]
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_gc3nw"]
 [ext_resource type="Script" uid="uid://dyyvc2btnvyo" path="res://ShopCards/AttributeCards/BaseAttributeCard.gd" id="2_gc3nw"]
 
 [node name="StrengthCard" type="Button"]
@@ -9,24 +9,11 @@ offset_bottom = 458.0
 scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme_override_icons/icon = ExtResource("1_egyka")
+theme = ExtResource("1_gc3nw")
 expand_icon = true
 script = ExtResource("2_gc3nw")
 attribute_name = "strength"
 amount = 5
 cost = 5
-
-[node name="Label" type="Label" parent="."]
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -71.0
-offset_top = 25.0
-offset_right = 74.0
-offset_bottom = 61.0
-grow_horizontal = 2
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [connection signal="button_up" from="." to="." method="_on_button_up"]

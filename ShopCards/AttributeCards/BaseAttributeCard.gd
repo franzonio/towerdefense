@@ -4,22 +4,67 @@ extends Button
 @export var attribute_name: String = ""
 @export var amount: int
 @export var cost: int
-var label
+var name_label
 var parent_name
+var all_gladiators
 
 var mouse_inside_button := false
 var added := false
 
+var name_color := "ef692f"#Color.GOLD.to_html(false)
+var base_text_color := "927e6a"#Color.DARK_GRAY.to_html(false)
+var base_value_color := "efd8a1"#Color.WHITE_SMOKE.to_html(false)
+var req_ok_color := "efd8a1"#Color.WHITE_SMOKE.to_html(false)
+var req_nok_color := "ef3a0c"#Color.RED.to_html(false)
+var mod_color := "3c9f9c"#Color.DODGER_BLUE.to_html(false)
+
+var label_display
 
 func _ready():
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	GameState_.connect("card_buy_result", Callable(self, "_on_card_buy_result"))
+	GameState_.connect("send_equipment_dict_to_peer_signal", Callable(self, "_on_send_equipment_dict_to_peer"))
+	GameState_.connect("send_gladiator_data_to_peer_card_signal", Callable(self, "_on_send_gladiator_data_to_peer_card_signal"))
+	GameState_.connect("update_equipment_card_signal", Callable(self, "_on_equipment_card_updated"))
+	GameState_.connect("signal_update_gold_req_in_shop_for_peer", Callable(self, "_on_update_gold_req_shop"))
+	
+	if multiplayer.is_server():
+		GameState_.refresh_gladiator_data_card(multiplayer.get_unique_id())
+	else:
+		GameState_.rpc_id(1, "refresh_gladiator_data_card", multiplayer.get_unique_id())
+	
 	parent_name = get_parent().name
 	if parent_name == "ShopGridContainer":
-		var label_display = format_name(attribute_name)
-		label = $Label
-		label.text = "+" + str(amount) + " " + label_display+"\n💰" + str(cost)
+		label_display = format_name(attribute_name)
+		name_label = RichTextLabel.new()
+		name_label.bbcode_enabled = true
+		name_label.fit_content = true
+		name_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		name_label.scroll_active = false
+		name_label.position.y = 15
+		name_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+		
+		if all_gladiators[multiplayer.get_unique_id()]["gold"] < cost:
+			name_label.bbcode_text = "%s \n💰[color=%s]%d[/color] " % [label_display, req_nok_color, cost] 
+		else:
+			name_label.bbcode_text = "%s \n💰%d " % [label_display, cost] 
+		
+		add_child(name_label)
+
+func _on_update_gold_req_shop(_id, gold):
+	print("asd")
+	if parent_name == "ShopGridContainer":
+		if gold < cost:
+			name_label.bbcode_text = "%s \n💰[color=%s]%d[/color] " % [label_display, req_nok_color, cost] 
+		else:
+			name_label.bbcode_text = "%s \n💰%d " % [label_display, cost] 
+			
+
+func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
+	all_gladiators = _all_gladiators
 
 func format_name(raw_name: String) -> String:
 	var parts = raw_name.split("_")            # → ["simple", "sword"]

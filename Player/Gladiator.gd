@@ -275,7 +275,7 @@ func check_for_attack(delta: float):
 				var dodge_modify = 1
 				var jester_penalty = 1
 				if all_gladiators[opponent_peer_id]["stance"] == "jester":
-					jester_penalty = 0.95
+					jester_penalty = 0.90
 				if all_gladiators[opponent_peer_id]["attack_type"] == "light":
 					dodge_modify = 1.4
 				if all_gladiators[opponent_peer_id]["attack_type"] == "heavy":

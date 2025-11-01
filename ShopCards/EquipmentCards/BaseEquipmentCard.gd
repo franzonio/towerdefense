@@ -17,6 +17,15 @@ var added := false
 signal button_parent(parent_name: String)
 signal mouse_inside_equipment_card_signal(mouse_inside_equipment_card: bool)
 
+var name_color := "ef692f"#Color.GOLD.to_html(false)
+var base_text_color := "927e6a"#Color.DARK_GRAY.to_html(false)
+var base_value_color := "efd8a1"#Color.WHITE_SMOKE.to_html(false)
+var req_ok_color := "efd8a1"#Color.WHITE_SMOKE.to_html(false)
+var req_nok_color := "ef3a0c"#Color.RED.to_html(false)
+var mod_color := "3c9f9c"#Color.DODGER_BLUE.to_html(false)
+
+var label_display
+
 func _ready():
 	#ProjectSettings.set_setting("gui/timers/tooltip_delay_sec", 5.0)
 	#print("_ready()")
@@ -27,6 +36,7 @@ func _ready():
 	GameState_.connect("send_equipment_dict_to_peer_signal", Callable(self, "_on_send_equipment_dict_to_peer"))
 	GameState_.connect("send_gladiator_data_to_peer_card_signal", Callable(self, "_on_send_gladiator_data_to_peer_card_signal"))
 	GameState_.connect("update_equipment_card_signal", Callable(self, "_on_equipment_card_updated"))
+	GameState_.connect("signal_update_gold_req_in_shop_for_peer", Callable(self, "_on_update_gold_req_shop"))
 	
 	if multiplayer.is_server():
 		GameState_.refresh_gladiator_data_card(multiplayer.get_unique_id())
@@ -35,33 +45,40 @@ func _ready():
 	
 	parent_name = get_parent().name
 	if parent_name == "ShopGridContainer":
-		var label_display = format_name(equipment_name)
-		name_label = $NameLabel
-		name_label.text = label_display+"\n💰" + str(cost)
-	#await get_tree().create_timer(0.5).timeout
+		label_display = format_name(equipment_name)
+		name_label = RichTextLabel.new()
+		name_label.bbcode_enabled = true
+		name_label.fit_content = true
+		name_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		name_label.scroll_active = false
+		name_label.position.y = 15
+		name_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+		
+		if all_gladiators[multiplayer.get_unique_id()]["gold"] < cost:
+			name_label.bbcode_text = "%s \n💰[color=%s]%d[/color] " % [label_display, req_nok_color, cost] 
+		else:
+			name_label.bbcode_text = "%s \n💰%d " % [label_display, cost] 
+		
+		add_child(name_label)
+		
 	
 	if multiplayer.is_server():
 		GameState_.get_equipment_by_name(multiplayer.get_unique_id(), equipment_name)
 	else:
 		GameState_.rpc_id(1, "get_equipment_by_name", multiplayer.get_unique_id(), equipment_name)
 	
-	'''
-	var style_box = StyleBoxFlat.new()
-	style_box.set_bg_color(Color(0.156, 0.151, 0.084))
-	style_box.set_border_width_all(6)
-	style_box.border_color = Color(0.655, 0.502, 0.027)
-	#style_box.set_expand_margin_all(10)
-	# We assume here that the `theme` property has been assigned a custom Theme beforehand.
-	theme.set_stylebox("panel", "TooltipPanel", style_box)
-	#theme.set_color("font_color", "TooltipLabel", Color(0, 1, 1))
-	'''
+
 	
 
 func _make_custom_tooltip(for_text):
 	
 	var label = RichTextLabel.new()
-	label.bbcode_enabled = true
+	label.add_theme_font_size_override("normal_font_size", 20)
+	label.add_theme_font_size_override("bold_font_size", 20)
 	label.bbcode_text = for_text
+	label.bbcode_enabled = true
 	label.fit_content = true
 	label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
@@ -69,6 +86,14 @@ func _make_custom_tooltip(for_text):
 	
 	return label
 
+
+func _on_update_gold_req_shop(_id, gold):
+	print("asd")
+	if parent_name == "ShopGridContainer":
+		if gold < cost:
+			name_label.bbcode_text = "%s \n💰[color=%s]%d[/color] " % [label_display, req_nok_color, cost] 
+		else:
+			name_label.bbcode_text = "%s \n💰%d " % [label_display, cost] 
 
 func _on_equipment_card_updated(id, updated_item_dict, slot, item):
 	
@@ -86,6 +111,8 @@ func _on_equipment_card_updated(id, updated_item_dict, slot, item):
 	elif ucfirst(slot) in parent_name:
 		tooltip_text = ""
 		tooltip_text = get_item_tooltip(updated_item_dict[item])
+		
+
 	
 func ucfirst(_text: String) -> String:
 	if _text.length() == 0:
@@ -191,15 +218,10 @@ func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data):
 func get_item_tooltip(item_data: Dictionary):
 	# Color definitions
 	#var custom_theme = preload("res://ShopCards/card_tooltip_theme.tres")
-	#theme.clear_color("bg_color", "PopupPanel/styles/panel")
+	#theme.clear_color("bg_color", "Panel")
 	#theme.set_color("bg_color", "PopupPanel/styles/panel", Color(0, 1, 1))
 	
-	var name_color := Color.GOLD.to_html(false)
-	var base_text_color := Color.DARK_GRAY.to_html(false)
-	var base_value_color := Color.WHITE_SMOKE.to_html(false)
-	var req_ok_color := Color.WHITE_SMOKE.to_html(false)
-	var req_nok_color := Color.RED.to_html(false)
-	var mod_color := Color.DODGER_BLUE.to_html(false)
+
 	
 	var display_name = format_name(equipment_name)
 	var level = item_data.get("level", -1)
@@ -219,21 +241,6 @@ func get_item_tooltip(item_data: Dictionary):
 	var min_dmg = int(round((min_base_dmg+added_min_dmg)*increased_dmg))
 	var max_dmg = int(round((max_base_dmg+added_max_dmg)*increased_dmg))
 	
-	# crit_chance = 1 + (wep_base_crit*local_wep_crit_bonus)*(1+global_crit_bonus)
-	'''
-	var wep_base_crit_chance = item_data.get("crit_chance", -1)
-	var local_wep_crit_chance_bonus = float(item_data["modifiers"]["bonuses"].get("local_increased_crit_chance", "0"))/100.0
-	var crit_chance = wep_base_crit_chance*(1+local_wep_crit_chance_bonus)
-	
-	var wep_base_crit_multi = item_data.get("crit_multi", -1)
-	var local_wep_crit_multi_bonus = float(item_data["modifiers"]["bonuses"].get("local_increased_crit_multi", "0"))/100.0
-	var crit_multi = wep_base_crit_multi*(1+local_wep_crit_multi_bonus)
-	
-	var wep_base_attack_speed = item_data.get("speed", -1)
-	var local_wep_attack_speed_bonus = float(item_data["modifiers"]["bonuses"].get("local_increased_attack_speed", "0"))/100.0
-	var speed = wep_base_attack_speed*(1+local_wep_attack_speed_bonus)
-	'''
-	
 	var crit_chance = item_data.get("crit_chance", -1)
 	var crit_multi = item_data.get("crit_multi", -1)
 	var speed = item_data.get("speed", -1)
@@ -247,7 +254,7 @@ func get_item_tooltip(item_data: Dictionary):
 	var type = item_data.get("type", "None")
 	var absorb = item_data.get("absorb", -1)
 
-	var tooltip = "[b][color=%s]%s[/color][/b]\n\n" % [name_color, display_name]
+	var tooltip = "[color=%s]%s[/color]\n\n" % [name_color, display_name]
 	#tooltip += "%Level %d\n" % [level]
 	if category == "shield": tooltip += "[color=%s]%s[/color]\n" % [base_text_color, category.capitalize()]
 	elif hands != -1: tooltip += "[color=%s]%s %s[/color]\n" % [base_text_color, hand_text, category.capitalize()]
@@ -348,74 +355,3 @@ func get_item_tooltip(item_data: Dictionary):
 
 
 	return tooltip
-
-
-
-func cool_get_item_tooltip(item_data: Dictionary) -> String:
-	var tooltip := ""
-
-	# Color definitions
-	var name_color := Color.SKY_BLUE
-	var stat_color := Color.GRAY
-	var type_color := Color.PALE_GREEN
-	var mod_color := Color.SKY_BLUE
-
-	# Item name (if you have one)
-	if item_data.has("name"):
-		tooltip += "[color=%s][b]%s[/b][/color]\n" % [name_color, item_data["name"]]
-
-	# Category and hand type
-	var category = item_data.get("category", "")
-	if category != "":
-		tooltip += "[color=%s]%s[/color]\n" % [stat_color, category.capitalize()]
-
-	var hands = item_data.get("hands", -1)
-	if hands != -1:
-		var hand_text = "One-handed" if hands == 1 else "Two-handed"
-		tooltip += "[color=%s]%s[/color]\n" % [type_color, hand_text]
-
-	# Damage
-	var min_dmg = item_data.get("min_dmg", -1)
-	var max_dmg = item_data.get("max_dmg", -1)
-	if min_dmg != -1 and max_dmg != -1:
-		tooltip += "[color=%s]Physical Damage: %d–%d[/color]\n" % [stat_color, min_dmg, max_dmg]
-
-	# Crit and speed
-	var crit_chance = item_data.get("crit_chance", -1.0)
-	if crit_chance != -1.0:
-		tooltip += "[color=%s]Critical Chance: %.1f%%[/color]\n" % [stat_color, crit_chance * 100]
-
-	var speed = item_data.get("speed", -1.0)
-	if speed != -1.0:
-		tooltip += "[color=%s]Attacks per Second: %.2f[/color]\n" % [stat_color, speed]
-
-	# Requirements
-	var str_req = item_data.get("str_req", -1)
-	if str_req != -1:
-		tooltip += "[color=%s]Requires Strength %d[/color]\n" % [stat_color, str_req]
-
-	var skill_req = item_data.get("skill_req", -1)
-	if skill_req != -1:
-		tooltip += "[color=%s]Requires Weapon Mastery %d[/color]\n" % [stat_color, skill_req]
-
-	# Modifications
-	var mod_labels := {
-		"strength": "Strength",
-		"weapon_skill": "Weapon Mastery",
-		"quickness": "Quickness",
-		"crit_rating": "Criticality",
-		"avoidance": "Avoidance",
-		"health": "Health",
-		"resilience": "Resilience",
-		"endurance": "Endurance"
-	}
-
-	if item_data.has("modifications"):
-		var mods = item_data["modifications"]
-		for key in mods.keys():
-			var value = mods[key]
-			if value != 0:
-				var label = mod_labels.get(key, key.capitalize())
-				tooltip += "[color=%s][b]+%d %s[/b][/color]\n" % [mod_color, value, label]
-
-	return tooltip.strip_edges()

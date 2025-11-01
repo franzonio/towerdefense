@@ -46,6 +46,8 @@ signal remove_item_from_inventory_signal(id, item_dict, slot_name)
 signal add_item_to_equipment_signal(peer_id, item_dict, category)
 signal remove_item_from_equipment_signal(peer_id, item_dict, category)
 
+signal signal_update_gold_req_in_shop_for_peer(id, gold)
+
 var craft_cards_stock
 var attr_cards_stock
 var all_cards_stock
@@ -188,6 +190,9 @@ func update_all_equipment_cards(id):
 			var first_key = slot_data.keys()[0]
 			rpc_id(id, "update_equipment_card", id, slot_data, slot_name, first_key)
 
+@rpc("any_peer", "call_local")
+func update_gold_req_in_shop_for_peer(id):
+	emit_signal("signal_update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
 
 @rpc("any_peer", "call_local")
 func grant_exp_for_peer(id: int, amount: int, cost: int):
@@ -639,6 +644,7 @@ func buy_equipment_card(id: int, equipment: String, cost: int, ):
 					all_gladiators[id]["gold"] -= cost
 					adjust_card_stock(equipment, "remove")
 					success = true
+					rpc_id(id, "update_gold_req_in_shop_for_peer", id)
 					rpc_id(id, "add_item_to_inventory", id, item_dict, slot_name)
 					rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 					rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
@@ -685,6 +691,7 @@ func sell_from_equipment(peer_id: int, equipment: String, equipment_button_paren
 	
 	all_gladiators[peer_id]["gold"] += int(price/2)
 	
+	rpc_id(peer_id, "update_gold_req_in_shop_for_peer", peer_id)
 	adjust_card_stock(equipment, "add")  # Restore stock
 	rpc_id(peer_id, "remove_item_from_equipment", peer_id, item_dict, category)
 	rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
@@ -703,6 +710,7 @@ func sell_from_inventory(id: int, equipment: String, selected_slot):
 	
 	all_gladiators[id]["inventory"][selected_slot] = {}  # Clear slot
 	all_gladiators[id]["gold"] += int(price/2)
+	rpc_id(id, "update_gold_req_in_shop_for_peer", id)
 	rpc_id(id, "remove_item_from_inventory", id, item_dict, selected_slot)
 	adjust_card_stock(equipment, "add")  # Restore stock
 	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
@@ -737,6 +745,7 @@ func buy_craft_card(id, craft_name, cost):
 			success = true
 			rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+			rpc_id(id, "update_gold_req_in_shop_for_peer", id)
 		else: add_to_peer_log(id, "[INFO] ❌Not enough gold!")
 	else: 
 		add_to_peer_log(id, "[INFO] ❌No " + craft_name + " cards left in stock!")
@@ -756,6 +765,7 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int):
 				emit_signal("gladiator_attribute_changed", all_gladiators)
 				adjust_card_stock(attribute, "remove")
 				success = true
+				rpc_id(id, "update_gold_req_in_shop_for_peer", id)
 				rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 				rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 				update_all_equipment_cards(id)
