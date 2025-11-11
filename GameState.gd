@@ -62,6 +62,9 @@ var players_ready_list = []
 var players_ready = 0
 var active_players = []
 
+var total_modifier_bonuses
+var prev_total_modifier_bonuses
+
 const RACE_MODIFIERS = {
 	"Orc": {
 		"strength": 1.25,
@@ -409,6 +412,7 @@ func get_equipment_by_name(id, item_name: String):
 
 @rpc("any_peer", "call_local")
 func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
+	prev_total_modifier_bonuses = total_modifier_bonuses
 	#print("Unqeuip equipment not implemented yet")
 	# 1. Remove from all_gladiators[peer_id][equipment_button_parent_name]
 	# 2. Add to 
@@ -433,13 +437,23 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 			elif item == "weapon1" or item == "weapon2": all_gladiators[peer_id][item] = get_equipment_by_name(peer_id, "unarmed")
 			else: all_gladiators[peer_id][item] = {}
 			
+			remove_attribute_bonuses(peer_id)
 			# Remove item modifier attributes from items
 			if modifier_attributes != {}:
 				for attribute in modifier_attributes:
-					all_gladiators[peer_id]["attributes"][attribute] -= modifier_attributes[attribute]
+					#var key = "increased_" + attribute
+					all_gladiators[peer_id]["attributes"][attribute] -= modifier_attributes[attribute]#/(1+float(prev_total_modifier_bonuses.get(key, 0))/100)
 			
 			# TODO Remove item modifier bonuses
-			if modifier_bonuses != {}: 1 
+			#if modifier_bonuses != {}: 1 
+			total_modifier_bonuses = collect_gladiator_bonuses(peer_id)
+			all_gladiators[peer_id]["total_modifier_bonuses"] = total_modifier_bonuses
+			
+			add_attribute_bonuses(peer_id)
+			
+			#print("x prev " + str(float(prev_total_modifier_bonuses.get("increased_health", 0))))
+			#attribute_bonuses(peer_id)
+			print(all_gladiators[peer_id]["attributes"]["health"])
 			
 			# Remove weight of item
 			if weight: all_gladiators[peer_id]["weight"] -= weight
@@ -541,15 +555,28 @@ func equip_item(peer_id, equipment, selected_slot):
 				rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id][category], category, equipment)
 				#update_all_equipment_cards(peer_id)
 				
-				
+			prev_total_modifier_bonuses = all_gladiators[peer_id].get("total_modifier_bonuses", {})
+			total_modifier_bonuses = collect_gladiator_bonuses(peer_id)
+			all_gladiators[peer_id]["total_modifier_bonuses"] = total_modifier_bonuses
 
+			remove_attribute_bonuses(peer_id)
 			# Apply item modifier attributes from items
 			if modifier_attributes != {}:
 				for attribute in modifier_attributes:
-					all_gladiators[peer_id]["attributes"][attribute] += modifier_attributes[attribute]
+					#var key = "increased_" + attribute
+					all_gladiators[peer_id]["attributes"][attribute] += modifier_attributes[attribute]#*(1+float(total_modifier_bonuses.get(key, 0))/100)
+					
+			add_attribute_bonuses(peer_id)
+					#print((1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_health", 0))))
+					
+			
+
 			
 			# TODO Apply item modifier bonuses
-			if modifier_bonuses != {}: 1 
+			#if modifier_bonuses != {}: 1 
+			
+			print(all_gladiators[peer_id]["attributes"]["health"])
+			#print(all_gladiators[peer_id])
 			
 			# Add weight of item
 			if weight: all_gladiators[peer_id]["weight"] += weight
@@ -559,6 +586,68 @@ func equip_item(peer_id, equipment, selected_slot):
 			update_all_equipment_cards(peer_id)
 		else: add_to_peer_log(peer_id, "[INFO] ❌Need " + str(str_req) + " strength to equip item, you have " + str(int(all_gladiators[peer_id]["attributes"]["strength"])) + "!")
 	else: add_to_peer_log(peer_id, "[INFO] ❌Item requires level " + str(lvl_req) + " to equip, you are level " + str(all_gladiators[peer_id]["level"]))
+
+
+func remove_attribute_bonuses(peer_id):
+	all_gladiators[peer_id]["attributes"]["strength"] = all_gladiators[peer_id]["attributes"].get("strength", 0)/(1+float(prev_total_modifier_bonuses.get("increased_strength", 0))/100)
+	all_gladiators[peer_id]["attributes"]["quickness"] = all_gladiators[peer_id]["attributes"].get("quickness", 0)/(1+float(prev_total_modifier_bonuses.get("increased_quickness", 0))/100)
+	all_gladiators[peer_id]["attributes"]["crit_rating"] = all_gladiators[peer_id]["attributes"].get("crit_rating", 0)/(1+float(prev_total_modifier_bonuses.get("increased_crit_rating", 0))/100)
+	all_gladiators[peer_id]["attributes"]["avoidance"] = all_gladiators[peer_id]["attributes"].get("avoidance", 0)/(1+float(prev_total_modifier_bonuses.get("increased_avoidance", 0))/100)
+	all_gladiators[peer_id]["attributes"]["health"] = all_gladiators[peer_id]["attributes"].get("health", 0)/(1+float(prev_total_modifier_bonuses.get("increased_health", 0))/100)
+	all_gladiators[peer_id]["attributes"]["resilience"] = all_gladiators[peer_id]["attributes"].get("resilience", 0)/(1+float(prev_total_modifier_bonuses.get("increased_resilience", 0))/100)
+	all_gladiators[peer_id]["attributes"]["endurance"] = all_gladiators[peer_id]["attributes"].get("endurance", 0)/(1+float(prev_total_modifier_bonuses.get("increased_endurance", 0))/100)
+			
+
+func add_attribute_bonuses(peer_id):
+	all_gladiators[peer_id]["attributes"]["strength"] = all_gladiators[peer_id]["attributes"].get("strength", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_strength", 0))/100)
+	all_gladiators[peer_id]["attributes"]["quickness"] = all_gladiators[peer_id]["attributes"].get("quickness", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_quickness", 0))/100)
+	all_gladiators[peer_id]["attributes"]["crit_rating"] = all_gladiators[peer_id]["attributes"].get("crit_rating", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_crit_rating", 0))/100)
+	all_gladiators[peer_id]["attributes"]["avoidance"] = all_gladiators[peer_id]["attributes"].get("avoidance", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_avoidance", 0))/100)
+	all_gladiators[peer_id]["attributes"]["health"] = all_gladiators[peer_id]["attributes"].get("health", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_health", 0))/100)
+	all_gladiators[peer_id]["attributes"]["resilience"] = all_gladiators[peer_id]["attributes"].get("resilience", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_resilience", 0))/100)
+	all_gladiators[peer_id]["attributes"]["endurance"] = all_gladiators[peer_id]["attributes"].get("endurance", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_endurance", 0))/100)
+
+
+@rpc("any_peer", "call_local")
+func collect_gladiator_bonuses(id): 
+	var merged := {}
+	var excluded_keys := ["inventory"]
+	var skip_weapon2 := false
+	var gladiator = all_gladiators[id].duplicate(true)
+
+	for key in gladiator.keys():
+		if excluded_keys.has(key):
+			continue
+
+		var slot = gladiator[key]
+		if typeof(slot) != TYPE_DICTIONARY:
+			continue
+
+		for item_key in slot.keys():
+			var item = slot[item_key]
+			if typeof(item) != TYPE_DICTIONARY:
+				continue
+
+			# Check if weapon1 is two-handed
+			if key == "weapon1" and item.has("hands") and item["hands"] == 2:
+				skip_weapon2 = true
+
+			# Skip weapon2 if weapon1 is two-handed
+			if key == "weapon2" and skip_weapon2 and item.has("type") and item["type"] == "weapon":
+				continue
+
+			# Collect bonuses
+			if item.has("modifiers") and item["modifiers"].has("bonuses"):
+				var bonuses = item["modifiers"]["bonuses"]
+				for bonus_key in bonuses.keys():
+					var value = bonuses[bonus_key]
+					var numeric_value = float(value) if typeof(value) in [TYPE_STRING, TYPE_INT, TYPE_FLOAT] and String(value).is_valid_float() else 0
+
+					if merged.has(bonus_key):
+						merged[bonus_key] += numeric_value
+					else:
+						merged[bonus_key] = numeric_value
+	return merged
 
 @rpc("any_peer", "call_local")
 func peer_attack_type(id, type): 
@@ -758,8 +847,11 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int):
 			#print("modify_attribute called on peer: ", multiplayer.get_unique_id())
 			var race = all_gladiators[id]["race"]
 			
+			total_modifier_bonuses = collect_gladiator_bonuses(id)
 			if all_gladiators.has(id):
-				var amount_after_bonuses = float(amount)*RACE_MODIFIERS[race][attribute]
+				var key = "increased_" + attribute
+				var amount_after_bonuses = float(amount)*RACE_MODIFIERS[race][attribute]*(1+float(total_modifier_bonuses.get(key, 0))/100)
+				print("amount_after_bonuses: " + str(amount_after_bonuses))
 				all_gladiators[id]["attributes"][attribute] += amount_after_bonuses
 				all_gladiators[id]["gold"] -= cost
 				emit_signal("gladiator_attribute_changed", all_gladiators)
@@ -1113,7 +1205,14 @@ func get_possible_bonuses_for_item(item_dict):
 				"local_increased_crit_chance": str(randi_range(item_level, 4*item_level)),
 				"life_on_hit": str(randi_range(1, item_level)),
 				"local_added_durability": str(randi_range(durability/5, durability/1.5)),
-				"local_increased_durability": str(randi_range(2*item_level, 10*item_level))
+				"local_increased_durability": str(randi_range(2*item_level, 10*item_level)),
+				
+				"increased_sword_mastery": str(randi_range(item_level, 2*item_level)),
+				"increased_axe_mastery": str(randi_range(item_level, 2*item_level)),
+				"increased_dagger_mastery": str(randi_range(item_level, 2*item_level)),
+				"increased_hammer_mastery": str(randi_range(item_level, 2*item_level)),
+				"increased_chain_mastery": str(randi_range(item_level, 2*item_level)),
+				"increased_shield_mastery": str(randi_range(item_level, 2*item_level))
 			}
 		elif hands == 2:
 			possible_bonuses = {
@@ -1126,18 +1225,190 @@ func get_possible_bonuses_for_item(item_dict):
 				"local_increased_crit_chance": str(2*randi_range(item_level, 4*item_level)),
 				"life_on_hit": str(2*randi_range(1, item_level)),
 				"local_added_durability": str(randi_range(durability/5, durability/1.5)),
-				"local_increased_durability": str(randi_range(4*item_level, 15*item_level))
+				"local_increased_durability": str(randi_range(4*item_level, 15*item_level)),
+				
+				"increased_sword_mastery": str(randi_range(item_level, 2*item_level)),
+				"increased_axe_mastery": str(randi_range(item_level, 2*item_level)),
+				"increased_dagger_mastery": str(randi_range(item_level, 2*item_level)),
+				"increased_hammer_mastery": str(randi_range(item_level, 2*item_level)),
+				"increased_chain_mastery": str(randi_range(item_level, 2*item_level)),
+				"increased_shield_mastery": str(randi_range(item_level, 2*item_level))
 			}
+			
 	if type == "weapon" and category == "shield":
 		possible_bonuses = {
 			"local_added_abs": str(randi_range(1, item_level)),
 			"local_added_durability": str(randi_range(durability/5, durability/1.5)),
 			"local_increased_durability": str(randi_range(2*item_level, 10*item_level)),
 			"added_block_chance": str(randi_range(1, item_level)),
-			"life_on_block": str(randi_range(item_level, 3*item_level))
+			"life_on_block": str(randi_range(item_level, 3*item_level)),
+			
+			"increased_sword_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_axe_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_dagger_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_hammer_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_chain_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_shield_mastery": str(randi_range(item_level, 2*item_level))
+		}
+		
+	if category == "ring":
+		possible_bonuses = {
+			"life_on_block": str(randi_range(item_level, 2*item_level)),
+			"life_on_hit": str(2*randi_range(item_level, 1.5*item_level)),
+			"added_hit_chance": str(randi_range(1, 2*item_level)),
+			"global_increased_crit_chance": str(2*randi_range(item_level, 3*item_level)),
+			"global_increased_crit_multi": str(2*randi_range(item_level, 3*item_level)),
+			"global_increased_attack_speed": str(2*randi_range(item_level, 3*item_level)),
+			
+			"increased_health": str(randi_range(item_level, 2*item_level)),
+			"increased_strength": str(randi_range(item_level, 2*item_level)),
+			"increased_quickness": str(randi_range(item_level, 2*item_level)),
+			"increased_crit_rating": str(randi_range(item_level, 2*item_level)),
+			"increased_avoidance": str(randi_range(item_level, 2*item_level)),
+			"increased_resilience": str(randi_range(item_level, 2*item_level)),
+			"increased_endurance": str(randi_range(item_level, 2*item_level)),
+		}
+		
+	if category == "amulet" or category == "necklace":
+		possible_bonuses = {
+			"life_on_block": str(1.5*randi_range(item_level, 2*item_level)),
+			"life_on_hit": str(3*randi_range(item_level, 1.5*item_level)),
+			"added_hit_chance": str(1.5*randi_range(1, 2*item_level)),
+			"global_increased_crit_chance": str(3*randi_range(item_level, 3*item_level)),
+			"global_increased_crit_multi": str(3*randi_range(item_level, 3*item_level)),
+			"global_increased_attack_speed": str(3*randi_range(item_level, 3*item_level)),
+			
+			"increased_health": str(randi_range(item_level, 2*item_level)),
+			"increased_strength": str(randi_range(item_level, 2*item_level)),
+			"increased_quickness": str(randi_range(item_level, 2*item_level)),
+			"increased_crit_rating": str(randi_range(item_level, 2*item_level)),
+			"increased_avoidance": str(randi_range(item_level, 2*item_level)),
+			"increased_resilience": str(randi_range(item_level, 2*item_level)),
+			"increased_endurance": str(randi_range(item_level, 2*item_level)),
+		}
+		
+	if category == "trinket":
+		possible_bonuses = {
+			"life_on_block": str(1.5*randi_range(item_level, 2*item_level)),
+			"life_on_hit": str(3*randi_range(item_level, 1.5*item_level)),
+			"added_hit_chance": str(1.5*randi_range(1, 2*item_level)),
+			"global_increased_crit_chance": str(3*randi_range(item_level, 3*item_level)),
+			"global_increased_crit_multi": str(3*randi_range(item_level, 3*item_level)),
+			"global_increased_attack_speed": str(3*randi_range(item_level, 3*item_level)),
+			
+			"increased_health": str(randi_range(item_level, 2*item_level)),
+			"increased_strength": str(randi_range(item_level, 2*item_level)),
+			"increased_quickness": str(randi_range(item_level, 2*item_level)),
+			"increased_crit_rating": str(randi_range(item_level, 2*item_level)),
+			"increased_avoidance": str(randi_range(item_level, 2*item_level)),
+			"increased_resilience": str(randi_range(item_level, 2*item_level)),
+			"increased_endurance": str(randi_range(item_level, 2*item_level)),
+		}
+		
+	if category == "back":
+		possible_bonuses = {
+			"life_on_block": str(1.5*randi_range(item_level, 2*item_level)),
+			"life_on_hit": str(3*randi_range(item_level, 1.5*item_level)),
+			"added_hit_chance": str(1.5*randi_range(1, 2*item_level)),
+			"global_increased_crit_chance": str(3*randi_range(item_level, 3*item_level)),
+			"global_increased_crit_multi": str(3*randi_range(item_level, 3*item_level)),
+			"global_increased_attack_speed": str(3*randi_range(item_level, 3*item_level)),
+			
+			"increased_health": str(randi_range(item_level, 2*item_level)),
+			"increased_strength": str(randi_range(item_level, 2*item_level)),
+			"increased_quickness": str(randi_range(item_level, 2*item_level)),
+			"increased_crit_rating": str(randi_range(item_level, 2*item_level)),
+			"increased_avoidance": str(randi_range(item_level, 2*item_level)),
+			"increased_resilience": str(randi_range(item_level, 2*item_level)),
+			"increased_endurance": str(randi_range(item_level, 2*item_level)),
+			
+			"increased_sword_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_axe_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_dagger_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_hammer_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_chain_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_shield_mastery": str(randi_range(item_level, 2*item_level))
+		}
+		
+	if category == "belt":
+		possible_bonuses = {
+			"life_on_block": str(1.5*randi_range(item_level, 2*item_level)),
+			"life_on_hit": str(3*randi_range(item_level, 1.5*item_level)),
+			"added_hit_chance": str(1.5*randi_range(1, 2*item_level)),
+			"global_increased_crit_chance": str(3*randi_range(item_level, 3*item_level)),
+			"global_increased_crit_multi": str(3*randi_range(item_level, 3*item_level)),
+			"global_increased_attack_speed": str(3*randi_range(item_level, 3*item_level)),
+			
+			"increased_health": str(randi_range(item_level, 2*item_level)),
+			"increased_strength": str(randi_range(item_level, 2*item_level)),
+			"increased_avoidance": str(randi_range(item_level, 2*item_level)),
+			"increased_resilience": str(randi_range(item_level, 2*item_level)),
+			"increased_endurance": str(randi_range(item_level, 2*item_level)),
+		}
+		
+	if category in ["chest", "head", "legs", "shoulders"]:
+		possible_bonuses = {
+			"local_added_abs": str(randi_range(1, item_level/1.5)),
+			"life_on_block": str(1.5*randi_range(item_level, 2*item_level)),
+			"life_on_hit": str(3*randi_range(item_level, 1.5*item_level)),
+			
+			"increased_health": str(randi_range(item_level, 2*item_level)),
+			"increased_avoidance": str(randi_range(item_level, 2*item_level)),
+			"increased_resilience": str(randi_range(item_level, 2*item_level)),
+			"increased_endurance": str(randi_range(item_level, 2*item_level)),
+			
+			
+			
 			
 		}
 		
+	if category == "boots":
+		possible_bonuses = {
+			"local_added_abs": str(randi_range(1, item_level/1.5)),
+			"life_on_block": str(1.5*randi_range(item_level, 2*item_level)),
+			"life_on_hit": str(3*randi_range(item_level, 1.5*item_level)),
+			
+			"increased_health": str(randi_range(item_level, 2*item_level)),
+			"increased_strength": str(randi_range(item_level, 2*item_level)),
+			"increased_quickness": str(randi_range(item_level, 2*item_level)),
+			"increased_avoidance": str(randi_range(item_level, 2*item_level)),
+			"increased_resilience": str(randi_range(item_level, 2*item_level)),
+			"increased_endurance": str(randi_range(item_level, 2*item_level)),
+		}
+		
+	if category == "gloves":
+		possible_bonuses = {
+			"local_added_abs": str(randi_range(1, item_level/1.5)),
+			"life_on_block": str(1.5*randi_range(item_level, 2*item_level)),
+			"life_on_hit": str(3*randi_range(item_level, 1.5*item_level)),
+			"added_hit_chance": str(1.5*randi_range(1, 2*item_level)),
+			"global_increased_crit_chance": str(3*randi_range(item_level, 3*item_level)),
+			"global_increased_crit_multi": str(3*randi_range(item_level, 3*item_level)),
+			"global_increased_attack_speed": str(3*randi_range(item_level, 3*item_level)),
+			
+			"increased_health": str(randi_range(item_level, 2*item_level)),
+			"increased_strength": str(randi_range(item_level, 2*item_level)),
+			"increased_crit_rating": str(randi_range(item_level, 2*item_level)),
+			"increased_quickness": str(randi_range(item_level, 2*item_level)),
+			
+			"increased_sword_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_axe_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_dagger_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_hammer_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_chain_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_shield_mastery": str(randi_range(item_level, 2*item_level))
+		}
+		
+	### IDEAS ###
+	# #% weapon hardening (reduces durability taken from parry)
+	# #% attributes
+	# 		- 
+	# -#% global attribute requirements
+	# #% increased income
+	# # thorns damage
+	# #% physical damage reduction
+	# damage per # attribute
+	# to life per # strength
 
 	return possible_bonuses
 	

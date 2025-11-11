@@ -91,7 +91,7 @@ var equipment_button_parent_name
 
 @onready var tome_of_chaos = $CraftingContainer/CraftingMats/TomeOfChaos
 @onready var tome_of_injection = $CraftingContainer/CraftingMats/TomeOfInjection
-@onready var crafting_bench = $CraftingContainer/CraftingBench
+#@onready var crafting_bench = $CraftingContainer/CraftingBench
 @onready var crafting_container = $CraftingContainer
 
 var physique_limits = {"Low": 70, "Good": 140, "Excellent": 210, "Outstanding": 280, "Legendary": 350}

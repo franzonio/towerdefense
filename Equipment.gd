@@ -33,7 +33,7 @@ extends Node
 	"sword": {
 		"simple_sword": {
 			"price": 20,
-			"stock": 2500,
+			"stock": 250,
 			"type": "weapon",
 			"category": "sword",
 			"weight": 3,
@@ -63,7 +63,7 @@ extends Node
 		},
 		"sturdy_blade": {
 			"price": 20,
-			"stock": 2500,
+			"stock": 250,
 			"type": "weapon",
 			"category": "sword",
 			"weight": 8,
@@ -321,7 +321,7 @@ extends Node
 	"chest": {
 		"padded_tunic": {
 			"price": 8,
-			"stock": 300,
+			"stock": 250,
 			"type": "armor",
 			"category": "chest",
 			"weight": 1,
@@ -430,7 +430,7 @@ extends Node
 		"padded_hood": {
 			"inventory_slot": "",
 			"price": 6,
-			"stock": 30,
+			"stock": 250,
 			"type": "armor",
 			"category": "head",
 			"weight": 1,
@@ -538,7 +538,7 @@ extends Node
 	"shoulders": {
 		"padded_wraps": {
 			"price": 5,
-			"stock": 280,
+			"stock": 250,
 			"type": "armor",
 			"category": "shoulders",
 			"weight": 1,
@@ -647,7 +647,7 @@ extends Node
 	"rings": {
 		"thin_ring": {
 			"price": 25,
-			"stock": 50,
+			"stock": 250,
 			"type": "jewellery",
 			"category": "ring",
 			"weight": 0,

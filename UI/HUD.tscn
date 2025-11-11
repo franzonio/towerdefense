@@ -1,11 +1,25 @@
-[gd_scene load_steps=14 format=3 uid="uid://dutn6wxx1oapc"]
+[gd_scene load_steps=29 format=3 uid="uid://dutn6wxx1oapc"]
 
 [ext_resource type="Script" uid="uid://cpvmnjflyi4ln" path="res://UI/HUD.gd" id="1_yixhe"]
-[ext_resource type="Texture2D" uid="uid://b3rcyrl5mceea" path="res://Assets/MenuAssets/Menu Buttons/Square Buttons/Square Buttons/Questionmark Square Button.png" id="2_ijstf"]
 [ext_resource type="Texture2D" uid="uid://bk716263khlx" path="res://Assets/CardAssets/CraftCardAssets/chaos_orb.png" id="2_uk570"]
 [ext_resource type="Script" uid="uid://cd4mgamt3dion" path="res://UI/ExpButton.gd" id="3_4n7mi"]
 [ext_resource type="Texture2D" uid="uid://1flqxbu5nk15" path="res://Assets/CardAssets/CraftCardAssets/exalted_orb.png" id="3_f2wx0"]
+[ext_resource type="Texture2D" uid="uid://cdbks1srnvfgl" path="res://Assets/EquipmentPanel/head_slot.png" id="5_am7sw"]
 [ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="5_gppie"]
+[ext_resource type="Texture2D" uid="uid://04nbofismc1" path="res://Assets/EquipmentPanel/BackgroundShield.png" id="5_rsrlt"]
+[ext_resource type="Texture2D" uid="uid://doygxri08d3qs" path="res://Assets/EquipmentPanel/chest_slot.png" id="6_ixkb2"]
+[ext_resource type="Texture2D" uid="uid://b1uts6mpv1kwx" path="res://Assets/EquipmentPanel/shoulder_slot.png" id="6_pgems"]
+[ext_resource type="Texture2D" uid="uid://bt3dpb05qd083" path="res://Assets/EquipmentPanel/weapon_slot.png" id="7_mms7u"]
+[ext_resource type="Texture2D" uid="uid://wjv4m26sboy3" path="res://Assets/EquipmentPanel/ring_slot.png" id="8_281ki"]
+[ext_resource type="Texture2D" uid="uid://c2mpo6wob3ggv" path="res://Assets/EquipmentPanel/shield_slot.png" id="9_rsrlt"]
+[ext_resource type="Texture2D" uid="uid://e4glytfe8804" path="res://Assets/EquipmentPanel/necklace_slot.png" id="9_w37wn"]
+[ext_resource type="Texture2D" uid="uid://b38741xtcou72" path="res://Assets/EquipmentPanel/amulet_slot.png" id="10_kg6a8"]
+[ext_resource type="Texture2D" uid="uid://cj4xdr3v8sice" path="res://Assets/EquipmentPanel/belt_slot.png" id="13_lbtxw"]
+[ext_resource type="Texture2D" uid="uid://2yb0vmubowa0" path="res://Assets/EquipmentPanel/legs_slot.png" id="14_gp2h7"]
+[ext_resource type="Texture2D" uid="uid://v61ii8bhvfyw" path="res://Assets/EquipmentPanel/trinket_slot.png" id="15_4hs1h"]
+[ext_resource type="Texture2D" uid="uid://b6skn46js24kq" path="res://Assets/EquipmentPanel/boots_slot.png" id="16_dcyds"]
+[ext_resource type="Texture2D" uid="uid://istsw06i80ul" path="res://Assets/EquipmentPanel/back_slot.png" id="17_rc7pm"]
+[ext_resource type="Texture2D" uid="uid://c0o5wotjquk3c" path="res://Assets/EquipmentPanel/gloves_slot.png" id="18_h8urj"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_yixhe"]
 properties/0/path = NodePath("GridContainer/VBoxContainer/Player1/PlayerInfo/PlayerName:text")
@@ -94,8 +108,12 @@ font_size = 13
 [sub_resource type="LabelSettings" id="LabelSettings_uk570"]
 font_size = 26
 
+[sub_resource type="LabelSettings" id="LabelSettings_pgems"]
+font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+
 [sub_resource type="LabelSettings" id="LabelSettings_f2wx0"]
 font_size = 14
+font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 
 [sub_resource type="LabelSettings" id="LabelSettings_gppie"]
 outline_size = 6
@@ -518,10 +536,10 @@ label_settings = SubResource("LabelSettings_uk570")
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -576.0
+offset_left = -527.0
 offset_top = 76.0
-offset_right = 854.0
-offset_bottom = 471.0
+offset_right = 791.75
+offset_bottom = 439.74997
 grow_horizontal = 2
 scale = Vector2(0.8, 0.8)
 
@@ -679,6 +697,7 @@ grow_vertical = 0
 [node name="Label" type="Label" parent="Inventory"]
 layout_mode = 2
 text = "Inventory"
+label_settings = SubResource("LabelSettings_pgems")
 horizontal_alignment = 1
 
 [node name="InventoryGridContainer" type="GridContainer" parent="Inventory"]
@@ -716,6 +735,7 @@ auto_translate_mode = 1
 auto_translate_mode = 1
 
 [node name="AttributePanel" type="Panel" parent="."]
+self_modulate = Color(1, 1, 1, 0.8627451)
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
@@ -830,26 +850,31 @@ grow_horizontal = 0
 grow_vertical = 2
 theme = ExtResource("5_gppie")
 
+[node name="Sprite2D" type="Sprite2D" parent="EquipmentPanel"]
+self_modulate = Color(0.56325173, 0.4779824, 0.5207176, 1)
+position = Vector2(165, 188.01416)
+scale = Vector2(2.370535, 3.6119552)
+texture = ExtResource("5_rsrlt")
+
 [node name="HeadSlot" type="TextureRect" parent="EquipmentPanel"]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -20.0
-offset_top = 10.0
+offset_top = 18.0
 offset_right = 20.0
-offset_bottom = 50.0
+offset_bottom = 58.0
 grow_horizontal = 2
-texture = ExtResource("2_ijstf")
-expand_mode = 4
+texture = ExtResource("5_am7sw")
 
 [node name="ShouldersSlot" type="TextureRect" parent="EquipmentPanel"]
 layout_mode = 1
-offset_left = 76.0
-offset_top = 36.0
-offset_right = 116.0
-offset_bottom = 76.0
-texture = ExtResource("2_ijstf")
+offset_left = 81.0
+offset_top = 55.0
+offset_right = 121.0
+offset_bottom = 95.0
+texture = ExtResource("6_pgems")
 expand_mode = 4
 
 [node name="ChestSlot" type="TextureRect" parent="EquipmentPanel"]
@@ -860,12 +885,12 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -20.0
-offset_top = -54.0
+offset_top = -36.0
 offset_right = 20.0
-offset_bottom = -14.0
+offset_bottom = 4.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_ijstf")
+texture = ExtResource("6_ixkb2")
 expand_mode = 4
 
 [node name="Weapon1Slot" type="TextureRect" parent="EquipmentPanel"]
@@ -875,13 +900,13 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -48.0
-offset_top = -51.0
-offset_right = -8.0
-offset_bottom = -11.0
+offset_left = -47.5
+offset_top = -58.0
+offset_right = -7.5
+offset_bottom = -18.0
 grow_horizontal = 2
 grow_vertical = 0
-texture = ExtResource("2_ijstf")
+texture = ExtResource("7_mms7u")
 expand_mode = 4
 
 [node name="Weapon2Slot" type="TextureRect" parent="EquipmentPanel"]
@@ -891,13 +916,13 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = 9.0
-offset_top = -51.0
-offset_right = 49.0
-offset_bottom = -11.0
+offset_left = 8.5
+offset_top = -58.0
+offset_right = 48.5
+offset_bottom = -18.0
 grow_horizontal = 2
 grow_vertical = 0
-texture = ExtResource("2_ijstf")
+texture = ExtResource("9_rsrlt")
 expand_mode = 4
 
 [node name="Ring1Slot" type="TextureRect" parent="EquipmentPanel"]
@@ -905,12 +930,12 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 10.0
-offset_top = -29.0
-offset_right = 50.0
-offset_bottom = 11.0
+offset_left = 76.0
+offset_top = -21.0
+offset_right = 116.0
+offset_bottom = 19.0
 grow_vertical = 2
-texture = ExtResource("2_ijstf")
+texture = ExtResource("8_281ki")
 expand_mode = 4
 
 [node name="Ring2Slot" type="TextureRect" parent="EquipmentPanel"]
@@ -918,12 +943,127 @@ layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_left = 51.0
-offset_top = -29.0
-offset_right = 91.0
-offset_bottom = 11.0
+offset_left = 214.0
+offset_top = -21.0
+offset_right = 254.0
+offset_bottom = 19.0
 grow_vertical = 2
-texture = ExtResource("2_ijstf")
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="NecklaceSlot" type="TextureRect" parent="EquipmentPanel"]
+layout_mode = 0
+offset_left = 116.0
+offset_top = 102.0
+offset_right = 156.0
+offset_bottom = 142.0
+texture = ExtResource("9_w37wn")
+expand_mode = 4
+
+[node name="AmuletSlot" type="TextureRect" parent="EquipmentPanel"]
+layout_mode = 0
+offset_left = 207.0
+offset_top = 55.0
+offset_right = 247.0
+offset_bottom = 95.0
+texture = ExtResource("10_kg6a8")
+expand_mode = 4
+
+[node name="BeltSlot" type="TextureRect" parent="EquipmentPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 13.0
+offset_right = 20.0
+offset_bottom = 53.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_lbtxw")
+expand_mode = 4
+
+[node name="LegsSlot" type="TextureRect" parent="EquipmentPanel"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 63.0
+offset_right = 20.0
+offset_bottom = 103.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_gp2h7")
+expand_mode = 4
+
+[node name="Trinket1Slot" type="TextureRect" parent="EquipmentPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = 81.0
+offset_right = 104.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="Trinket2Slot" type="TextureRect" parent="EquipmentPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 224.0
+offset_top = 81.0
+offset_right = 264.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="BootsSlot" type="TextureRect" parent="EquipmentPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 263.0
+offset_top = 14.0
+offset_right = 303.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("16_dcyds")
+expand_mode = 4
+
+[node name="BackSlot" type="TextureRect" parent="EquipmentPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 172.0
+offset_top = -85.0
+offset_right = 212.0
+offset_bottom = -45.0
+grow_vertical = 2
+texture = ExtResource("17_rc7pm")
+expand_mode = 4
+
+[node name="GlovesSlot" type="TextureRect" parent="EquipmentPanel"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 26.0
+offset_top = 14.0
+offset_right = 66.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("18_h8urj")
 expand_mode = 4
 
 [node name="Panel" type="Panel" parent="."]
@@ -1015,11 +1155,13 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -20.0
-offset_right = 20.0
-offset_bottom = 23.0
+offset_left = -25.5
+offset_top = 4.0
+offset_right = 25.5
+offset_bottom = 27.0
 grow_horizontal = 2
 text = "Concede"
+label_settings = SubResource("LabelSettings_pgems")
 
 [node name="ConcedeThresholdMenu" type="OptionButton" parent="ConcedePanel"]
 layout_mode = 1
@@ -1035,6 +1177,8 @@ grow_horizontal = 2
 grow_vertical = 0
 tooltip_text = "Give up at this threshold"
 theme = ExtResource("5_gppie")
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_focus_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 
 [node name="AttackPanel" type="Panel" parent="."]
 anchors_preset = 3
@@ -1055,11 +1199,13 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -20.0
-offset_right = 20.0
-offset_bottom = 23.0
+offset_left = -36.0
+offset_top = 4.0
+offset_right = 36.0
+offset_bottom = 27.0
 grow_horizontal = 2
 text = "Attack Type"
+label_settings = SubResource("LabelSettings_pgems")
 
 [node name="AttackMenu" type="OptionButton" parent="AttackPanel"]
 layout_mode = 1
@@ -1076,6 +1222,8 @@ grow_vertical = 0
 tooltip_text = "Normal - no impact
 Light - increases hit chance and reduces enemy dodge chance with lighter attacks
 Heavy - hits harder, but decreases hit chance and increases enemy dodge chance"
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_focus_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 
 [node name="StancePanel" type="Panel" parent="."]
 anchors_preset = 3
@@ -1096,11 +1244,13 @@ layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -20.0
-offset_right = 20.0
-offset_bottom = 23.0
+offset_left = -21.5
+offset_top = 4.0
+offset_right = 21.5
+offset_bottom = 27.0
 grow_horizontal = 2
 text = "Stance"
+label_settings = SubResource("LabelSettings_pgems")
 
 [node name="StanceMenu" type="OptionButton" parent="StancePanel"]
 layout_mode = 1
@@ -1118,6 +1268,8 @@ tooltip_text = "Normal - no impact
 Offensive - increases attack speed and criticality, but reduces dodge and parry chance
 Defensive - increases dodge and parry chance, but reduces attack speed and criticality
 Jester - reduces enemy hit chance, but reduces your endurance"
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_focus_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 
 [node name="EscMenu" type="VBoxContainer" parent="."]
 anchors_preset = 8

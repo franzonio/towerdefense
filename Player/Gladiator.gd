@@ -349,8 +349,8 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 	
 	print("before bonuses: " + str(_hit_chance) + " | " + str(_crit_chance) + " | " + str(_crit_multi))
 	_hit_chance += combined_gladiator_bonuses.get("added_hit_chance", 0)/100.0
-	_crit_chance = _crit_chance*(1+combined_gladiator_bonuses.get("increased_crit_chance", 0)/100.0)
-	_crit_multi = _crit_multi*(1+combined_gladiator_bonuses.get("increased_crit_multi", 0)/100.0)
+	_crit_chance = _crit_chance*(1+combined_gladiator_bonuses.get("global_increased_crit_chance", 0)/100.0)
+	_crit_multi = _crit_multi*(1+combined_gladiator_bonuses.get("global_increased_crit_multi", 0)/100.0)
 	print("after bonuses: " + str(_hit_chance) + " | " + str(_crit_chance) + " | " + str(_crit_multi))
 	var life_on_hit = combined_gladiator_bonuses.get("life_on_hit", 0)
 	
@@ -788,7 +788,7 @@ func update_gladiator(data: Dictionary):
 		var as_wep_base = 1/(weapon1_speed+weapon2_speed)
 		var as_exp_p1 = -(0.01+(weapon1_speed+weapon2_speed)/250)
 		var as_exp_p2 = (weapon1_speed+weapon2_speed)*quickness**(1-weight/250)
-		attack_speed = as_wep_base*exp(as_exp_p1*as_exp_p2) / (1+combined_gladiator_bonuses.get("increased_attack_speed", 0)/100.0)
+		attack_speed = as_wep_base*exp(as_exp_p1*as_exp_p2) / (1+combined_gladiator_bonuses.get("global_increased_attack_speed", 0)/100.0)
 		
 		var ratio1 = glad_weapon1_category_skill / weapon1_skill_req
 		var ratio2 = glad_weapon2_category_skill / weapon2_skill_req
@@ -797,7 +797,7 @@ func update_gladiator(data: Dictionary):
 		var as_wep_base = 1/weapon1_speed
 		var as_exp_p1 = -(0.01+weapon1_speed/250)
 		var as_exp_p2 = weapon1_speed*quickness**(1-weight/250)
-		attack_speed = as_wep_base*exp(as_exp_p1*as_exp_p2) / (1+combined_gladiator_bonuses.get("increased_attack_speed", 0)/100.0)
+		attack_speed = as_wep_base*exp(as_exp_p1*as_exp_p2) / (1+combined_gladiator_bonuses.get("global_increased_attack_speed", 0)/100.0)
 		
 		var ratio1 = glad_weapon1_category_skill / weapon1_skill_req
 		parry_chance = [stance_parry_block_mod*(0.8 - exp(-0.4*(2*ratio1-1.0)))/2, stance_parry_block_mod*(0.8 - exp(-0.4*(2*ratio1-1.0)))/2]

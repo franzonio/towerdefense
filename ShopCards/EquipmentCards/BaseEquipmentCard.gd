@@ -7,6 +7,7 @@ var name_label
 var self_name
 var parent_name
 var item_dict
+var original_item_dict
 var all_gladiators
 var initial_tooltip_received = 0
 
@@ -17,14 +18,26 @@ var added := false
 signal button_parent(parent_name: String)
 signal mouse_inside_equipment_card_signal(mouse_inside_equipment_card: bool)
 
-var name_color := "ef692f"#Color.GOLD.to_html(false)
-var base_text_color := "927e6a"#Color.DARK_GRAY.to_html(false)
-var base_value_color := "efd8a1"#Color.WHITE_SMOKE.to_html(false)
-var req_ok_color := "efd8a1"#Color.WHITE_SMOKE.to_html(false)
-var req_nok_color := "ef3a0c"#Color.RED.to_html(false)
-var mod_color := "3c9f9c"#Color.DODGER_BLUE.to_html(false)
+var name_color := "ab9b8e"#"ef692f"
+var base_text_color := "ab9b8e"#"927e6a"
+var base_value_color := "d2c9a5"#"efd8a1"
+var req_ok_color := "d2c9a5"#"efd8a1"
+var req_nok_color := "79444a"#"ef3a0c"
+var mod_color := "3c9f9c"#"8caba1"
+
+var weapon_color := "d2c9a5"#Color.DARK_GRAY.to_html(false)
+var armor_color := "ba9158"#Color.BURLYWOOD.to_html(false)
+var jewellery_color := "b3a555"#Color.GOLDENROD.to_html(false)
 
 var label_display
+
+var orig_min_dmg
+var orig_durability
+var orig_weight
+var orig_speed
+var orig_crit_chance
+var orig_crit_multi
+var orig_absorb
 
 func _ready():
 	#ProjectSettings.set_setting("gui/timers/tooltip_delay_sec", 5.0)
@@ -40,13 +53,19 @@ func _ready():
 	
 	if multiplayer.is_server():
 		GameState_.refresh_gladiator_data_card(multiplayer.get_unique_id())
+		GameState_.get_equipment_by_name(multiplayer.get_unique_id(), equipment_name)
 	else:
 		GameState_.rpc_id(1, "refresh_gladiator_data_card", multiplayer.get_unique_id())
+		GameState_.rpc_id(1, "get_equipment_by_name", multiplayer.get_unique_id(), equipment_name)
+	
+	#await get_tree().create_timer(0.3).timeout
 	
 	parent_name = get_parent().name
 	if parent_name == "ShopGridContainer":
 		label_display = format_name(equipment_name)
 		name_label = RichTextLabel.new()
+		name_label.add_theme_font_size_override("normal_font_size", 26)
+		name_label.add_theme_font_size_override("bold_font_size", 26)
 		name_label.bbcode_enabled = true
 		name_label.fit_content = true
 		name_label.autowrap_mode = TextServer.AUTOWRAP_OFF
@@ -55,22 +74,12 @@ func _ready():
 		name_label.scroll_active = false
 		name_label.position.y = 15
 		name_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
-		
-		if all_gladiators[multiplayer.get_unique_id()]["gold"] < cost:
-			name_label.bbcode_text = "%s \n💰[color=%s]%d[/color] " % [label_display, req_nok_color, cost] 
-		else:
-			name_label.bbcode_text = "%s \n💰%d " % [label_display, cost] 
-		
+		name_label.add_theme_color_override("font_outline_color", Color.BLACK)
+		name_label.add_theme_constant_override("outline_size", 5)
+		"theme_override_constants/outline_size"
 		add_child(name_label)
+		_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
 		
-	
-	if multiplayer.is_server():
-		GameState_.get_equipment_by_name(multiplayer.get_unique_id(), equipment_name)
-	else:
-		GameState_.rpc_id(1, "get_equipment_by_name", multiplayer.get_unique_id(), equipment_name)
-	
-
-	
 
 func _make_custom_tooltip(for_text):
 	
@@ -83,17 +92,35 @@ func _make_custom_tooltip(for_text):
 	label.autowrap_mode = TextServer.AUTOWRAP_OFF
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.scroll_active = false
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 5)
+	
 	
 	return label
 
+func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
+	all_gladiators = _all_gladiators
+	_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
 
 func _on_update_gold_req_shop(_id, gold):
-	print("asd")
-	if parent_name == "ShopGridContainer":
-		if gold < cost:
-			name_label.bbcode_text = "%s \n💰[color=%s]%d[/color] " % [label_display, req_nok_color, cost] 
-		else:
-			name_label.bbcode_text = "%s \n💰%d " % [label_display, cost] 
+	#print("_on_update_gold_req_shop: " + str(_id))
+	
+	if multiplayer.get_unique_id() != _id: return
+	
+	if item_dict:
+		if parent_name == "ShopGridContainer" and item_dict.has(equipment_name):
+			var item_type = item_dict[equipment_name]["type"]
+			var color = Color.WHITE.to_html(false)
+			
+			if item_type == "weapon": color = weapon_color
+			elif item_type == "armor": color = armor_color
+			elif item_type == "jewellery": color = jewellery_color
+			
+			if gold < cost:
+				name_label.bbcode_text = "[color=%s]%s[/color] \n💰[color=%s]%d[/color] " % [color, label_display, req_nok_color, cost] 
+			else:
+				name_label.bbcode_text = "[color=%s]%s[/color] \n💰%d " % [color, label_display, cost] 
+	#else: 1#print("no item dict!")
 
 func _on_equipment_card_updated(id, updated_item_dict, slot, item):
 	
@@ -121,31 +148,28 @@ func ucfirst(_text: String) -> String:
 
 
 func _on_send_equipment_dict_to_peer(id, _item_dict):
-	#print(initial_tooltip_received)
-	#print("initial_tooltip_received: " + str(initial_tooltip_received))
 	if id != multiplayer.get_unique_id(): return
-	if initial_tooltip_received == 1: return
-	#if id == multiplayer.get_unique_id():
+	if initial_tooltip_received == 1: 
+		return
+	
 	item_dict = _item_dict.duplicate(true)
+	
+	_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
+	
 	if item_dict.has(equipment_name):
 		var item = item_dict[equipment_name].duplicate(true)
-		#print("_on_send_equipment_dict_to_peer " + str(item))
-		if tooltip_text == "": tooltip_text = get_item_tooltip(item)
-		#initial_tooltip_received = 1
+		orig_min_dmg = item.get("min_dmg", 0)
+		orig_durability = item.get("durability", 0)
+		orig_weight = item.get("weight", 0)
+		orig_speed = item.get("speed", 0)
+		orig_crit_chance = item.get("crit_chance", 0)
+		orig_crit_multi = item.get("crit_multi", 0)
+		orig_absorb = item.get("absorb", 0)
+		
+		if tooltip_text == "": 
+			tooltip_text = get_item_tooltip(item)
 	
-'''	
-if item_dict.has(equipment_name):
-		var item = item_dict[equipment_name].duplicate(true)
-		print("_on_send_equipment_dict_to_peer " + str(item))
-		tooltip_text = get_item_tooltip(item)
-		initial_tooltip_received = 1
-	else: 1
-'''
 
-			#print("⚠️ Equipment name not found: " + equipment_name)
-
-func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
-	all_gladiators = _all_gladiators
 
 func format_name(raw_name: String) -> String:
 	var parts = raw_name.split("_")            # → ["simple", "sword"]
@@ -253,16 +277,67 @@ func get_item_tooltip(item_data: Dictionary):
 	var category = item_data.get("category", "None")
 	var type = item_data.get("type", "None")
 	var absorb = item_data.get("absorb", -1)
+	
+	if type == "jewellery": name_color = jewellery_color
+	elif type == "armor": name_color = armor_color
+	elif type == "weapon": name_color = weapon_color
 
-	var tooltip = "[color=%s]%s[/color]\n\n" % [name_color, display_name]
+	var tooltip = "[color=%s]%s[/color]\n" % [name_color, display_name]
 	#tooltip += "%Level %d\n" % [level]
-	if category == "shield": tooltip += "[color=%s]%s[/color]\n" % [base_text_color, category.capitalize()]
-	elif hands != -1: tooltip += "[color=%s]%s %s[/color]\n" % [base_text_color, hand_text, category.capitalize()]
-	if min_dmg != -1 and category != "shield": tooltip += "[color=%s]Damage:[/color] [color=%s]%d–%d[/color]\n" % [base_text_color, base_value_color, min_dmg, max_dmg]
-	if durability != -1: tooltip += "[color=%s]Durability:[/color] [color=%s]%d[/color]\n" % [base_text_color, base_value_color, durability]
-	if absorb != -1 and category == "shield": tooltip += "[color=%s]Block Absorb:[/color] [color=%s]%d[/color]\n" % [base_text_color, base_value_color, absorb]
-	elif absorb != -1 and type == "armor": tooltip += "[color=%s]Absorb:[/color] [color=%s]%d[/color]\n" % [base_text_color, base_value_color, absorb]
-	if weight != -1: tooltip += "[color=%s]Weight:[/color] [color=%s]%d[/color]\n" % [base_text_color, base_value_color, weight]
+	if category == "shield": 
+		tooltip += "[color=%s]%s[/color]\n\n" % [base_text_color, category.capitalize()]
+	elif hands != -1: 
+		tooltip += "[color=%s]%s %s[/color]\n\n" % [base_text_color, hand_text, category.capitalize()]
+	elif hands == -1:
+		tooltip += "[color=%s]%s[/color]\n\n" % [base_text_color, category.capitalize()]
+		
+	if min_dmg != -1 and category != "shield": 
+		if min_dmg == orig_min_dmg: 
+			tooltip += "[color=%s]Damage:[/color] [color=%s]%d–%d[/color]\n" % [base_text_color, base_value_color, min_dmg, max_dmg]
+		else:
+			tooltip += "[color=%s]Damage:[/color] [color=%s]%d–%d[/color]\n" % [base_text_color, mod_color, min_dmg, max_dmg]
+			
+	if speed > 0: 
+		if speed == orig_speed:
+			tooltip += "[color=%s]Attacks Per Second:[/color] [color=%s] %.2f [/color]\n" % [base_text_color, base_value_color, speed]#tooltip += "\nSpeed: %.2f Attacks Per Second\n" % speed
+		else:
+			tooltip += "[color=%s]Attacks Per Second:[/color] [color=%s] %.2f [/color]\n" % [base_text_color, mod_color, speed]
+	
+	if crit_multi > 0: 
+		if crit_multi == orig_crit_multi:
+			tooltip += "[color=%s]Critical Multiplier:[/color] [color=%s]×%.2f[/color]\n" % [base_text_color, base_value_color, crit_multi]
+		else:
+			tooltip += "[color=%s]Critical Multiplier:[/color] [color=%s]×%.2f[/color]\n" % [base_text_color, mod_color, crit_multi]	
+		
+	if crit_chance > 0: 
+		if crit_chance == orig_crit_chance:
+			tooltip += "[color=%s]Critical Chance:[/color] [color=%s]%.1f%%[/color]\n" % [base_text_color, base_value_color, (crit_chance * 100)]
+		else:
+			tooltip += "[color=%s]Critical Chance:[/color] [color=%s]%.1f%%[/color]\n" % [base_text_color, mod_color, (crit_chance * 100)]
+			
+			
+	if durability != -1: 
+		if durability == orig_durability:
+			tooltip += "[color=%s]Durability:[/color] [color=%s]%d[/color]\n" % [base_text_color, base_value_color, durability]
+		else:
+			tooltip += "[color=%s]Durability:[/color] [color=%s]%d[/color]\n" % [base_text_color, mod_color, durability]
+			
+	if absorb != -1 and category == "shield": 
+		if absorb == orig_absorb:
+			tooltip += "[color=%s]Block Absorb:[/color] [color=%s]%d[/color]\n" % [base_text_color, base_value_color, absorb]
+		else:
+			tooltip += "[color=%s]Block Absorb:[/color] [color=%s]%d[/color]\n" % [base_text_color, mod_color, absorb]
+	elif absorb != -1 and type == "armor": 
+		if absorb == orig_absorb:
+			tooltip += "[color=%s]Absorb:[/color] [color=%s]%d[/color]\n" % [base_text_color, base_value_color, absorb]
+		else:
+			tooltip += "[color=%s]Absorb:[/color] [color=%s]%d[/color]\n" % [base_text_color, mod_color, absorb]
+	
+	if weight != -1: 
+		if weight == orig_weight:
+			tooltip += "[color=%s]Weight:[/color] [color=%s]%d[/color]\n" % [base_text_color, base_value_color, weight]
+		else:
+			tooltip += "[color=%s]Weight:[/color] [color=%s]%d[/color]\n" % [base_text_color, mod_color, weight]
 	
 	var lvl_req_color
 	if int(all_gladiators[multiplayer.get_unique_id()]["level"]) >= int(level): lvl_req_color = req_ok_color
@@ -293,9 +368,7 @@ func get_item_tooltip(item_data: Dictionary):
 	#if str_req != -1: tooltip += "\nStrength Requirement: %d\n" % str_req
 	#if skill_req != -1: tooltip += "Weapon Mastery Requirement: %d\n" % skill_req
 
-	if speed > 0: tooltip += "\n[color=%s]Attacks Per Second:[/color] [color=%s] %.2f [/color]\n" % [base_text_color, base_value_color, speed]#tooltip += "\nSpeed: %.2f Attacks Per Second\n" % speed
-	if crit_chance > 0: tooltip += "[color=%s]Critical Chance:[/color] [color=%s]%.1f%%[/color]\n" % [base_text_color, base_value_color, (crit_chance * 100)]
-	if crit_multi > 0: tooltip += "[color=%s]Critical Multiplier:[/color] [color=%s]×%.2f[/color]" % [base_text_color, base_value_color, crit_multi]
+
 
 	# Modifications
 	var mod_labels := {
@@ -307,6 +380,21 @@ func get_item_tooltip(item_data: Dictionary):
 		"resilience": "Resilience",
 		"endurance": "Endurance",
 		
+		"increased_health": "% increased health attribute",
+		"increased_strength": "% increased strength attribute",
+		"increased_quickness": "% increased quickness attribute",
+		"increased_crit_rating": "% increased criticalty attribute",
+		"increased_avoidance": "% increased avoidance attribute",
+		"increased_resilience": "% increased resilience attribute",
+		"increased_endurance": "% increased endurance attribute",
+
+		"increased_sword_mastery": "% increased sword mastery",
+		"increased_axe_mastery": "% increased axe mastery",
+		"increased_dagger_mastery": "% increased dagger mastery",
+		"increased_hammer_mastery": "% increased hammer mastery",
+		"increased_chain_mastery": "% increased chain mastery",
+		"increased_shield_mastery": "% increased shield mastery",
+		
 		"sword_mastery": "Sword Mastery",
 		"axe_mastery": "Axe Mastery",
 		"hammer_mastery": "Hammer Mastery",
@@ -315,19 +403,23 @@ func get_item_tooltip(item_data: Dictionary):
 		"shield_mastery": "Shield Mastery",
 		"unarmed_mastery": "Unarmed Mastery",
 		
-		"added_dmg": " additional weapon damage",
-		"increased_dmg": "% increased weapon damage",
-		"added_hit_chance": "% additional hit chance",
 		"local_increased_attack_speed": "% increased local attack speed",
 		"local_increased_crit_multi": "% increased local critical multiplier",
 		"local_increased_crit_chance": "% increased local critical strike chance",
-		"life_on_hit": " life on hit",
-		
 		"local_added_abs": " additional absorb",
 		"local_added_durability": " to durability",
 		"local_increased_durability": "% increased durability",
+		
+		"global_increased_crit_chance": "% increased global critical strike chance",
+		"global_increased_crit_multi": "% increased global critical multiplier",
+		"global_increased_attack_speed": "% increased global attack speed",
+		
+		"added_dmg": " additional weapon damage",
+		"increased_dmg": "% increased weapon damage",
+		"added_hit_chance": "% additional hit chance",
 		"added_block_chance": "% increased block chance",
-		"life_on_block": " life on block"
+		"life_on_block": " life on block",
+		"life_on_hit": " life on hit",
 		}
 		
 	

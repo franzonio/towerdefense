@@ -19,6 +19,11 @@ var req_nok_color := "ef3a0c"#Color.RED.to_html(false)
 var mod_color := "3c9f9c"#Color.DODGER_BLUE.to_html(false)
 
 var label_display
+var race_modifiers
+
+var pos_bonus_color = Color.GREEN.to_html(false)
+var neg_bonus_color = Color.RED.to_html(false)
+var no_bonus_color = "efd8a1"
 
 func _ready():
 	mouse_entered.connect(_on_mouse_entered)
@@ -38,6 +43,8 @@ func _ready():
 	if parent_name == "ShopGridContainer":
 		label_display = format_name(attribute_name)
 		name_label = RichTextLabel.new()
+		name_label.add_theme_font_size_override("normal_font_size", 26)
+		name_label.add_theme_font_size_override("bold_font_size", 26)
 		name_label.bbcode_enabled = true
 		name_label.fit_content = true
 		name_label.autowrap_mode = TextServer.AUTOWRAP_OFF
@@ -46,25 +53,45 @@ func _ready():
 		name_label.scroll_active = false
 		name_label.position.y = 15
 		name_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
-		
-		if all_gladiators[multiplayer.get_unique_id()]["gold"] < cost:
-			name_label.bbcode_text = "%s \n💰[color=%s]%d[/color] " % [label_display, req_nok_color, cost] 
-		else:
-			name_label.bbcode_text = "%s \n💰%d " % [label_display, cost] 
+		name_label.add_theme_color_override("font_outline_color", Color.BLACK)
+		name_label.add_theme_constant_override("outline_size", 5)
 		
 		add_child(name_label)
+		_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
+		
+		race_modifiers = GameState_.RACE_MODIFIERS#.get(GameState_.selected_race, {})
+		tooltip_text = get_attribute_tooltip(attribute_name)
+		
+
+func _make_custom_tooltip(for_text):
+	
+	var label = RichTextLabel.new()
+	label.add_theme_font_size_override("normal_font_size", 20)
+	label.add_theme_font_size_override("bold_font_size", 20)
+	label.bbcode_text = for_text
+	label.bbcode_enabled = true
+	label.fit_content = true
+	label.autowrap_mode = TextServer.AUTOWRAP_OFF
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.scroll_active = false
+	label.add_theme_color_override("font_outline_color", Color.BLACK)
+	label.add_theme_constant_override("outline_size", 5)
+	
+	return label
 
 func _on_update_gold_req_shop(_id, gold):
-	print("asd")
+	var color = "ae5d40"
+	
 	if parent_name == "ShopGridContainer":
 		if gold < cost:
-			name_label.bbcode_text = "%s \n💰[color=%s]%d[/color] " % [label_display, req_nok_color, cost] 
+			name_label.bbcode_text = "[color=%s]+%d %s[/color] \n💰[color=%s]%d[/color] " % [color, amount, label_display, req_nok_color, cost] 
 		else:
-			name_label.bbcode_text = "%s \n💰%d " % [label_display, cost] 
+			name_label.bbcode_text = "[color=%s]+%d %s[/color] \n💰%d " % [color, amount, label_display, cost] 
 			
 
 func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
 	all_gladiators = _all_gladiators
+	_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
 
 func format_name(raw_name: String) -> String:
 	var parts = raw_name.split("_")            # → ["simple", "sword"]
@@ -122,3 +149,15 @@ func buy_card():
 func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data):
 	if peer_id == multiplayer.get_unique_id():
 		added = success
+
+func get_attribute_tooltip(_attribute_name):
+	var attribute_text = ""
+	var race = all_gladiators[multiplayer.get_unique_id()]["race"]
+	var race_mod = race_modifiers[race][_attribute_name]
+	#print(_attribute_name + " " + str(race_mod))
+	if race_mod == 1: attribute_text = race + " mod: [color=%s]%s[/color]" % [no_bonus_color, race_mod]
+	elif race_mod > 1: attribute_text = race + " mod: [color=%s]%s[/color]" % [pos_bonus_color, race_mod]
+	elif race_mod < 1: attribute_text = race + " mod: [color=%s]%s[/color]" % [neg_bonus_color, race_mod]
+	
+	
+	return attribute_text
