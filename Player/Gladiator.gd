@@ -26,7 +26,7 @@ var no_wep = {"hands": 1,
 				}
 			}
 var no_wep_hit_chance = 0.7
-var no_wep_crit_chance = 1 + no_wep["crit_chance"]
+var no_wep_crit_chance = no_wep["crit_chance"]
 var no_wep_crit_multi = no_wep["crit_multi"]
 var no_wep_attack_speed = no_wep["speed"]
 
@@ -97,7 +97,7 @@ var input_vector := Vector2.ZERO
 @export var endurance := 1.0
 @export var weapon_skill := 1.0
 @export var sword_mastery := 1.0
-@export var dagger_mastery := 1.0
+@export var stabbing_mastery := 1.0
 @export var axe_mastery := 1.0
 @export var chain_mastery := 1.0
 @export var hammer_mastery := 1.0
@@ -162,12 +162,13 @@ var opponent_dead = false
 @export var concede_threshold := 0.5
 
 var combined_gladiator_bonuses = {}
-
+var prev_sec = 0
 
 signal died
 
 func _ready():
-	time_passed = -1000
+	time_passed = -100000
+	prev_sec = 0
 	await get_tree().process_frame 
 	dead = 0
 	add_to_group("gladiators")
@@ -214,6 +215,20 @@ func _ready():
 # Only process input if this is OUR player
 func _process(delta: float) -> void:
 	time_passed += delta
+	
+	if time_passed > 0 and int(time_passed) != prev_sec and !opponent_dead:
+		prev_sec = int(time_passed)
+		if is_multiplayer_authority():
+		
+			var blood_rage_dmg = combined_gladiator_bonuses.get("blood_rage", [0,0])
+			blood_rage_dmg = blood_rage_dmg[0]/100.0*max_health
+			#current_health -= max_health*blood_rage_dmg
+			if blood_rage_dmg > 0: 
+				receive_damage(blood_rage_dmg, -1, 1, 0, 0, 0, 0, 0, weapon1_durability, weapon2_durability, 0, 0)
+		#$HealthBar.value = current_health
+		#$HealthBar/HealthBarText.text = str(int(current_health))
+	
+	
 	if is_multiplayer_authority():
 		if opponent and opponent.dead and not opponent_dead:
 			opponent_dead = true
@@ -320,9 +335,11 @@ func check_for_attack(delta: float):
 						_crit_chance = no_wep_crit_chance
 						_crit_multi = no_wep_crit_multi
 					next_attack_weapon = 1
+					#print("live: weapon1")
 					
 				elif next_attack_weapon == 1: 
-					if !weapon2_can_block: weapon = weapon2
+					if weapon2_can_block == false: 
+						weapon = weapon2
 					else: weapon = weapon1
 					if weapon2_durability > 0:
 						_hit_chance = hit_chance[1]
@@ -333,8 +350,11 @@ func check_for_attack(delta: float):
 						_crit_chance = no_wep_crit_chance
 						_crit_multi = no_wep_crit_multi
 					next_attack_weapon = 0
+					#print("live: weapon2")
 					
-				#print("before deal_attack: " + str(_hit_chance) + " | " + str(_crit_chance) + " | " + str(_crit_multi))
+				#print("live: " + str(weapon))
+				#print("live: before deal_attack both: " + str(hit_chance) + " | " + str(crit_chance) + " | " + str(crit_multi))
+				#print("live: before deal_attack: " + str(_hit_chance) + " | " + str(_crit_chance) + " | " + str(_crit_multi))
 				deal_attack(self, opponent, weapon, _hit_chance, _crit_chance, _crit_multi)
 				attack_charge_time = 0.0
 		else:
@@ -347,11 +367,11 @@ func check_for_attack(delta: float):
 func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_chance, _crit_multi):
 	# crit_chance = 1 + (wep_base_crit*local_wep_crit_bonus)*(1+global_crit_bonus)
 	
-	print("before bonuses: " + str(_hit_chance) + " | " + str(_crit_chance) + " | " + str(_crit_multi))
+	print("live: before bonuses: " + str(_hit_chance) + " | " + str(_crit_chance) + " | " + str(_crit_multi))
 	_hit_chance += combined_gladiator_bonuses.get("added_hit_chance", 0)/100.0
 	_crit_chance = _crit_chance*(1+combined_gladiator_bonuses.get("global_increased_crit_chance", 0)/100.0)
 	_crit_multi = _crit_multi*(1+combined_gladiator_bonuses.get("global_increased_crit_multi", 0)/100.0)
-	print("after bonuses: " + str(_hit_chance) + " | " + str(_crit_chance) + " | " + str(_crit_multi))
+	print("live: after bonuses: " + str(_hit_chance) + " | " + str(_crit_chance) + " | " + str(_crit_multi))
 	var life_on_hit = combined_gladiator_bonuses.get("life_on_hit", 0)
 	
 	var added_min_dmg = 0
@@ -364,7 +384,9 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 		added_min_dmg = int(added_dmg[0])
 		added_max_dmg = int(added_dmg[1])
 		
-	var increased_dmg = 1.0 + float(_weapon["modifiers"]["bonuses"].get("increased_dmg", "0"))/100.0
+	var blood_rage_dmg = combined_gladiator_bonuses.get("blood_rage", [0,0])
+	blood_rage_dmg = blood_rage_dmg[1]
+	var increased_dmg = 1.0 + float(_weapon["modifiers"]["bonuses"].get("increased_dmg", "0"))/100.0 + float(blood_rage_dmg)/100.0
 	var wep_min_dmg = int(round((min_base_dmg+added_min_dmg)*increased_dmg))
 	var wep_max_dmg = int(round((max_base_dmg+added_max_dmg)*increased_dmg))
 	
@@ -392,7 +414,7 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 	if roll_wep_dmg + effective_str/15.0 > _weapon["max_dmg"]:
 		str_used_before_max = (wep_max_dmg-roll_wep_dmg)*15
 		var str_left = effective_str - str_used_before_max
-		if wep_category == "dagger":
+		if wep_category == "stabbing":
 			dmg_after_str = roll_wep_dmg + str_used_before_max/15 + str_left/34
 		elif wep_category == "sword":
 			dmg_after_str = roll_wep_dmg + str_used_before_max/15 + str_left/30
@@ -437,9 +459,15 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 	var final_damage = hit_success*(1-dodge_success)*(1-parry_success)*(1-block_success)*roundf(clamp(raw_damage - defender.absorb_after_resilience, 0, 9999))
 
 	if hit_success and not dodge_success:
-		current_health += life_on_hit
-		$HealthBar.value = current_health
-		$HealthBar/HealthBarText.text = str(int(current_health))
+		#current_health += life_on_hit
+		if life_on_hit > 0:
+			receive_damage(-life_on_hit, -2, 1, 0, 0, 0, 0, 0, weapon1_durability, weapon2_durability, 0, 0)
+		#$HealthBar.value = current_health
+		#$HealthBar/HealthBarText.text = str(int(current_health))
+
+	var opponent_thorns = all_gladiators[opponent_peer_id].get("total_modifier_bonuses", {}).get("thorns", 0)
+	if opponent_thorns > 0:
+		receive_damage(opponent_thorns, -1, 1, 0, 0, 0, 0, 0, weapon1_durability, weapon2_durability, 0, 0)
 
 	if defender.has_method("receive_damage"):
 		defender.rpc_id(defender.get_multiplayer_authority(), "receive_damage", final_damage, raw_damage, 
@@ -451,13 +479,16 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 		return false
 
 @rpc("any_peer", "call_local")
-func receive_damage(amount: int, raw_damage, hit_success, dodge_success, crit, parry_success, defender_weapon1_broken, 
+func receive_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_success, defender_weapon1_broken, 
 					defender_weapon2_broken, wep1_new_durability, wep2_new_durability, block_success, shield_absorb):
 	if !hit_success or dodge_success: next_attack_critical = true
-	if block_success: current_health += life_on_block
+	if block_success: 
+		rpc("show_damage_popup", -life_on_block, -2, 1, 0, 0, 0, 0, 0, 0, 0)
+		current_health += life_on_block
 	weapon1_durability = wep1_new_durability
 	weapon2_durability = wep2_new_durability
 	current_health -= amount
+	if current_health > max_health: current_health = max_health
 	$HealthBar.value = current_health
 	$HealthBar/HealthBarText.text = str(int(current_health))
 	rpc("show_damage_popup", amount, raw_damage, hit_success, dodge_success, crit, parry_success,
@@ -605,12 +636,12 @@ func update_all_gladiators(data: Dictionary):
 					g.rpc_id(g.get_multiplayer_authority(), "update_gladiator", data[id])
 
 func update_gladiator_after_strategy(hit_chance_penalty, dodge_mod):
-	glad_weapon1_category_skill = (glad_weapon1_category_skill-5)*hit_chance_penalty
-	glad_weapon2_category_skill = (glad_weapon2_category_skill-5)*hit_chance_penalty
+	glad_weapon1_category_skill = hit_chance_penalty
+	glad_weapon2_category_skill = hit_chance_penalty
 	
 	var hit_base_per_lvl = -(1.6-float(int(level))/12) # Less penalty for too low weapon mastery in low levels
-	var hit_skill_weight_1 = (glad_weapon1_category_skill/(20*(0.8 + weight/400.0))) # Reduce hit chance with weight
-	var hit_skill_weight_2 = (glad_weapon2_category_skill/(20*(0.8 + weight/400.0))) # Reduce hit chance with weight
+	var hit_skill_weight_1 = (glad_weapon1_category_skill/(weapon1_skill_req*(0.8 + weight/400.0))) # Reduce hit chance with weight
+	var hit_skill_weight_2 = (glad_weapon2_category_skill/(weapon2_skill_req*(0.8 + weight/400.0))) # Reduce hit chance with weight
 	var hit_curve_smoothness = 6+float(int(level))/4 # In low level, hit curve is more smooth (exponential part)
 	var wep1_difficulty = 1 # vary around 1 -> higher makes it easier to handle
 	var wep2_difficulty = 1 # vary around 1 -> higher makes it easier to handle
@@ -623,7 +654,7 @@ func update_gladiator_after_strategy(hit_chance_penalty, dodge_mod):
 					  wep2_difficulty + 1/(hit_base_per_lvl - (hit_skill_weight_2**hit_curve_smoothness))]
 					
 	if weapon1_durability == 1: hit_chance[0] = no_wep_hit_chance
-	if weapon2_durability == 2: hit_chance[1] = no_wep_hit_chance
+	if weapon2_durability == 1: hit_chance[1] = no_wep_hit_chance
 					
 	avoidance = avoidance/dodge_mod
 	dodge_chance = ((2*avoidance/((1.1+0.05*weight)**1.5))/200) / ((2*avoidance/(1.1+0.05*weight)/200)+1)
@@ -633,7 +664,7 @@ func update_gladiator_after_strategy(hit_chance_penalty, dodge_mod):
 
 @rpc("any_peer", "call_local")
 func update_gladiator(data: Dictionary):
-	combined_gladiator_bonuses = collect_gladiator_bonuses(data)
+	combined_gladiator_bonuses = data.get("total_modifier_bonuses", {})
 	print("combined_gladiator_bonuses: " + str(combined_gladiator_bonuses))
 	
 	recalculated_hit_chance = 0
@@ -663,7 +694,7 @@ func update_gladiator(data: Dictionary):
 	endurance = data["attributes"]["endurance"]
 	sword_mastery = data["attributes"]["sword_mastery"]
 	axe_mastery = data["attributes"]["axe_mastery"]
-	dagger_mastery = data["attributes"]["dagger_mastery"]
+	stabbing_mastery = data["attributes"]["stabbing_mastery"]
 	hammer_mastery = data["attributes"]["hammer_mastery"]
 	chain_mastery = data["attributes"]["chain_mastery"]
 	
@@ -741,6 +772,7 @@ func update_gladiator(data: Dictionary):
 	weapon2_durability = data["weapon2"][weapon2_name]["durability"]
 	
 	life_on_block = combined_gladiator_bonuses.get("life_on_block", 0)
+	print("life_on_block ready: " + str(life_on_block))
 	shield_absorb = data["weapon2"][weapon2_name].get("absorb", -1)
 	weapon1_can_parry = data["weapon1"][weapon1_name]["parry"]
 	weapon2_can_parry = data["weapon2"][weapon2_name]["parry"]
@@ -754,8 +786,8 @@ func update_gladiator(data: Dictionary):
 	glad_weapon2_category_skill = data["attributes"][weapon2_category + "_mastery"]
 	
 	var hit_base_per_lvl = -(1.6-float(level)/12) # Less penalty for too low weapon mastery in low levels
-	var hit_skill_weight_1 = (glad_weapon1_category_skill/(20*(0.8 + weight/400))) # Reduce hit chance with weight
-	var hit_skill_weight_2 = (glad_weapon2_category_skill/(20*(0.8 + weight/400))) # Reduce hit chance with weight
+	var hit_skill_weight_1 = (glad_weapon1_category_skill/(weapon1_skill_req*(0.8 + weight/400.0))) # Reduce hit chance with weight
+	var hit_skill_weight_2 = (glad_weapon2_category_skill/(weapon2_skill_req*(0.8 + weight/400.0))) # Reduce hit chance with weight
 	var hit_curve_smoothness = 6+float(level)/4 # In low level, hit curve is more smooth (exponential part)
 	var wep1_difficulty = 1 # vary around 1 -> higher makes it easier to handle
 	var wep2_difficulty = 1 # vary around 1 -> higher makes it easier to handle
@@ -836,7 +868,7 @@ func update_gladiator(data: Dictionary):
 
 func collect_gladiator_bonuses(gladiator: Dictionary) -> Dictionary:
 	var merged := {}
-	var excluded_keys := ["inventory"]
+	var excluded_keys := ["inventory", "total_modifier_bonuses"]
 	var skip_weapon2 := false
 
 	for key in gladiator.keys():

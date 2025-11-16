@@ -78,7 +78,10 @@ func _ready():
 		name_label.add_theme_constant_override("outline_size", 5)
 		"theme_override_constants/outline_size"
 		add_child(name_label)
-		_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
+		if all_gladiators != null:
+			_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
+			
+	
 		
 
 func _make_custom_tooltip(for_text):
@@ -107,6 +110,9 @@ func _on_update_gold_req_shop(_id, gold):
 	
 	if multiplayer.get_unique_id() != _id: return
 	
+	#print(equipment_name + " | cost: " + str(cost) + " | gold after buy eq: " + str(gold) + " item dict: " + str(item_dict) + "\n")
+	#print("item dict: " + str(item_dict))
+	
 	if item_dict:
 		if parent_name == "ShopGridContainer" and item_dict.has(equipment_name):
 			var item_type = item_dict[equipment_name]["type"]
@@ -115,6 +121,8 @@ func _on_update_gold_req_shop(_id, gold):
 			if item_type == "weapon": color = weapon_color
 			elif item_type == "armor": color = armor_color
 			elif item_type == "jewellery": color = jewellery_color
+			
+			
 			
 			if gold < cost:
 				name_label.bbcode_text = "[color=%s]%s[/color] \n💰[color=%s]%d[/color] " % [color, label_display, req_nok_color, cost] 
@@ -152,11 +160,14 @@ func _on_send_equipment_dict_to_peer(id, _item_dict):
 	if initial_tooltip_received == 1: 
 		return
 	
-	item_dict = _item_dict.duplicate(true)
 	
-	_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
 	
-	if item_dict.has(equipment_name):
+	if _item_dict.has(equipment_name):
+		
+		item_dict = _item_dict.duplicate(true)
+	
+		_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
+		
 		var item = item_dict[equipment_name].duplicate(true)
 		orig_min_dmg = item.get("min_dmg", 0)
 		orig_durability = item.get("durability", 0)
@@ -165,6 +176,7 @@ func _on_send_equipment_dict_to_peer(id, _item_dict):
 		orig_crit_chance = item.get("crit_chance", 0)
 		orig_crit_multi = item.get("crit_multi", 0)
 		orig_absorb = item.get("absorb", 0)
+		original_item_dict = item_dict.duplicate(true)
 		
 		if tooltip_text == "": 
 			tooltip_text = get_item_tooltip(item)
@@ -327,6 +339,7 @@ func get_item_tooltip(item_data: Dictionary):
 			tooltip += "[color=%s]Block Absorb:[/color] [color=%s]%d[/color]\n" % [base_text_color, base_value_color, absorb]
 		else:
 			tooltip += "[color=%s]Block Absorb:[/color] [color=%s]%d[/color]\n" % [base_text_color, mod_color, absorb]
+			
 	elif absorb != -1 and type == "armor": 
 		if absorb == orig_absorb:
 			tooltip += "[color=%s]Absorb:[/color] [color=%s]%d[/color]\n" % [base_text_color, base_value_color, absorb]
@@ -390,7 +403,7 @@ func get_item_tooltip(item_data: Dictionary):
 
 		"increased_sword_mastery": "% increased sword mastery",
 		"increased_axe_mastery": "% increased axe mastery",
-		"increased_dagger_mastery": "% increased dagger mastery",
+		"increased_stabbing_mastery": "% increased stabbing mastery",
 		"increased_hammer_mastery": "% increased hammer mastery",
 		"increased_chain_mastery": "% increased chain mastery",
 		"increased_shield_mastery": "% increased shield mastery",
@@ -398,7 +411,7 @@ func get_item_tooltip(item_data: Dictionary):
 		"sword_mastery": "Sword Mastery",
 		"axe_mastery": "Axe Mastery",
 		"hammer_mastery": "Hammer Mastery",
-		"dagger_mastery": "Dagger Mastery",
+		"stabbing_mastery": "Stabbing Mastery",
 		"chain_mastery": "Chain Mastery",
 		"shield_mastery": "Shield Mastery",
 		"unarmed_mastery": "Unarmed Mastery",
@@ -420,6 +433,8 @@ func get_item_tooltip(item_data: Dictionary):
 		"added_block_chance": "% increased block chance",
 		"life_on_block": " life on block",
 		"life_on_hit": " life on hit",
+		"thorns": " to thorns",
+		
 		}
 		
 	
@@ -439,9 +454,19 @@ func get_item_tooltip(item_data: Dictionary):
 		var mods_bonuses = item_data["modifiers"].get("bonuses", {})
 		mod_lines = []
 		for key in mods_bonuses.keys():
-			var value = mods_bonuses[key]
-			var label = mod_labels.get(key, key.capitalize())
-			mod_lines.append("[color=%s]%s%s[/color]" % [mod_color, value, label])
+			if key == "blood_rage":
+				var value1 = mods_bonuses[key][0]
+				var value2 = mods_bonuses[key][1]
+				mod_lines.append("[color=%s]%.2f%% life drained per second\n %.0f%% increased damage[/color]" % [mod_color, value1, value2])
+			if key == "to_gold_income":
+				var value = mods_bonuses[key]
+				var label = mod_labels.get(key, key.capitalize())
+				mod_lines.append("[color=%s]Gain %s extra gold per round[/color]" % [mod_color, value])
+				
+			else:
+				var value = mods_bonuses[key]
+				var label = mod_labels.get(key, key.capitalize())
+				mod_lines.append("[color=%s]%s%s[/color]" % [mod_color, value, label])
 		if mod_lines.size() > 0:
 			tooltip += "\n\n" + "\n".join(mod_lines)
 

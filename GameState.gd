@@ -77,7 +77,7 @@ const RACE_MODIFIERS = {
 		"sword_mastery": 1.0,
 		"axe_mastery": 1.1,
 		"hammer_mastery": 1.2,
-		"dagger_mastery": 1.0,
+		"stabbing_mastery": 1.0,
 		"chain_mastery": 1.15,
 		"shield_mastery": 0.95,
 		"unarmed_mastery": 1.0
@@ -93,7 +93,7 @@ const RACE_MODIFIERS = {
 		"sword_mastery": 1.15,
 		"axe_mastery": 1.0,
 		"hammer_mastery": 1.0,
-		"dagger_mastery": 1.3,
+		"stabbing_mastery": 1.3,
 		"chain_mastery": 1.1,
 		"shield_mastery": 1.2,
 		"unarmed_mastery": 1.0
@@ -109,7 +109,7 @@ const RACE_MODIFIERS = {
 		"sword_mastery": 1.1,
 		"axe_mastery": 1.1,
 		"hammer_mastery": 1.1,
-		"dagger_mastery": 1.1,
+		"stabbing_mastery": 1.1,
 		"chain_mastery": 1.1,
 		"shield_mastery": 1.1,
 		"unarmed_mastery": 1.0
@@ -125,7 +125,7 @@ const RACE_MODIFIERS = {
 		"sword_mastery": 0.7,
 		"axe_mastery": 0.8,
 		"hammer_mastery": 1.1,
-		"dagger_mastery": 0.7,
+		"stabbing_mastery": 0.7,
 		"chain_mastery": 1.15,
 		"shield_mastery": 0.7,
 		"unarmed_mastery": 1.0
@@ -162,7 +162,7 @@ func create_card_pool():
 		"sword_mastery": 100,
 		"axe_mastery": 100,
 		"hammer_mastery": 100,
-		"dagger_mastery": 100,
+		"stabbing_mastery": 100,
 		"chain_mastery": 100,
 		"shield_mastery": 100
 	}
@@ -194,8 +194,9 @@ func update_all_equipment_cards(id):
 			rpc_id(id, "update_equipment_card", id, slot_data, slot_name, first_key)
 
 @rpc("any_peer", "call_local")
-func update_gold_req_in_shop_for_peer(id):
-	emit_signal("signal_update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
+func update_gold_req_in_shop_for_peer(id, gold):
+	print(all_gladiators)
+	emit_signal("signal_update_gold_req_in_shop_for_peer", id, gold)
 
 @rpc("any_peer", "call_local")
 func grant_exp_for_peer(id: int, amount: int, cost: int):
@@ -220,6 +221,7 @@ func grant_exp_for_peer(id: int, amount: int, cost: int):
 
 		all_gladiators[id]["level"] = current_level
 		all_gladiators[id]["exp"] = current_exp
+		rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
 		rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 		update_all_equipment_cards(id)
 	else: add_to_peer_log(id, "Not enough gold!")
@@ -313,8 +315,11 @@ func grant_gold_for_peer(id: int, base_amount: int, opponent_id: int, winner: bo
 	if winner: total_bonus += 1
 	#print(all_gladiators[id]["name"] + " total_bonus: " + str(total_bonus))
 	# 4. Final gold addition
-	all_gladiators[id]["gold"] += base_amount + int(total_bonus)
-	print(str(base_amount + int(total_bonus)) + " gold for peer " + str(id))
+	var gold_from_gear = all_gladiators[id].get("total_modifier_bonuses", {})
+	gold_from_gear = gold_from_gear.get("to_gold_income", 0)
+	all_gladiators[id]["gold"] += base_amount + int(total_bonus) + gold_from_gear
+	#print(str(base_amount + int(total_bonus)) + " gold for peer " + str(id))
+	rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
 	rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 
 
@@ -453,7 +458,7 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 			
 			#print("x prev " + str(float(prev_total_modifier_bonuses.get("increased_health", 0))))
 			#attribute_bonuses(peer_id)
-			print(all_gladiators[peer_id]["attributes"]["health"])
+			print(all_gladiators[peer_id]["attributes"]["endurance"])
 			
 			# Remove weight of item
 			if weight: all_gladiators[peer_id]["weight"] -= weight
@@ -482,7 +487,7 @@ func equip_item(peer_id, equipment, selected_slot):
 	var weight = item_dict[equipment].get("weight", 0)
 	var equip_success = 0
 	
-	if category in ["sword", "axe", "chain", "dagger", "hammer"]:
+	if category in ["sword", "axe", "chain", "stabbing", "hammer"]:
 		category = "weapon"
 	
 	if int(all_gladiators[peer_id]["level"]) >= lvl_req:
@@ -575,7 +580,7 @@ func equip_item(peer_id, equipment, selected_slot):
 			# TODO Apply item modifier bonuses
 			#if modifier_bonuses != {}: 1 
 			
-			print(all_gladiators[peer_id]["attributes"]["health"])
+			print(all_gladiators[peer_id]["attributes"]["endurance"])
 			#print(all_gladiators[peer_id])
 			
 			# Add weight of item
@@ -589,29 +594,38 @@ func equip_item(peer_id, equipment, selected_slot):
 
 
 func remove_attribute_bonuses(peer_id):
-	all_gladiators[peer_id]["attributes"]["strength"] = all_gladiators[peer_id]["attributes"].get("strength", 0)/(1+float(prev_total_modifier_bonuses.get("increased_strength", 0))/100)
-	all_gladiators[peer_id]["attributes"]["quickness"] = all_gladiators[peer_id]["attributes"].get("quickness", 0)/(1+float(prev_total_modifier_bonuses.get("increased_quickness", 0))/100)
-	all_gladiators[peer_id]["attributes"]["crit_rating"] = all_gladiators[peer_id]["attributes"].get("crit_rating", 0)/(1+float(prev_total_modifier_bonuses.get("increased_crit_rating", 0))/100)
-	all_gladiators[peer_id]["attributes"]["avoidance"] = all_gladiators[peer_id]["attributes"].get("avoidance", 0)/(1+float(prev_total_modifier_bonuses.get("increased_avoidance", 0))/100)
-	all_gladiators[peer_id]["attributes"]["health"] = all_gladiators[peer_id]["attributes"].get("health", 0)/(1+float(prev_total_modifier_bonuses.get("increased_health", 0))/100)
-	all_gladiators[peer_id]["attributes"]["resilience"] = all_gladiators[peer_id]["attributes"].get("resilience", 0)/(1+float(prev_total_modifier_bonuses.get("increased_resilience", 0))/100)
-	all_gladiators[peer_id]["attributes"]["endurance"] = all_gladiators[peer_id]["attributes"].get("endurance", 0)/(1+float(prev_total_modifier_bonuses.get("increased_endurance", 0))/100)
-			
+	#all_gladiators[peer_id]["attributes"]["strength"] = all_gladiators[peer_id]["attributes"].get("strength", 0)/(1+float(prev_total_modifier_bonuses.get("increased_strength", 0))/100)
+	#all_gladiators[peer_id]["attributes"]["quickness"] = all_gladiators[peer_id]["attributes"].get("quickness", 0)/(1+float(prev_total_modifier_bonuses.get("increased_quickness", 0))/100)
+	#all_gladiators[peer_id]["attributes"]["crit_rating"] = all_gladiators[peer_id]["attributes"].get("crit_rating", 0)/(1+float(prev_total_modifier_bonuses.get("increased_crit_rating", 0))/100)
+	#all_gladiators[peer_id]["attributes"]["avoidance"] = all_gladiators[peer_id]["attributes"].get("avoidance", 0)/(1+float(prev_total_modifier_bonuses.get("increased_avoidance", 0))/100)
+	#all_gladiators[peer_id]["attributes"]["health"] = all_gladiators[peer_id]["attributes"].get("health", 0)/(1+float(prev_total_modifier_bonuses.get("increased_health", 0))/100)
+	#all_gladiators[peer_id]["attributes"]["resilience"] = all_gladiators[peer_id]["attributes"].get("resilience", 0)/(1+float(prev_total_modifier_bonuses.get("increased_resilience", 0))/100)
+	#all_gladiators[peer_id]["attributes"]["endurance"] = all_gladiators[peer_id]["attributes"].get("endurance", 0)/(1+float(prev_total_modifier_bonuses.get("increased_endurance", 0))/100)
+	
+	var all_attributes = all_gladiators[peer_id]["attributes"].keys()
+	for attr in all_attributes:
+		var increased_string = "increased_" + attr
+		all_gladiators[peer_id]["attributes"][attr] = all_gladiators[peer_id]["attributes"].get(attr, 0)/(1+float(prev_total_modifier_bonuses.get(increased_string, 0))/100)
 
 func add_attribute_bonuses(peer_id):
-	all_gladiators[peer_id]["attributes"]["strength"] = all_gladiators[peer_id]["attributes"].get("strength", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_strength", 0))/100)
-	all_gladiators[peer_id]["attributes"]["quickness"] = all_gladiators[peer_id]["attributes"].get("quickness", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_quickness", 0))/100)
-	all_gladiators[peer_id]["attributes"]["crit_rating"] = all_gladiators[peer_id]["attributes"].get("crit_rating", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_crit_rating", 0))/100)
-	all_gladiators[peer_id]["attributes"]["avoidance"] = all_gladiators[peer_id]["attributes"].get("avoidance", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_avoidance", 0))/100)
-	all_gladiators[peer_id]["attributes"]["health"] = all_gladiators[peer_id]["attributes"].get("health", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_health", 0))/100)
-	all_gladiators[peer_id]["attributes"]["resilience"] = all_gladiators[peer_id]["attributes"].get("resilience", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_resilience", 0))/100)
-	all_gladiators[peer_id]["attributes"]["endurance"] = all_gladiators[peer_id]["attributes"].get("endurance", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_endurance", 0))/100)
+	#all_gladiators[peer_id]["attributes"]["strength"] = all_gladiators[peer_id]["attributes"].get("strength", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_strength", 0))/100)
+	#all_gladiators[peer_id]["attributes"]["quickness"] = all_gladiators[peer_id]["attributes"].get("quickness", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_quickness", 0))/100)
+	#all_gladiators[peer_id]["attributes"]["crit_rating"] = all_gladiators[peer_id]["attributes"].get("crit_rating", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_crit_rating", 0))/100)
+	#all_gladiators[peer_id]["attributes"]["avoidance"] = all_gladiators[peer_id]["attributes"].get("avoidance", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_avoidance", 0))/100)
+	#all_gladiators[peer_id]["attributes"]["health"] = all_gladiators[peer_id]["attributes"].get("health", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_health", 0))/100)
+	#all_gladiators[peer_id]["attributes"]["resilience"] = all_gladiators[peer_id]["attributes"].get("resilience", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_resilience", 0))/100)
+	#all_gladiators[peer_id]["attributes"]["endurance"] = all_gladiators[peer_id]["attributes"].get("endurance", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_endurance", 0))/100)
+	
+	var all_attributes = all_gladiators[peer_id]["attributes"].keys()
+	for attr in all_attributes:
+		var increased_string = "increased_" + attr
+		all_gladiators[peer_id]["attributes"][attr] = all_gladiators[peer_id]["attributes"].get(attr, 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get(increased_string, 0))/100)
 
 
 @rpc("any_peer", "call_local")
 func collect_gladiator_bonuses(id): 
 	var merged := {}
-	var excluded_keys := ["inventory"]
+	var excluded_keys := ["inventory", "total_modifier_bonuses"]
 	var skip_weapon2 := false
 	var gladiator = all_gladiators[id].duplicate(true)
 
@@ -641,12 +655,29 @@ func collect_gladiator_bonuses(id):
 				var bonuses = item["modifiers"]["bonuses"]
 				for bonus_key in bonuses.keys():
 					var value = bonuses[bonus_key]
-					var numeric_value = float(value) if typeof(value) in [TYPE_STRING, TYPE_INT, TYPE_FLOAT] and String(value).is_valid_float() else 0
-
+					print(value)
+					#var numeric_value = float(value) if typeof(value) in [TYPE_STRING, TYPE_INT, TYPE_FLOAT] and String(value).is_valid_float() else 0
+					
+					if bonus_key == "blood_rage":
+						print("pause")
+					
 					if merged.has(bonus_key):
-						merged[bonus_key] += numeric_value
+						if value is Array:
+							for i in range(len(value)):
+								#var numeric_value = float(value[i]) if typeof(value[i]) in [TYPE_STRING, TYPE_INT, TYPE_FLOAT] and String(value[i]).is_valid_float() else 0
+								merged[bonus_key][i] += float(value[i])
+						else:
+							#var numeric_value = float(value) if typeof(value) in [TYPE_STRING, TYPE_INT, TYPE_FLOAT] and String(value).is_valid_float() else 0
+							merged[bonus_key] += float(value)
 					else:
-						merged[bonus_key] = numeric_value
+						#if value is Array:
+						#	for i in range(len(value)):
+								#var numeric_value = float(value[i]) if typeof(value[i]) in [TYPE_STRING, TYPE_INT, TYPE_FLOAT] and String(value[i]).is_valid_float() else 0
+						#		merged[bonus_key][i] = float(value[i])#numeric_value[i]
+						#else:
+							#var numeric_value = float(value) if typeof(value) in [TYPE_STRING, TYPE_INT, TYPE_FLOAT] and String(value).is_valid_float() else 0
+						if value is Array: merged[bonus_key] = value
+						else: merged[bonus_key] = float(value)
 	return merged
 
 @rpc("any_peer", "call_local")
@@ -733,7 +764,7 @@ func buy_equipment_card(id: int, equipment: String, cost: int, ):
 					all_gladiators[id]["gold"] -= cost
 					adjust_card_stock(equipment, "remove")
 					success = true
-					rpc_id(id, "update_gold_req_in_shop_for_peer", id)
+					rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
 					rpc_id(id, "add_item_to_inventory", id, item_dict, slot_name)
 					rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 					rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
@@ -780,7 +811,7 @@ func sell_from_equipment(peer_id: int, equipment: String, equipment_button_paren
 	
 	all_gladiators[peer_id]["gold"] += int(price/2)
 	
-	rpc_id(peer_id, "update_gold_req_in_shop_for_peer", peer_id)
+	rpc_id(peer_id, "update_gold_req_in_shop_for_peer", peer_id, all_gladiators[peer_id]["gold"])
 	adjust_card_stock(equipment, "add")  # Restore stock
 	rpc_id(peer_id, "remove_item_from_equipment", peer_id, item_dict, category)
 	rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
@@ -799,7 +830,7 @@ func sell_from_inventory(id: int, equipment: String, selected_slot):
 	
 	all_gladiators[id]["inventory"][selected_slot] = {}  # Clear slot
 	all_gladiators[id]["gold"] += int(price/2)
-	rpc_id(id, "update_gold_req_in_shop_for_peer", id)
+	rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
 	rpc_id(id, "remove_item_from_inventory", id, item_dict, selected_slot)
 	adjust_card_stock(equipment, "add")  # Restore stock
 	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
@@ -834,7 +865,7 @@ func buy_craft_card(id, craft_name, cost):
 			success = true
 			rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
-			rpc_id(id, "update_gold_req_in_shop_for_peer", id)
+			rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
 		else: add_to_peer_log(id, "[INFO] ❌Not enough gold!")
 	else: 
 		add_to_peer_log(id, "[INFO] ❌No " + craft_name + " cards left in stock!")
@@ -857,7 +888,7 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int):
 				emit_signal("gladiator_attribute_changed", all_gladiators)
 				adjust_card_stock(attribute, "remove")
 				success = true
-				rpc_id(id, "update_gold_req_in_shop_for_peer", id)
+				rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
 				rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 				rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 				update_all_equipment_cards(id)
@@ -977,12 +1008,8 @@ func reroll_cards_new_round(_active_players: Array):
 func reroll_cards_new_round_send_signal(_active_players: Array):
 	print("Emitting signal reroll_cards_new_round, active_players = " + str(_active_players))
 	emit_signal("reroll_cards_new_round_signal", _active_players)
-	
-	
 
-	
-	
-	
+
 @rpc("any_peer", "call_local")
 func use_craft_mat_on_item(id, craft_mat, item, slot):
 	
@@ -1209,7 +1236,7 @@ func get_possible_bonuses_for_item(item_dict):
 				
 				"increased_sword_mastery": str(randi_range(item_level, 2*item_level)),
 				"increased_axe_mastery": str(randi_range(item_level, 2*item_level)),
-				"increased_dagger_mastery": str(randi_range(item_level, 2*item_level)),
+				"increased_stabbing_mastery": str(randi_range(item_level, 2*item_level)),
 				"increased_hammer_mastery": str(randi_range(item_level, 2*item_level)),
 				"increased_chain_mastery": str(randi_range(item_level, 2*item_level)),
 				"increased_shield_mastery": str(randi_range(item_level, 2*item_level))
@@ -1229,7 +1256,7 @@ func get_possible_bonuses_for_item(item_dict):
 				
 				"increased_sword_mastery": str(randi_range(item_level, 2*item_level)),
 				"increased_axe_mastery": str(randi_range(item_level, 2*item_level)),
-				"increased_dagger_mastery": str(randi_range(item_level, 2*item_level)),
+				"increased_stabbing_mastery": str(randi_range(item_level, 2*item_level)),
 				"increased_hammer_mastery": str(randi_range(item_level, 2*item_level)),
 				"increased_chain_mastery": str(randi_range(item_level, 2*item_level)),
 				"increased_shield_mastery": str(randi_range(item_level, 2*item_level))
@@ -1245,10 +1272,12 @@ func get_possible_bonuses_for_item(item_dict):
 			
 			"increased_sword_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_axe_mastery": str(randi_range(item_level, 2*item_level)),
-			"increased_dagger_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_stabbing_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_hammer_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_chain_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_shield_mastery": str(randi_range(item_level, 2*item_level))
+			
+			
 		}
 		
 	if category == "ring":
@@ -1267,6 +1296,9 @@ func get_possible_bonuses_for_item(item_dict):
 			"increased_avoidance": str(randi_range(item_level, 2*item_level)),
 			"increased_resilience": str(randi_range(item_level, 2*item_level)),
 			"increased_endurance": str(randi_range(item_level, 2*item_level)),
+			
+			"blood_rage": [randf_range(0.25, 0.75), randi_range(item_level, 3*item_level)],
+			"to_gold_income": str(clamp(randi_range(1, item_level/1.5), 1, 9999))
 		}
 		
 	if category == "amulet" or category == "necklace":
@@ -1285,6 +1317,9 @@ func get_possible_bonuses_for_item(item_dict):
 			"increased_avoidance": str(randi_range(item_level, 2*item_level)),
 			"increased_resilience": str(randi_range(item_level, 2*item_level)),
 			"increased_endurance": str(randi_range(item_level, 2*item_level)),
+			
+			"blood_rage": str([randf_range(0.25, 0.75), randi_range(item_level, 3*item_level)]),
+			"to_gold_income": str(clamp(randi_range(1, item_level/1.5), 1, 9999))
 		}
 		
 	if category == "trinket":
@@ -1303,6 +1338,9 @@ func get_possible_bonuses_for_item(item_dict):
 			"increased_avoidance": str(randi_range(item_level, 2*item_level)),
 			"increased_resilience": str(randi_range(item_level, 2*item_level)),
 			"increased_endurance": str(randi_range(item_level, 2*item_level)),
+			
+			"blood_rage": [randf_range(0.25, 0.75), randi_range(item_level, 3*item_level)],
+			"to_gold_income": str(clamp(randi_range(1, item_level/1.5), 1, 9999))
 		}
 		
 	if category == "back":
@@ -1324,10 +1362,12 @@ func get_possible_bonuses_for_item(item_dict):
 			
 			"increased_sword_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_axe_mastery": str(randi_range(item_level, 2*item_level)),
-			"increased_dagger_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_stabbing_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_hammer_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_chain_mastery": str(randi_range(item_level, 2*item_level)),
-			"increased_shield_mastery": str(randi_range(item_level, 2*item_level))
+			"increased_shield_mastery": str(randi_range(item_level, 2*item_level)),
+			
+			"to_gold_income": str(clamp(randi_range(1, item_level/1.5), 1, 9999))
 		}
 		
 	if category == "belt":
@@ -1344,11 +1384,13 @@ func get_possible_bonuses_for_item(item_dict):
 			"increased_avoidance": str(randi_range(item_level, 2*item_level)),
 			"increased_resilience": str(randi_range(item_level, 2*item_level)),
 			"increased_endurance": str(randi_range(item_level, 2*item_level)),
+			
+			"to_gold_income": str(clamp(randi_range(1, item_level/1.5), 1, 9999))
 		}
 		
 	if category in ["chest", "head", "legs", "shoulders"]:
 		possible_bonuses = {
-			"local_added_abs": str(randi_range(1, item_level/1.5)),
+			"local_added_abs": str(randi_range(1, item_level)),
 			"life_on_block": str(1.5*randi_range(item_level, 2*item_level)),
 			"life_on_hit": str(3*randi_range(item_level, 1.5*item_level)),
 			
@@ -1357,14 +1399,14 @@ func get_possible_bonuses_for_item(item_dict):
 			"increased_resilience": str(randi_range(item_level, 2*item_level)),
 			"increased_endurance": str(randi_range(item_level, 2*item_level)),
 			
-			
-			
+			"thorns": str(randi_range(1, item_level)),
+			"to_gold_income": str(clamp(randi_range(1, item_level/1.5), 1, 9999))
 			
 		}
 		
 	if category == "boots":
 		possible_bonuses = {
-			"local_added_abs": str(randi_range(1, item_level/1.5)),
+			"local_added_abs": str(clamp(randi_range(1, item_level/1.5), 1, 9999)),
 			"life_on_block": str(1.5*randi_range(item_level, 2*item_level)),
 			"life_on_hit": str(3*randi_range(item_level, 1.5*item_level)),
 			
@@ -1374,11 +1416,14 @@ func get_possible_bonuses_for_item(item_dict):
 			"increased_avoidance": str(randi_range(item_level, 2*item_level)),
 			"increased_resilience": str(randi_range(item_level, 2*item_level)),
 			"increased_endurance": str(randi_range(item_level, 2*item_level)),
+			
+			"thorns": str(randi_range(1, item_level)),
+			"to_gold_income": str(clamp(randi_range(1, item_level/1.5), 1, 9999))
 		}
 		
 	if category == "gloves":
 		possible_bonuses = {
-			"local_added_abs": str(randi_range(1, item_level/1.5)),
+			"local_added_abs": str(clamp(randi_range(1, item_level/1.5), 1, 9999)),
 			"life_on_block": str(1.5*randi_range(item_level, 2*item_level)),
 			"life_on_hit": str(3*randi_range(item_level, 1.5*item_level)),
 			"added_hit_chance": str(1.5*randi_range(1, 2*item_level)),
@@ -1393,10 +1438,13 @@ func get_possible_bonuses_for_item(item_dict):
 			
 			"increased_sword_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_axe_mastery": str(randi_range(item_level, 2*item_level)),
-			"increased_dagger_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_stabbing_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_hammer_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_chain_mastery": str(randi_range(item_level, 2*item_level)),
-			"increased_shield_mastery": str(randi_range(item_level, 2*item_level))
+			"increased_shield_mastery": str(randi_range(item_level, 2*item_level)),
+			
+			"thorns": str(randi_range(1, item_level)),
+			"to_gold_income": str(randi_range(1, item_level/1.5))
 		}
 		
 	### IDEAS ###
@@ -1404,11 +1452,12 @@ func get_possible_bonuses_for_item(item_dict):
 	# #% attributes
 	# 		- 
 	# -#% global attribute requirements
-	# #% increased income
-	# # thorns damage
+	# 			# extra gold per round
+	# 			# thorns damage
 	# #% physical damage reduction
 	# damage per # attribute
 	# to life per # strength
+	# 			drains X dmg per sec, inc dmg % / attack speed %
 
 	return possible_bonuses
 	

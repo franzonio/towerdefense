@@ -15,7 +15,7 @@ var name_color := "ef692f"#Color.GOLD.to_html(false)
 var base_text_color := "927e6a"#Color.DARK_GRAY.to_html(false)
 var base_value_color := "efd8a1"#Color.WHITE_SMOKE.to_html(false)
 var req_ok_color := "efd8a1"#Color.WHITE_SMOKE.to_html(false)
-var req_nok_color := "ef3a0c"#Color.RED.to_html(false)
+var req_nok_color := "79444a"#Color.RED.to_html(false)
 var mod_color := "3c9f9c"#Color.DODGER_BLUE.to_html(false)
 
 var label_display
@@ -26,6 +26,7 @@ var neg_bonus_color = Color.RED.to_html(false)
 var no_bonus_color = "efd8a1"
 
 func _ready():
+	race_modifiers = GameState_.RACE_MODIFIERS#.get(GameState_.selected_race, {})
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	GameState_.connect("card_buy_result", Callable(self, "_on_card_buy_result"))
@@ -57,10 +58,11 @@ func _ready():
 		name_label.add_theme_constant_override("outline_size", 5)
 		
 		add_child(name_label)
-		_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
+		if all_gladiators != null:
+			_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
 		
-		race_modifiers = GameState_.RACE_MODIFIERS#.get(GameState_.selected_race, {})
-		tooltip_text = get_attribute_tooltip(attribute_name)
+		
+		
 		
 
 func _make_custom_tooltip(for_text):
@@ -92,6 +94,7 @@ func _on_update_gold_req_shop(_id, gold):
 func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
 	all_gladiators = _all_gladiators
 	_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
+	tooltip_text = get_attribute_tooltip(attribute_name)
 
 func format_name(raw_name: String) -> String:
 	var parts = raw_name.split("_")            # → ["simple", "sword"]

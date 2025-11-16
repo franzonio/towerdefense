@@ -83,7 +83,7 @@ var equipment_button_parent_name
 @onready var resilience_panel = $AttributePanel/VBoxContainer/Resilience
 @onready var sword_mastery_panel = $AttributePanel/VBoxContainer/SwordMastery
 @onready var axe_mastery_panel = $AttributePanel/VBoxContainer/AxeMastery
-@onready var dagger_mastery_panel = $AttributePanel/VBoxContainer/DaggerMastery
+@onready var stabbing_mastery_panel = $AttributePanel/VBoxContainer/StabbingMastery
 @onready var hammer_mastery_panel = $AttributePanel/VBoxContainer/HammerMastery
 @onready var chain_mastery_panel = $AttributePanel/VBoxContainer/ChainMastery
 @onready var shield_mastery_panel = $AttributePanel/VBoxContainer/ShieldMastery
@@ -121,7 +121,7 @@ var craft_active = ""
 @onready var axe_mastery_card = preload("res://ShopCards/AttributeCards/AxeMasteryCard.tscn")
 @onready var shield_mastery_card = preload("res://ShopCards/AttributeCards/ShieldMasteryCard.tscn")
 @onready var hammer_mastery_card = preload("res://ShopCards/AttributeCards/HammerMasteryCard.tscn")
-@onready var dagger_mastery_card = preload("res://ShopCards/AttributeCards/DaggerMasteryCard.tscn")
+@onready var stabbing_mastery_card = preload("res://ShopCards/AttributeCards/StabbingMasteryCard.tscn")
 @onready var chain_mastery_card = preload("res://ShopCards/AttributeCards/ChainMasteryCard.tscn")
 
 @onready var tome_of_chaos_card = preload("res://ShopCards/CraftCards/TomeOfChaosCard.tscn")
@@ -275,7 +275,7 @@ func get_all_cards():
 		
 		### WEAPON MASTERY ###
 		[sword_mastery_card, "sword_mastery", card_stock["sword_mastery"]], [axe_mastery_card, "axe_mastery", card_stock["axe_mastery"]],
-		[shield_mastery_card, "shield_mastery", card_stock["shield_mastery"]], [dagger_mastery_card, "dagger_mastery", card_stock["dagger_mastery"]],
+		[shield_mastery_card, "shield_mastery", card_stock["shield_mastery"]], [stabbing_mastery_card, "stabbing_mastery", card_stock["stabbing_mastery"]],
 		[chain_mastery_card, "chain_mastery", card_stock["chain_mastery"]], [hammer_mastery_card, "hammer_mastery", card_stock["hammer_mastery"]],
 		
 		### CHESTS ###
@@ -569,7 +569,7 @@ func update_attribute_ui():
 	resilience_panel.text = "Resilience: " + str(int(attributes["resilience"]))
 	sword_mastery_panel.text = "Sword Mastery: " + str(int(attributes["sword_mastery"]))
 	axe_mastery_panel.text = "Axe Mastery: " + str(int(attributes["axe_mastery"]))
-	dagger_mastery_panel.text = "Dagger Mastery: " + str(int(attributes["dagger_mastery"]))
+	stabbing_mastery_panel.text = "Stabbing Mastery: " + str(int(attributes["stabbing_mastery"]))
 	hammer_mastery_panel.text = "Hammer Mastery: " + str(int(attributes["hammer_mastery"]))
 	chain_mastery_panel.text = "Chain Mastery: " + str(int(attributes["chain_mastery"]))
 	shield_mastery_panel.text = "Shield Mastery: " + str(int(attributes["shield_mastery"]))
@@ -1041,7 +1041,7 @@ func populate_hud():
 		var sword_mastery = all_gladiators[peer_id]["attributes"]["sword_mastery"]
 		var axe_mastery = all_gladiators[peer_id]["attributes"]["axe_mastery"]
 		var hammer_mastery = all_gladiators[peer_id]["attributes"]["hammer_mastery"]
-		var dagger_mastery = all_gladiators[peer_id]["attributes"]["dagger_mastery"]
+		var stabbing_mastery = all_gladiators[peer_id]["attributes"]["stabbing_mastery"]
 		var chain_mastery = all_gladiators[peer_id]["attributes"]["chain_mastery"]
 		var shield_mastery = all_gladiators[peer_id]["attributes"]["shield_mastery"]
 		var unarmed_mastery = all_gladiators[peer_id]["attributes"]["unarmed_mastery"]
@@ -1053,7 +1053,7 @@ func populate_hud():
 		var weight = all_gladiators[peer_id]["weight"]
 		var physique = strength + health + endurance/2
 		var agility = [quickness, crit_rating/2, avoidance, sword_mastery/3, axe_mastery/3, hammer_mastery/3, 
-						dagger_mastery/3, chain_mastery/3, shield_mastery/3, unarmed_mastery/3].reduce(func(a, b): return a + b)
+						stabbing_mastery/3, chain_mastery/3, shield_mastery/3, unarmed_mastery/3].reduce(func(a, b): return a + b)
 		
 		var gladiator_physique_class
 		for physique_class in physique_limits.keys():

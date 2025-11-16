@@ -219,12 +219,12 @@ extends Node
 		}
 	},
 		
-	"dagger": {
+	"stabbing": {
 		"small_dagger": {
 			"price": 20,
 			"stock": 250,
 			"type": "weapon",
-			"category": "dagger",
+			"category": "stabbing",
 			"weight": 2,
 			"hands": 1,
 			"min_dmg": 3.0, 
@@ -243,7 +243,7 @@ extends Node
 				{
 				"attributes": 
 					{
-					"dagger_mastery": 5,
+					"stabbing_mastery": 5,
 					"quickness": 5,
 					"crit_chance": 5
 					},

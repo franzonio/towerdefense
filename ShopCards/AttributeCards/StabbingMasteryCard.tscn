@@ -1,0 +1,19 @@
+[gd_scene load_steps=3 format=3 uid="uid://bmi6f7y5aklbt"]
+
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_o2hjm"]
+[ext_resource type="Script" uid="uid://dyyvc2btnvyo" path="res://ShopCards/AttributeCards/BaseAttributeCard.gd" id="2_e3tt5"]
+
+[node name="StabbingMasteryCard" type="Button"]
+offset_right = 306.0
+offset_bottom = 458.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_o2hjm")
+expand_icon = true
+script = ExtResource("2_e3tt5")
+attribute_name = "stabbing_mastery"
+amount = 5
+cost = 5
+
+[connection signal="button_up" from="." to="." method="_on_button_up"]
