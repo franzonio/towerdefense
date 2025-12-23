@@ -64,16 +64,19 @@ func _ready():
 	if parent_name == "ShopGridContainer":
 		label_display = format_name(equipment_name)
 		name_label = RichTextLabel.new()
-		name_label.add_theme_font_size_override("normal_font_size", 26)
-		name_label.add_theme_font_size_override("bold_font_size", 26)
+		name_label.add_theme_font_size_override("normal_font_size", 22)
+		name_label.add_theme_font_size_override("bold_font_size", 22)
 		name_label.bbcode_enabled = true
-		name_label.fit_content = true
-		name_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+		name_label.fit_content = false
+		name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		name_label.scroll_active = false
-		name_label.position.y = 15
-		name_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+		name_label.position.y = -100
+		
+		name_label.size = Vector2(128,128)
+		
+		#name_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
 		name_label.add_theme_color_override("font_outline_color", Color.BLACK)
 		name_label.add_theme_constant_override("outline_size", 5)
 		"theme_override_constants/outline_size"
@@ -128,6 +131,10 @@ func _on_update_gold_req_shop(_id, gold):
 				name_label.bbcode_text = "[color=%s]%s[/color] \n💰[color=%s]%d[/color] " % [color, label_display, req_nok_color, cost] 
 			else:
 				name_label.bbcode_text = "[color=%s]%s[/color] \n💰%d " % [color, label_display, cost] 
+				
+			''' JUST ADDED THIS LINE, DOES IT WORK PROPERLY?'''
+			tooltip_text = get_item_tooltip(item_dict[equipment_name])
+			
 	#else: 1#print("no item dict!")
 
 func _on_equipment_card_updated(id, updated_item_dict, slot, item):

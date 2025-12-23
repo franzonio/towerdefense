@@ -38,16 +38,19 @@ func _ready():
 	if parent_name == "ShopGridContainer":
 		label_display = format_name(craft_name)
 		name_label = RichTextLabel.new()
-		name_label.add_theme_font_size_override("normal_font_size", 26)
-		name_label.add_theme_font_size_override("bold_font_size", 26)
+		name_label.add_theme_font_size_override("normal_font_size", 22)
+		name_label.add_theme_font_size_override("bold_font_size", 22)
 		name_label.bbcode_enabled = true
-		name_label.fit_content = true
-		name_label.autowrap_mode = TextServer.AUTOWRAP_OFF
+		name_label.fit_content = false
+		name_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		name_label.scroll_active = false
-		name_label.position.y = 15
-		name_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
+		name_label.position.y = -100
+		
+		name_label.size = Vector2(128,128)
+		
+		#name_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
 		name_label.add_theme_color_override("font_outline_color", Color.BLACK)
 		name_label.add_theme_constant_override("outline_size", 5)
 		

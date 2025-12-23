@@ -369,35 +369,35 @@ text = "-"
 layout_mode = 2
 text = "+"
 
-[node name="Dagger Mastery_Modifier" type="Label" parent="GridContainer"]
+[node name="Stabbing Mastery_Modifier" type="Label" parent="GridContainer"]
 layout_mode = 2
 
-[node name="Dagger Mastery" type="Label" parent="GridContainer"]
+[node name="Stabbing Mastery" type="Label" parent="GridContainer"]
 layout_mode = 2
 tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
 mouse_filter = 1
 text = "Dagger Mastery"
 
-[node name="Dagger Mastery_Value" type="Label" parent="GridContainer"]
+[node name="Stabbing Mastery_Value" type="Label" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "0"
 
-[node name="Dagger Mastery_Final" type="Label" parent="GridContainer"]
+[node name="Stabbing Mastery_Final" type="Label" parent="GridContainer"]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 6
 text = "0"
 
-[node name="Dagger Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
+[node name="Stabbing Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Dagger Mastery_Sub" type="Button" parent="GridContainer/Dagger Mastery_Buttons"]
+[node name="Stabbing Mastery_Sub" type="Button" parent="GridContainer/Stabbing Mastery_Buttons"]
 layout_mode = 2
 text = "-"
 
-[node name="Dagger Mastery_Add" type="Button" parent="GridContainer/Dagger Mastery_Buttons"]
+[node name="Stabbing Mastery_Add" type="Button" parent="GridContainer/Stabbing Mastery_Buttons"]
 layout_mode = 2
 text = "+"
 
@@ -687,7 +687,7 @@ text = "Troll"
 [connection signal="pressed" from="GridContainer/Endurance_Buttons/Endurance_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Sword Mastery_Buttons/Sword Mastery_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Axe Mastery_Buttons/Axe Mastery_Sub" to="." method="_on_strength_sub_pressed"]
-[connection signal="pressed" from="GridContainer/Dagger Mastery_Buttons/Dagger Mastery_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Stabbing Mastery_Buttons/Stabbing Mastery_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Hammer Mastery_Buttons/Hammer Mastery_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Chain Mastery_Buttons/Chain Mastery_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Shield Mastery_Buttons/Shield Mastery_Sub" to="." method="_on_strength_sub_pressed"]

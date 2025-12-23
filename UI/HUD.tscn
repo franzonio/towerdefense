@@ -536,16 +536,22 @@ label_settings = SubResource("LabelSettings_uk570")
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -527.0
-offset_top = 76.0
-offset_right = 791.75
-offset_bottom = 439.74997
+offset_left = -255.99994
+offset_top = 133.99997
+offset_right = 384.0
+offset_bottom = 290.99997
 grow_horizontal = 2
 scale = Vector2(0.8, 0.8)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Shop"]
 layout_mode = 2
 size_flags_horizontal = 3
+
+[node name="ShopGridContainer" type="GridContainer" parent="Shop/VBoxContainer"]
+custom_minimum_size = Vector2(640, 128)
+layout_mode = 2
+size_flags_vertical = 3
+columns = 5
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Shop/VBoxContainer"]
 layout_mode = 2
@@ -554,14 +560,9 @@ size_flags_horizontal = 4
 [node name="RefreshButton" type="Button" parent="Shop/VBoxContainer/HBoxContainer"]
 layout_mode = 2
 theme = ExtResource("5_gppie")
+theme_override_font_sizes/font_size = 20
 disabled = true
 text = "Reroll"
-
-[node name="ShopGridContainer" type="GridContainer" parent="Shop/VBoxContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-columns = 5
 
 [node name="CraftingContainer" type="VBoxContainer" parent="."]
 anchors_preset = 7

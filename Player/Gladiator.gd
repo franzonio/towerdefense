@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+@onready var human_no_gear = preload("res://Assets/PlayerAssets/human_no_gear-Sheet.png")
+@onready var human_t1_light = preload("res://Assets/PlayerAssets/human_t1_light-Sheet.png")
 @onready var DamagePopupScene = preload("res://DamagePopup.tscn")
 
 #@onready var synchronizer = $MultiplayerSynchronizer
@@ -32,7 +34,8 @@ var no_wep_attack_speed = no_wep["speed"]
 
 var time_passed = 0
 @onready var nav = $NavigationAgent2D
-@onready var sprite = $Sprite
+#@onready var sprite = $Sprite
+@onready var sprite = $CharacterAnimationPlayer
 @onready var health_bar = $HealthBar
 @onready var health_bar_text = $HealthBar/HealthBarText
 @onready var multiplayer_sync = $MultiplayerSynchronizer
@@ -50,8 +53,8 @@ var time_passed = 0
 #@onready var nameLabel = $Name
 
 #var velocity: Vector2 = Vector2.ZERO
-@export var current_animation: String = "idle_down"
-@export var prev_animation: String = "idle_down"
+@export var current_animation: String = "idle_right"
+@export var prev_animation: String = "idle_right"
 
 var input_vector := Vector2.ZERO
 
@@ -163,16 +166,34 @@ var opponent_dead = false
 
 var combined_gladiator_bonuses = {}
 var prev_sec = 0
+var face_towards = ""
 
 signal died
 
 func _ready():
+	$".".visible = false
+	if multiplayer.is_server():
+		GameState_.refresh_gladiator_data(multiplayer.get_unique_id())
+	else:
+		GameState_.rpc_id(1, "refresh_gladiator_data", multiplayer.get_unique_id())
+		
 	time_passed = -100000
 	prev_sec = 0
 	await get_tree().process_frame 
 	dead = 0
 	add_to_group("gladiators")
-	sprite.play("idle_down")
+	
+	
+	direction = (target_position - global_position).normalized()
+	if direction.x < 0:
+		face_towards = "left"
+		sprite.play(race+"_idle_left")
+		flip_animations(true)
+	else:
+		face_towards = "right"
+		sprite.play(race+"_idle_right")
+		flip_animations(false)
+	
 	GameState_.connect("send_gladiator_data_to_peer_signal", Callable(self, "_on_send_gladiator_data_to_peer_signal"))
 	GameState_.connect("killed_by_server_signal", Callable(self, "_on_killed_by_server_signal"))
 	
@@ -181,7 +202,14 @@ func _ready():
 		var hud = get_node("/root/Main/HUD")
 		if hud:
 			hud.concede_threshold_changed.connect(_on_concede_threshold_changed)
-	await get_tree().create_timer(11.0).timeout # 11
+	
+	await get_tree().create_timer(1.0).timeout
+	
+	await get_tree().create_timer(10.0).timeout # 11
+	
+	#if multiplayer.is_server() and is_multiplayer_authority():
+	#	$Chest.texture = human_t1_light
+		
 	time_passed = 0
 	# Intermission phase where players buy upgrades
 	
@@ -206,11 +234,13 @@ func _ready():
 			for g in get_tree().get_nodes_in_group("gladiators"):
 				if g.get_multiplayer_authority() == opponent_peer_id: opponent = g
 		
+		'''
 		var all_animations = sprite.sprite_frames.get_animation_names()
 
 		for animation_name in all_animations:
 			if animation_name.begins_with("attack_right"): attack_right_animations.append(animation_name)
 			if animation_name.begins_with("attack_left"): attack_left_animations.append(animation_name)
+		'''
 	
 # Only process input if this is OUR player
 func _process(delta: float) -> void:
@@ -240,32 +270,133 @@ func _process(delta: float) -> void:
 func _physics_process(delta):
 	$HealthBar.value = current_health
 	if is_multiplayer_authority() and opponent != null and is_instance_valid(opponent) and opponent.current_health > opponent.max_health*opponent.concede_threshold and opponent_peer_id:
-		if opponent_dead: return
+		if opponent_dead: 
+			if face_towards == "right":
+				sprite.play(race+"_idle_right")
+			elif face_towards == "left":
+				sprite.play(race+"_idle_left")
+			
+			return
 		prev_animation = current_animation
 		check_for_attack(delta)
 		handle_ai_movement(delta)
 		handle_animation()
 	else: 
-		if opponent_dead: return
-		if current_animation.begins_with("attack"): sprite.play(current_animation)
-		elif !current_animation.begins_with("attack") and current_animation != "N/A": sprite.play(current_animation)
+		if opponent_dead: 
+			if face_towards == "right":
+				sprite.play(race+"_idle_right")
+			elif face_towards == "left":
+				sprite.play(race+"_idle_left")
+			return
+		if current_animation.begins_with(race+"_attack"): 
+			sprite.play(current_animation)
 		
+		
+func flip_animations(flip):
+	$vfx.flip_h = flip
+	$GlovesBack.flip_h = flip
+	$GlovesFront.flip_h = flip
+	$WeaponFront.flip_h = flip
+	$WeaponBack.flip_h = flip
+	$Shoulders.flip_h = flip
+	$Chest.flip_h = flip
+	$Legs.flip_h = flip
+	$Boots.flip_h = flip
+	$Helmet.flip_h = flip
+	
+	if flip == false:
+		$CollisionShape2D.position.x = -13.5
+		$HealthBar.position.x = -13.5
+		$Label.position.x = -13.5
+		$Name.position.x = -94
+	else:
+		$CollisionShape2D.position.x = 6
+		$HealthBar.position.x = 6
+		$Label.position.x = 6
+		$Name.position.x = -74.5
+	
+	
 func _on_send_gladiator_data_to_peer_signal(_peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
 	all_gladiators = _all_gladiators
+	update_item_textures.rpc()
+	
+	
+@rpc("any_peer", "call_local")
+func update_item_textures():
+	
+	var id = owner_id #multiplayer.get_unique_id()
+	#print("id: " + str(id))
+	#if 1: #multiplayer.get_unique_id() == id:# and is_multiplayer_authority():
+		
+	var weapon1 = all_gladiators[id].get("weapon1", {})#.keys()[0]
+	var weapon2 = all_gladiators[id].get("weapon2", {})#.keys()[0]
+	var boots = all_gladiators[id].get("boots", {})#.keys()[0]
+	var head = all_gladiators[id].get("head", {})#.keys()[0]
+	var shoulders = all_gladiators[id].get("shoulders", {})#.keys()[0]
+	var gloves = all_gladiators[id].get("gloves", {})#.keys()[0]
+	var chest = all_gladiators[id].get("chest", {})#.keys()[0]
+
+	if head != {}:
+		$Helmet.texture = human_t1_light
+	else:
+		$Helmet.texture = human_no_gear
+
+	if shoulders != {}:
+		$Shoulders.texture = human_t1_light
+	else:
+		$Shoulders.texture = human_no_gear
+		
+	if gloves != {}:
+		$GlovesFront.texture = human_t1_light
+		$GlovesBack.texture = human_t1_light
+	else:
+		$GlovesFront.texture = human_no_gear
+		$GlovesBack.texture = human_no_gear
+		
+	if chest != {}:
+		$Chest.texture = human_t1_light
+	else:
+		$Chest.texture = human_no_gear
+
+	if boots != {}:
+		$Boots.texture = human_t1_light
+	else:
+		$Boots.texture = human_no_gear
+		
+		
+	$".".visible = true
 		
 func _on_concede_threshold_changed(value: float):
 	concede_threshold = value
 	
 func handle_animation():
-	if current_animation.begins_with("attack") and !sprite.is_playing(): sprite.play(current_animation)
-	elif !current_animation.begins_with("attack") and current_animation != "N/A": sprite.play(current_animation)
+	if current_animation.begins_with(race+"_attack"): # and !sprite.is_playing(): 
+		sprite.play(current_animation)
+		if face_towards == "right":
+			current_animation = race+"_idle_right"
+		elif face_towards == "left":
+			current_animation = race+"_idle_left"
+		
+	elif current_animation.begins_with(race+"_idle") and !sprite.is_playing():
+		if face_towards == "right":
+			current_animation = race+"_idle_right"
+		elif face_towards == "left":
+			current_animation = race+"_idle_left"
+		sprite.play(current_animation)
+		
+		#if abs(direction.x) > abs(direction.y): current_animation = "walk_right" if direction.x > 0 else "walk_left"
 	
-	if not sprite.is_connected("animation_finished", _on_any_animation_finished): sprite.animation_finished.connect(_on_any_animation_finished, CONNECT_ONE_SHOT)
+	#if not sprite.is_connected("animation_finished", _on_any_animation_finished): 
+	#	sprite.animation_finished.connect(_on_any_animation_finished, CONNECT_ONE_SHOT)
 	
 	
 func _on_any_animation_finished(): 
-	if sprite.animation == "die": emit_signal("died")
-	else: current_animation = "N/A"
+	
+	if current_animation == race+"_die": 
+		emit_signal("died")
+	else: 
+		sprite.play(race+"_idle_right")
+	#else: 1#current_animation = "N/A"
 		
 		
 func check_for_attack(delta: float):
@@ -284,8 +415,10 @@ func check_for_attack(delta: float):
 
 			#print("opponent.current_health" + str(opponent.current_health))
 			if attack_charge_time >= attack_speed and opponent.current_health > opponent.max_health*opponent.concede_threshold and !opponent.dead:
-				if direction.x > 0.0: current_animation = attack_right_animations[randi_range(0, attack_right_animations.size()-1)]
-				if direction.x < 0.0: current_animation = attack_left_animations[randi_range(0, attack_left_animations.size()-1)]
+				if face_towards == "right": 
+					current_animation = race+"_attackRightSwingFront"
+				elif face_towards == "left": 
+					current_animation = race+"_attackLeftSwingFront"
 				
 				var dodge_modify = 1
 				var jester_penalty = 1
@@ -516,7 +649,7 @@ func die():
 	sprite.stop()
 	
 	if not sprite.is_playing():
-		sprite.play("die")
+		sprite.play(race+"_die")
 		
 	#print("die()  |  peer " + str(multiplayer.get_unique_id()) + " emits died signal")
 	emit_signal("died")
@@ -534,18 +667,10 @@ func handle_ai_movement(delta):
 	if global_position.distance_to(target_position) < ATTACK_RANGE/2.0: # Stop when close enough
 		velocity = Vector2.ZERO
 		reached_target = true
-		#target_position = Vector2.ZERO
 	
 	position += velocity * delta
 
-	if multiplayer.is_server(): 
-		'''
-		print("\nvelocity: " + str(velocity))
-		print("global_position: " + str(global_position) + " | target_position: " + str(target_position) + " | delta: " + str(global_position.distance_to(target_position)))
-		print("in_combat: " + str(in_combat) + " | reached_target: " + str(reached_target))
-		print("current_animation: " + str(current_animation))
-		'''
-
+	'''
 	if !current_animation.begins_with("attack"):# or current_animation != "N/A":
 		if !reached_target:
 			
@@ -556,9 +681,9 @@ func handle_ai_movement(delta):
 			# Stop at idle direction depending on last move
 			if prev_animation == "walk_right": current_animation = "idle_right"
 			elif prev_animation == "walk_left": current_animation = "idle_left"
-			elif prev_animation == "walk_up": current_animation = "idle_up"
-			elif prev_animation == "walk_down": current_animation = "idle_down"
-
+			elif prev_animation == "walk_up": current_animation = "idle_right"
+			elif prev_animation == "walk_down": current_animation = "idle_left"
+	'''
 
 
 
@@ -582,10 +707,16 @@ func initialize_gladiator(data, opponent_id, _spawn_point, meeting_point, peer_i
 func show_damage_popup(amount, raw_damage, hit_success, dodge_success, crit, parry_success,
 					defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb):
 	var popup = DamagePopupScene.instantiate()
-	if prev_animation == "idle_left" or prev_animation == "walk_left": popup.global_position = global_position + Vector2(150, 40)
-	elif prev_animation == "idle_right" or prev_animation == "walk_right": popup.global_position = global_position + Vector2(-150, 40)
-	else: popup.global_position = global_position + Vector2(0, 40)
-	#print("show_damage_popup" + str(spawn_point))
+	
+	if face_towards == "left": 
+		popup.global_position = global_position + Vector2(-100, 40)
+	elif face_towards == "right": 
+		popup.global_position = global_position + Vector2(-150, 40)
+		
+	#else: popup.global_position = global_position + Vector2(0, 40)
+
+	
+	await get_tree().create_timer(0.2).timeout
 	popup.show_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_success, spawn_point,
 	 				defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb)
 	get_tree().current_scene.add_child(popup)
@@ -636,8 +767,8 @@ func update_all_gladiators(data: Dictionary):
 					g.rpc_id(g.get_multiplayer_authority(), "update_gladiator", data[id])
 
 func update_gladiator_after_strategy(hit_chance_penalty, dodge_mod):
-	glad_weapon1_category_skill = hit_chance_penalty
-	glad_weapon2_category_skill = hit_chance_penalty
+	glad_weapon1_category_skill = glad_weapon1_category_skill*hit_chance_penalty
+	glad_weapon2_category_skill = glad_weapon2_category_skill*hit_chance_penalty
 	
 	var hit_base_per_lvl = -(1.6-float(int(level))/12) # Less penalty for too low weapon mastery in low levels
 	var hit_skill_weight_1 = (glad_weapon1_category_skill/(weapon1_skill_req*(0.8 + weight/400.0))) # Reduce hit chance with weight
@@ -754,6 +885,7 @@ func update_gladiator(data: Dictionary):
 	#print(str(owner_id) + " concede: " + str(concede_threshold))
 	#print("\ndata" + str(data) + "\n")
 	
+	race = data["race"].to_lower()
 	gladiator_name = data.name
 	#$Name.label_settings.set_font_color(data["color"])
 	$Name.text = data.name
@@ -803,7 +935,7 @@ func update_gladiator(data: Dictionary):
 					(weapon1_crit_chance-1)+stance_crit_chance_mod*((weapon1_crit_chance**4)*crit_rating/(((weapon1_crit_chance**4)*crit_rating)+400))]
 		
 		hit_chance = [attack_type_hit_mod*(wep1_difficulty + 1/(hit_base_per_lvl - (hit_skill_weight_1**hit_curve_smoothness))), 
-					attack_type_hit_mod*(wep1_difficulty + 1/(hit_base_per_lvl - (hit_skill_weight_1**hit_curve_smoothness)))]
+					  attack_type_hit_mod*(wep1_difficulty + 1/(hit_base_per_lvl - (hit_skill_weight_1**hit_curve_smoothness)))]
 	else: 
 		block_chance = 0
 		crit_multi = [stance_crit_multi_mod*((weapon1_crit_multi+(((1+weapon1_crit_multi)**weapon1_crit_multi)*crit_rating)/(weapon1_crit_multi*crit_rating+400))), 

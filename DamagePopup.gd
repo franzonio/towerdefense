@@ -44,6 +44,7 @@ func show_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_suc
 
 
 func customize_popup_font(color: Color, size, text: String, spawn_point, _direction):
+	modulate.a = 0
 	direction = _direction
 	$Label.add_theme_color_override("font_color", color) 
 	$Label.add_theme_font_size_override("font_size", size)
@@ -53,28 +54,30 @@ func customize_popup_font(color: Color, size, text: String, spawn_point, _direct
 	side = find_spawn_side(spawn_point)
 	if _direction == "up":
 		if side == "left": 
-			$Label.position.x = -100
+			$Label.position.x = 50
 			$Label.position.y = -100
 		if side == "right": 
-			$Label.position.x = 75
+			$Label.position.x = 200
 			$Label.position.y = -100
 	
 	if _direction == "behind":
 		if side == "left": 
-			$Label.position.x = -100
+			$Label.position.x = 100
 			#$Label.position.y = -100
 		if side == "right": 
-			$Label.position.x = 75
+			$Label.position.x = 175
 			#$Label.position.y = -100
 			
 	if _direction == "down":
 		if side == "left": 
-			$Label.position.x = -50
-			$Label.position.y = 50
+			$Label.position.x = 100
+			$Label.position.y = 15
 		if side == "right": 
-			$Label.position.x = 55
-			$Label.position.y = 50
+			$Label.position.x = 170
+			$Label.position.y = 15
 	
+	#print("asd: " + str($Label.position))
+	#await get_tree().create_timer(2).timeout
 	modulate.a = 1.0  # Fully visible
 
 func find_spawn_side(target):
