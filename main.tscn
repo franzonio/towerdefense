@@ -46,6 +46,7 @@ polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Arr
 outlines = Array[PackedVector2Array]([PackedVector2Array(-1158, -648, -1155.81, -79.4949, -1412, -79, -1414, 113, -1155.08, 109.258, -1153, 648, 1152, 648, 1147, 95, 1387, 93, 1389, -94, 1147, -90.4112, 1147, -648)])
 
 [node name="Main" type="Node2D"]
+texture_filter = 1
 script = ExtResource("1_4c57u")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]

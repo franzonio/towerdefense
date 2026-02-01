@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://bp0acgkch12yg"]
+
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_k7pe0"]
+[ext_resource type="Texture2D" uid="uid://w8ho6b6alf03" path="res://Assets/CardAssets/EquipmentCardAssets/boots_t4_heavy_128x128.png" id="2_1g6w0"]
+[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="2_uirk8"]
+
+[node name="BloodsteelSabatons" type="Button"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -508.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_k7pe0")
+icon = ExtResource("2_1g6w0")
+expand_icon = true
+script = ExtResource("2_uirk8")
+equipment_name = "bloodsteel_sabatons"
+cost = 35
+
+[connection signal="button_up" from="." to="." method="_on_button_up"]

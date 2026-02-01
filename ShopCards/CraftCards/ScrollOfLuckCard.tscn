@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://bd6km2f5v3r2j"]
+
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_7llx5"]
+[ext_resource type="Script" uid="uid://c4d57lsma72lf" path="res://ShopCards/CraftCards/BaseCraftCards.gd" id="1_rlgp7"]
+[ext_resource type="Texture2D" uid="uid://cd5rsplet8de7" path="res://Assets/CardAssets/CraftCardAssets/scroll_of_luck.png" id="2_34yjg"]
+
+[node name="ScrollOfLuckCard" type="Button"]
+offset_right = 306.0
+offset_bottom = 458.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_7llx5")
+theme_override_icons/icon = ExtResource("2_34yjg")
+expand_icon = true
+script = ExtResource("1_rlgp7")
+craft_name = "scroll_of_luck"
+cost = 5
+
+[connection signal="button_up" from="." to="." method="_on_button_up"]

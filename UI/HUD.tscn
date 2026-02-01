@@ -1,9 +1,9 @@
 [gd_scene load_steps=29 format=3 uid="uid://dutn6wxx1oapc"]
 
 [ext_resource type="Script" uid="uid://cpvmnjflyi4ln" path="res://UI/HUD.gd" id="1_yixhe"]
-[ext_resource type="Texture2D" uid="uid://bk716263khlx" path="res://Assets/CardAssets/CraftCardAssets/chaos_orb.png" id="2_uk570"]
 [ext_resource type="Script" uid="uid://cd4mgamt3dion" path="res://UI/ExpButton.gd" id="3_4n7mi"]
-[ext_resource type="Texture2D" uid="uid://1flqxbu5nk15" path="res://Assets/CardAssets/CraftCardAssets/exalted_orb.png" id="3_f2wx0"]
+[ext_resource type="Texture2D" uid="uid://cd5rsplet8de7" path="res://Assets/CardAssets/CraftCardAssets/scroll_of_luck.png" id="3_rsrlt"]
+[ext_resource type="Texture2D" uid="uid://ck8sns2nu4t8h" path="res://Assets/CardAssets/CraftCardAssets/scroll_of_injection.png" id="4_lbtxw"]
 [ext_resource type="Texture2D" uid="uid://cdbks1srnvfgl" path="res://Assets/EquipmentPanel/head_slot.png" id="5_am7sw"]
 [ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="5_gppie"]
 [ext_resource type="Texture2D" uid="uid://04nbofismc1" path="res://Assets/EquipmentPanel/BackgroundShield.png" id="5_rsrlt"]
@@ -97,6 +97,9 @@ properties/23/replication_mode = 2
 properties/24/path = NodePath(".:card_stock")
 properties/24/spawn = true
 properties/24/replication_mode = 2
+properties/25/path = NodePath(".:round_now")
+properties/25/spawn = true
+properties/25/replication_mode = 2
 
 [sub_resource type="LabelSettings" id="LabelSettings_yixhe"]
 
@@ -131,6 +134,7 @@ toggle_mode = true
 replication_config = SubResource("SceneReplicationConfig_yixhe")
 
 [node name="MarginContainer" type="MarginContainer" parent="."]
+texture_filter = 1
 anchors_preset = 10
 anchor_right = 1.0
 offset_bottom = 23.0
@@ -144,16 +148,19 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="Label_Gold" type="Label" parent="MarginContainer/HBoxContainer"]
+texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 8
 text = "💰 0"
 
 [node name="Label_Experience" type="Label" parent="MarginContainer/HBoxContainer"]
+texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 8
 text = "       🔹 0"
 
 [node name="GridContainer" type="GridContainer" parent="."]
+texture_filter = 1
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
@@ -536,28 +543,30 @@ label_settings = SubResource("LabelSettings_uk570")
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -255.99994
-offset_top = 133.99997
-offset_right = 384.0
-offset_bottom = 290.99997
+offset_left = -481.0
+offset_top = 132.99998
+offset_right = 479.0
+offset_bottom = 358.0
 grow_horizontal = 2
-scale = Vector2(0.8, 0.8)
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Shop"]
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="ShopGridContainer" type="GridContainer" parent="Shop/VBoxContainer"]
-custom_minimum_size = Vector2(640, 128)
+custom_minimum_size = Vector2(960, 192)
 layout_mode = 2
-size_flags_vertical = 3
+size_flags_horizontal = 4
+size_flags_vertical = 4
 columns = 5
 
 [node name="HBoxContainer" type="HBoxContainer" parent="Shop/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
+size_flags_vertical = 3
 
 [node name="RefreshButton" type="Button" parent="Shop/VBoxContainer/HBoxContainer"]
+texture_filter = 1
+custom_minimum_size = Vector2(70, 0)
 layout_mode = 2
 theme = ExtResource("5_gppie")
 theme_override_font_sizes/font_size = 20
@@ -570,30 +579,34 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -124.0
-offset_top = -141.0
-offset_right = 123.0
+offset_left = -63.0
+offset_top = -165.0
+offset_right = 65.0
 offset_bottom = -109.0
 grow_horizontal = 2
 grow_vertical = 0
+alignment = 1
 
 [node name="CraftingMats" type="HBoxContainer" parent="CraftingContainer"]
-custom_minimum_size = Vector2(30, 30)
+custom_minimum_size = Vector2(128, 56)
 layout_mode = 2
 size_flags_horizontal = 3
+alignment = 1
 
-[node name="TomeOfChaos" type="Button" parent="CraftingContainer/CraftingMats"]
+[node name="ScrollOfLuck" type="Button" parent="CraftingContainer/CraftingMats"]
+texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("5_gppie")
 theme_override_font_sizes/font_size = 11
+theme_override_icons/icon = ExtResource("3_rsrlt")
 toggle_mode = true
-icon = ExtResource("2_uk570")
 autowrap_mode = 2
 autowrap_trim_flags = 0
+icon_alignment = 1
 expand_icon = true
 
-[node name="Label" type="Label" parent="CraftingContainer/CraftingMats/TomeOfChaos"]
+[node name="Label" type="Label" parent="CraftingContainer/CraftingMats/ScrollOfLuck"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -607,18 +620,20 @@ grow_vertical = 0
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TomeOfInjection" type="Button" parent="CraftingContainer/CraftingMats"]
+[node name="ScrollOfInjection" type="Button" parent="CraftingContainer/CraftingMats"]
+texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("5_gppie")
 theme_override_font_sizes/font_size = 11
+theme_override_icons/icon = ExtResource("4_lbtxw")
 toggle_mode = true
-icon = ExtResource("3_f2wx0")
 autowrap_mode = 2
 autowrap_trim_flags = 0
+icon_alignment = 1
 expand_icon = true
 
-[node name="Label" type="Label" parent="CraftingContainer/CraftingMats/TomeOfInjection"]
+[node name="Label" type="Label" parent="CraftingContainer/CraftingMats/ScrollOfInjection"]
 layout_mode = 1
 anchors_preset = 3
 anchor_left = 1.0
@@ -631,58 +646,9 @@ grow_horizontal = 0
 grow_vertical = 0
 horizontal_alignment = 1
 vertical_alignment = 1
-
-[node name="VaalOrb2" type="Button" parent="CraftingContainer/CraftingMats"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("5_gppie")
-theme_override_font_sizes/font_size = 11
-toggle_mode = true
-autowrap_mode = 2
-autowrap_trim_flags = 0
-expand_icon = true
-
-[node name="VaalOrb3" type="Button" parent="CraftingContainer/CraftingMats"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("5_gppie")
-theme_override_font_sizes/font_size = 11
-toggle_mode = true
-autowrap_mode = 2
-autowrap_trim_flags = 0
-expand_icon = true
-
-[node name="VaalOrb4" type="Button" parent="CraftingContainer/CraftingMats"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("5_gppie")
-theme_override_font_sizes/font_size = 11
-toggle_mode = true
-autowrap_mode = 2
-autowrap_trim_flags = 0
-expand_icon = true
-
-[node name="VaalOrb5" type="Button" parent="CraftingContainer/CraftingMats"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("5_gppie")
-theme_override_font_sizes/font_size = 11
-toggle_mode = true
-autowrap_mode = 2
-autowrap_trim_flags = 0
-expand_icon = true
-
-[node name="VaalOrb6" type="Button" parent="CraftingContainer/CraftingMats"]
-layout_mode = 2
-size_flags_horizontal = 3
-theme = ExtResource("5_gppie")
-theme_override_font_sizes/font_size = 11
-toggle_mode = true
-autowrap_mode = 2
-autowrap_trim_flags = 0
-expand_icon = true
 
 [node name="Inventory" type="VBoxContainer" parent="."]
+custom_minimum_size = Vector2(256, 64)
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -696,12 +662,14 @@ grow_horizontal = 2
 grow_vertical = 0
 
 [node name="Label" type="Label" parent="Inventory"]
+texture_filter = 1
 layout_mode = 2
 text = "Inventory"
 label_settings = SubResource("LabelSettings_pgems")
 horizontal_alignment = 1
 
 [node name="InventoryGridContainer" type="GridContainer" parent="Inventory"]
+custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -711,21 +679,25 @@ columns = 4
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("5_gppie")
 
 [node name="slot2" type="PanelContainer" parent="Inventory/InventoryGridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("5_gppie")
 
 [node name="slot3" type="PanelContainer" parent="Inventory/InventoryGridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("5_gppie")
 
 [node name="slot4" type="PanelContainer" parent="Inventory/InventoryGridContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = ExtResource("5_gppie")
 
 [node name="InventoryPopup" type="PopupMenu" parent="."]
 
@@ -737,6 +709,7 @@ auto_translate_mode = 1
 
 [node name="AttributePanel" type="Panel" parent="."]
 self_modulate = Color(1, 1, 1, 0.8627451)
+texture_filter = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
@@ -817,12 +790,12 @@ layout_mode = 2
 size_flags_horizontal = 3
 label_settings = SubResource("LabelSettings_f2wx0")
 
-[node name="HammerMastery" type="Label" parent="AttributePanel/VBoxContainer"]
+[node name="MaceMastery" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 label_settings = SubResource("LabelSettings_f2wx0")
 
-[node name="ChainMastery" type="Label" parent="AttributePanel/VBoxContainer"]
+[node name="FlagellationMastery" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 label_settings = SubResource("LabelSettings_f2wx0")
@@ -838,6 +811,7 @@ size_flags_horizontal = 3
 label_settings = SubResource("LabelSettings_f2wx0")
 
 [node name="EquipmentPanel" type="Panel" parent="."]
+texture_filter = 1
 anchors_preset = 6
 anchor_left = 1.0
 anchor_top = 0.5
@@ -853,11 +827,13 @@ theme = ExtResource("5_gppie")
 
 [node name="Sprite2D" type="Sprite2D" parent="EquipmentPanel"]
 self_modulate = Color(0.56325173, 0.4779824, 0.5207176, 1)
+texture_filter = 1
 position = Vector2(165, 188.01416)
 scale = Vector2(2.370535, 3.6119552)
 texture = ExtResource("5_rsrlt")
 
 [node name="HeadSlot" type="TextureRect" parent="EquipmentPanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -870,6 +846,7 @@ grow_horizontal = 2
 texture = ExtResource("5_am7sw")
 
 [node name="ShouldersSlot" type="TextureRect" parent="EquipmentPanel"]
+texture_filter = 1
 layout_mode = 1
 offset_left = 81.0
 offset_top = 55.0
@@ -879,6 +856,7 @@ texture = ExtResource("6_pgems")
 expand_mode = 4
 
 [node name="ChestSlot" type="TextureRect" parent="EquipmentPanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -895,6 +873,7 @@ texture = ExtResource("6_ixkb2")
 expand_mode = 4
 
 [node name="Weapon1Slot" type="TextureRect" parent="EquipmentPanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -911,6 +890,7 @@ texture = ExtResource("7_mms7u")
 expand_mode = 4
 
 [node name="Weapon2Slot" type="TextureRect" parent="EquipmentPanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -927,6 +907,7 @@ texture = ExtResource("9_rsrlt")
 expand_mode = 4
 
 [node name="Ring1Slot" type="TextureRect" parent="EquipmentPanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -940,6 +921,7 @@ texture = ExtResource("8_281ki")
 expand_mode = 4
 
 [node name="Ring2Slot" type="TextureRect" parent="EquipmentPanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -953,6 +935,7 @@ texture = ExtResource("8_281ki")
 expand_mode = 4
 
 [node name="NecklaceSlot" type="TextureRect" parent="EquipmentPanel"]
+texture_filter = 1
 layout_mode = 0
 offset_left = 116.0
 offset_top = 102.0
@@ -962,6 +945,7 @@ texture = ExtResource("9_w37wn")
 expand_mode = 4
 
 [node name="AmuletSlot" type="TextureRect" parent="EquipmentPanel"]
+texture_filter = 1
 layout_mode = 0
 offset_left = 207.0
 offset_top = 55.0
@@ -971,6 +955,7 @@ texture = ExtResource("10_kg6a8")
 expand_mode = 4
 
 [node name="BeltSlot" type="TextureRect" parent="EquipmentPanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -987,6 +972,7 @@ texture = ExtResource("13_lbtxw")
 expand_mode = 4
 
 [node name="LegsSlot" type="TextureRect" parent="EquipmentPanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -1003,6 +989,7 @@ texture = ExtResource("14_gp2h7")
 expand_mode = 4
 
 [node name="Trinket1Slot" type="TextureRect" parent="EquipmentPanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -1016,6 +1003,7 @@ texture = ExtResource("15_4hs1h")
 expand_mode = 4
 
 [node name="Trinket2Slot" type="TextureRect" parent="EquipmentPanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -1029,6 +1017,7 @@ texture = ExtResource("15_4hs1h")
 expand_mode = 4
 
 [node name="BootsSlot" type="TextureRect" parent="EquipmentPanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -1042,6 +1031,7 @@ texture = ExtResource("16_dcyds")
 expand_mode = 4
 
 [node name="BackSlot" type="TextureRect" parent="EquipmentPanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -1055,6 +1045,7 @@ texture = ExtResource("17_rc7pm")
 expand_mode = 4
 
 [node name="GlovesSlot" type="TextureRect" parent="EquipmentPanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -1093,6 +1084,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ChatLog" type="VBoxContainer" parent="Panel/ChatScroll"]
+texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1108,6 +1100,7 @@ offset_bottom = -4.0
 grow_vertical = 0
 
 [node name="ChatInput" type="LineEdit" parent="HBoxContainer"]
+texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 3
 theme = ExtResource("5_gppie")
@@ -1118,12 +1111,14 @@ draw_control_chars = true
 caret_blink = true
 
 [node name="SendButton" type="Button" parent="HBoxContainer"]
+texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 8
 theme = ExtResource("5_gppie")
 text = "Send"
 
 [node name="ExpButton" type="Button" parent="."]
+texture_filter = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -1138,6 +1133,7 @@ text = "TRAIN
 script = ExtResource("3_4n7mi")
 
 [node name="ConcedePanel" type="Panel" parent="."]
+texture_filter = 1
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -1152,6 +1148,7 @@ grow_vertical = 0
 theme = ExtResource("5_gppie")
 
 [node name="Label" type="Label" parent="ConcedePanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -1165,6 +1162,7 @@ text = "Concede"
 label_settings = SubResource("LabelSettings_pgems")
 
 [node name="ConcedeThresholdMenu" type="OptionButton" parent="ConcedePanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -1196,6 +1194,7 @@ grow_vertical = 0
 theme = ExtResource("5_gppie")
 
 [node name="Label" type="Label" parent="AttackPanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -1241,6 +1240,7 @@ grow_vertical = 0
 theme = ExtResource("5_gppie")
 
 [node name="Label" type="Label" parent="StancePanel"]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
@@ -1286,15 +1286,18 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Resume" type="Button" parent="EscMenu"]
+texture_filter = 1
 layout_mode = 2
 text = "Resume"
 
 [node name="Options" type="Button" parent="EscMenu"]
+texture_filter = 1
 layout_mode = 2
 text = "Options
 "
 
 [node name="Disconnect" type="Button" parent="EscMenu"]
+texture_filter = 1
 layout_mode = 2
 text = "Disconnect"
 
@@ -1302,6 +1305,7 @@ text = "Disconnect"
 layout_mode = 2
 
 [node name="ConfirmDisconnectLabel" type="Label" parent="EscMenu/ConfirmDisconnect"]
+texture_filter = 1
 layout_mode = 2
 text = "Are you sure you want to disconnect?"
 label_settings = SubResource("LabelSettings_gppie")
@@ -1313,10 +1317,12 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="Yes" type="Button" parent="EscMenu/ConfirmDisconnect/ConfirmDisconnectContainer"]
+texture_filter = 1
 layout_mode = 2
 text = "✅ Yes"
 
 [node name="No" type="Button" parent="EscMenu/ConfirmDisconnect/ConfirmDisconnectContainer"]
+texture_filter = 1
 layout_mode = 2
 text = "❌ No"
 
@@ -1324,8 +1330,8 @@ text = "❌ No"
 [connection signal="pressed" from="ShopButton" to="." method="_on_shop_button_pressed"]
 [connection signal="toggled" from="ShopButton" to="." method="_on_shop_button_toggled"]
 [connection signal="pressed" from="Shop/VBoxContainer/HBoxContainer/RefreshButton" to="." method="_on_refresh_button_pressed"]
-[connection signal="toggled" from="CraftingContainer/CraftingMats/TomeOfChaos" to="." method="_on_tome_of_chaos_toggled"]
-[connection signal="toggled" from="CraftingContainer/CraftingMats/TomeOfInjection" to="." method="_on_tome_of_injection_toggled"]
+[connection signal="toggled" from="CraftingContainer/CraftingMats/ScrollOfLuck" to="." method="_on_scroll_of_luck_toggled"]
+[connection signal="toggled" from="CraftingContainer/CraftingMats/ScrollOfInjection" to="." method="_on_scroll_of_injection_toggled"]
 [connection signal="button_up" from="ExpButton" to="." method="_on_exp_button_button_up"]
 [connection signal="pressed" from="EscMenu/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="EscMenu/Options" to="." method="_on_options_pressed"]

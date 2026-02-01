@@ -27,10 +27,12 @@ grow_vertical = 2
 
 [node name="ResumeButton" type="Button" parent="VBoxContainer"]
 process_mode = 3
+texture_filter = 1
 layout_mode = 2
 text = "Resume"
 
 [node name="MainMenuButton" type="Button" parent="VBoxContainer"]
 process_mode = 3
+texture_filter = 1
 layout_mode = 2
 text = "Main Menu"

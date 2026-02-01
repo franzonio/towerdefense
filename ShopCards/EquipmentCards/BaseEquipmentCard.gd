@@ -40,6 +40,7 @@ var orig_crit_multi
 var orig_absorb
 
 func _ready():
+	set_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
 	#ProjectSettings.set_setting("gui/timers/tooltip_delay_sec", 5.0)
 	#print("_ready()")
 	initial_tooltip_received = 0
@@ -73,6 +74,7 @@ func _ready():
 		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		name_label.scroll_active = false
 		name_label.position.y = -100
+		name_label.position.x = 30
 		
 		name_label.size = Vector2(128,128)
 		
@@ -90,6 +92,7 @@ func _ready():
 func _make_custom_tooltip(for_text):
 	
 	var label = RichTextLabel.new()
+	label.set_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
 	label.add_theme_font_size_override("normal_font_size", 20)
 	label.add_theme_font_size_override("bold_font_size", 20)
 	label.bbcode_text = for_text
@@ -411,15 +414,15 @@ func get_item_tooltip(item_data: Dictionary):
 		"increased_sword_mastery": "% increased sword mastery",
 		"increased_axe_mastery": "% increased axe mastery",
 		"increased_stabbing_mastery": "% increased stabbing mastery",
-		"increased_hammer_mastery": "% increased hammer mastery",
-		"increased_chain_mastery": "% increased chain mastery",
+		"increased_mace_mastery": "% increased mace mastery",
+		"increased_flagellation_mastery": "% increased flagellation mastery",
 		"increased_shield_mastery": "% increased shield mastery",
 		
 		"sword_mastery": "Sword Mastery",
 		"axe_mastery": "Axe Mastery",
-		"hammer_mastery": "Hammer Mastery",
+		"mace_mastery": "Mace Mastery",
 		"stabbing_mastery": "Stabbing Mastery",
-		"chain_mastery": "Chain Mastery",
+		"flagellation_mastery": "flagellation Mastery",
 		"shield_mastery": "Shield Mastery",
 		"unarmed_mastery": "Unarmed Mastery",
 		

@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://vo1dmvmvcq7"]
+[gd_scene load_steps=4 format=3 uid="uid://vo1dmvmvcq7"]
 
 [ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_d2o61"]
 [ext_resource type="Script" uid="uid://dyyvc2btnvyo" path="res://ShopCards/AttributeCards/BaseAttributeCard.gd" id="1_momki"]
+[ext_resource type="Texture2D" uid="uid://dr7nismaqx0i7" path="res://Assets/CardAssets/AttributeCardAssets/axe_mastery.png" id="2_fy27w"]
 
 [node name="AxeMasteryCard" type="Button"]
 offset_right = 294.0
@@ -10,6 +11,7 @@ scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_d2o61")
+theme_override_icons/icon = ExtResource("2_fy27w")
 expand_icon = true
 script = ExtResource("1_momki")
 attribute_name = "axe_mastery"

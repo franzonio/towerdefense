@@ -1,0 +1,27 @@
+[gd_scene load_steps=5 format=3 uid="uid://ceb5iy4m2gfef"]
+
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_0niew"]
+[ext_resource type="Texture2D" uid="uid://cpedn35g7dinh" path="res://Assets/CardAssets/EquipmentCardAssets/sword_t1_2h_128x128.png" id="2_fwsiq"]
+[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="3_6gnqk"]
+[ext_resource type="Texture2D" uid="uid://b8umqdhlvu75n" path="res://Assets/CardAssets/EquipmentCardAssets/axe_2h_t3_heavy_128x128.png" id="3_fwsiq"]
+
+[node name="DraconicExecutioner" type="Button"]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -839.0
+offset_bottom = 3.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_0niew")
+theme_override_icons/icon = ExtResource("2_fwsiq")
+icon = ExtResource("3_fwsiq")
+expand_icon = true
+script = ExtResource("3_6gnqk")
+equipment_name = "draconic_executioner"
+cost = 30
+
+[connection signal="button_up" from="." to="." method="_on_button_up"]

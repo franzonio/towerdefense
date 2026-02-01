@@ -19,6 +19,7 @@ outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
 [node name="Lobby" type="Control"]
+texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -193,5 +194,5 @@ size_flags_vertical = 3
 
 [connection signal="pressed" from="ChooseSteamOrEnet/UseSteamButton" to="." method="_on_use_steam_button_pressed"]
 [connection signal="pressed" from="ChooseSteamOrEnet/UseEnetButton" to="." method="_on_use_enet_button_pressed"]
-[connection signal="pressed" from="LobbyContainer/RefreshLobbies" to="." method="_on_list_lobbies_pressed"]
 [connection signal="pressed" from="LobbyContainer/RefreshLobbies" to="." method="_on_refresh_lobbies_pressed"]
+[connection signal="pressed" from="LobbyContainer/RefreshLobbies" to="." method="_on_list_lobbies_pressed"]

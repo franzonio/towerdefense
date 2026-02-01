@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://cuteaovlg6c7c"]
+
+[ext_resource type="Script" uid="uid://dyyvc2btnvyo" path="res://ShopCards/AttributeCards/BaseAttributeCard.gd" id="1_bvx8t"]
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_lqb60"]
+[ext_resource type="Texture2D" uid="uid://br0efvthrphbn" path="res://Assets/CardAssets/AttributeCardAssets/mace_mastery.png" id="2_2oydn"]
+
+[node name="MaceMasteryCard" type="Button"]
+offset_right = 306.0
+offset_bottom = 458.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_lqb60")
+theme_override_icons/icon = ExtResource("2_2oydn")
+expand_icon = true
+script = ExtResource("1_bvx8t")
+attribute_name = "mace_mastery"
+amount = 5
+cost = 5
+
+[connection signal="button_up" from="." to="." method="_on_button_up"]

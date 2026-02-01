@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://csp0jvgbmo1tj"]
+[gd_scene load_steps=4 format=3 uid="uid://csp0jvgbmo1tj"]
 
 [ext_resource type="Script" uid="uid://dyyvc2btnvyo" path="res://ShopCards/AttributeCards/BaseAttributeCard.gd" id="1_bv4kl"]
 [ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_r4emf"]
+[ext_resource type="Texture2D" uid="uid://8o8ue5e3cvd4" path="res://Assets/CardAssets/AttributeCardAssets/avoidance.png" id="2_eist7"]
 
 [node name="AvoidanceCard" type="Button"]
 offset_right = 306.0
@@ -10,6 +11,7 @@ scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_r4emf")
+theme_override_icons/icon = ExtResource("2_eist7")
 expand_icon = true
 script = ExtResource("1_bv4kl")
 attribute_name = "avoidance"

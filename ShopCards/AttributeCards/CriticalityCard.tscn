@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://ccr8n46sytfdb"]
+[gd_scene load_steps=4 format=3 uid="uid://ccr8n46sytfdb"]
 
 [ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_ofjty"]
 [ext_resource type="Script" uid="uid://dyyvc2btnvyo" path="res://ShopCards/AttributeCards/BaseAttributeCard.gd" id="1_rhs16"]
+[ext_resource type="Texture2D" uid="uid://dgyoxp3jdvf85" path="res://Assets/CardAssets/AttributeCardAssets/criticality.png" id="2_4eojj"]
 
 [node name="CriticalityCard" type="Button"]
 offset_right = 306.0
@@ -10,6 +11,7 @@ scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_ofjty")
+theme_override_icons/icon = ExtResource("2_4eojj")
 expand_icon = true
 script = ExtResource("1_rhs16")
 attribute_name = "crit_rating"

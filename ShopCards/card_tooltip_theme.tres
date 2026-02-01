@@ -2,16 +2,9 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5kwvm"]
 bg_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
-border_width_left = 4
-border_width_top = 4
-border_width_right = 4
-border_width_bottom = 4
 border_color = Color(0.29411766, 0.23921569, 0.26666668, 0.8352941)
-corner_radius_top_left = 6
-corner_radius_top_right = 6
-corner_radius_bottom_right = 6
-corner_radius_bottom_left = 6
 corner_detail = 1
+anti_aliasing = false
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_us337"]
 bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.7137255)
@@ -48,4 +41,5 @@ Button/icons/icon = null
 Button/styles/normal = SubResource("StyleBoxFlat_5kwvm")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_us337")
 Panel/styles/panel = SubResource("StyleBoxFlat_244px")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_244px")
 PopupPanel/styles/panel = SubResource("StyleBoxFlat_244px")

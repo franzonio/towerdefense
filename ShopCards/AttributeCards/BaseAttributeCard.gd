@@ -26,6 +26,7 @@ var neg_bonus_color = Color.RED.to_html(false)
 var no_bonus_color = "efd8a1"
 
 func _ready():
+	set_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
 	race_modifiers = GameState_.RACE_MODIFIERS#.get(GameState_.selected_race, {})
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
@@ -53,7 +54,7 @@ func _ready():
 		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		name_label.scroll_active = false
 		name_label.position.y = -100
-		
+		name_label.position.x = 30#100
 		name_label.size = Vector2(128,128)
 		
 		#name_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
@@ -71,6 +72,7 @@ func _ready():
 func _make_custom_tooltip(for_text):
 	
 	var label = RichTextLabel.new()
+	label.set_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
 	label.add_theme_font_size_override("normal_font_size", 20)
 	label.add_theme_font_size_override("bold_font_size", 20)
 	label.bbcode_text = for_text

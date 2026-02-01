@@ -1,0 +1,35 @@
+[gd_scene load_steps=4 format=3 uid="uid://c036w5rrsdykx"]
+
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_hcjti"]
+[ext_resource type="Texture2D" uid="uid://xd3utt0738ws" path="res://Assets/CardAssets/EquipmentCardAssets/axe_t2_light_128x128.png" id="2_xbuy7"]
+[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="4_4dnn4"]
+
+[node name="SteelHatchet" type="Button"]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1792.0
+offset_bottom = -952.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_hcjti")
+theme_override_icons/icon = ExtResource("2_xbuy7")
+expand_icon = true
+script = ExtResource("4_4dnn4")
+equipment_name = "steel_hatchet"
+cost = 20
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -36.0
+offset_right = 129.0
+offset_bottom = 8.0
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="button_up" from="." to="." method="_on_button_up"]

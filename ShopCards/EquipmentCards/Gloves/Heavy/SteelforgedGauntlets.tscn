@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://d33lk6d8n15tb"]
+
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_k3jpp"]
+[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="2_d5kvu"]
+[ext_resource type="Texture2D" uid="uid://fdmct4d2g5cx" path="res://Assets/CardAssets/EquipmentCardAssets/gloves_t2_heavy_128x128.png" id="2_vfeml"]
+
+[node name="SteelforgedGauntlets" type="Button"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -508.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_k3jpp")
+icon = ExtResource("2_vfeml")
+expand_icon = true
+script = ExtResource("2_d5kvu")
+equipment_name = "steelforged_gauntlets"
+cost = 8
+
+[connection signal="button_up" from="." to="." method="_on_button_up"]

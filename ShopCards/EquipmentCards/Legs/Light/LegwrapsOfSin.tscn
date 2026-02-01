@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://cybjw2inxab3m"]
+
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_xv2di"]
+[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="2_dnu5m"]
+[ext_resource type="Texture2D" uid="uid://b4xscelfkb3a5" path="res://Assets/CardAssets/EquipmentCardAssets/legs_t4_light_128x128.png" id="2_knvgx"]
+
+[node name="LegwrapsOfSin" type="Button"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -508.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_xv2di")
+icon = ExtResource("2_knvgx")
+expand_icon = true
+script = ExtResource("2_dnu5m")
+equipment_name = "legwraps_of_sin"
+cost = 8
+
+[connection signal="button_up" from="." to="." method="_on_button_up"]

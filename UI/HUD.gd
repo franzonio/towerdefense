@@ -84,13 +84,13 @@ var equipment_button_parent_name
 @onready var sword_mastery_panel = $AttributePanel/VBoxContainer/SwordMastery
 @onready var axe_mastery_panel = $AttributePanel/VBoxContainer/AxeMastery
 @onready var stabbing_mastery_panel = $AttributePanel/VBoxContainer/StabbingMastery
-@onready var hammer_mastery_panel = $AttributePanel/VBoxContainer/HammerMastery
-@onready var chain_mastery_panel = $AttributePanel/VBoxContainer/ChainMastery
+@onready var mace_mastery_panel = $AttributePanel/VBoxContainer/MaceMastery
+@onready var flagellation_mastery_panel = $AttributePanel/VBoxContainer/FlagellationMastery
 @onready var shield_mastery_panel = $AttributePanel/VBoxContainer/ShieldMastery
 @onready var unarmed_mastery_panel = $AttributePanel/VBoxContainer/UnarmedMastery
 
-@onready var tome_of_chaos = $CraftingContainer/CraftingMats/TomeOfChaos
-@onready var tome_of_injection = $CraftingContainer/CraftingMats/TomeOfInjection
+@onready var scroll_of_luck = $CraftingContainer/CraftingMats/ScrollOfLuck
+@onready var scroll_of_injection = $CraftingContainer/CraftingMats/ScrollOfInjection
 #@onready var crafting_bench = $CraftingContainer/CraftingBench
 @onready var crafting_container = $CraftingContainer
 
@@ -110,6 +110,7 @@ signal stance_changed(value: int)
 signal attack_changed(value: int)
 var craft_active = ""
 
+### ATTRIBUTES ###
 @onready var strength_card = preload("res://ShopCards/AttributeCards/StrengthCard.tscn")
 @onready var health_card = preload("res://ShopCards/AttributeCards/HealthCard.tscn")
 @onready var avoidance_card = preload("res://ShopCards/AttributeCards/AvoidanceCard.tscn")
@@ -120,42 +121,190 @@ var craft_active = ""
 @onready var sword_mastery_card = preload("res://ShopCards/AttributeCards/SwordMasteryCard.tscn")
 @onready var axe_mastery_card = preload("res://ShopCards/AttributeCards/AxeMasteryCard.tscn")
 @onready var shield_mastery_card = preload("res://ShopCards/AttributeCards/ShieldMasteryCard.tscn")
-@onready var hammer_mastery_card = preload("res://ShopCards/AttributeCards/HammerMasteryCard.tscn")
+@onready var mace_mastery_card = preload("res://ShopCards/AttributeCards/MaceMasteryCard.tscn")
 @onready var stabbing_mastery_card = preload("res://ShopCards/AttributeCards/StabbingMasteryCard.tscn")
-@onready var chain_mastery_card = preload("res://ShopCards/AttributeCards/ChainMasteryCard.tscn")
+@onready var flagellation_mastery_card = preload("res://ShopCards/AttributeCards/FlagellationMasteryCard.tscn")
 
-@onready var tome_of_chaos_card = preload("res://ShopCards/CraftCards/TomeOfChaosCard.tscn")
-@onready var tome_of_injection_card = preload("res://ShopCards/CraftCards/TomeOfInjectionCard.tscn")
+### CRAFTING ###
+@onready var scroll_of_luck_card = preload("res://ShopCards/CraftCards/ScrollOfLuckCard.tscn")
+@onready var scroll_of_injection_card = preload("res://ShopCards/CraftCards/ScrollOfInjectionCard.tscn")
 
-@onready var simple_sword_card = preload("res://ShopCards/EquipmentCards/Sword/1h/SimpleSword.tscn")
-@onready var light_axe_card = preload("res://ShopCards/EquipmentCards/Axe/1h/LightAxe.tscn")
-@onready var wooden_buckler_card = preload("res://ShopCards/EquipmentCards/Shield/WoodenBuckler.tscn")
-@onready var sturdy_blade_card = preload("res://ShopCards/EquipmentCards/Sword/2h/SturdyBlade.tscn")
+### AXE ###
+@onready var wooden_hatchet_card = preload("res://ShopCards/EquipmentCards/Axe/1h/WoodenHatchet.tscn")
+@onready var steel_hatchet_card = preload("res://ShopCards/EquipmentCards/Axe/1h/SteelHatchet.tscn")
+@onready var verdant_splitter_card = preload("res://ShopCards/EquipmentCards/Axe/1h/VerdantSplitter.tscn")
+@onready var diamond_splitter_card = preload("res://ShopCards/EquipmentCards/Axe/1h/DiamondSplitter.tscn")
 
-@onready var padded_tunic_card = preload("res://ShopCards/EquipmentCards/Chest/PaddedTunic.tscn")
-@onready var chain_mail_shirt_card = preload("res://ShopCards/EquipmentCards/Chest/ChainMailShirt.tscn")
-@onready var iron_plate_card = preload("res://ShopCards/EquipmentCards/Chest/IronPlate.tscn")
-@onready var leather_vest_card = preload("res://ShopCards/EquipmentCards/Chest/LeatherVest.tscn")
-@onready var obsidian_bulwark_card = preload("res://ShopCards/EquipmentCards/Chest/ObsidianBulwark.tscn")
-@onready var reinforced_leather_vest_card = preload("res://ShopCards/EquipmentCards/Chest/ReinforcedLeatherVest.tscn")
+@onready var battleworn_axe_card = preload("res://ShopCards/EquipmentCards/Axe/1h/BattlewornAxe.tscn")
+@onready var iron_axe_card = preload("res://ShopCards/EquipmentCards/Axe/1h/IronAxe.tscn")
+@onready var emberized_cleaver_card = preload("res://ShopCards/EquipmentCards/Axe/1h/EmberizedCleaver.tscn")
+@onready var crimson_cleaver_card = preload("res://ShopCards/EquipmentCards/Axe/1h/CrimsonCleaver.tscn")
 
-@onready var padded_hood_card = preload("res://ShopCards/EquipmentCards/Head/PaddedHood.tscn")
-@onready var chain_mail_coif_card = preload("res://ShopCards/EquipmentCards/Head/ChainMailCoif.tscn")
-@onready var iron_helm_card = preload("res://ShopCards/EquipmentCards/Head/IronHelm.tscn")
-@onready var leather_cap_card = preload("res://ShopCards/EquipmentCards/Head/LeatherCap.tscn")
-@onready var obsidian_mask_card = preload("res://ShopCards/EquipmentCards/Head/ObsidianMask.tscn")
-@onready var reinforced_leather_cap_card = preload("res://ShopCards/EquipmentCards/Head/ReinforcedLeatherCap.tscn")
+@onready var barbaric_decapitator_card = preload("res://ShopCards/EquipmentCards/Axe/2h/BarbaricDecapitator.tscn")
+@onready var knightly_decapitator_card = preload("res://ShopCards/EquipmentCards/Axe/2h/KnightlyDecapitator.tscn")
+@onready var draconic_executioner_card = preload("res://ShopCards/EquipmentCards/Axe/2h/DraconicExecutioner.tscn")
+@onready var demonic_executioner_card = preload("res://ShopCards/EquipmentCards/Axe/2h/DemonicExecutioner.tscn")
 
-@onready var padded_wraps_card = preload("res://ShopCards/EquipmentCards/Shoulders/PaddedWraps.tscn")
-@onready var chain_mail_shoulderguards_card = preload("res://ShopCards/EquipmentCards/Shoulders/ChainMailShoulderguards.tscn")
-@onready var iron_shoulders_card = preload("res://ShopCards/EquipmentCards/Shoulders/IronShoulders.tscn")
-@onready var leather_pads_card = preload("res://ShopCards/EquipmentCards/Shoulders/LeatherPads.tscn")
-@onready var obsidian_spikes_card = preload("res://ShopCards/EquipmentCards/Shoulders/ObsidianSpikes.tscn")
-@onready var reinforced_leather_pads_card = preload("res://ShopCards/EquipmentCards/Shoulders/ReinforcedLeatherPads.tscn")
+### FLAGELLATION ###
+@onready var wooden_whip_card = preload("res://ShopCards/EquipmentCards/Flagellation/1h/WoodenWhip.tscn")
+@onready var steel_whip_card = preload("res://ShopCards/EquipmentCards/Flagellation/1h/SteelWhip.tscn")
+@onready var verdant_knout_card = preload("res://ShopCards/EquipmentCards/Flagellation/1h/VerdantKnout.tscn")
+@onready var diamond_knout_card = preload("res://ShopCards/EquipmentCards/Flagellation/1h/DiamondKnout.tscn")
 
-@onready var thin_ring_card = preload("res://ShopCards/EquipmentCards/Ring/ThinRing.tscn")
+@onready var battleworn_flail_card = preload("res://ShopCards/EquipmentCards/Flagellation/1h/BattlewornFlail.tscn")
+@onready var iron_flail_card = preload("res://ShopCards/EquipmentCards/Flagellation/1h/IronFlail.tscn")
+@onready var emberized_scourge_card = preload("res://ShopCards/EquipmentCards/Flagellation/1h/EmberizedScourge.tscn")
+@onready var crimson_scourge_card = preload("res://ShopCards/EquipmentCards/Flagellation/1h/CrimsonScourge.tscn")
+
+@onready var barbaric_chainflogger_card = preload("res://ShopCards/EquipmentCards/Flagellation/2h/BarbaricChainflogger.tscn")
+@onready var knightly_spikes_card = preload("res://ShopCards/EquipmentCards/Flagellation/2h/KnightlySpikes.tscn")
+@onready var draconic_disemboweler_card = preload("res://ShopCards/EquipmentCards/Flagellation/2h/DraconicDisemboweler.tscn")
+@onready var demonic_torturer_card = preload("res://ShopCards/EquipmentCards/Flagellation/2h/DemonicTorturer.tscn")
+
+### MACE ###
+@onready var wooden_hammer_card = preload("res://ShopCards/EquipmentCards/Mace/1h/WoodenHammer.tscn")
+@onready var steel_hammer_card = preload("res://ShopCards/EquipmentCards/Mace/1h/SteelHammer.tscn")
+@onready var verdant_mallet_card = preload("res://ShopCards/EquipmentCards/Mace/1h/VerdantMallet.tscn")
+@onready var diamond_mallet_card = preload("res://ShopCards/EquipmentCards/Mace/1h/DiamondMallet.tscn")
+
+@onready var battleworn_mace_card = preload("res://ShopCards/EquipmentCards/Mace/1h/BattlewornMace.tscn")
+@onready var iron_mace_card = preload("res://ShopCards/EquipmentCards/Mace/1h/IronMace.tscn")
+@onready var emberized_crusher_card = preload("res://ShopCards/EquipmentCards/Mace/1h/EmberizedCrusher.tscn")
+@onready var crimson_crusher_card = preload("res://ShopCards/EquipmentCards/Mace/1h/CrimsonCrusher.tscn")
+
+@onready var barbaric_warhammer_card = preload("res://ShopCards/EquipmentCards/Mace/2h/BarbaricWarhammer.tscn")
+@onready var knightly_warhammer_card = preload("res://ShopCards/EquipmentCards/Mace/2h/KnightlyWarhammer.tscn")
+@onready var draconic_skullbasher_card = preload("res://ShopCards/EquipmentCards/Mace/2h/DraconicSkullbasher.tscn")
+@onready var demonic_skullbasher_card = preload("res://ShopCards/EquipmentCards/Mace/2h/DemonicSkullbasher.tscn")
+
+### STABBING ###
+@onready var wooden_dagger_card = preload("res://ShopCards/EquipmentCards/Stabbing/1h/WoodenDagger.tscn")
+@onready var steel_dagger_card = preload("res://ShopCards/EquipmentCards/Stabbing/1h/SteelDagger.tscn")
+@onready var verdant_shard_card = preload("res://ShopCards/EquipmentCards/Stabbing/1h/VerdantShard.tscn")
+@onready var diamond_shard_card = preload("res://ShopCards/EquipmentCards/Stabbing/1h/DiamondShard.tscn")
+
+@onready var battleworn_carver_card = preload("res://ShopCards/EquipmentCards/Stabbing/1h/BattlewornCarver.tscn")
+@onready var iron_carver_card = preload("res://ShopCards/EquipmentCards/Stabbing/1h/IronCarver.tscn")
+@onready var emberized_stiletto_card = preload("res://ShopCards/EquipmentCards/Stabbing/1h/EmberizedStiletto.tscn")
+@onready var crimson_stiletto_card = preload("res://ShopCards/EquipmentCards/Stabbing/1h/CrimsonStiletto.tscn")
+
+@onready var barbaric_pike_card = preload("res://ShopCards/EquipmentCards/Stabbing/2h/BarbaricPike.tscn")
+@onready var knightly_pike_card = preload("res://ShopCards/EquipmentCards/Stabbing/2h/KnightlyPike.tscn")
+@onready var draconic_trident_card = preload("res://ShopCards/EquipmentCards/Stabbing/2h/DraconicTrident.tscn")
+@onready var demonic_trident_card = preload("res://ShopCards/EquipmentCards/Stabbing/2h/DemonicTrident.tscn")
+
+### SWORD ###
+@onready var wooden_sword_card = preload("res://ShopCards/EquipmentCards/Sword/1h/WoodenSword.tscn")
+@onready var steel_sword_card = preload("res://ShopCards/EquipmentCards/Sword/1h/SteelSword.tscn")
+@onready var verdant_slicer_card = preload("res://ShopCards/EquipmentCards/Sword/1h/VerdantSlicer.tscn")
+@onready var diamond_slicer_card = preload("res://ShopCards/EquipmentCards/Sword/1h/DiamondSlicer.tscn")
+
+@onready var battleworn_blade_card = preload("res://ShopCards/EquipmentCards/Sword/1h/BattlewornBlade.tscn")
+@onready var iron_blade_card = preload("res://ShopCards/EquipmentCards/Sword/1h/IronBlade.tscn")
+@onready var emberized_slasher_card = preload("res://ShopCards/EquipmentCards/Sword/1h/EmberizedSlasher.tscn")
+@onready var crimson_slasher_card = preload("res://ShopCards/EquipmentCards/Sword/1h/CrimsonSlasher.tscn")
+
+@onready var barbaric_claymore_card = preload("res://ShopCards/EquipmentCards/Sword/2h/BarbaricClaymore.tscn")
+@onready var knightly_claymore_card = preload("res://ShopCards/EquipmentCards/Sword/2h/KnightlyClaymore.tscn")
+@onready var draconic_edge_card = preload("res://ShopCards/EquipmentCards/Sword/2h/DraconicEdge.tscn")
+@onready var demonic_edge_card = preload("res://ShopCards/EquipmentCards/Sword/2h/DemonicEdge.tscn")
+
+### SHIELD ###
+@onready var wooden_guard_card = preload("res://ShopCards/EquipmentCards/Shield/Light/WoodenGuard.tscn")
+@onready var steel_guard_card = preload("res://ShopCards/EquipmentCards/Shield/Light/SteelGuard.tscn")
+@onready var verdant_aegis_card = preload("res://ShopCards/EquipmentCards/Shield/Light/VerdantAegis.tscn")
+@onready var diamond_aegis_card = preload("res://ShopCards/EquipmentCards/Shield/Light/DiamondAegis.tscn")
+@onready var battleworn_wall_card = preload("res://ShopCards/EquipmentCards/Shield/Heavy/BattlewornWall.tscn")
+@onready var iron_wall_card = preload("res://ShopCards/EquipmentCards/Shield/Heavy/IronWall.tscn")
+@onready var emberized_bulwark_card = preload("res://ShopCards/EquipmentCards/Shield/Heavy/EmberizedBulwark.tscn")
+@onready var crimson_bulwark_card = preload("res://ShopCards/EquipmentCards/Shield/Heavy/CrimsonBulwark.tscn")
+
+### BELT ###
+@onready var leather_belt_card = preload("res://ShopCards/EquipmentCards/Belt/Light/LeatherBelt.tscn")
+@onready var tailored_belt_card = preload("res://ShopCards/EquipmentCards/Belt/Light/TailoredBelt.tscn")
+@onready var strap_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Belt/Light/StrapOfElvenSilk.tscn")
+@onready var strap_of_sin_card = preload("res://ShopCards/EquipmentCards/Belt/Light/StrapOfSin.tscn")
+@onready var plate_waistguard_card = preload("res://ShopCards/EquipmentCards/Belt/Heavy/PlateWaistguard.tscn")
+@onready var steelforged_waistguard_card = preload("res://ShopCards/EquipmentCards/Belt/Heavy/SteelforgedWaistguard.tscn")
+@onready var girdle_of_kings_card = preload("res://ShopCards/EquipmentCards/Belt/Heavy/GirdleOfKings.tscn")
+@onready var bloodsteel_girdle_card = preload("res://ShopCards/EquipmentCards/Belt/Heavy/BloodsteelGirdle.tscn")
+
+### BOOTS ###
+@onready var leather_boots_card = preload("res://ShopCards/EquipmentCards/Boots/Light/LeatherBoots.tscn")
+@onready var tailored_boots_card = preload("res://ShopCards/EquipmentCards/Boots/Light/TailoredBoots.tscn")
+@onready var treads_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Boots/Light/TreadsOfElvenSilk.tscn")
+@onready var treads_of_sin_card = preload("res://ShopCards/EquipmentCards/Boots/Light/TreadsOfSin.tscn")
+@onready var plate_greaves_card = preload("res://ShopCards/EquipmentCards/Boots/Heavy/PlateGreaves.tscn")
+@onready var steelforged_greaves_card = preload("res://ShopCards/EquipmentCards/Boots/Heavy/SteelforgedGreaves.tscn")
+@onready var sabatons_of_kings_card = preload("res://ShopCards/EquipmentCards/Boots/Heavy/SabatonsOfKings.tscn")
+@onready var bloodsteel_sabatons_card = preload("res://ShopCards/EquipmentCards/Boots/Heavy/BloodsteelSabatons.tscn")
+
+### CHEST ###
+@onready var leather_vest_card = preload("res://ShopCards/EquipmentCards/Chest/Light/LeatherVest.tscn")
+@onready var tailored_vest_card = preload("res://ShopCards/EquipmentCards/Chest/Light/TailoredVest.tscn")
+@onready var garb_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Chest/Light/GarbOfElvenSilk.tscn")
+@onready var garb_of_sin_card = preload("res://ShopCards/EquipmentCards/Chest/Light/GarbOfSin.tscn")
+@onready var plate_cuirass_card = preload("res://ShopCards/EquipmentCards/Chest/Heavy/PlateCuirass.tscn")
+@onready var steelforged_cuirass_card = preload("res://ShopCards/EquipmentCards/Chest/Heavy/SteelforgedCuirass.tscn")
+@onready var carapace_of_kings_card = preload("res://ShopCards/EquipmentCards/Chest/Heavy/CarapaceOfKings.tscn")
+@onready var bloodsteel_carapace_card = preload("res://ShopCards/EquipmentCards/Chest/Heavy/BloodsteelCarapace.tscn")
+
+### GLOVES ###
+@onready var leather_gloves_card = preload("res://ShopCards/EquipmentCards/Gloves/Light/LeatherGloves.tscn")
+@onready var tailored_gloves_card = preload("res://ShopCards/EquipmentCards/Gloves/Light/TailoredGloves.tscn")
+@onready var hands_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Gloves/Light/HandsOfElvenSilk.tscn")
+@onready var hands_of_sin_card = preload("res://ShopCards/EquipmentCards/Gloves/Light/HandsOfSin.tscn")
+@onready var plate_gauntlets_card = preload("res://ShopCards/EquipmentCards/Gloves/Heavy/PlateGauntlets.tscn")
+@onready var steelforged_gauntlets_card = preload("res://ShopCards/EquipmentCards/Gloves/Heavy/SteelforgedGauntlets.tscn")
+@onready var grips_of_kings_card = preload("res://ShopCards/EquipmentCards/Gloves/Heavy/GripsOfKings.tscn")
+@onready var bloodsteel_grips_card = preload("res://ShopCards/EquipmentCards/Gloves/Heavy/BloodsteelGrips.tscn")
+
+### HEAD ###
+@onready var leather_cap_card = preload("res://ShopCards/EquipmentCards/Head/Light/LeatherCap.tscn")
+@onready var tailored_cap_card = preload("res://ShopCards/EquipmentCards/Head/Light/TailoredCap.tscn")
+@onready var hat_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Head/Light/HatOfElvenSilk.tscn")
+@onready var hat_of_sin_card = preload("res://ShopCards/EquipmentCards/Head/Light/HatOfSin.tscn")
+@onready var plate_helmet_card = preload("res://ShopCards/EquipmentCards/Head/Heavy/PlateHelmet.tscn")
+@onready var steelforged_helmet_card = preload("res://ShopCards/EquipmentCards/Head/Heavy/SteelforgedHelmet.tscn")
+@onready var barbute_of_kings_card = preload("res://ShopCards/EquipmentCards/Head/Heavy/BarbuteOfKings.tscn")
+@onready var bloodsteel_barbute_card = preload("res://ShopCards/EquipmentCards/Head/Heavy/BarbuteOfKings.tscn")
+
+### LEGS ###
+@onready var leather_pantaloons_card = preload("res://ShopCards/EquipmentCards/Legs/Light/LeatherPantaloons.tscn")
+@onready var tailored_pantaloons_card = preload("res://ShopCards/EquipmentCards/Legs/Light/TailoredPantaloons.tscn")
+@onready var legwraps_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Legs/Light/LegwrapsOfElvenSilk.tscn")
+@onready var legwraps_of_sin_card = preload("res://ShopCards/EquipmentCards/Legs/Light/LegwrapsOfSin.tscn")
+@onready var plate_legs_card = preload("res://ShopCards/EquipmentCards/Legs/Heavy/PlateLegs.tscn")
+@onready var steelforged_Legs_card = preload("res://ShopCards/EquipmentCards/Legs/Heavy/SteelforgedLegs.tscn")
+@onready var legguards_of_kings_card = preload("res://ShopCards/EquipmentCards/Legs/Heavy/LegguardsOfKings.tscn")
+@onready var bloodsteel_legguards_card = preload("res://ShopCards/EquipmentCards/Legs/Heavy/BloodsteelLegguards.tscn")
+
+### SHOULDERS ###
+@onready var leather_shoulders_card = preload("res://ShopCards/EquipmentCards/Shoulders/Light/LeatherShoulders.tscn")
+@onready var tailored_shoulders_card = preload("res://ShopCards/EquipmentCards/Shoulders/Light/TailoredShoulders.tscn")
+@onready var mantle_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Shoulders/Light/MantleOfElvenSilk.tscn")
+@onready var mantle_of_sin_card = preload("res://ShopCards/EquipmentCards/Shoulders/Light/MantleOfSin.tscn")
+@onready var plate_spaulders_card = preload("res://ShopCards/EquipmentCards/Shoulders/Heavy/PlateSpaulders.tscn")
+@onready var steelforged_spaulders_card = preload("res://ShopCards/EquipmentCards/Shoulders/Heavy/SteelforgedSpaulders.tscn")
+@onready var pauldrons_of_kings_card = preload("res://ShopCards/EquipmentCards/Shoulders/Heavy/PauldronsOfKings.tscn")
+@onready var bloodsteel_pauldrons_card = preload("res://ShopCards/EquipmentCards/Shoulders/Heavy/BloodsteelPauldrons.tscn")
+
+### RING ###
+@onready var ring_of_stone_card = preload("res://ShopCards/EquipmentCards/Ring/RingOfStone.tscn")
+@onready var ring_of_noble_tears = preload("res://ShopCards/EquipmentCards/Ring/RingOfNobleTears.tscn")
+@onready var ring_of_royals = preload("res://ShopCards/EquipmentCards/Ring/RingOfRoyals.tscn")
+@onready var ring_of_the_emperor = preload("res://ShopCards/EquipmentCards/Ring/RingOfTheEmperor.tscn")
+
+### AMULET ###
+@onready var amulet_of_stone_card = preload("res://ShopCards/EquipmentCards/Amulet/AmuletOfStone.tscn")
+@onready var amulet_of_noble_tears = preload("res://ShopCards/EquipmentCards/Amulet/AmuletOfNobleTears.tscn")
+@onready var amulet_of_royals = preload("res://ShopCards/EquipmentCards/Amulet/AmuletOfRoyals.tscn")
+@onready var amulet_of_the_emperor = preload("res://ShopCards/EquipmentCards/Amulet/AmuletOfTheEmperor.tscn")
+
+
 
 func _ready():
+	round_now = 0
 	esc_menu.visible = false
 	confirm_disconnect.visible = false
 	#refresh_button.visible = false
@@ -265,41 +414,190 @@ func _unhandled_input(event):
 func get_all_cards():
 	all_cards = [
 		### ATTRIBUTES ###
-		[strength_card, "strength", card_stock["strength"]], [health_card, "health", card_stock["health"]], 
-		[criticality_card, "crit_rating", card_stock["crit_rating"]], [endurance_card, "endurance", card_stock["endurance"]], 
-		[quickness_card, "quickness", card_stock["quickness"]], [resilience_card, "resilience", card_stock["resilience"]], 
-		[avoidance_card, "avoidance", card_stock["avoidance"]], 
-		
-		### CRAFTING MATERIALS ###
-		[tome_of_chaos_card, "tome_of_chaos", card_stock["tome_of_chaos"]], [tome_of_injection_card, "tome_of_injection", card_stock["tome_of_injection"]],
-		
-		### WEAPON MASTERY ###
-		[sword_mastery_card, "sword_mastery", card_stock["sword_mastery"]], [axe_mastery_card, "axe_mastery", card_stock["axe_mastery"]],
-		[shield_mastery_card, "shield_mastery", card_stock["shield_mastery"]], [stabbing_mastery_card, "stabbing_mastery", card_stock["stabbing_mastery"]],
-		[chain_mastery_card, "chain_mastery", card_stock["chain_mastery"]], [hammer_mastery_card, "hammer_mastery", card_stock["hammer_mastery"]],
-		
-		### CHESTS ###
-		[padded_tunic_card, "padded_tunic", card_stock["padded_tunic"]], [chain_mail_shirt_card, "chain_mail_shirt", card_stock["chain_mail_shirt"]],
-		[iron_plate_card, "iron_plate", card_stock["iron_plate"]], [leather_vest_card, "leather_vest", card_stock["leather_vest"]],
-		[obsidian_bulwark_card, "obsidian_bulwark", card_stock["obsidian_bulwark"]], [reinforced_leather_vest_card, "reinforced_leather_vest", card_stock["reinforced_leather_vest"]],
-		
-		### HEADS ###
-		[padded_hood_card, "padded_hood", card_stock["padded_hood"]], [chain_mail_coif_card, "chain_mail_coif", card_stock["chain_mail_coif"]],
-		[iron_helm_card, "iron_helm", card_stock["iron_helm"]], [leather_cap_card, "leather_cap", card_stock["leather_cap"]],
-		[obsidian_mask_card, "obsidian_mask", card_stock["obsidian_mask"]], [reinforced_leather_cap_card, "reinforced_leather_cap", card_stock["reinforced_leather_cap"]],
-		
-		### SHOULDER ###
-		[padded_wraps_card, "padded_wraps", card_stock["padded_wraps"]], [chain_mail_shoulderguards_card, "chain_mail_shoulderguards", card_stock["chain_mail_shoulderguards"]],
-		[iron_shoulders_card, "iron_shoulders", card_stock["iron_shoulders"]], [leather_pads_card, "leather_pads", card_stock["leather_pads"]],
-		[obsidian_spikes_card, "obsidian_spikes", card_stock["obsidian_spikes"]], [reinforced_leather_pads_card, "reinforced_leather_pads", card_stock["reinforced_leather_pads"]],
+		[strength_card, "strength", card_stock["strength"]],
+		[health_card, "health", card_stock["health"]],
+		[criticality_card, "crit_rating", card_stock["crit_rating"]],
+		[endurance_card, "endurance", card_stock["endurance"]],
+		[quickness_card, "quickness", card_stock["quickness"]],
+		[resilience_card, "resilience", card_stock["resilience"]],
+		[avoidance_card, "avoidance", card_stock["avoidance"]],
 
-		### WEAPONS ###
-		[simple_sword_card, "simple_sword", card_stock["simple_sword"]], [light_axe_card, "light_axe", card_stock["light_axe"]],
-		[wooden_buckler_card, "wooden_buckler", card_stock["wooden_buckler"]], [sturdy_blade_card, "sturdy_blade", card_stock["sturdy_blade"]],
-		
+		### CRAFTING MATERIALS ###
+		[scroll_of_luck_card, "scroll_of_luck", card_stock["scroll_of_luck"]],
+		[scroll_of_injection_card, "scroll_of_injection", card_stock["scroll_of_injection"]],
+
+		### WEAPON MASTERY ###
+		[sword_mastery_card, "sword_mastery", card_stock["sword_mastery"]],
+		[axe_mastery_card, "axe_mastery", card_stock["axe_mastery"]],
+		[shield_mastery_card, "shield_mastery", card_stock["shield_mastery"]],
+		[stabbing_mastery_card, "stabbing_mastery", card_stock["stabbing_mastery"]],
+		[flagellation_mastery_card, "flagellation_mastery", card_stock["flagellation_mastery"]],
+		[mace_mastery_card, "mace_mastery", card_stock["mace_mastery"]],
+
+		### CHESTS ###
+		[leather_vest_card, "leather_vest", card_stock["leather_vest"]],
+		[tailored_vest_card, "tailored_vest", card_stock["tailored_vest"]],
+		[garb_of_elven_silk_card, "garb_of_elven_silk", card_stock["garb_of_elven_silk"]],
+		[garb_of_sin_card, "garb_of_sin", card_stock["garb_of_sin"]],
+		[plate_cuirass_card, "plate_cuirass", card_stock["plate_cuirass"]],
+		[steelforged_cuirass_card, "steelforged_cuirass", card_stock["steelforged_cuirass"]],
+		[carapace_of_kings_card, "carapace_of_kings", card_stock["carapace_of_kings"]],
+		[bloodsteel_carapace_card, "bloodsteel_carapace", card_stock["bloodsteel_carapace"]],
+
+		### HEADS ###
+		[leather_cap_card, "leather_cap", card_stock["leather_cap"]],
+		[tailored_cap_card, "tailored_cap", card_stock["tailored_cap"]],
+		[hat_of_elven_silk_card, "hat_of_elven_silk", card_stock["hat_of_elven_silk"]],
+		[hat_of_sin_card, "hat_of_sin", card_stock["hat_of_sin"]],
+		[plate_helmet_card, "plate_helmet", card_stock["plate_helmet"]],
+		[steelforged_helmet_card, "steelforged_helmet", card_stock["steelforged_helmet"]],
+		[barbute_of_kings_card, "barbute_of_kings", card_stock["barbute_of_kings"]],
+		[bloodsteel_barbute_card, "bloodsteel_barbute", card_stock["bloodsteel_barbute"]],
+
+		### SHOULDERS ###
+		[leather_shoulders_card, "leather_shoulders", card_stock["leather_shoulders"]],
+		[tailored_shoulders_card, "tailored_shoulders", card_stock["tailored_shoulders"]],
+		[mantle_of_elven_silk_card, "mantle_of_elven_silk", card_stock["mantle_of_elven_silk"]],
+		[mantle_of_sin_card, "mantle_of_sin", card_stock["mantle_of_sin"]],
+		[plate_spaulders_card, "plate_spaulders", card_stock["plate_spaulders"]],
+		[steelforged_spaulders_card, "steelforged_spaulders", card_stock["steelforged_spaulders"]],
+		[pauldrons_of_kings_card, "pauldrons_of_kings", card_stock["pauldrons_of_kings"]],
+		[bloodsteel_pauldrons_card, "bloodsteel_pauldrons", card_stock["bloodsteel_pauldrons"]],
+
+		### BELT ###
+		[leather_belt_card, "leather_belt", card_stock["leather_belt"]],
+		[tailored_belt_card, "tailored_belt", card_stock["tailored_belt"]],
+		[strap_of_elven_silk_card, "strap_of_elven_silk", card_stock["strap_of_elven_silk"]],
+		[strap_of_sin_card, "strap_of_sin", card_stock["strap_of_sin"]],
+		[plate_waistguard_card, "plate_waistguard", card_stock["plate_waistguard"]],
+		[steelforged_waistguard_card, "steelforged_waistguard", card_stock["steelforged_waistguard"]],
+		[girdle_of_kings_card, "girdle_of_kings", card_stock["girdle_of_kings"]],
+		[bloodsteel_girdle_card, "bloodsteel_girdle", card_stock["bloodsteel_girdle"]],
+
+		### BOOTS ###
+		[leather_boots_card, "leather_boots", card_stock["leather_boots"]],
+		[tailored_boots_card, "tailored_boots", card_stock["tailored_boots"]],
+		[treads_of_elven_silk_card, "treads_of_elven_silk", card_stock["treads_of_elven_silk"]],
+		[treads_of_sin_card, "treads_of_sin", card_stock["treads_of_sin"]],
+		[plate_greaves_card, "plate_greaves", card_stock["plate_greaves"]],
+		[steelforged_greaves_card, "steelforged_greaves", card_stock["steelforged_greaves"]],
+		[sabatons_of_kings_card, "sabatons_of_kings", card_stock["sabatons_of_kings"]],
+		[bloodsteel_sabatons_card, "bloodsteel_sabatons", card_stock["bloodsteel_sabatons"]],
+
+		### GLOVES ###
+		[leather_gloves_card, "leather_gloves", card_stock["leather_gloves"]],
+		[tailored_gloves_card, "tailored_gloves", card_stock["tailored_gloves"]],
+		[hands_of_elven_silk_card, "hands_of_elven_silk", card_stock["hands_of_elven_silk"]],
+		[hands_of_sin_card, "hands_of_sin", card_stock["hands_of_sin"]],
+		[plate_gauntlets_card, "plate_gauntlets", card_stock["plate_gauntlets"]],
+		[steelforged_gauntlets_card, "steelforged_gauntlets", card_stock["steelforged_gauntlets"]],
+		[grips_of_kings_card, "grips_of_kings", card_stock["grips_of_kings"]],
+		[bloodsteel_grips_card, "bloodsteel_grips", card_stock["bloodsteel_grips"]],
+
+		### LEGS ###
+		[leather_pantaloons_card, "leather_pantaloons", card_stock["leather_pantaloons"]],
+		[tailored_pantaloons_card, "tailored_pantaloons", card_stock["tailored_pantaloons"]],
+		[legwraps_of_elven_silk_card, "legwraps_of_elven_silk", card_stock["legwraps_of_elven_silk"]],
+		[legwraps_of_sin_card, "legwraps_of_sin", card_stock["legwraps_of_sin"]],
+		[plate_legs_card, "plate_legs", card_stock["plate_legs"]],
+		[steelforged_Legs_card, "steelforged_legs", card_stock["steelforged_legs"]],
+		[legguards_of_kings_card, "legguards_of_kings", card_stock["legguards_of_kings"]],
+		[bloodsteel_legguards_card, "bloodsteel_legguards", card_stock["bloodsteel_legguards"]],
+
+		### SWORD ###
+		[wooden_sword_card, "wooden_sword", card_stock["wooden_sword"]],
+		[steel_sword_card, "steel_sword", card_stock["steel_sword"]],
+		[verdant_slicer_card, "verdant_slicer", card_stock["verdant_slicer"]],
+		[diamond_slicer_card, "diamond_slicer", card_stock["diamond_slicer"]],
+		[battleworn_blade_card, "battleworn_blade", card_stock["battleworn_blade"]],
+		[iron_blade_card, "iron_blade", card_stock["iron_blade"]],
+		[emberized_slasher_card, "emberized_slasher", card_stock["emberized_slasher"]],
+		[crimson_slasher_card, "crimson_slasher", card_stock["crimson_slasher"]],
+		[barbaric_claymore_card, "barbaric_claymore", card_stock["barbaric_claymore"]],
+		[knightly_claymore_card, "knightly_claymore", card_stock["knightly_claymore"]],
+		[draconic_edge_card, "draconic_edge", card_stock["draconic_edge"]],
+		[demonic_edge_card, "demonic_edge", card_stock["demonic_edge"]],
+
+		### AXE ###
+		[wooden_hatchet_card, "wooden_hatchet", card_stock["wooden_hatchet"]],
+		[steel_hatchet_card, "steel_hatchet", card_stock["steel_hatchet"]],
+		[verdant_splitter_card, "verdant_splitter", card_stock["verdant_splitter"]],
+		[diamond_splitter_card, "diamond_splitter", card_stock["diamond_splitter"]],
+		[battleworn_axe_card, "battleworn_axe", card_stock["battleworn_axe"]],
+		[iron_axe_card, "iron_axe", card_stock["iron_axe"]],
+		[emberized_cleaver_card, "emberized_cleaver", card_stock["emberized_cleaver"]],
+		[crimson_cleaver_card, "crimson_cleaver", card_stock["crimson_cleaver"]],
+		[barbaric_decapitator_card, "barbaric_decapitator", card_stock["barbaric_decapitator"]],
+		[knightly_decapitator_card, "knightly_decapitator", card_stock["knightly_decapitator"]],
+		[draconic_executioner_card, "draconic_executioner", card_stock["draconic_executioner"]],
+		[demonic_executioner_card, "demonic_executioner", card_stock["demonic_executioner"]],
+
+		### STABBING ###
+		[wooden_dagger_card, "wooden_dagger", card_stock["wooden_dagger"]],
+		[steel_dagger_card, "steel_dagger", card_stock["steel_dagger"]],
+		[verdant_shard_card, "verdant_shard", card_stock["verdant_shard"]],
+		[diamond_shard_card, "diamond_shard", card_stock["diamond_shard"]],
+		[battleworn_carver_card, "battleworn_carver", card_stock["battleworn_carver"]],
+		[iron_carver_card, "iron_carver", card_stock["iron_carver"]],
+		[emberized_stiletto_card, "emberized_stiletto", card_stock["emberized_stiletto"]],
+		[crimson_stiletto_card, "crimson_stiletto", card_stock["crimson_stiletto"]],
+		[barbaric_pike_card, "barbaric_pike", card_stock["barbaric_pike"]],
+		[knightly_pike_card, "knightly_pike", card_stock["knightly_pike"]],
+		[draconic_trident_card, "draconic_trident", card_stock["draconic_trident"]],
+		[demonic_trident_card, "demonic_trident", card_stock["demonic_trident"]],
+
+		### FLAGELLATION ###
+		[wooden_whip_card, "wooden_whip", card_stock["wooden_whip"]],
+		[steel_whip_card, "steel_whip", card_stock["steel_whip"]],
+		[verdant_knout_card, "verdant_knout", card_stock["verdant_knout"]],
+		[diamond_knout_card, "diamond_knout", card_stock["diamond_knout"]],
+		[battleworn_flail_card, "battleworn_flail", card_stock["battleworn_flail"]],
+		[iron_flail_card, "iron_flail", card_stock["iron_flail"]],
+		[emberized_scourge_card, "emberized_scourge", card_stock["emberized_scourge"]],
+		[crimson_scourge_card, "crimson_scourge", card_stock["crimson_scourge"]],
+		[barbaric_chainflogger_card, "barbaric_chainflogger", card_stock["barbaric_chainflogger"]],
+		[knightly_spikes_card, "knightly_spikes", card_stock["knightly_spikes"]],
+		[draconic_disemboweler_card, "draconic_disemboweler", card_stock["draconic_disemboweler"]],
+		[demonic_torturer_card, "demonic_torturer", card_stock["demonic_torturer"]],
+
+		### MACE ###
+		[wooden_hammer_card, "wooden_hammer", card_stock["wooden_hammer"]],
+		[steel_hammer_card, "steel_hammer", card_stock["steel_hammer"]],
+		[verdant_mallet_card, "verdant_mallet", card_stock["verdant_mallet"]],
+		[diamond_mallet_card, "diamond_mallet", card_stock["diamond_mallet"]],
+		[battleworn_mace_card, "battleworn_mace", card_stock["battleworn_mace"]],
+		[iron_mace_card, "iron_mace", card_stock["iron_mace"]],
+		[emberized_crusher_card, "emberized_crusher", card_stock["emberized_crusher"]],
+		[crimson_crusher_card, "crimson_crusher", card_stock["crimson_crusher"]],
+		[barbaric_warhammer_card, "barbaric_warhammer", card_stock["barbaric_warhammer"]],
+		[knightly_warhammer_card, "knightly_warhammer", card_stock["knightly_warhammer"]],
+		[draconic_skullbasher_card, "draconic_skullbasher", card_stock["draconic_skullbasher"]],
+		[demonic_skullbasher_card, "demonic_skullbasher", card_stock["demonic_skullbasher"]],
+
+		### SHIELD ###
+		[wooden_guard_card, "wooden_guard", card_stock["wooden_guard"]],
+		[steel_guard_card, "steel_guard", card_stock["steel_guard"]],
+		[verdant_aegis_card, "verdant_aegis", card_stock["verdant_aegis"]],
+		[diamond_aegis_card, "diamond_aegis", card_stock["diamond_aegis"]],
+		[battleworn_wall_card, "battleworn_wall", card_stock["battleworn_wall"]],
+		[iron_wall_card, "iron_wall", card_stock["iron_wall"]],
+		[emberized_bulwark_card, "emberized_bulwark", card_stock["emberized_bulwark"]],
+		[crimson_bulwark_card, "crimson_bulwark", card_stock["crimson_bulwark"]],
+
 		### RINGS ###
-		[thin_ring_card, "thin_ring", card_stock["thin_ring"]],
-		]
+		[ring_of_stone_card, "ring_of_stone", card_stock["ring_of_stone"]],
+		[ring_of_noble_tears, "ring_of_noble_tears", card_stock["ring_of_noble_tears"]],
+		[ring_of_royals, "ring_of_royals", card_stock["ring_of_royals"]],
+		[ring_of_the_emperor, "ring_of_the_emperor", card_stock["ring_of_the_emperor"]],
+
+		### AMULETS ###
+		[amulet_of_stone_card, "amulet_of_stone", card_stock["amulet_of_stone"]],
+		[amulet_of_noble_tears, "amulet_of_noble_tears", card_stock["amulet_of_noble_tears"]],
+		[amulet_of_royals, "amulet_of_royals", card_stock["amulet_of_royals"]],
+		[amulet_of_the_emperor, "amulet_of_the_emperor", card_stock["amulet_of_the_emperor"]],
+	]
+
+		
 	return all_cards
 	
 func get_equipment_by_name(item_name: String):
@@ -319,10 +617,10 @@ func _input(event):
 
 	if event is InputEventMouseButton and craft_active != "":
 		await get_tree().create_timer(0.1).timeout
-		tome_of_chaos.button_pressed = false
-		tome_of_chaos.release_focus()
-		tome_of_injection.button_pressed = false
-		tome_of_injection.release_focus()
+		scroll_of_luck.button_pressed = false
+		scroll_of_luck.release_focus()
+		scroll_of_injection.button_pressed = false
+		scroll_of_injection.release_focus()
 	
 func _on_send_pressed(submitted_text = ""):
 	var msg = chat_input.text.strip_edges()
@@ -507,19 +805,19 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data
 func update_craft_ui():
 	var crafting_mats = all_gladiators[multiplayer.get_unique_id()].get("crafting_mats", {})
 	
-	if crafting_mats["tome_of_chaos"] == 0:
-		tome_of_chaos.get_child(0).text = ""
-		tome_of_chaos.disabled = true
+	if crafting_mats["scroll_of_luck"] == 0:
+		scroll_of_luck.get_child(0).text = ""
+		scroll_of_luck.disabled = true
 	else:
-		tome_of_chaos.get_child(0).text = str(crafting_mats["tome_of_chaos"])
-		tome_of_chaos.disabled = false
+		scroll_of_luck.get_child(0).text = str(crafting_mats["scroll_of_luck"])
+		scroll_of_luck.disabled = false
 
-	if crafting_mats["tome_of_injection"] == 0:
-		tome_of_injection.get_child(0).text = ""
-		tome_of_injection.disabled = true
+	if crafting_mats["scroll_of_injection"] == 0:
+		scroll_of_injection.get_child(0).text = ""
+		scroll_of_injection.disabled = true
 	else:
-		tome_of_injection.get_child(0).text = str(crafting_mats["tome_of_injection"])
-		tome_of_injection.disabled = false
+		scroll_of_injection.get_child(0).text = str(crafting_mats["scroll_of_injection"])
+		scroll_of_injection.disabled = false
 	
 func update_stance_ui():
 	var previous_index = stance_menu.get_selected_id()
@@ -570,8 +868,8 @@ func update_attribute_ui():
 	sword_mastery_panel.text = "Sword Mastery: " + str(int(attributes["sword_mastery"]))
 	axe_mastery_panel.text = "Axe Mastery: " + str(int(attributes["axe_mastery"]))
 	stabbing_mastery_panel.text = "Stabbing Mastery: " + str(int(attributes["stabbing_mastery"]))
-	hammer_mastery_panel.text = "Hammer Mastery: " + str(int(attributes["hammer_mastery"]))
-	chain_mastery_panel.text = "Chain Mastery: " + str(int(attributes["chain_mastery"]))
+	mace_mastery_panel.text = "Mace Mastery: " + str(int(attributes["mace_mastery"]))
+	flagellation_mastery_panel.text = "Flagellation Mastery: " + str(int(attributes["flagellation_mastery"]))
 	shield_mastery_panel.text = "Shield Mastery: " + str(int(attributes["shield_mastery"]))
 	unarmed_mastery_panel.text = "Unarmed: " + str(int(attributes["unarmed_mastery"]))
 	
@@ -833,8 +1131,8 @@ func _on_inventory_item_pressed(item_name: String, slot_name: String):
 		else:
 			GameState_.rpc_id(1, "use_craft_mat_on_item", multiplayer.get_unique_id(), craft_active, selected_item_name, selected_slot)
 			
-		tome_of_chaos.button_pressed = false
-		tome_of_injection.button_pressed = false
+		scroll_of_luck.button_pressed = false
+		scroll_of_injection.button_pressed = false
 		craft_active = ""
 	else:
 		inventory_popup.set_position(get_viewport().get_mouse_position())
@@ -1040,9 +1338,9 @@ func populate_hud():
 		var endurance = all_gladiators[peer_id]["attributes"]["endurance"]
 		var sword_mastery = all_gladiators[peer_id]["attributes"]["sword_mastery"]
 		var axe_mastery = all_gladiators[peer_id]["attributes"]["axe_mastery"]
-		var hammer_mastery = all_gladiators[peer_id]["attributes"]["hammer_mastery"]
+		var mace_mastery = all_gladiators[peer_id]["attributes"]["mace_mastery"]
 		var stabbing_mastery = all_gladiators[peer_id]["attributes"]["stabbing_mastery"]
-		var chain_mastery = all_gladiators[peer_id]["attributes"]["chain_mastery"]
+		var flagellation_mastery = all_gladiators[peer_id]["attributes"]["flagellation_mastery"]
 		var shield_mastery = all_gladiators[peer_id]["attributes"]["shield_mastery"]
 		var unarmed_mastery = all_gladiators[peer_id]["attributes"]["unarmed_mastery"]
 		
@@ -1052,8 +1350,8 @@ func populate_hud():
 		
 		var weight = all_gladiators[peer_id]["weight"]
 		var physique = strength + health + endurance/2
-		var agility = [quickness, crit_rating/2, avoidance, sword_mastery/3, axe_mastery/3, hammer_mastery/3, 
-						stabbing_mastery/3, chain_mastery/3, shield_mastery/3, unarmed_mastery/3].reduce(func(a, b): return a + b)
+		var agility = [quickness, crit_rating/2, avoidance, sword_mastery/3, axe_mastery/3, mace_mastery/3, 
+						stabbing_mastery/3, flagellation_mastery/3, shield_mastery/3, unarmed_mastery/3].reduce(func(a, b): return a + b)
 		
 		var gladiator_physique_class
 		for physique_class in physique_limits.keys():
@@ -1082,6 +1380,8 @@ func populate_hud():
 		inspect_text +=  "\nPhysique: %s \nAgility: %s \nWeight: %s" % [gladiator_physique_class, gladiator_agility_class, gladiator_weight_class]
 
 		inspect_label.tooltip_text = inspect_text
+		inspect_label.set_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
+		
 func update_gold(amount: int):
 	label_gold.text = "💰" + str(amount)
 
@@ -1169,10 +1469,10 @@ func enable_craft_with_material(crafting_mat, toggled_on):
 	
 
 
-func _on_tome_of_chaos_toggled(toggled_on: bool):
-	enable_craft_with_material("tome_of_chaos", toggled_on)
+func _on_scroll_of_luck_toggled(toggled_on: bool):
+	enable_craft_with_material("scroll_of_luck", toggled_on)
 	
 
 
-func _on_tome_of_injection_toggled(toggled_on: bool) -> void:
-	enable_craft_with_material("tome_of_injection", toggled_on)
+func _on_scroll_of_injection_toggled(toggled_on: bool) -> void:
+	enable_craft_with_material("scroll_of_injection", toggled_on)

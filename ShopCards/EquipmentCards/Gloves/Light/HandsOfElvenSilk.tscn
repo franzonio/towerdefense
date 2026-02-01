@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://dda10sm107fwg"]
+
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_5arg8"]
+[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="2_sjkl1"]
+[ext_resource type="Texture2D" uid="uid://c7b0ies0itkml" path="res://Assets/CardAssets/EquipmentCardAssets/gloves_t3_light_128x128.png" id="2_t3dcc"]
+
+[node name="HandsOfElvenSilk" type="Button"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -508.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_5arg8")
+icon = ExtResource("2_t3dcc")
+expand_icon = true
+script = ExtResource("2_sjkl1")
+equipment_name = "hands_of_elven_silk"
+cost = 20
+
+[connection signal="button_up" from="." to="." method="_on_button_up"]

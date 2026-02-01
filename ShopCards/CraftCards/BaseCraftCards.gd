@@ -21,6 +21,7 @@ var mod_color := "3c9f9c"#Color.DODGER_BLUE.to_html(false)
 var label_display
 
 func _ready():
+	set_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	GameState_.connect("card_buy_result", Callable(self, "_on_card_buy_result"))
@@ -47,6 +48,7 @@ func _ready():
 		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		name_label.scroll_active = false
 		name_label.position.y = -100
+		name_label.position.x = 30
 		
 		name_label.size = Vector2(128,128)
 		
@@ -63,6 +65,7 @@ func _ready():
 func _make_custom_tooltip(for_text):
 	
 	var label = RichTextLabel.new()
+	label.set_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
 	label.add_theme_font_size_override("normal_font_size", 20)
 	label.add_theme_font_size_override("bold_font_size", 20)
 	label.bbcode_text = for_text
@@ -148,11 +151,11 @@ func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data):
 
 func get_craft_tooltip(_craft_name):
 	var craft_text = ""
-	if _craft_name == "tome_of_chaos":
+	if _craft_name == "scroll_of_luck":
 		craft_text = "Rerolls an item with new modifiers"
-	elif _craft_name == "tome_of_injection":
+	elif _craft_name == "scroll_of_injection":
 		craft_text = "Adds an additional modifier on an item"
-	elif _craft_name == "tome_of_refinement":
+	elif _craft_name == "scroll_of_refinement":
 		craft_text = "Rerolls the numeric values of existing modifiers on an item"
 	
 	return craft_text

@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://bmi6f7y5aklbt"]
+[gd_scene load_steps=4 format=3 uid="uid://bmi6f7y5aklbt"]
 
 [ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_o2hjm"]
+[ext_resource type="Texture2D" uid="uid://bqsgvg0gxci17" path="res://Assets/CardAssets/AttributeCardAssets/stabbing_mastery.png" id="2_7em5v"]
 [ext_resource type="Script" uid="uid://dyyvc2btnvyo" path="res://ShopCards/AttributeCards/BaseAttributeCard.gd" id="2_e3tt5"]
 
 [node name="StabbingMasteryCard" type="Button"]
@@ -10,6 +11,7 @@ scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_o2hjm")
+theme_override_icons/icon = ExtResource("2_7em5v")
 expand_icon = true
 script = ExtResource("2_e3tt5")
 attribute_name = "stabbing_mastery"

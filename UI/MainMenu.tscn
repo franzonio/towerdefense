@@ -40,13 +40,16 @@ grow_vertical = 2
 alignment = 1
 
 [node name="StartButton" type="Button" parent="VBoxContainer"]
+texture_filter = 1
 layout_mode = 2
 text = "Play"
 
 [node name="OptionsButton" type="Button" parent="VBoxContainer"]
+texture_filter = 1
 layout_mode = 2
 text = "Options"
 
 [node name="ExitButton" type="Button" parent="VBoxContainer"]
+texture_filter = 1
 layout_mode = 2
 text = "Exit"

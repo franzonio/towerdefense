@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://bfxkpkwpmlyy3"]
+[gd_scene load_steps=4 format=3 uid="uid://bfxkpkwpmlyy3"]
 
 [ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_gc3nw"]
 [ext_resource type="Script" uid="uid://dyyvc2btnvyo" path="res://ShopCards/AttributeCards/BaseAttributeCard.gd" id="2_gc3nw"]
+[ext_resource type="Texture2D" uid="uid://bwwt46h1vcdco" path="res://Assets/CardAssets/AttributeCardAssets/strength.png" id="2_hupih"]
 
 [node name="StrengthCard" type="Button"]
 offset_right = 306.0
@@ -10,6 +11,7 @@ scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_gc3nw")
+theme_override_icons/icon = ExtResource("2_hupih")
 expand_icon = true
 script = ExtResource("2_gc3nw")
 attribute_name = "strength"

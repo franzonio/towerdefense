@@ -102,8 +102,8 @@ var input_vector := Vector2.ZERO
 @export var sword_mastery := 1.0
 @export var stabbing_mastery := 1.0
 @export var axe_mastery := 1.0
-@export var chain_mastery := 1.0
-@export var hammer_mastery := 1.0
+@export var flagellation_mastery := 1.0
+@export var mace_mastery := 1.0
 
 var attack_type_str_mod = 1
 var glad_weapon1_category_skill
@@ -553,9 +553,9 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 			dmg_after_str = roll_wep_dmg + str_used_before_max/15 + str_left/30
 		elif wep_category == "axe":
 			dmg_after_str = roll_wep_dmg + str_used_before_max/15 + str_left/26
-		elif wep_category == "hammer":
+		elif wep_category == "mace":
 			dmg_after_str = roll_wep_dmg + str_used_before_max/15 + str_left/20
-		elif wep_category == "chain":
+		elif wep_category == "flagellation":
 			dmg_after_str = roll_wep_dmg + str_used_before_max/15 + str_left/18
 		elif wep_category == "unarmed":
 			dmg_after_str = roll_wep_dmg + str_used_before_max/15 + str_left/50
@@ -826,8 +826,8 @@ func update_gladiator(data: Dictionary):
 	sword_mastery = data["attributes"]["sword_mastery"]
 	axe_mastery = data["attributes"]["axe_mastery"]
 	stabbing_mastery = data["attributes"]["stabbing_mastery"]
-	hammer_mastery = data["attributes"]["hammer_mastery"]
-	chain_mastery = data["attributes"]["chain_mastery"]
+	mace_mastery = data["attributes"]["mace_mastery"]
+	flagellation_mastery = data["attributes"]["flagellation_mastery"]
 	
 	var stance_dodge_mod = 1
 	var stance_parry_block_mod = 1

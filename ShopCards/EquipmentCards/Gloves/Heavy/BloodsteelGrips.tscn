@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://ce632scvpec8g"]
+
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_esuw1"]
+[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="2_2wrp3"]
+[ext_resource type="Texture2D" uid="uid://cqhfn6f8v0dlj" path="res://Assets/CardAssets/EquipmentCardAssets/gloves_t4_heavy_128x128.png" id="2_snns5"]
+
+[node name="BloodsteelGrips" type="Button"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -508.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_esuw1")
+icon = ExtResource("2_snns5")
+expand_icon = true
+script = ExtResource("2_2wrp3")
+equipment_name = "bloodsteel_grips"
+cost = 35
+
+[connection signal="button_up" from="." to="." method="_on_button_up"]

@@ -17,6 +17,7 @@ outline_size = 2
 outline_color = Color(0, 0, 0, 1)
 
 [node name="AttributeAllocation" type="Control"]
+texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -48,6 +49,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="GridContainer" type="GridContainer" parent="."]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -401,67 +403,67 @@ text = "-"
 layout_mode = 2
 text = "+"
 
-[node name="Hammer Mastery_Modifier" type="Label" parent="GridContainer"]
+[node name="Mace Mastery_Modifier" type="Label" parent="GridContainer"]
 layout_mode = 2
 
-[node name="Hammer Mastery" type="Label" parent="GridContainer"]
+[node name="Mace Mastery" type="Label" parent="GridContainer"]
 layout_mode = 2
 tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
 mouse_filter = 1
-text = "Hammer Mastery"
+text = "Mace Mastery"
 
-[node name="Hammer Mastery_Value" type="Label" parent="GridContainer"]
+[node name="Mace Mastery_Value" type="Label" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "0"
 
-[node name="Hammer Mastery_Final" type="Label" parent="GridContainer"]
+[node name="Mace Mastery_Final" type="Label" parent="GridContainer"]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 6
 text = "0"
 
-[node name="Hammer Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
+[node name="Mace Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Hammer Mastery_Sub" type="Button" parent="GridContainer/Hammer Mastery_Buttons"]
+[node name="Mace Mastery_Sub" type="Button" parent="GridContainer/Mace Mastery_Buttons"]
 layout_mode = 2
 text = "-"
 
-[node name="Hammer Mastery_Add" type="Button" parent="GridContainer/Hammer Mastery_Buttons"]
+[node name="Mace Mastery_Add" type="Button" parent="GridContainer/Mace Mastery_Buttons"]
 layout_mode = 2
 text = "+"
 
-[node name="Chain Mastery_Modifier" type="Label" parent="GridContainer"]
+[node name="Flagellation Mastery_Modifier" type="Label" parent="GridContainer"]
 layout_mode = 2
 
-[node name="Chain Mastery" type="Label" parent="GridContainer"]
+[node name="Flagellation Mastery" type="Label" parent="GridContainer"]
 layout_mode = 2
 tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
 mouse_filter = 1
-text = "Chain Mastery"
+text = "Flagellation Mastery"
 
-[node name="Chain Mastery_Value" type="Label" parent="GridContainer"]
+[node name="Flagellation Mastery_Value" type="Label" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 4
 text = "0"
 
-[node name="Chain Mastery_Final" type="Label" parent="GridContainer"]
+[node name="Flagellation Mastery_Final" type="Label" parent="GridContainer"]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 6
 text = "0"
 
-[node name="Chain Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
+[node name="Flagellation Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
 layout_mode = 2
 size_flags_horizontal = 10
 
-[node name="Chain Mastery_Sub" type="Button" parent="GridContainer/Chain Mastery_Buttons"]
+[node name="Flagellation Mastery_Sub" type="Button" parent="GridContainer/Flagellation Mastery_Buttons"]
 layout_mode = 2
 text = "-"
 
-[node name="Chain Mastery_Add" type="Button" parent="GridContainer/Chain Mastery_Buttons"]
+[node name="Flagellation Mastery_Add" type="Button" parent="GridContainer/Flagellation Mastery_Buttons"]
 layout_mode = 2
 text = "+"
 
@@ -530,14 +532,15 @@ layout_mode = 2
 text = "+"
 
 [node name="RemainingLabel" type="Label" parent="."]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -77.0
-offset_top = 10.0
-offset_right = 77.0
-offset_bottom = 33.0
+offset_left = -38.0
+offset_top = 283.0
+offset_right = 116.0
+offset_bottom = 306.0
 grow_horizontal = 2
 text = "Remaining points: X"
 
@@ -556,11 +559,13 @@ grow_horizontal = 2
 grow_vertical = 0
 
 [node name="PlayersReadyLabel" type="Label" parent="StartGameContainer"]
+texture_filter = 1
 layout_mode = 2
 text = "0/8 ready"
 horizontal_alignment = 1
 
 [node name="ConfirmButton" type="Button" parent="."]
+texture_filter = 1
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -576,6 +581,7 @@ grow_vertical = 0
 text = "Confirm"
 
 [node name="GoBack" type="Button" parent="."]
+texture_filter = 1
 layout_mode = 1
 offset_left = 8.0
 offset_top = 8.0
@@ -605,6 +611,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="ChatLog" type="VBoxContainer" parent="ChatPanel/ChatScroll"]
+texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -621,6 +628,7 @@ offset_bottom = -4.0
 grow_vertical = 0
 
 [node name="ChatInput" type="LineEdit" parent="HBoxContainer"]
+texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 3
 placeholder_text = "Type here..."
@@ -630,6 +638,7 @@ draw_control_chars = true
 caret_blink = true
 
 [node name="SendButton" type="Button" parent="HBoxContainer"]
+texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 8
 text = "Send"
@@ -688,7 +697,7 @@ text = "Troll"
 [connection signal="pressed" from="GridContainer/Sword Mastery_Buttons/Sword Mastery_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Axe Mastery_Buttons/Axe Mastery_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Stabbing Mastery_Buttons/Stabbing Mastery_Sub" to="." method="_on_strength_sub_pressed"]
-[connection signal="pressed" from="GridContainer/Hammer Mastery_Buttons/Hammer Mastery_Sub" to="." method="_on_strength_sub_pressed"]
-[connection signal="pressed" from="GridContainer/Chain Mastery_Buttons/Chain Mastery_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Mace Mastery_Buttons/Mace Mastery_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Flagellation Mastery_Buttons/Flagellation Mastery_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Shield Mastery_Buttons/Shield Mastery_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Unarmed Mastery_Buttons/Unarmed Mastery_Sub" to="." method="_on_strength_sub_pressed"]

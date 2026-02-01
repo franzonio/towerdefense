@@ -76,9 +76,9 @@ const RACE_MODIFIERS = {
 		"endurance": 0.9,
 		"sword_mastery": 1.0,
 		"axe_mastery": 1.1,
-		"hammer_mastery": 1.2,
+		"mace_mastery": 1.2,
 		"stabbing_mastery": 1.0,
-		"chain_mastery": 1.15,
+		"flagellation_mastery": 1.15,
 		"shield_mastery": 0.95,
 		"unarmed_mastery": 1.0
 	},
@@ -92,9 +92,9 @@ const RACE_MODIFIERS = {
 		"endurance": 1.35,
 		"sword_mastery": 1.15,
 		"axe_mastery": 1.0,
-		"hammer_mastery": 1.0,
+		"mace_mastery": 1.0,
 		"stabbing_mastery": 1.3,
-		"chain_mastery": 1.1,
+		"flagellation_mastery": 1.1,
 		"shield_mastery": 1.2,
 		"unarmed_mastery": 1.0
 	},
@@ -108,9 +108,9 @@ const RACE_MODIFIERS = {
 		"endurance": 1.2,
 		"sword_mastery": 1.1,
 		"axe_mastery": 1.1,
-		"hammer_mastery": 1.1,
+		"mace_mastery": 1.1,
 		"stabbing_mastery": 1.1,
-		"chain_mastery": 1.1,
+		"flagellation_mastery": 1.1,
 		"shield_mastery": 1.1,
 		"unarmed_mastery": 1.0
 	},
@@ -124,9 +124,9 @@ const RACE_MODIFIERS = {
 		"endurance": 0.8,
 		"sword_mastery": 0.7,
 		"axe_mastery": 0.8,
-		"hammer_mastery": 1.1,
+		"mace_mastery": 1.1,
 		"stabbing_mastery": 0.7,
-		"chain_mastery": 1.15,
+		"flagellation_mastery": 1.15,
 		"shield_mastery": 0.7,
 		"unarmed_mastery": 1.0
 	}
@@ -147,8 +147,8 @@ func _ready():
 
 func create_card_pool():
 	craft_cards_stock = {
-		"tome_of_chaos": 300,
-		"tome_of_injection": 300
+		"scroll_of_luck": 300,
+		"scroll_of_injection": 300
 	}
 	
 	attr_cards_stock = {
@@ -161,9 +161,9 @@ func create_card_pool():
 		"endurance": 100,
 		"sword_mastery": 100,
 		"axe_mastery": 100,
-		"hammer_mastery": 100,
+		"mace_mastery": 100,
 		"stabbing_mastery": 100,
-		"chain_mastery": 100,
+		"flagellation_mastery": 100,
 		"shield_mastery": 100
 	}
 	var _all_cards_stock = {}  # Create a fresh dictionary
@@ -487,7 +487,7 @@ func equip_item(peer_id, equipment, selected_slot):
 	var weight = item_dict[equipment].get("weight", 0)
 	var equip_success = 0
 	
-	if category in ["sword", "axe", "chain", "stabbing", "hammer"]:
+	if category in ["sword", "axe", "flagellation", "stabbing", "mace"]:
 		category = "weapon"
 	
 	if int(all_gladiators[peer_id]["level"]) >= lvl_req:
@@ -535,6 +535,36 @@ func equip_item(peer_id, equipment, selected_slot):
 					all_gladiators[peer_id]["shoulders"] = item_dict
 					equip_success = 1
 				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing shoulders")
+				
+			elif category == "belt":
+				if all_gladiators[peer_id]["belt"] == {}: 
+					all_gladiators[peer_id]["belt"] = item_dict
+					equip_success = 1
+				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing belt")
+				
+			elif category == "boots":
+				if all_gladiators[peer_id]["boots"] == {}: 
+					all_gladiators[peer_id]["boots"] = item_dict
+					equip_success = 1
+				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing boots")
+				
+			elif category == "gloves":
+				if all_gladiators[peer_id]["gloves"] == {}: 
+					all_gladiators[peer_id]["gloves"] = item_dict
+					equip_success = 1
+				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing gloves")
+				
+			elif category == "legs":
+				if all_gladiators[peer_id]["legs"] == {}: 
+					all_gladiators[peer_id]["legs"] = item_dict
+					equip_success = 1
+				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing legs")
+				
+			elif category == "amulet":
+				if all_gladiators[peer_id]["amulet"] == {}: 
+					all_gladiators[peer_id]["amulet"] = item_dict
+					equip_success = 1
+				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing amulet")
 				
 			elif category == "ring": 
 				if all_gladiators[peer_id]["ring1"] == {}: 
@@ -1019,7 +1049,7 @@ func use_craft_mat_on_item(id, craft_mat, item, slot):
 	var roll_interval_max = 3+2*item_dict_to_craft[item]["level"]
 	
 	# == TOME OF CHAOS ==
-	if craft_mat == "tome_of_chaos": # Roll 3 attributes
+	if craft_mat == "scroll_of_luck": # Roll 3 attributes
 		item_dict_to_craft = stock_item.duplicate(true)
 		#print("stock item: " + str(item_dict_to_craft))
 		var nbr_of_bonuses_pool = [0,0,1,1,2,2,3]
@@ -1037,12 +1067,12 @@ func use_craft_mat_on_item(id, craft_mat, item, slot):
 		item_dict_to_craft[item]["modifiers"]["attributes"] = random_attributes.duplicate(true)
 		
 	# == TOME OF INJECTION ==
-	if craft_mat == "tome_of_injection": # Add 1 new attribute
+	if craft_mat == "scroll_of_injection": # Add 1 new attribute
 		var existing_attributes_on_item = item_dict_to_craft[item]["modifiers"]["attributes"].keys().size()
 		var existing_bonuses_on_item = item_dict_to_craft[item]["modifiers"]["bonuses"].keys().size()
 		
-		var random_bonus = get_tome_of_injection_bonus_roll(id, item, slot)
-		var random_attribute = get_tome_of_injection_attribute_roll(item_dict_to_craft[item]["modifiers"]["attributes"], possible_attributes, roll_interval_max)
+		var random_bonus = get_scroll_of_injection_bonus_roll(id, item, slot)
+		var random_attribute = get_scroll_of_injection_attribute_roll(item_dict_to_craft[item]["modifiers"]["attributes"], possible_attributes, roll_interval_max)
 		
 		if existing_attributes_on_item >= 3 and existing_bonuses_on_item < 3: 
 			if random_bonus == {}:
@@ -1068,7 +1098,7 @@ func use_craft_mat_on_item(id, craft_mat, item, slot):
 			return
 		
 	# == TOME OF LIBERTY ==
-	if craft_mat == "tome_of_liberty": print("") # Remove all/one modifiers
+	if craft_mat == "scroll_of_liberty": print("") # Remove all/one modifiers
 			
 	var bonuses_after_craft = item_dict_to_craft[item]["modifiers"]["bonuses"]
 		
@@ -1166,7 +1196,7 @@ func get_bonuses_rolls(id, slot, nbr_of_rolls):
 	return selected
 		
 		
-func get_tome_of_injection_attribute_roll(item_dict_to_craft: Dictionary, attribute_list: Array, roll_interval_max: int) -> Dictionary:
+func get_scroll_of_injection_attribute_roll(item_dict_to_craft: Dictionary, attribute_list: Array, roll_interval_max: int) -> Dictionary:
 	var result := {}
 
 	# Filter out attributes that already exist
@@ -1192,7 +1222,7 @@ func get_tome_of_injection_attribute_roll(item_dict_to_craft: Dictionary, attrib
 	return result
 			
 			
-func get_tome_of_injection_bonus_roll(id, item, slot):
+func get_scroll_of_injection_bonus_roll(id, item, slot):
 	var item_dict_to_craft = all_gladiators[id]["inventory"][slot].duplicate(true)
 	var existing_bonuses = item_dict_to_craft[item]["modifiers"].get("bonuses", {})
 	var possible_bonuses = get_possible_bonuses_for_item(item_dict_to_craft)
@@ -1237,8 +1267,8 @@ func get_possible_bonuses_for_item(item_dict):
 				"increased_sword_mastery": str(randi_range(item_level, 2*item_level)),
 				"increased_axe_mastery": str(randi_range(item_level, 2*item_level)),
 				"increased_stabbing_mastery": str(randi_range(item_level, 2*item_level)),
-				"increased_hammer_mastery": str(randi_range(item_level, 2*item_level)),
-				"increased_chain_mastery": str(randi_range(item_level, 2*item_level)),
+				"increased_mace_mastery": str(randi_range(item_level, 2*item_level)),
+				"increased_flagellation_mastery": str(randi_range(item_level, 2*item_level)),
 				"increased_shield_mastery": str(randi_range(item_level, 2*item_level))
 			}
 		elif hands == 2:
@@ -1257,8 +1287,8 @@ func get_possible_bonuses_for_item(item_dict):
 				"increased_sword_mastery": str(randi_range(item_level, 2*item_level)),
 				"increased_axe_mastery": str(randi_range(item_level, 2*item_level)),
 				"increased_stabbing_mastery": str(randi_range(item_level, 2*item_level)),
-				"increased_hammer_mastery": str(randi_range(item_level, 2*item_level)),
-				"increased_chain_mastery": str(randi_range(item_level, 2*item_level)),
+				"increased_mace_mastery": str(randi_range(item_level, 2*item_level)),
+				"increased_flagellation_mastery": str(randi_range(item_level, 2*item_level)),
 				"increased_shield_mastery": str(randi_range(item_level, 2*item_level))
 			}
 			
@@ -1273,8 +1303,8 @@ func get_possible_bonuses_for_item(item_dict):
 			"increased_sword_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_axe_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_stabbing_mastery": str(randi_range(item_level, 2*item_level)),
-			"increased_hammer_mastery": str(randi_range(item_level, 2*item_level)),
-			"increased_chain_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_mace_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_flagellation_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_shield_mastery": str(randi_range(item_level, 2*item_level))
 			
 			
@@ -1363,8 +1393,8 @@ func get_possible_bonuses_for_item(item_dict):
 			"increased_sword_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_axe_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_stabbing_mastery": str(randi_range(item_level, 2*item_level)),
-			"increased_hammer_mastery": str(randi_range(item_level, 2*item_level)),
-			"increased_chain_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_mace_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_flagellation_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_shield_mastery": str(randi_range(item_level, 2*item_level)),
 			
 			"to_gold_income": str(clamp(randi_range(1, item_level/1.5), 1, 9999))
@@ -1439,8 +1469,8 @@ func get_possible_bonuses_for_item(item_dict):
 			"increased_sword_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_axe_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_stabbing_mastery": str(randi_range(item_level, 2*item_level)),
-			"increased_hammer_mastery": str(randi_range(item_level, 2*item_level)),
-			"increased_chain_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_mace_mastery": str(randi_range(item_level, 2*item_level)),
+			"increased_flagellation_mastery": str(randi_range(item_level, 2*item_level)),
 			"increased_shield_mastery": str(randi_range(item_level, 2*item_level)),
 			
 			"thorns": str(randi_range(1, item_level)),

@@ -309,9 +309,9 @@ func _initialize_attributes():
 		"endurance": 100.0,
 		"sword_mastery": 40.0,
 		"axe_mastery": 40.0,
-		"hammer_mastery": 40.0,
+		"mace_mastery": 40.0,
 		"stabbing_mastery": 40.0,
-		"chain_mastery": 40.0,
+		"flagellation_mastery": 40.0,
 		"shield_mastery": 40.0,
 		"unarmed_mastery": 40.0,
 	}
@@ -425,7 +425,7 @@ func _on_confirm():
 	var gladiator = {
 		"color": Color.WHITE,
 		"name": GameState_.selected_name,
-		"gold": 100,
+		"gold": 10000,
 		"exp": 0,
 		"streak": 0,
 		"level": "1",
@@ -449,6 +449,11 @@ func _on_confirm():
 		"head": {},
 		"shoulders": {},
 		"chest": {},
+		"belt": {},
+		"gloves": {},
+		"boots": {},
+		"legs": {},
+		"amulet": {},
 
 		"ring1": {},
 		"ring2": {},
@@ -461,8 +466,8 @@ func _on_confirm():
 		},
 		
 		"crafting_mats": {
-			"tome_of_chaos": 5000,
-			"tome_of_injection": 5000
+			"scroll_of_luck": 5000,
+			"scroll_of_injection": 5000
 		}
 	}
 	

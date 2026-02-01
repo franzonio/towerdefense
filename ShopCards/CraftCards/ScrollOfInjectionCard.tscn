@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://6ndw2ixygsrk"]
+
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_31r7l"]
+[ext_resource type="Script" uid="uid://c4d57lsma72lf" path="res://ShopCards/CraftCards/BaseCraftCards.gd" id="1_eylmr"]
+[ext_resource type="Texture2D" uid="uid://ck8sns2nu4t8h" path="res://Assets/CardAssets/CraftCardAssets/scroll_of_injection.png" id="2_6a4qw"]
+
+[node name="ScrollOfInjectionCard" type="Button"]
+offset_right = 306.0
+offset_bottom = 458.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_31r7l")
+theme_override_icons/icon = ExtResource("2_6a4qw")
+expand_icon = true
+script = ExtResource("1_eylmr")
+craft_name = "scroll_of_injection"
+cost = 5
+
+[connection signal="button_up" from="." to="." method="_on_button_up"]

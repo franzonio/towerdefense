@@ -1,0 +1,37 @@
+[gd_scene load_steps=5 format=3 uid="uid://c22c7rof8tkr3"]
+
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_k21r3"]
+[ext_resource type="Texture2D" uid="uid://b1v5duyduam36" path="res://Assets/CardAssets/EquipmentCardAssets/sword_t1_light_128x128.png" id="2_2kbtv"]
+[ext_resource type="Texture2D" uid="uid://bxpfdvu682kd6" path="res://Assets/CardAssets/EquipmentCardAssets/mace_t3_light_128x128.png" id="3_k21r3"]
+[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="4_s6kwu"]
+
+[node name="VerdantMallet" type="Button"]
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -1792.0
+offset_bottom = -952.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_k21r3")
+theme_override_icons/icon = ExtResource("2_2kbtv")
+icon = ExtResource("3_k21r3")
+expand_icon = true
+script = ExtResource("4_s6kwu")
+equipment_name = "verdant_mallet"
+cost = 20
+
+[node name="RichTextLabel" type="RichTextLabel" parent="."]
+layout_mode = 0
+offset_left = 1.0
+offset_top = -36.0
+offset_right = 129.0
+offset_bottom = 8.0
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="button_up" from="." to="." method="_on_button_up"]

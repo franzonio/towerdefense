@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://bj6mdyn6bh50v"]
+
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_dbjio"]
+[ext_resource type="Texture2D" uid="uid://c1bktvat0cev" path="res://Assets/CardAssets/AttributeCardAssets/flagellation_mastery.png" id="2_1h3s2"]
+[ext_resource type="Script" uid="uid://dyyvc2btnvyo" path="res://ShopCards/AttributeCards/BaseAttributeCard.gd" id="2_gddoi"]
+
+[node name="FlagellationMasteryCard" type="Button"]
+offset_right = 306.0
+offset_bottom = 458.0
+scale = Vector2(0.5, 0.5)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = ExtResource("1_dbjio")
+theme_override_icons/icon = ExtResource("2_1h3s2")
+expand_icon = true
+script = ExtResource("2_gddoi")
+attribute_name = "flagellation_mastery"
+amount = 5
+cost = 5
+
+[connection signal="button_up" from="." to="." method="_on_button_up"]

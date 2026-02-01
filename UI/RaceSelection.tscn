@@ -12,6 +12,7 @@ outline_size = 2
 outline_color = Color(0, 0, 0, 1)
 
 [node name="RaceSelection" type="Control"]
+texture_filter = 1
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
