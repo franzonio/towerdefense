@@ -535,12 +535,13 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 	if randf() > _hit_chance:
 		hit_success = 0
 			
+	var roll_wep_dmg = randf_range(wep_min_dmg, wep_max_dmg)
 	if hit_success and randf() < _crit_chance or attacker.next_attack_critical:
 		crit = _crit_multi
 		attacker.next_attack_critical = false  # reset after use
+		#roll_wep_dmg = randf_range((wep_min_dmg+wep_max_dmg)/2, wep_max_dmg)
 
 	var effective_str = attack_type_str_mod*strength
-	var roll_wep_dmg = randf_range(wep_min_dmg, wep_max_dmg)
 	var dmg_after_str = 0
 	var str_used_before_max = 0
 	

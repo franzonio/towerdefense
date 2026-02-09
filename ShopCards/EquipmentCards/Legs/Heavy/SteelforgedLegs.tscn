@@ -17,7 +17,7 @@ theme = ExtResource("1_tpg0i")
 icon = ExtResource("2_s7ra8")
 expand_icon = true
 script = ExtResource("2_8cg0m")
-equipment_name = "steelforged_Legs"
+equipment_name = "steelforged_legs"
 cost = 8
 
 [connection signal="button_up" from="." to="." method="_on_button_up"]
