@@ -147,8 +147,8 @@ func _ready():
 
 func create_card_pool():
 	craft_cards_stock = {
-		"scroll_of_luck": 300,
-		"scroll_of_injection": 300
+		"scroll_of_luck": 50,
+		"scroll_of_injection": 50
 	}
 	
 	attr_cards_stock = {

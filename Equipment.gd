@@ -435,53 +435,53 @@ extends Node
 	"shield": {
 					###### SHIELD LIGHT ######
 		"wooden_guard": {
-			"price": 20, "stock": 250, "type": "weapon", "category": "shield", "weight": 3, "hands": 1,
-			"min_dmg": 0.0,  "max_dmg": 0.0, "durability": 30, "absorb": 5, "str_req": 20, "skill_req": 30,
-			"level": 3, "crit_chance": 0, "crit_multi": 0, "speed": 0, "range": 0, "parry": false, "block": true,
+			"price": 4, "stock": 8, "type": "weapon", "category": "shield", "weight": 4, "hands": 1,
+			"min_dmg": 0.0,  "max_dmg": 0.0, "durability": 20, "absorb": 9, "str_req": 45, "skill_req": 35,
+			"level": 1, "crit_chance": 0, "crit_multi": 0, "speed": 0, "range": 0, "parry": false, "block": true,
 			"modifiers": { "attributes": { "shield_mastery": 5, "avoidance": 5 }, "bonuses": {} }
 		},
 		"steel_guard": {
-			"price": 20, "stock": 250, "type": "weapon", "category": "shield", "weight": 3, "hands": 1,
-			"min_dmg": 0.0,  "max_dmg": 0.0, "durability": 30, "absorb": 5, "str_req": 20, "skill_req": 30,
-			"level": 3, "crit_chance": 0, "crit_multi": 0, "speed": 0, "range": 0, "parry": false, "block": true,
+			"price": 8, "stock": 6, "type": "weapon", "category": "shield", "weight": 5, "hands": 1,
+			"min_dmg": 0.0,  "max_dmg": 0.0, "durability": 30, "absorb": 16, "str_req": 60, "skill_req": 50,
+			"level": 4, "crit_chance": 0, "crit_multi": 0, "speed": 0, "range": 0, "parry": false, "block": true,
 			"modifiers": { "attributes": { "shield_mastery": 5, "avoidance": 5 }, "bonuses": {} }
 		},
 		"verdant_aegis": {
-			"price": 20, "stock": 250, "type": "weapon", "category": "shield", "weight": 3, "hands": 1,
-			"min_dmg": 0.0,  "max_dmg": 0.0, "durability": 30, "absorb": 5, "str_req": 20, "skill_req": 30,
-			"level": 3, "crit_chance": 0, "crit_multi": 0, "speed": 0, "range": 0, "parry": false, "block": true,
+			"price": 12, "stock": 4, "type": "weapon", "category": "shield", "weight": 5, "hands": 1,
+			"min_dmg": 0.0,  "max_dmg": 0.0, "durability": 47, "absorb": 21, "str_req": 70, "skill_req": 70,
+			"level": 7, "crit_chance": 0, "crit_multi": 0, "speed": 0, "range": 0, "parry": false, "block": true,
 			"modifiers": { "attributes": { "shield_mastery": 5, "avoidance": 5 }, "bonuses": {} }
 		},
 		"diamond_aegis": {
-			"price": 20, "stock": 250, "type": "weapon", "category": "shield", "weight": 3, "hands": 1,
-			"min_dmg": 0.0,  "max_dmg": 0.0, "durability": 30, "absorb": 5, "str_req": 20, "skill_req": 30,
-			"level": 3, "crit_chance": 0, "crit_multi": 0, "speed": 0, "range": 0, "parry": false, "block": true,
+			"price": 16, "stock": 2, "type": "weapon", "category": "shield", "weight": 6, "hands": 1,
+			"min_dmg": 0.0,  "max_dmg": 0.0, "durability": 69, "absorb": 29, "str_req": 80, "skill_req": 85,
+			"level": 10, "crit_chance": 0, "crit_multi": 0, "speed": 0, "range": 0, "parry": false, "block": true,
 			"modifiers": { "attributes": { "shield_mastery": 5, "avoidance": 5 }, "bonuses": {} }
 		},
 			
 					###### SHIELD HEAVY ######
 		"battleworn_wall": {
-			"price": 20, "stock": 250, "type": "weapon", "category": "shield", "weight": 3, "hands": 1,
-			"min_dmg": 0.0,  "max_dmg": 0.0, "durability": 30, "absorb": 5, "str_req": 20, "skill_req": 30,
-			"level": 3, "crit_chance": 0, "crit_multi": 0, "speed": 0, "range": 0, "parry": false, "block": true,
+			"price": 4, "stock": 8, "type": "weapon", "category": "shield", "weight": 10, "hands": 1,
+			"min_dmg": 0.0,  "max_dmg": 0.0, "durability": 39, "absorb": 7, "str_req": 65, "skill_req": 25,
+			"level": 1, "crit_chance": 0, "crit_multi": 0, "speed": 0, "range": 0, "parry": false, "block": true,
 			"modifiers": { "attributes": { "shield_mastery": 5, "avoidance": 5 }, "bonuses": {} }
 		},
 		"iron_wall": {
-			"price": 20, "stock": 250, "type": "weapon", "category": "shield", "weight": 3, "hands": 1,
-			"min_dmg": 0.0,  "max_dmg": 0.0, "durability": 30, "absorb": 5, "str_req": 20, "skill_req": 30,
-			"level": 3, "crit_chance": 0, "crit_multi": 0, "speed": 0, "range": 0, "parry": false, "block": true,
+			"price": 8, "stock": 6, "type": "weapon", "category": "shield", "weight": 14, "hands": 1,
+			"min_dmg": 0.0,  "max_dmg": 0.0, "durability": 51, "absorb": 13, "str_req": 80, "skill_req": 35,
+			"level": 4, "crit_chance": 0, "crit_multi": 0, "speed": 0, "range": 0, "parry": false, "block": true,
 			"modifiers": { "attributes": { "shield_mastery": 5, "avoidance": 5 }, "bonuses": {} }
 		},
 		"emberized_bulwark": {
-			"price": 20, "stock": 250, "type": "weapon", "category": "shield", "weight": 3, "hands": 1,
-			"min_dmg": 0.0,  "max_dmg": 0.0, "durability": 30, "absorb": 5, "str_req": 20, "skill_req": 30,
-			"level": 3, "crit_chance": 0, "crit_multi": 0, "speed": 0, "range": 0, "parry": false, "block": true,
+			"price": 12, "stock": 4, "type": "weapon", "category": "shield", "weight": 16, "hands": 1,
+			"min_dmg": 0.0,  "max_dmg": 0.0, "durability": 84, "absorb": 16, "str_req": 95, "skill_req": 45,
+			"level": 7, "crit_chance": 0, "crit_multi": 0, "speed": 0, "range": 0, "parry": false, "block": true,
 			"modifiers": { "attributes": { "shield_mastery": 5, "avoidance": 5 }, "bonuses": {} }
 		},
 		"crimson_bulwark": {
-			"price": 20, "stock": 250, "type": "weapon", "category": "shield", "weight": 3, "hands": 1,
-			"min_dmg": 0.0,  "max_dmg": 0.0, "durability": 30, "absorb": 5, "str_req": 20, "skill_req": 30,
-			"level": 3, "crit_chance": 0, "crit_multi": 0, "speed": 0, "range": 0, "parry": false, "block": true,
+			"price": 16, "stock": 2, "type": "weapon", "category": "shield", "weight": 18, "hands": 1,
+			"min_dmg": 0.0,  "max_dmg": 0.0, "durability": 126, "absorb": 19, "str_req": 115, "skill_req": 55,
+			"level": 10, "crit_chance": 0, "crit_multi": 0, "speed": 0, "range": 0, "parry": false, "block": true,
 			"modifiers": { "attributes": { "shield_mastery": 5, "avoidance": 5 }, "bonuses": {} }
 		}
 	},
@@ -490,100 +490,100 @@ extends Node
 					###### CHEST ######
 	"chest": {
 		"leather_vest": {
-			"price": 8, "stock": 250, "type": "armor", "category": "chest", "weight": 1, "absorb": 1,
-			"str_req": 10, "level": 1, 
+			"price": 4, "stock": 14, "type": "armor", "category": "chest", "weight": 2, "absorb": 2,
+			"str_req": 20, "level": 1, 
 			"modifiers": { "attributes": { "quickness": 3, "avoidance": 2 }, "bonuses": {} }
 		},
 		
 		"tailored_vest": { 
-			"price": 10, "stock": 250, "type": "armor", "category": "chest", "weight": 1, "absorb": 2,
-			"str_req": 20, "level": 2,
+			"price": 6, "stock": 12, "type": "armor", "category": "chest", "weight": 2, "absorb": 3,
+			"str_req": 25, "level": 3,
 			"modifiers":  { "attributes": {}, "bonuses": {} }
 		},
 		
 		"garb_of_elven_silk": {
-			"price": 18, "stock": 200, "type": "armor", "category": "chest", "weight": 2, "absorb": 2,
-			"str_req": 25, "level": 3,
+			"price": 8, "stock": 8, "type": "armor", "category": "chest", "weight": 3, "absorb": 5,
+			"str_req": 30, "level": 6,
 			"modifiers": { "attributes": { "avoidance": 3, "crit_rating": 2 }, "bonuses": {} }
 		},
 
 		"garb_of_sin": { 
-			"price": 35,"stock": 150,"type": "armor","category": "chest","weight": 5,"absorb": 4,
-			"str_req": 40, "level": 5,
+			"price": 10,"stock": 4,"type": "armor","category": "chest","weight": 3,"absorb": 6,
+			"str_req": 35, "level": 9,
 			"modifiers": { "attributes": { "endurance": 4, "resilience": 2 }, "bonuses": {} }
 		},
 		
 		"plate_cuirass": {
-			"price": 8, "stock": 250, "type": "armor", "category": "chest", "weight": 1, "absorb": 1,
-			"str_req": 10, "level": 1, 
+			"price": 4, "stock": 14, "type": "armor", "category": "chest", "weight": 4, "absorb": 4,
+			"str_req": 30, "level": 1, 
 			"modifiers": { "attributes": { "quickness": 3, "avoidance": 2 }, "bonuses": {} }
 		},
 		
 		"steelforged_cuirass": { 
-			"price": 10, "stock": 250, "type": "armor", "category": "chest", "weight": 1, "absorb": 2,
-			"str_req": 20, "level": 2,
+			"price": 6, "stock": 12, "type": "armor", "category": "chest", "weight": 5, "absorb": 5,
+			"str_req": 50, "level": 3,
 			"modifiers":  { "attributes": {}, "bonuses": {} }
 		},
 		
 		"carapace_of_kings": {
-			"price": 18, "stock": 200, "type": "armor", "category": "chest", "weight": 2, "absorb": 2,
-			"str_req": 25, "level": 3,
+			"price": 8, "stock": 8, "type": "armor", "category": "chest", "weight": 6, "absorb": 7,
+			"str_req": 65, "level": 6,
 			"modifiers": { "attributes": { "avoidance": 3, "crit_rating": 2 }, "bonuses": {} }
 		},
 
 		"bloodsteel_carapace": { 
-			"price": 35,"stock": 150,"type": "armor","category": "chest","weight": 5,"absorb": 4,
-			"str_req": 40, "level": 5,
+			"price": 10,"stock": 4,"type": "armor","category": "chest","weight": 7,"absorb": 9,
+			"str_req": 85, "level": 9,
 			"modifiers": { "attributes": { "endurance": 4, "resilience": 2 }, "bonuses": {} }
 		},
 	},
 					###### HEAD ######
 	"head": {
 		"leather_cap": {
-			"price": 8, "stock": 250, "type": "armor", "category": "head", "weight": 1, "absorb": 1,
-			"str_req": 10, "level": 1, 
+			"price": 4, "stock": 14, "type": "armor", "category": "head", "weight": 1, "absorb": 1,
+			"str_req": 15, "level": 1, 
 			"modifiers": { "attributes": { "quickness": 3, "avoidance": 2 }, "bonuses": {} }
 		},
 		
 		"tailored_cap": { 
-			"price": 10, "stock": 250, "type": "armor", "category": "head", "weight": 1, "absorb": 2,
-			"str_req": 20, "level": 2,
+			"price": 6, "stock": 12, "type": "armor", "category": "head", "weight": 1, "absorb": 2,
+			"str_req": 20, "level": 3,
 			"modifiers":  { "attributes": {}, "bonuses": {} }
 		},
 		
 		"hat_of_elven_silk": {
-			"price": 18, "stock": 200, "type": "armor", "category": "head", "weight": 2, "absorb": 2,
-			"str_req": 25, "level": 3,
+			"price": 8, "stock": 8, "type": "armor", "category": "head", "weight": 2, "absorb": 4,
+			"str_req": 25, "level": 6,
 			"modifiers": { "attributes": { "avoidance": 3, "crit_rating": 2 }, "bonuses": {} }
 		},
 
 		"hat_of_sin": { 
-			"price": 35,"stock": 150,"type": "armor","category": "head","weight": 5,"absorb": 4,
-			"str_req": 40, "level": 5,
+			"price": 10,"stock": 4,"type": "armor","category": "head","weight": 2,"absorb": 4,
+			"str_req": 30, "level": 9,
 			"modifiers": { "attributes": { "endurance": 4, "resilience": 2 }, "bonuses": {} }
 		},
 		
 		"plate_helmet": {
-			"price": 8, "stock": 250, "type": "armor", "category": "head", "weight": 1, "absorb": 1,
-			"str_req": 10, "level": 1, 
+			"price": 4, "stock": 14, "type": "armor", "category": "head", "weight": 3, "absorb": 2,
+			"str_req": 25, "level": 1, 
 			"modifiers": { "attributes": { "quickness": 3, "avoidance": 2 }, "bonuses": {} }
 		},
 		
 		"steelforged_helmet": { 
-			"price": 10, "stock": 250, "type": "armor", "category": "head", "weight": 1, "absorb": 2,
-			"str_req": 20, "level": 2,
+			"price": 6, "stock": 12, "type": "armor", "category": "head", "weight": 4, "absorb": 4,
+			"str_req": 40, "level": 3,
 			"modifiers":  { "attributes": {}, "bonuses": {} }
 		},
 		
 		"barbute_of_kings": {
-			"price": 18, "stock": 200, "type": "armor", "category": "head", "weight": 2, "absorb": 2,
-			"str_req": 25, "level": 3,
+			"price": 8, "stock": 8, "type": "armor", "category": "head", "weight": 5, "absorb": 6,
+			"str_req": 55, "level": 6,
 			"modifiers": { "attributes": { "avoidance": 3, "crit_rating": 2 }, "bonuses": {} }
 		},
 
 		"bloodsteel_barbute": { 
-			"price": 35,"stock": 150,"type": "armor","category": "head","weight": 5,"absorb": 4,
-			"str_req": 40, "level": 5,
+			"price": 10,"stock": 4,"type": "armor","category": "head","weight": 6,"absorb": 8,
+			"str_req": 75, "level": 9,
 			"modifiers": { "attributes": { "endurance": 4, "resilience": 2 }, "bonuses": {} }
 		},
 		
@@ -593,100 +593,100 @@ extends Node
 					###### SHOULDERS ######
 	"shoulders": {
 		"leather_shoulders": {
-			"price": 8, "stock": 250, "type": "armor", "category": "shoulders", "weight": 1, "absorb": 1,
-			"str_req": 10, "level": 1, 
+			"price": 4, "stock": 14, "type": "armor", "category": "shoulders", "weight": 1, "absorb": 1,
+			"str_req": 15, "level": 1, 
 			"modifiers": { "attributes": { "quickness": 3, "avoidance": 2 }, "bonuses": {} }
 		},
 		
 		"tailored_shoulders": { 
-			"price": 10, "stock": 250, "type": "armor", "category": "shoulders", "weight": 1, "absorb": 2,
-			"str_req": 20, "level": 2,
+			"price": 6, "stock": 12, "type": "armor", "category": "shoulders", "weight": 1, "absorb": 2,
+			"str_req": 20, "level": 3,
 			"modifiers":  { "attributes": {}, "bonuses": {} }
 		},
 		
 		"mantle_of_elven_silk": {
-			"price": 18, "stock": 200, "type": "armor", "category": "shoulders", "weight": 2, "absorb": 2,
-			"str_req": 25, "level": 3,
+			"price": 8, "stock": 8, "type": "armor", "category": "shoulders", "weight": 2, "absorb": 4,
+			"str_req": 25, "level": 6,
 			"modifiers": { "attributes": { "avoidance": 3, "crit_rating": 2 }, "bonuses": {} }
 		},
 
 		"mantle_of_sin": { 
-			"price": 35,"stock": 150,"type": "armor","category": "shoulders", "weight": 5,"absorb": 4,
-			"str_req": 40, "level": 5,
+			"price": 10,"stock": 4,"type": "armor","category": "shoulders", "weight": 2,"absorb": 5,
+			"str_req": 30, "level": 9,
 			"modifiers": { "attributes": { "endurance": 4, "resilience": 2 }, "bonuses": {} }
 		},
 		
 		"plate_spaulders": {
-			"price": 8, "stock": 250, "type": "armor", "category": "shoulders", "weight": 1, "absorb": 1,
-			"str_req": 10, "level": 1, 
+			"price": 4, "stock": 14, "type": "armor", "category": "shoulders", "weight": 3, "absorb": 2,
+			"str_req": 25, "level": 1, 
 			"modifiers": { "attributes": { "quickness": 3, "avoidance": 2 }, "bonuses": {} }
 		},
 		
 		"steelforged_spaulders": { 
-			"price": 10, "stock": 250, "type": "armor", "category": "shoulders", "weight": 1, "absorb": 2,
-			"str_req": 20, "level": 2,
+			"price": 6, "stock": 12, "type": "armor", "category": "shoulders", "weight": 4, "absorb": 4,
+			"str_req": 40, "level": 3,
 			"modifiers":  { "attributes": {}, "bonuses": {} }
 		},
 		
 		"pauldrons_of_kings": {
-			"price": 18, "stock": 200, "type": "armor", "category": "shoulders", "weight": 2, "absorb": 2,
-			"str_req": 25, "level": 3,
+			"price": 8, "stock": 8, "type": "armor", "category": "shoulders", "weight": 5, "absorb": 6,
+			"str_req": 55, "level": 6,
 			"modifiers": { "attributes": { "avoidance": 3, "crit_rating": 2 }, "bonuses": {} }
 		},
 
 		"bloodsteel_pauldrons": { 
-			"price": 35,"stock": 150,"type": "armor","category": "shoulders","weight": 5,"absorb": 4,
-			"str_req": 40, "level": 5,
+			"price": 10,"stock": 4,"type": "armor","category": "shoulders","weight": 6,"absorb": 8,
+			"str_req": 75, "level": 9,
 			"modifiers": { "attributes": { "endurance": 4, "resilience": 2 }, "bonuses": {} }
 		},
 	},
 					###### BELT ######
 	"belt": {
 		"leather_belt": {
-			"price": 8, "stock": 250, "type": "armor", "category": "belt", "weight": 1, "absorb": 1,
+			"price": 4, "stock": 14, "type": "armor", "category": "belt", "weight": 1, "absorb": 1,
 			"str_req": 10, "level": 1, 
 			"modifiers": { "attributes": { "quickness": 3, "avoidance": 2 }, "bonuses": {} }
 		},
 		
 		"tailored_belt": { 
-			"price": 10, "stock": 250, "type": "armor", "category": "belt", "weight": 1, "absorb": 2,
-			"str_req": 20, "level": 2,
+			"price": 6, "stock": 12, "type": "armor", "category": "belt", "weight": 1, "absorb": 2,
+			"str_req": 15, "level": 3,
 			"modifiers":  { "attributes": {}, "bonuses": {} }
 		},
 		
 		"strap_of_elven_silk": {
-			"price": 18, "stock": 200, "type": "armor", "category": "belt", "weight": 2, "absorb": 2,
-			"str_req": 25, "level": 3,
+			"price": 8, "stock": 8, "type": "armor", "category": "belt", "weight": 1, "absorb": 3,
+			"str_req": 20, "level": 6,
 			"modifiers": { "attributes": { "avoidance": 3, "crit_rating": 2 }, "bonuses": {} }
 		},
 
 		"strap_of_sin": { 
-			"price": 35,"stock": 150,"type": "armor","category": "belt","weight": 5,"absorb": 4,
-			"str_req": 40, "level": 5,
+			"price": 10,"stock": 4,"type": "armor","category": "belt","weight": 1,"absorb": 4,
+			"str_req": 25, "level": 9,
 			"modifiers": { "attributes": { "endurance": 4, "resilience": 2 }, "bonuses": {} }
 		},
 		
 		"plate_waistguard": {
-			"price": 8, "stock": 250, "type": "armor", "category": "belt", "weight": 1, "absorb": 1,
-			"str_req": 10, "level": 1, 
+			"price": 4, "stock": 14, "type": "armor", "category": "belt", "weight": 3, "absorb": 2,
+			"str_req": 20, "level": 1, 
 			"modifiers": { "attributes": { "quickness": 3, "avoidance": 2 }, "bonuses": {} }
 		},
 		
 		"steelforged_waistguard": { 
-			"price": 10, "stock": 250, "type": "armor", "category": "belt", "weight": 1, "absorb": 2,
-			"str_req": 20, "level": 2,
+			"price": 6, "stock": 12, "type": "armor", "category": "belt", "weight": 4, "absorb": 4,
+			"str_req": 30, "level": 3,
 			"modifiers":  { "attributes": {}, "bonuses": {} }
 		},
 		
 		"girdle_of_kings": {
-			"price": 18, "stock": 200, "type": "armor", "category": "belt", "weight": 2, "absorb": 2,
-			"str_req": 25, "level": 3,
+			"price": 8, "stock": 8, "type": "armor", "category": "belt", "weight": 5, "absorb": 6,
+			"str_req": 45, "level": 6,
 			"modifiers": { "attributes": { "avoidance": 3, "crit_rating": 2 }, "bonuses": {} }
 		},
 
 		"bloodsteel_girdle": { 
-			"price": 35,"stock": 150,"type": "armor","category": "belt","weight": 5,"absorb": 4,
-			"str_req": 40, "level": 5,
+			"price": 10,"stock": 4,"type": "armor","category": "belt","weight": 6,"absorb": 8,
+			"str_req": 65, "level": 9,
 			"modifiers": { "attributes": { "endurance": 4, "resilience": 2 }, "bonuses": {} }
 		},
 	},
@@ -694,50 +694,50 @@ extends Node
 					###### BOOTS ######
 	"boots": {
 		"leather_boots": {
-			"price": 8, "stock": 250, "type": "armor", "category": "boots", "weight": 1, "absorb": 1,
+			"price": 4, "stock": 14, "type": "armor", "category": "boots", "weight": 1, "absorb": 1,
 			"str_req": 10, "level": 1, 
 			"modifiers": { "attributes": { "quickness": 3, "avoidance": 2 }, "bonuses": {} }
 		},
 		
 		"tailored_boots": { 
-			"price": 10, "stock": 250, "type": "armor", "category": "boots", "weight": 1, "absorb": 2,
-			"str_req": 20, "level": 2,
+			"price": 6, "stock": 12, "type": "armor", "category": "boots", "weight": 1, "absorb": 2,
+			"str_req": 15, "level": 3,
 			"modifiers":  { "attributes": {}, "bonuses": {} }
 		},
 		
 		"treads_of_elven_silk": {
-			"price": 18, "stock": 200, "type": "armor", "category": "boots", "weight": 2, "absorb": 2,
-			"str_req": 25, "level": 3,
+			"price": 8, "stock": 8, "type": "armor", "category": "boots", "weight": 1, "absorb": 3,
+			"str_req": 20, "level": 6,
 			"modifiers": { "attributes": { "avoidance": 3, "crit_rating": 2 }, "bonuses": {} }
 		},
 
 		"treads_of_sin": { 
-			"price": 35,"stock": 150,"type": "armor","category": "boots", "weight": 5,"absorb": 4,
-			"str_req": 40, "level": 5,
+			"price": 10,"stock": 4,"type": "armor","category": "boots", "weight": 1,"absorb": 4,
+			"str_req": 25, "level": 9,
 			"modifiers": { "attributes": { "endurance": 4, "resilience": 2 }, "bonuses": {} }
 		},
 		
 		"plate_greaves": {
-			"price": 8, "stock": 250, "type": "armor", "category": "boots", "weight": 1, "absorb": 1,
-			"str_req": 10, "level": 1, 
+			"price": 4, "stock": 14, "type": "armor", "category": "boots", "weight": 3, "absorb": 2,
+			"str_req": 20, "level": 1, 
 			"modifiers": { "attributes": { "quickness": 3, "avoidance": 2 }, "bonuses": {} }
 		},
 		
 		"steelforged_greaves": { 
-			"price": 10, "stock": 250, "type": "armor", "category": "boots", "weight": 1, "absorb": 2,
-			"str_req": 20, "level": 2,
+			"price": 6, "stock": 12, "type": "armor", "category": "boots", "weight": 4, "absorb": 4,
+			"str_req": 30, "level": 3,
 			"modifiers":  { "attributes": {}, "bonuses": {} }
 		},
 		
 		"sabatons_of_kings": {
-			"price": 18, "stock": 200, "type": "armor", "category": "boots", "weight": 2, "absorb": 2,
-			"str_req": 25, "level": 3,
+			"price": 8, "stock": 8, "type": "armor", "category": "boots", "weight": 5, "absorb": 6,
+			"str_req": 45, "level": 6,
 			"modifiers": { "attributes": { "avoidance": 3, "crit_rating": 2 }, "bonuses": {} }
 		},
 
 		"bloodsteel_sabatons": { 
-			"price": 35,"stock": 150,"type": "armor","category": "boots", "weight": 5,"absorb": 4,
-			"str_req": 40, "level": 5,
+			"price": 10,"stock": 4,"type": "armor","category": "boots", "weight": 6,"absorb": 8,
+			"str_req": 65, "level": 9,
 			"modifiers": { "attributes": { "endurance": 4, "resilience": 2 }, "bonuses": {} }
 		},
 	},
@@ -745,50 +745,50 @@ extends Node
 					###### GLOVES ######
 	"gloves": {
 		"leather_gloves": {
-			"price": 8, "stock": 250, "type": "armor", "category": "gloves", "weight": 1, "absorb": 1,
+			"price": 4, "stock": 14, "type": "armor", "category": "gloves", "weight": 1, "absorb": 1,
 			"str_req": 10, "level": 1, 
 			"modifiers": { "attributes": { "quickness": 3, "avoidance": 2 }, "bonuses": {} }
 		},
 		
 		"tailored_gloves": { 
-			"price": 10, "stock": 250, "type": "armor", "category": "gloves", "weight": 1, "absorb": 2,
-			"str_req": 20, "level": 2,
+			"price": 6, "stock": 12, "type": "armor", "category": "gloves", "weight": 1, "absorb": 2,
+			"str_req": 15, "level": 3,
 			"modifiers":  { "attributes": {}, "bonuses": {} }
 		},
 		
 		"hands_of_elven_silk": {
-			"price": 18, "stock": 200, "type": "armor", "category": "gloves", "weight": 2, "absorb": 2,
-			"str_req": 25, "level": 3,
+			"price": 8, "stock": 8, "type": "armor", "category": "gloves", "weight": 1, "absorb": 3,
+			"str_req": 20, "level": 6,
 			"modifiers": { "attributes": { "avoidance": 3, "crit_rating": 2 }, "bonuses": {} }
 		},
 
 		"hands_of_sin": { 
-			"price": 35,"stock": 150,"type": "armor","category": "gloves", "weight": 5,"absorb": 4,
-			"str_req": 40, "level": 5,
+			"price": 10,"stock": 4,"type": "armor","category": "gloves", "weight": 1,"absorb": 5,
+			"str_req": 25, "level": 9,
 			"modifiers": { "attributes": { "endurance": 4, "resilience": 2 }, "bonuses": {} }
 		},
 		
 		"plate_gauntlets": {
-			"price": 8, "stock": 250, "type": "armor", "category": "gloves", "weight": 1, "absorb": 1,
-			"str_req": 10, "level": 1, 
+			"price": 4, "stock": 14, "type": "armor", "category": "gloves", "weight": 3, "absorb": 2,
+			"str_req": 20, "level": 1, 
 			"modifiers": { "attributes": { "quickness": 3, "avoidance": 2 }, "bonuses": {} }
 		},
 		
 		"steelforged_gauntlets": { 
-			"price": 10, "stock": 250, "type": "armor", "category": "gloves", "weight": 1, "absorb": 2,
-			"str_req": 20, "level": 2,
+			"price": 6, "stock": 12, "type": "armor", "category": "gloves", "weight": 4, "absorb": 4,
+			"str_req": 30, "level": 3,
 			"modifiers":  { "attributes": {}, "bonuses": {} }
 		},
 		
 		"grips_of_kings": {
-			"price": 18, "stock": 200, "type": "armor", "category": "gloves", "weight": 2, "absorb": 2,
-			"str_req": 25, "level": 3,
+			"price": 8, "stock": 8, "type": "armor", "category": "gloves", "weight": 5, "absorb": 6,
+			"str_req": 45, "level": 6,
 			"modifiers": { "attributes": { "avoidance": 3, "crit_rating": 2 }, "bonuses": {} }
 		},
 
 		"bloodsteel_grips": { 
-			"price": 35,"stock": 150,"type": "armor","category": "gloves", "weight": 5,"absorb": 4,
-			"str_req": 40, "level": 5,
+			"price": 10,"stock": 4,"type": "armor","category": "gloves", "weight": 6,"absorb": 8,
+			"str_req": 65, "level": 9,
 			"modifiers": { "attributes": { "endurance": 4, "resilience": 2 }, "bonuses": {} }
 		},
 	},
@@ -796,102 +796,102 @@ extends Node
 					###### LEGS ######
 	"legs": {
 		"leather_pantaloons": {
-			"price": 8, "stock": 250, "type": "armor", "category": "legs", "weight": 1, "absorb": 1,
-			"str_req": 10, "level": 1, 
+			"price": 4, "stock": 14, "type": "armor", "category": "legs", "weight": 2, "absorb": 2,
+			"str_req": 20, "level": 1, 
 			"modifiers": { "attributes": { "quickness": 3, "avoidance": 2 }, "bonuses": {} }
 		},
 		
 		"tailored_pantaloons": { 
-			"price": 10, "stock": 250, "type": "armor", "category": "legs", "weight": 1, "absorb": 2,
-			"str_req": 20, "level": 2,
+			"price": 6, "stock": 12, "type": "armor", "category": "legs", "weight": 2, "absorb": 3,
+			"str_req": 25, "level": 3,
 			"modifiers":  { "attributes": {}, "bonuses": {} }
 		},
 		
 		"legwraps_of_elven_silk": {
-			"price": 18, "stock": 200, "type": "armor", "category": "legs", "weight": 2, "absorb": 2,
-			"str_req": 25, "level": 3,
+			"price": 8, "stock": 8, "type": "armor", "category": "legs", "weight": 3, "absorb": 5,
+			"str_req": 30, "level": 6,
 			"modifiers": { "attributes": { "avoidance": 3, "crit_rating": 2 }, "bonuses": {} }
 		},
 
 		"legwraps_of_sin": { 
-			"price": 35,"stock": 150,"type": "armor","category": "legs", "weight": 5,"absorb": 4,
-			"str_req": 40, "level": 5,
+			"price": 10,"stock": 4,"type": "armor","category": "legs", "weight": 3,"absorb": 6,
+			"str_req": 35, "level": 9,
 			"modifiers": { "attributes": { "endurance": 4, "resilience": 2 }, "bonuses": {} }
 		},
 		
 		"plate_legs": {
-			"price": 8, "stock": 250, "type": "armor", "category": "legs", "weight": 1, "absorb": 1,
-			"str_req": 10, "level": 1, 
+			"price": 4, "stock": 14, "type": "armor", "category": "legs", "weight": 4, "absorb": 4,
+			"str_req": 30, "level": 1, 
 			"modifiers": { "attributes": { "quickness": 3, "avoidance": 2 }, "bonuses": {} }
 		},
 		
 		"steelforged_legs": { 
-			"price": 10, "stock": 250, "type": "armor", "category": "legs", "weight": 1, "absorb": 2,
-			"str_req": 20, "level": 2,
+			"price": 6, "stock": 12, "type": "armor", "category": "legs", "weight": 5, "absorb": 5,
+			"str_req": 50, "level": 3,
 			"modifiers":  { "attributes": {}, "bonuses": {} }
 		},
 		
 		"legguards_of_kings": {
-			"price": 18, "stock": 200, "type": "armor", "category": "legs", "weight": 2, "absorb": 2,
-			"str_req": 25, "level": 3,
+			"price": 8, "stock": 8, "type": "armor", "category": "legs", "weight": 6, "absorb": 7,
+			"str_req": 65, "level": 6,
 			"modifiers": { "attributes": { "avoidance": 3, "crit_rating": 2 }, "bonuses": {} }
 		},
 
 		"bloodsteel_legguards": { 
-			"price": 35,"stock": 150,"type": "armor","category": "legs", "weight": 5,"absorb": 4,
-			"str_req": 40, "level": 5,
+			"price": 10,"stock": 4,"type": "armor","category": "legs", "weight": 7,"absorb": 9,
+			"str_req": 85, "level": 9,
 			"modifiers": { "attributes": { "endurance": 4, "resilience": 2 }, "bonuses": {} }
 		},
 	},
 
 	"rings": {
 		"ring_of_stone": {
-			"price": 25, "stock": 250, "type": "jewellery", "category": "ring", "weight": 0,
+			"price": 25, "stock": 14, "type": "jewellery", "category": "ring", "weight": 0,
 			"absorb": 0, "str_req": 0, "level": 1,
 			"modifiers": { "attributes": { "resilience": 5, "endurance": 5, "health": 5 }, "bonuses": {} }
 		},
 		
 		"ring_of_noble_tears": {
-			"price": 25, "stock": 250, "type": "jewellery", "category": "ring", "weight": 0,
-			"absorb": 0, "str_req": 0, "level": 1,
+			"price": 25, "stock": 12, "type": "jewellery", "category": "ring", "weight": 0,
+			"absorb": 0, "str_req": 0, "level": 3,
 			"modifiers": { "attributes": { "avoidance": 8, "endurance": 8, "health": 8 }, "bonuses": {} }
 		},
 		
 		"ring_of_royals": {
-			"price": 25, "stock": 250, "type": "jewellery", "category": "ring", "weight": 0,
-			"absorb": 0, "str_req": 0, "level": 1,
+			"price": 25, "stock": 8, "type": "jewellery", "category": "ring", "weight": 0,
+			"absorb": 0, "str_req": 0, "level": 6,
 			"modifiers": { "attributes": { "avoidance": 12, "quickness": 12, "health": 12 }, "bonuses": {} }
 		},
 		
 		"ring_of_the_emperor": {
-			"price": 25, "stock": 250, "type": "jewellery", "category": "ring", "weight": 0,
-			"absorb": 0, "str_req": 0, "level": 1,
+			"price": 25, "stock": 4, "type": "jewellery", "category": "ring", "weight": 0,
+			"absorb": 0, "str_req": 0, "level": 9,
 			"modifiers": { "attributes": { "crit_rating": 17, "quickness": 17, "health": 17 }, "bonuses": {} }
 		},
 	},
 	
 	"amulet": {	
 		"amulet_of_stone": {
-			"price": 25, "stock": 250, "type": "jewellery", "category": "amulet", "weight": 0,
+			"price": 25, "stock": 14, "type": "jewellery", "category": "amulet", "weight": 0,
 			"absorb": 0, "str_req": 0, "level": 1,
 			"modifiers": { "attributes": { "resilience": 5, "endurance": 5, "health": 5 }, "bonuses": {} }
 		},
 		
 		"amulet_of_noble_tears": {
-			"price": 25, "stock": 250, "type": "jewellery", "category": "amulet", "weight": 0,
-			"absorb": 0, "str_req": 0, "level": 1,
+			"price": 25, "stock": 12, "type": "jewellery", "category": "amulet", "weight": 0,
+			"absorb": 0, "str_req": 0, "level": 3,
 			"modifiers": { "attributes": { "avoidance": 8, "endurance": 8, "health": 8 }, "bonuses": {} }
 		},
 		
 		"amulet_of_royals": {
-			"price": 25, "stock": 250, "type": "jewellery", "category": "amulet", "weight": 0,
-			"absorb": 0, "str_req": 0, "level": 1,
+			"price": 25, "stock": 8, "type": "jewellery", "category": "amulet", "weight": 0,
+			"absorb": 0, "str_req": 0, "level": 6,
 			"modifiers": { "attributes": { "avoidance": 12, "quickness": 12, "health": 12 }, "bonuses": {} }
 		},
 		
 		"amulet_of_the_emperor": {
-			"price": 25, "stock": 250, "type": "jewellery", "category": "amulet", "weight": 0,
-			"absorb": 0, "str_req": 0, "level": 1,
+			"price": 25, "stock": 4, "type": "jewellery", "category": "amulet", "weight": 0,
+			"absorb": 0, "str_req": 0, "level": 9,
 			"modifiers": { "attributes": { "crit_rating": 17, "quickness": 17, "health": 17 }, "bonuses": {} }
 		},
 	}

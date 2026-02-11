@@ -1,0 +1,57 @@
+,absorb,weight,str_req,price,stock,level
+Leather Belt,1,1,10,4,14,1
+Leather Boots,1,1,10,4,14,1
+Leather Vest,2,2,20,4,14,1
+Leather Gloves,1,1,10,4,14,1
+Leather Cap,1,1,15,4,14,1
+Leather Pantaloons,2,2,20,4,14,1
+Leather Shoulders,1,1,15,4,14,1
+Plate Waistguard,2,3,20,4,14,1
+Plate Greaves,2,3,20,4,14,1
+Plate Cuirass,4,4,30,4,14,1
+Plate Gauntlets,2,3,20,4,14,1
+Plate Helmet,2,3,25,4,14,1
+Plate Legs,4,4,30,4,14,1
+Plate Spaulders,2,3,25,4,14,1
+Tailored Belt,2,1,15,6,12,3
+Tailored Boots,2,1,15,6,12,3
+Tailored Vest,3,2,25,6,12,3
+Tailored Gloves,2,1,15,6,12,3
+Tailored Cap,2,1,20,6,12,3
+Tailored Pantaloons,3,2,25,6,12,3
+Tailored Shoulders,2,1,20,6,12,3
+Steelforged Waistguard,4,4,30,6,12,3
+Steelforged Greaves,4,4,30,6,12,3
+Steelforged Cuirass,5,5,50,6,12,3
+Steelforged Gauntlets,4,4,30,6,12,3
+Steelforged Helmet,4,4,40,6,12,3
+Steelforged Legs,5,5,50,6,12,3
+Steelforged Spaulders,4,4,40,6,12,3
+Strap of Elven Silk,3,1,20,8,8,6
+Treads of Elven Silk,3,1,20,8,8,6
+Garb of Elven Silk,5,3,30,8,8,6
+Hands of Elven Silk,3,1,20,8,8,6
+Hat of Elven Silk,4,2,25,8,8,6
+Legwraps of Elven Silk,5,3,30,8,8,6
+Mantle of Elven Silk,4,2,25,8,8,6
+Girdle of Kings,6,5,45,8,8,6
+Sabatons of Kings,6,5,45,8,8,6
+Carapace of Kings,7,6,65,8,8,6
+Grips of Kings,6,5,45,8,8,6
+Barbute of Kings,6,5,55,8,8,6
+Legguards of Kings,7,6,65,8,8,6
+Pauldrons of Kings,6,5,55,8,8,6
+Strap of Sin,4,1,25,10,4,9
+Treads of Sin,4,1,25,10,4,9
+Garb of Sin,6,3,35,10,4,9
+Hands of Sin,5,1,25,10,4,9
+Hat of Sin,4,2,30,10,4,9
+Legwraps of Sin,6,3,35,10,4,9
+Mantle of Sin,5,2,30,10,4,9
+Bloodsteel Girdle,8,6,65,10,4,9
+Bloodsteel Sabatons,8,6,65,10,4,9
+Bloodsteel Carapace,9,7,85,10,4,9
+Bloodsteel Grips,8,6,65,10,4,9
+Bloodsteel Barbute,8,6,75,10,4,9
+Bloodsteel Legguards,9,7,85,10,4,9
+Bloodsteel Pauldrons,8,6,75,10,4,9

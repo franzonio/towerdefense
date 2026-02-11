@@ -2,7 +2,9 @@
 extends Button
 
 @export var equipment_name: String = ""
-@export var cost: int
+#@export var cost: int
+var cost
+
 var name_label
 var self_name
 var parent_name
@@ -39,7 +41,17 @@ var orig_crit_chance
 var orig_crit_multi
 var orig_absorb
 
+var equipment_script 
+var equipment_instance
+var equipment_data 
+
 func _ready():
+	equipment_script = load("res://Equipment.gd")
+	equipment_instance = equipment_script.new()
+	equipment_data = equipment_instance.all_equipment
+	var item = find_value_recursive(equipment_data, equipment_name)
+	cost = item["price"]
+	
 	set_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
 	#ProjectSettings.set_setting("gui/timers/tooltip_delay_sec", 5.0)
 	#print("_ready()")
@@ -87,7 +99,20 @@ func _ready():
 			_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
 			
 	
-		
+func find_value_recursive(target_dict: Dictionary, target_key: String):
+	# 1. Check if the key exists at the current level
+	if target_dict.has(target_key):
+		return target_dict[target_key]
+	
+	# 2. If not, look inside any nested dictionaries
+	for key in target_dict:
+		if target_dict[key] is Dictionary:
+			var result = find_value_recursive(target_dict[key], target_key)
+			if result != null:
+				return result
+				
+	# 3. Return null if nothing is found in this branch
+	return null
 
 func _make_custom_tooltip(for_text):
 	

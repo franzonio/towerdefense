@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://c5uah5hdnsud8"
+
+[deps]
+
+files=["res://armor_base_stats.absorb.translation", "res://armor_base_stats.weight.translation", "res://armor_base_stats.str.translation", "res://armor_base_stats.price.translation", "res://armor_base_stats.stock.translation", "res://armor_base_stats.level.translation"]
+
+source_file="res://armor_base_stats.csv"
+dest_files=["res://armor_base_stats.absorb.translation", "res://armor_base_stats.weight.translation", "res://armor_base_stats.str.translation", "res://armor_base_stats.price.translation", "res://armor_base_stats.stock.translation", "res://armor_base_stats.level.translation"]
+
+[params]
+
+compress=true
+delimiter=0

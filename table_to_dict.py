@@ -2,51 +2,43 @@ import pandas as pd
 import re
 import os
 
-def update_equipment_gd(csv_path, gd_path, output_path):
-    # Load CSV data
+def update_category(csv_path, gd_content, keys_to_update, category_label):
+    """
+    Updates the GDScript content with values from a specific CSV file.
+    """
     if not os.path.exists(csv_path):
-        print(f"Error: {csv_path} not found.")
-        return
-    
+        print(f"[SKIP] {category_label} file not found: {csv_path}")
+        return gd_content, []
+
+    print(f"[PROCESS] Updating {category_label} from {csv_path}...")
     df = pd.read_csv(csv_path)
-    # The first column contains the weapon names
     name_col = df.columns[0]
     df = df.dropna(subset=[name_col])
 
-    # Load GDScript content
-    if not os.path.exists(gd_path):
-        print(f"Error: {gd_path} not found.")
-        return
-        
-    with open(gd_path, 'r', encoding='utf-8') as f:
-        gd_content = f.read()
-
-    # Columns to transfer from CSV to GDScript
-    keys_to_update = [
-        'min_dmg', 'max_dmg', 'weight', 'speed', 
-        'crit_chance', 'crit_multi', 'durability', 
-        'str_req', 'skill_req', 'price', 'stock', 'level'
-    ]
+    unused_items = []
+    match_count = 0
 
     for _, row in df.iterrows():
-        # Convert "Steel Sword" to "steel_sword"
-        weapon_name = str(row[name_col])
-        weapon_id = weapon_name.lower().replace(" ", "_").replace("-", "_")
+        item_name = str(row[name_col]).strip()
+        if not item_name:
+            continue
+
+        # Convert "Iron Shield" to "iron_shield"
+        item_id = item_name.lower().replace(" ", "_").replace("-", "_")
         
-        # Regex to find the start of the weapon dictionary block
-        # Look for "weapon_id": {
-        start_pattern = rf'"{weapon_id}"\s*:\s*\{{'
+        # Locate the block for this specific item ID
+        start_pattern = rf'"{item_id}"\s*:\s*\{{'
         match = re.search(start_pattern, gd_content)
         
         if not match:
+            unused_items.append(item_name)
             continue
             
         start_idx = match.start()
         
-        # Find the end of this weapon's block by matching curly braces
+        # Balance braces to find the end of the item's dictionary
         brace_count = 0
         end_idx = -1
-        # Start scanning from where the opening brace was found
         for i in range(match.end() - 1, len(gd_content)):
             if gd_content[i] == '{':
                 brace_count += 1
@@ -57,34 +49,70 @@ def update_equipment_gd(csv_path, gd_path, output_path):
                     break
         
         if end_idx == -1:
+            unused_items.append(item_name)
             continue
 
-        # Extract the specific weapon block substring
+        # Modify the specific block for this item
         block = gd_content[start_idx:end_idx]
-        
-        # Update each key within this block
         for key in keys_to_update:
             if key in df.columns and not pd.isna(row[key]):
                 val = row[key]
-                # Formatting: remove .0 if it's an integer
-                if val == int(val):
-                    val_str = str(int(val))
-                else:
-                    val_str = str(val)
+                # Format: remove .0 for integers, keep floats for others
+                val_str = str(int(val)) if val == int(val) else str(val)
                 
-                # Regex to replace "key": value with the new value
-                # This ensures we only replace values within this specific weapon block
+                # Replace only existing keys to maintain file structure integrity
                 key_pattern = rf'("{key}"\s*:\s*)[^,}} \n\t]+'
                 block = re.sub(key_pattern, rf'\g<1>{val_str}', block)
         
-        # Re-insert the modified block into the full file content
+        # Stitch the updated block back into the main content
         gd_content = gd_content[:start_idx] + block + gd_content[end_idx:]
+        match_count += 1
 
-    # Write the updated content to the output file
-    with open(output_path, 'w', encoding='utf-8') as f:
-        f.write(gd_content)
+    print(f"        -> Successfully updated {match_count} items.")
+    return gd_content, unused_items
+
+def main():
+    gd_input_path = 'Equipment.gd'
+    gd_output_path = 'Equipment_updated.gd'
     
-    print(f"Update complete. File saved as {output_path}")
+    if not os.path.exists(gd_input_path):
+        print(f"Error: {gd_input_path} not found.")
+        return
+
+    with open(gd_input_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    # 1. Update Weapons
+    weapon_keys = [
+        'min_dmg', 'max_dmg', 'weight', 'speed', 'crit_chance', 
+        'crit_multi', 'durability', 'str_req', 'skill_req', 'price'
+    ]
+    content, unused_w = update_category('weapons_base_stats.csv', content, weapon_keys, "Weapons")
+
+    # 2. Update Shields
+    shield_keys = [
+        'absorb', 'weight', 'durability', 'str_req', 'skill_req', 'price', 'stock', 'level'
+    ]
+    content, unused_s = update_category('shield_base_stats.csv', content, shield_keys, "Shields")
+
+    # 3. Update Armor
+    armor_keys = [
+        'absorb', 'weight', 'str_req', 'price', 'stock', 'level'
+    ]
+    content, unused_a = update_category('armor_base_stats.csv', content, armor_keys, "Armor")
+
+    # Save the final consolidated file
+    with open(gd_output_path, 'w', encoding='utf-8') as f:
+        f.write(content)
+    
+    print(f"\nConsolidated update complete. Saved to: {gd_output_path}")
+
+    # Final reporting for missed items
+    for label, items in [("Weapons", unused_w), ("Shields", unused_s), ("Armor", unused_a)]:
+        if items:
+            print(f"\n[MISSING] Items in {label} CSV but not found in GDScript:")
+            for itm in items:
+                print(f" - {itm}")
 
 if __name__ == "__main__":
-    update_equipment_gd('weapons_base_stats.csv', 'Equipment.gd', 'Equipment_updated.gd')
+    main()

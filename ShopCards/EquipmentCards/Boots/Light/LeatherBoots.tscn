@@ -22,6 +22,5 @@ icon = ExtResource("3_6a4i3")
 expand_icon = true
 script = ExtResource("3_0ejie")
 equipment_name = "leather_boots"
-cost = 10
 
 [connection signal="button_up" from="." to="." method="_on_button_up"]

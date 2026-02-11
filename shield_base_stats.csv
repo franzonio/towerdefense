@@ -1,0 +1,9 @@
+,absorb,weight,durability,str_req,skill_req,tot,price,stock,level
+Wooden Guard,9,4,20,45,35,80,4,8,1
+Battleworn Wall,7,10,39,65,25,90,4,8,1
+Steel Guard,16,5,30,60,50,110,8,6,4
+Iron Wall,13,14,51,80,35,115,8,6,4
+Verdant Aegis,21,5,47,70,70,140,12,4,7
+Emberized Bulwark,16,16,84,95,45,140,12,4,7
+Diamond Aegis,29,6,69,80,85,165,16,2,10
+Crimson Bulwark,19,18,126,115,55,170,16,2,10
