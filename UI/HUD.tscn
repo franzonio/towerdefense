@@ -810,254 +810,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 label_settings = SubResource("LabelSettings_f2wx0")
 
-[node name="EquipmentPanel" type="Panel" parent="."]
-texture_filter = 1
-anchors_preset = 6
-anchor_left = 1.0
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_left = -391.0
-offset_top = -96.0
-offset_right = -64.0
-offset_bottom = 278.0
-grow_horizontal = 0
-grow_vertical = 2
-theme = ExtResource("5_gppie")
-
-[node name="Sprite2D" type="Sprite2D" parent="EquipmentPanel"]
-self_modulate = Color(0.56325173, 0.4779824, 0.5207176, 1)
-texture_filter = 1
-position = Vector2(165, 188.01416)
-scale = Vector2(2.370535, 3.6119552)
-texture = ExtResource("5_rsrlt")
-
-[node name="HeadSlot" type="TextureRect" parent="EquipmentPanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -20.0
-offset_top = 18.0
-offset_right = 20.0
-offset_bottom = 58.0
-grow_horizontal = 2
-texture = ExtResource("5_am7sw")
-
-[node name="ShouldersSlot" type="TextureRect" parent="EquipmentPanel"]
-texture_filter = 1
-layout_mode = 1
-offset_left = 81.0
-offset_top = 55.0
-offset_right = 121.0
-offset_bottom = 95.0
-texture = ExtResource("6_pgems")
-expand_mode = 4
-
-[node name="ChestSlot" type="TextureRect" parent="EquipmentPanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -36.0
-offset_right = 20.0
-offset_bottom = 4.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("6_ixkb2")
-expand_mode = 4
-
-[node name="Weapon1Slot" type="TextureRect" parent="EquipmentPanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -47.5
-offset_top = -58.0
-offset_right = -7.5
-offset_bottom = -18.0
-grow_horizontal = 2
-grow_vertical = 0
-texture = ExtResource("7_mms7u")
-expand_mode = 4
-
-[node name="Weapon2Slot" type="TextureRect" parent="EquipmentPanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = 8.5
-offset_top = -58.0
-offset_right = 48.5
-offset_bottom = -18.0
-grow_horizontal = 2
-grow_vertical = 0
-texture = ExtResource("9_rsrlt")
-expand_mode = 4
-
-[node name="Ring1Slot" type="TextureRect" parent="EquipmentPanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 76.0
-offset_top = -21.0
-offset_right = 116.0
-offset_bottom = 19.0
-grow_vertical = 2
-texture = ExtResource("8_281ki")
-expand_mode = 4
-
-[node name="Ring2Slot" type="TextureRect" parent="EquipmentPanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 214.0
-offset_top = -21.0
-offset_right = 254.0
-offset_bottom = 19.0
-grow_vertical = 2
-texture = ExtResource("8_281ki")
-expand_mode = 4
-
-[node name="NecklaceSlot" type="TextureRect" parent="EquipmentPanel"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 116.0
-offset_top = 102.0
-offset_right = 156.0
-offset_bottom = 142.0
-texture = ExtResource("9_w37wn")
-expand_mode = 4
-
-[node name="AmuletSlot" type="TextureRect" parent="EquipmentPanel"]
-texture_filter = 1
-layout_mode = 0
-offset_left = 207.0
-offset_top = 55.0
-offset_right = 247.0
-offset_bottom = 95.0
-texture = ExtResource("10_kg6a8")
-expand_mode = 4
-
-[node name="BeltSlot" type="TextureRect" parent="EquipmentPanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = 13.0
-offset_right = 20.0
-offset_bottom = 53.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("13_lbtxw")
-expand_mode = 4
-
-[node name="LegsSlot" type="TextureRect" parent="EquipmentPanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = 63.0
-offset_right = 20.0
-offset_bottom = 103.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("14_gp2h7")
-expand_mode = 4
-
-[node name="Trinket1Slot" type="TextureRect" parent="EquipmentPanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 64.0
-offset_top = 81.0
-offset_right = 104.0
-offset_bottom = 121.0
-grow_vertical = 2
-texture = ExtResource("15_4hs1h")
-expand_mode = 4
-
-[node name="Trinket2Slot" type="TextureRect" parent="EquipmentPanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 224.0
-offset_top = 81.0
-offset_right = 264.0
-offset_bottom = 121.0
-grow_vertical = 2
-texture = ExtResource("15_4hs1h")
-expand_mode = 4
-
-[node name="BootsSlot" type="TextureRect" parent="EquipmentPanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 263.0
-offset_top = 14.0
-offset_right = 303.0
-offset_bottom = 54.0
-grow_vertical = 2
-texture = ExtResource("16_dcyds")
-expand_mode = 4
-
-[node name="BackSlot" type="TextureRect" parent="EquipmentPanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 172.0
-offset_top = -85.0
-offset_right = 212.0
-offset_bottom = -45.0
-grow_vertical = 2
-texture = ExtResource("17_rc7pm")
-expand_mode = 4
-
-[node name="GlovesSlot" type="TextureRect" parent="EquipmentPanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 4
-anchor_top = 0.5
-anchor_bottom = 0.5
-offset_left = 26.0
-offset_top = 14.0
-offset_right = 66.0
-offset_bottom = 54.0
-grow_vertical = 2
-texture = ExtResource("18_h8urj")
-expand_mode = 4
-
 [node name="Panel" type="Panel" parent="."]
 anchors_preset = 2
 anchor_top = 1.0
@@ -1122,10 +874,10 @@ texture_filter = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -47.0
-offset_top = 40.0
-offset_right = -10.0
-offset_bottom = 71.0
+offset_left = -68.0
+offset_top = 30.0
+offset_right = -6.0
+offset_bottom = 64.0
 grow_horizontal = 0
 theme = ExtResource("5_gppie")
 text = "TRAIN
@@ -1325,6 +1077,2077 @@ text = "✅ Yes"
 texture_filter = 1
 layout_mode = 2
 text = "❌ No"
+
+[node name="EquipmentPanel1" type="Panel" parent="."]
+texture_filter = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -391.0
+offset_top = -96.0
+offset_right = -64.0
+offset_bottom = 278.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("5_gppie")
+
+[node name="Name" type="RichTextLabel" parent="EquipmentPanel1"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="EquipmentPanel1"]
+self_modulate = Color(0.56325173, 0.4779824, 0.5207176, 1)
+texture_filter = 1
+position = Vector2(165, 188.01416)
+scale = Vector2(2.370535, 3.6119552)
+texture = ExtResource("5_rsrlt")
+
+[node name="HeadSlot" type="TextureRect" parent="EquipmentPanel1"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 18.0
+offset_right = 20.0
+offset_bottom = 58.0
+grow_horizontal = 2
+texture = ExtResource("5_am7sw")
+
+[node name="ShouldersSlot" type="TextureRect" parent="EquipmentPanel1"]
+texture_filter = 1
+layout_mode = 1
+offset_left = 81.0
+offset_top = 55.0
+offset_right = 121.0
+offset_bottom = 95.0
+texture = ExtResource("6_pgems")
+expand_mode = 4
+
+[node name="ChestSlot" type="TextureRect" parent="EquipmentPanel1"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -36.0
+offset_right = 20.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_ixkb2")
+expand_mode = 4
+
+[node name="Weapon1Slot" type="TextureRect" parent="EquipmentPanel1"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -47.5
+offset_top = -58.0
+offset_right = -7.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("7_mms7u")
+expand_mode = 4
+
+[node name="Weapon2Slot" type="TextureRect" parent="EquipmentPanel1"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 8.5
+offset_top = -58.0
+offset_right = 48.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("9_rsrlt")
+expand_mode = 4
+
+[node name="Ring1Slot" type="TextureRect" parent="EquipmentPanel1"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 76.0
+offset_top = -21.0
+offset_right = 116.0
+offset_bottom = 19.0
+grow_vertical = 2
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="Ring2Slot" type="TextureRect" parent="EquipmentPanel1"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 214.0
+offset_top = -21.0
+offset_right = 254.0
+offset_bottom = 19.0
+grow_vertical = 2
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="NecklaceSlot" type="TextureRect" parent="EquipmentPanel1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 116.0
+offset_top = 102.0
+offset_right = 156.0
+offset_bottom = 142.0
+texture = ExtResource("9_w37wn")
+expand_mode = 4
+
+[node name="AmuletSlot" type="TextureRect" parent="EquipmentPanel1"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 207.0
+offset_top = 55.0
+offset_right = 247.0
+offset_bottom = 95.0
+texture = ExtResource("10_kg6a8")
+expand_mode = 4
+
+[node name="BeltSlot" type="TextureRect" parent="EquipmentPanel1"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 13.0
+offset_right = 20.0
+offset_bottom = 53.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_lbtxw")
+expand_mode = 4
+
+[node name="LegsSlot" type="TextureRect" parent="EquipmentPanel1"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 63.0
+offset_right = 20.0
+offset_bottom = 103.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_gp2h7")
+expand_mode = 4
+
+[node name="Trinket1Slot" type="TextureRect" parent="EquipmentPanel1"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = 81.0
+offset_right = 104.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="Trinket2Slot" type="TextureRect" parent="EquipmentPanel1"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 224.0
+offset_top = 81.0
+offset_right = 264.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="BootsSlot" type="TextureRect" parent="EquipmentPanel1"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 263.0
+offset_top = 14.0
+offset_right = 303.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("16_dcyds")
+expand_mode = 4
+
+[node name="BackSlot" type="TextureRect" parent="EquipmentPanel1"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 172.0
+offset_top = -85.0
+offset_right = 212.0
+offset_bottom = -45.0
+grow_vertical = 2
+texture = ExtResource("17_rc7pm")
+expand_mode = 4
+
+[node name="GlovesSlot" type="TextureRect" parent="EquipmentPanel1"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 26.0
+offset_top = 14.0
+offset_right = 66.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("18_h8urj")
+expand_mode = 4
+
+[node name="EquipmentPanel2" type="Panel" parent="."]
+visible = false
+texture_filter = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -1706.0
+offset_top = -85.0
+offset_right = -1379.0
+offset_bottom = 289.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("5_gppie")
+
+[node name="Name" type="RichTextLabel" parent="EquipmentPanel2"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="EquipmentPanel2"]
+self_modulate = Color(0.56325173, 0.4779824, 0.5207176, 1)
+texture_filter = 1
+position = Vector2(165, 188.01416)
+scale = Vector2(2.370535, 3.6119552)
+texture = ExtResource("5_rsrlt")
+
+[node name="HeadSlot" type="TextureRect" parent="EquipmentPanel2"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 18.0
+offset_right = 20.0
+offset_bottom = 58.0
+grow_horizontal = 2
+texture = ExtResource("5_am7sw")
+
+[node name="ShouldersSlot" type="TextureRect" parent="EquipmentPanel2"]
+texture_filter = 1
+layout_mode = 1
+offset_left = 81.0
+offset_top = 55.0
+offset_right = 121.0
+offset_bottom = 95.0
+texture = ExtResource("6_pgems")
+expand_mode = 4
+
+[node name="ChestSlot" type="TextureRect" parent="EquipmentPanel2"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -36.0
+offset_right = 20.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_ixkb2")
+expand_mode = 4
+
+[node name="Weapon1Slot" type="TextureRect" parent="EquipmentPanel2"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -47.5
+offset_top = -58.0
+offset_right = -7.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("7_mms7u")
+expand_mode = 4
+
+[node name="Weapon2Slot" type="TextureRect" parent="EquipmentPanel2"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 8.5
+offset_top = -58.0
+offset_right = 48.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("9_rsrlt")
+expand_mode = 4
+
+[node name="Ring1Slot" type="TextureRect" parent="EquipmentPanel2"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 76.0
+offset_top = -21.0
+offset_right = 116.0
+offset_bottom = 19.0
+grow_vertical = 2
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="Ring2Slot" type="TextureRect" parent="EquipmentPanel2"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 214.0
+offset_top = -21.0
+offset_right = 254.0
+offset_bottom = 19.0
+grow_vertical = 2
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="NecklaceSlot" type="TextureRect" parent="EquipmentPanel2"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 116.0
+offset_top = 102.0
+offset_right = 156.0
+offset_bottom = 142.0
+texture = ExtResource("9_w37wn")
+expand_mode = 4
+
+[node name="AmuletSlot" type="TextureRect" parent="EquipmentPanel2"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 207.0
+offset_top = 55.0
+offset_right = 247.0
+offset_bottom = 95.0
+texture = ExtResource("10_kg6a8")
+expand_mode = 4
+
+[node name="BeltSlot" type="TextureRect" parent="EquipmentPanel2"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 13.0
+offset_right = 20.0
+offset_bottom = 53.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_lbtxw")
+expand_mode = 4
+
+[node name="LegsSlot" type="TextureRect" parent="EquipmentPanel2"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 63.0
+offset_right = 20.0
+offset_bottom = 103.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_gp2h7")
+expand_mode = 4
+
+[node name="Trinket1Slot" type="TextureRect" parent="EquipmentPanel2"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = 81.0
+offset_right = 104.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="Trinket2Slot" type="TextureRect" parent="EquipmentPanel2"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 224.0
+offset_top = 81.0
+offset_right = 264.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="BootsSlot" type="TextureRect" parent="EquipmentPanel2"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 263.0
+offset_top = 14.0
+offset_right = 303.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("16_dcyds")
+expand_mode = 4
+
+[node name="BackSlot" type="TextureRect" parent="EquipmentPanel2"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 172.0
+offset_top = -85.0
+offset_right = 212.0
+offset_bottom = -45.0
+grow_vertical = 2
+texture = ExtResource("17_rc7pm")
+expand_mode = 4
+
+[node name="GlovesSlot" type="TextureRect" parent="EquipmentPanel2"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 26.0
+offset_top = 14.0
+offset_right = 66.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("18_h8urj")
+expand_mode = 4
+
+[node name="EquipmentPanel3" type="Panel" parent="."]
+visible = false
+texture_filter = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -391.0
+offset_top = -96.0
+offset_right = -64.0
+offset_bottom = 278.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("5_gppie")
+
+[node name="Name" type="RichTextLabel" parent="EquipmentPanel3"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="EquipmentPanel3"]
+self_modulate = Color(0.56325173, 0.4779824, 0.5207176, 1)
+texture_filter = 1
+position = Vector2(165, 188.01416)
+scale = Vector2(2.370535, 3.6119552)
+texture = ExtResource("5_rsrlt")
+
+[node name="HeadSlot" type="TextureRect" parent="EquipmentPanel3"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 18.0
+offset_right = 20.0
+offset_bottom = 58.0
+grow_horizontal = 2
+texture = ExtResource("5_am7sw")
+
+[node name="ShouldersSlot" type="TextureRect" parent="EquipmentPanel3"]
+texture_filter = 1
+layout_mode = 1
+offset_left = 81.0
+offset_top = 55.0
+offset_right = 121.0
+offset_bottom = 95.0
+texture = ExtResource("6_pgems")
+expand_mode = 4
+
+[node name="ChestSlot" type="TextureRect" parent="EquipmentPanel3"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -36.0
+offset_right = 20.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_ixkb2")
+expand_mode = 4
+
+[node name="Weapon1Slot" type="TextureRect" parent="EquipmentPanel3"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -47.5
+offset_top = -58.0
+offset_right = -7.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("7_mms7u")
+expand_mode = 4
+
+[node name="Weapon2Slot" type="TextureRect" parent="EquipmentPanel3"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 8.5
+offset_top = -58.0
+offset_right = 48.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("9_rsrlt")
+expand_mode = 4
+
+[node name="Ring1Slot" type="TextureRect" parent="EquipmentPanel3"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 76.0
+offset_top = -21.0
+offset_right = 116.0
+offset_bottom = 19.0
+grow_vertical = 2
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="Ring2Slot" type="TextureRect" parent="EquipmentPanel3"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 214.0
+offset_top = -21.0
+offset_right = 254.0
+offset_bottom = 19.0
+grow_vertical = 2
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="NecklaceSlot" type="TextureRect" parent="EquipmentPanel3"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 116.0
+offset_top = 102.0
+offset_right = 156.0
+offset_bottom = 142.0
+texture = ExtResource("9_w37wn")
+expand_mode = 4
+
+[node name="AmuletSlot" type="TextureRect" parent="EquipmentPanel3"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 207.0
+offset_top = 55.0
+offset_right = 247.0
+offset_bottom = 95.0
+texture = ExtResource("10_kg6a8")
+expand_mode = 4
+
+[node name="BeltSlot" type="TextureRect" parent="EquipmentPanel3"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 13.0
+offset_right = 20.0
+offset_bottom = 53.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_lbtxw")
+expand_mode = 4
+
+[node name="LegsSlot" type="TextureRect" parent="EquipmentPanel3"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 63.0
+offset_right = 20.0
+offset_bottom = 103.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_gp2h7")
+expand_mode = 4
+
+[node name="Trinket1Slot" type="TextureRect" parent="EquipmentPanel3"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = 81.0
+offset_right = 104.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="Trinket2Slot" type="TextureRect" parent="EquipmentPanel3"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 224.0
+offset_top = 81.0
+offset_right = 264.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="BootsSlot" type="TextureRect" parent="EquipmentPanel3"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 263.0
+offset_top = 14.0
+offset_right = 303.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("16_dcyds")
+expand_mode = 4
+
+[node name="BackSlot" type="TextureRect" parent="EquipmentPanel3"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 172.0
+offset_top = -85.0
+offset_right = 212.0
+offset_bottom = -45.0
+grow_vertical = 2
+texture = ExtResource("17_rc7pm")
+expand_mode = 4
+
+[node name="GlovesSlot" type="TextureRect" parent="EquipmentPanel3"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 26.0
+offset_top = 14.0
+offset_right = 66.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("18_h8urj")
+expand_mode = 4
+
+[node name="EquipmentPanel4" type="Panel" parent="."]
+visible = false
+texture_filter = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -391.0
+offset_top = -96.0
+offset_right = -64.0
+offset_bottom = 278.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("5_gppie")
+
+[node name="Name" type="RichTextLabel" parent="EquipmentPanel4"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="EquipmentPanel4"]
+self_modulate = Color(0.56325173, 0.4779824, 0.5207176, 1)
+texture_filter = 1
+position = Vector2(165, 188.01416)
+scale = Vector2(2.370535, 3.6119552)
+texture = ExtResource("5_rsrlt")
+
+[node name="HeadSlot" type="TextureRect" parent="EquipmentPanel4"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 18.0
+offset_right = 20.0
+offset_bottom = 58.0
+grow_horizontal = 2
+texture = ExtResource("5_am7sw")
+
+[node name="ShouldersSlot" type="TextureRect" parent="EquipmentPanel4"]
+texture_filter = 1
+layout_mode = 1
+offset_left = 81.0
+offset_top = 55.0
+offset_right = 121.0
+offset_bottom = 95.0
+texture = ExtResource("6_pgems")
+expand_mode = 4
+
+[node name="ChestSlot" type="TextureRect" parent="EquipmentPanel4"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -36.0
+offset_right = 20.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_ixkb2")
+expand_mode = 4
+
+[node name="Weapon1Slot" type="TextureRect" parent="EquipmentPanel4"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -47.5
+offset_top = -58.0
+offset_right = -7.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("7_mms7u")
+expand_mode = 4
+
+[node name="Weapon2Slot" type="TextureRect" parent="EquipmentPanel4"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 8.5
+offset_top = -58.0
+offset_right = 48.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("9_rsrlt")
+expand_mode = 4
+
+[node name="Ring1Slot" type="TextureRect" parent="EquipmentPanel4"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 76.0
+offset_top = -21.0
+offset_right = 116.0
+offset_bottom = 19.0
+grow_vertical = 2
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="Ring2Slot" type="TextureRect" parent="EquipmentPanel4"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 214.0
+offset_top = -21.0
+offset_right = 254.0
+offset_bottom = 19.0
+grow_vertical = 2
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="NecklaceSlot" type="TextureRect" parent="EquipmentPanel4"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 116.0
+offset_top = 102.0
+offset_right = 156.0
+offset_bottom = 142.0
+texture = ExtResource("9_w37wn")
+expand_mode = 4
+
+[node name="AmuletSlot" type="TextureRect" parent="EquipmentPanel4"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 207.0
+offset_top = 55.0
+offset_right = 247.0
+offset_bottom = 95.0
+texture = ExtResource("10_kg6a8")
+expand_mode = 4
+
+[node name="BeltSlot" type="TextureRect" parent="EquipmentPanel4"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 13.0
+offset_right = 20.0
+offset_bottom = 53.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_lbtxw")
+expand_mode = 4
+
+[node name="LegsSlot" type="TextureRect" parent="EquipmentPanel4"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 63.0
+offset_right = 20.0
+offset_bottom = 103.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_gp2h7")
+expand_mode = 4
+
+[node name="Trinket1Slot" type="TextureRect" parent="EquipmentPanel4"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = 81.0
+offset_right = 104.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="Trinket2Slot" type="TextureRect" parent="EquipmentPanel4"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 224.0
+offset_top = 81.0
+offset_right = 264.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="BootsSlot" type="TextureRect" parent="EquipmentPanel4"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 263.0
+offset_top = 14.0
+offset_right = 303.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("16_dcyds")
+expand_mode = 4
+
+[node name="BackSlot" type="TextureRect" parent="EquipmentPanel4"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 172.0
+offset_top = -85.0
+offset_right = 212.0
+offset_bottom = -45.0
+grow_vertical = 2
+texture = ExtResource("17_rc7pm")
+expand_mode = 4
+
+[node name="GlovesSlot" type="TextureRect" parent="EquipmentPanel4"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 26.0
+offset_top = 14.0
+offset_right = 66.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("18_h8urj")
+expand_mode = 4
+
+[node name="EquipmentPanel5" type="Panel" parent="."]
+visible = false
+texture_filter = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -391.0
+offset_top = -96.0
+offset_right = -64.0
+offset_bottom = 278.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("5_gppie")
+
+[node name="Name" type="RichTextLabel" parent="EquipmentPanel5"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="EquipmentPanel5"]
+self_modulate = Color(0.56325173, 0.4779824, 0.5207176, 1)
+texture_filter = 1
+position = Vector2(165, 188.01416)
+scale = Vector2(2.370535, 3.6119552)
+texture = ExtResource("5_rsrlt")
+
+[node name="HeadSlot" type="TextureRect" parent="EquipmentPanel5"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 18.0
+offset_right = 20.0
+offset_bottom = 58.0
+grow_horizontal = 2
+texture = ExtResource("5_am7sw")
+
+[node name="ShouldersSlot" type="TextureRect" parent="EquipmentPanel5"]
+texture_filter = 1
+layout_mode = 1
+offset_left = 81.0
+offset_top = 55.0
+offset_right = 121.0
+offset_bottom = 95.0
+texture = ExtResource("6_pgems")
+expand_mode = 4
+
+[node name="ChestSlot" type="TextureRect" parent="EquipmentPanel5"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -36.0
+offset_right = 20.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_ixkb2")
+expand_mode = 4
+
+[node name="Weapon1Slot" type="TextureRect" parent="EquipmentPanel5"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -47.5
+offset_top = -58.0
+offset_right = -7.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("7_mms7u")
+expand_mode = 4
+
+[node name="Weapon2Slot" type="TextureRect" parent="EquipmentPanel5"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 8.5
+offset_top = -58.0
+offset_right = 48.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("9_rsrlt")
+expand_mode = 4
+
+[node name="Ring1Slot" type="TextureRect" parent="EquipmentPanel5"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 76.0
+offset_top = -21.0
+offset_right = 116.0
+offset_bottom = 19.0
+grow_vertical = 2
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="Ring2Slot" type="TextureRect" parent="EquipmentPanel5"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 214.0
+offset_top = -21.0
+offset_right = 254.0
+offset_bottom = 19.0
+grow_vertical = 2
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="NecklaceSlot" type="TextureRect" parent="EquipmentPanel5"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 116.0
+offset_top = 102.0
+offset_right = 156.0
+offset_bottom = 142.0
+texture = ExtResource("9_w37wn")
+expand_mode = 4
+
+[node name="AmuletSlot" type="TextureRect" parent="EquipmentPanel5"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 207.0
+offset_top = 55.0
+offset_right = 247.0
+offset_bottom = 95.0
+texture = ExtResource("10_kg6a8")
+expand_mode = 4
+
+[node name="BeltSlot" type="TextureRect" parent="EquipmentPanel5"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 13.0
+offset_right = 20.0
+offset_bottom = 53.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_lbtxw")
+expand_mode = 4
+
+[node name="LegsSlot" type="TextureRect" parent="EquipmentPanel5"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 63.0
+offset_right = 20.0
+offset_bottom = 103.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_gp2h7")
+expand_mode = 4
+
+[node name="Trinket1Slot" type="TextureRect" parent="EquipmentPanel5"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = 81.0
+offset_right = 104.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="Trinket2Slot" type="TextureRect" parent="EquipmentPanel5"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 224.0
+offset_top = 81.0
+offset_right = 264.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="BootsSlot" type="TextureRect" parent="EquipmentPanel5"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 263.0
+offset_top = 14.0
+offset_right = 303.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("16_dcyds")
+expand_mode = 4
+
+[node name="BackSlot" type="TextureRect" parent="EquipmentPanel5"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 172.0
+offset_top = -85.0
+offset_right = 212.0
+offset_bottom = -45.0
+grow_vertical = 2
+texture = ExtResource("17_rc7pm")
+expand_mode = 4
+
+[node name="GlovesSlot" type="TextureRect" parent="EquipmentPanel5"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 26.0
+offset_top = 14.0
+offset_right = 66.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("18_h8urj")
+expand_mode = 4
+
+[node name="EquipmentPanel6" type="Panel" parent="."]
+visible = false
+texture_filter = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -391.0
+offset_top = -96.0
+offset_right = -64.0
+offset_bottom = 278.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("5_gppie")
+
+[node name="Name" type="RichTextLabel" parent="EquipmentPanel6"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="EquipmentPanel6"]
+self_modulate = Color(0.56325173, 0.4779824, 0.5207176, 1)
+texture_filter = 1
+position = Vector2(165, 188.01416)
+scale = Vector2(2.370535, 3.6119552)
+texture = ExtResource("5_rsrlt")
+
+[node name="HeadSlot" type="TextureRect" parent="EquipmentPanel6"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 18.0
+offset_right = 20.0
+offset_bottom = 58.0
+grow_horizontal = 2
+texture = ExtResource("5_am7sw")
+
+[node name="ShouldersSlot" type="TextureRect" parent="EquipmentPanel6"]
+texture_filter = 1
+layout_mode = 1
+offset_left = 81.0
+offset_top = 55.0
+offset_right = 121.0
+offset_bottom = 95.0
+texture = ExtResource("6_pgems")
+expand_mode = 4
+
+[node name="ChestSlot" type="TextureRect" parent="EquipmentPanel6"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -36.0
+offset_right = 20.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_ixkb2")
+expand_mode = 4
+
+[node name="Weapon1Slot" type="TextureRect" parent="EquipmentPanel6"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -47.5
+offset_top = -58.0
+offset_right = -7.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("7_mms7u")
+expand_mode = 4
+
+[node name="Weapon2Slot" type="TextureRect" parent="EquipmentPanel6"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 8.5
+offset_top = -58.0
+offset_right = 48.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("9_rsrlt")
+expand_mode = 4
+
+[node name="Ring1Slot" type="TextureRect" parent="EquipmentPanel6"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 76.0
+offset_top = -21.0
+offset_right = 116.0
+offset_bottom = 19.0
+grow_vertical = 2
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="Ring2Slot" type="TextureRect" parent="EquipmentPanel6"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 214.0
+offset_top = -21.0
+offset_right = 254.0
+offset_bottom = 19.0
+grow_vertical = 2
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="NecklaceSlot" type="TextureRect" parent="EquipmentPanel6"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 116.0
+offset_top = 102.0
+offset_right = 156.0
+offset_bottom = 142.0
+texture = ExtResource("9_w37wn")
+expand_mode = 4
+
+[node name="AmuletSlot" type="TextureRect" parent="EquipmentPanel6"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 207.0
+offset_top = 55.0
+offset_right = 247.0
+offset_bottom = 95.0
+texture = ExtResource("10_kg6a8")
+expand_mode = 4
+
+[node name="BeltSlot" type="TextureRect" parent="EquipmentPanel6"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 13.0
+offset_right = 20.0
+offset_bottom = 53.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_lbtxw")
+expand_mode = 4
+
+[node name="LegsSlot" type="TextureRect" parent="EquipmentPanel6"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 63.0
+offset_right = 20.0
+offset_bottom = 103.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_gp2h7")
+expand_mode = 4
+
+[node name="Trinket1Slot" type="TextureRect" parent="EquipmentPanel6"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = 81.0
+offset_right = 104.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="Trinket2Slot" type="TextureRect" parent="EquipmentPanel6"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 224.0
+offset_top = 81.0
+offset_right = 264.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="BootsSlot" type="TextureRect" parent="EquipmentPanel6"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 263.0
+offset_top = 14.0
+offset_right = 303.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("16_dcyds")
+expand_mode = 4
+
+[node name="BackSlot" type="TextureRect" parent="EquipmentPanel6"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 172.0
+offset_top = -85.0
+offset_right = 212.0
+offset_bottom = -45.0
+grow_vertical = 2
+texture = ExtResource("17_rc7pm")
+expand_mode = 4
+
+[node name="GlovesSlot" type="TextureRect" parent="EquipmentPanel6"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 26.0
+offset_top = 14.0
+offset_right = 66.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("18_h8urj")
+expand_mode = 4
+
+[node name="EquipmentPanel7" type="Panel" parent="."]
+visible = false
+texture_filter = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -391.0
+offset_top = -96.0
+offset_right = -64.0
+offset_bottom = 278.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("5_gppie")
+
+[node name="Name" type="RichTextLabel" parent="EquipmentPanel7"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="EquipmentPanel7"]
+self_modulate = Color(0.56325173, 0.4779824, 0.5207176, 1)
+texture_filter = 1
+position = Vector2(165, 188.01416)
+scale = Vector2(2.370535, 3.6119552)
+texture = ExtResource("5_rsrlt")
+
+[node name="HeadSlot" type="TextureRect" parent="EquipmentPanel7"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 18.0
+offset_right = 20.0
+offset_bottom = 58.0
+grow_horizontal = 2
+texture = ExtResource("5_am7sw")
+
+[node name="ShouldersSlot" type="TextureRect" parent="EquipmentPanel7"]
+texture_filter = 1
+layout_mode = 1
+offset_left = 81.0
+offset_top = 55.0
+offset_right = 121.0
+offset_bottom = 95.0
+texture = ExtResource("6_pgems")
+expand_mode = 4
+
+[node name="ChestSlot" type="TextureRect" parent="EquipmentPanel7"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -36.0
+offset_right = 20.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_ixkb2")
+expand_mode = 4
+
+[node name="Weapon1Slot" type="TextureRect" parent="EquipmentPanel7"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -47.5
+offset_top = -58.0
+offset_right = -7.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("7_mms7u")
+expand_mode = 4
+
+[node name="Weapon2Slot" type="TextureRect" parent="EquipmentPanel7"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 8.5
+offset_top = -58.0
+offset_right = 48.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("9_rsrlt")
+expand_mode = 4
+
+[node name="Ring1Slot" type="TextureRect" parent="EquipmentPanel7"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 76.0
+offset_top = -21.0
+offset_right = 116.0
+offset_bottom = 19.0
+grow_vertical = 2
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="Ring2Slot" type="TextureRect" parent="EquipmentPanel7"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 214.0
+offset_top = -21.0
+offset_right = 254.0
+offset_bottom = 19.0
+grow_vertical = 2
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="NecklaceSlot" type="TextureRect" parent="EquipmentPanel7"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 116.0
+offset_top = 102.0
+offset_right = 156.0
+offset_bottom = 142.0
+texture = ExtResource("9_w37wn")
+expand_mode = 4
+
+[node name="AmuletSlot" type="TextureRect" parent="EquipmentPanel7"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 207.0
+offset_top = 55.0
+offset_right = 247.0
+offset_bottom = 95.0
+texture = ExtResource("10_kg6a8")
+expand_mode = 4
+
+[node name="BeltSlot" type="TextureRect" parent="EquipmentPanel7"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 13.0
+offset_right = 20.0
+offset_bottom = 53.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_lbtxw")
+expand_mode = 4
+
+[node name="LegsSlot" type="TextureRect" parent="EquipmentPanel7"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 63.0
+offset_right = 20.0
+offset_bottom = 103.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_gp2h7")
+expand_mode = 4
+
+[node name="Trinket1Slot" type="TextureRect" parent="EquipmentPanel7"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = 81.0
+offset_right = 104.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="Trinket2Slot" type="TextureRect" parent="EquipmentPanel7"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 224.0
+offset_top = 81.0
+offset_right = 264.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="BootsSlot" type="TextureRect" parent="EquipmentPanel7"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 263.0
+offset_top = 14.0
+offset_right = 303.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("16_dcyds")
+expand_mode = 4
+
+[node name="BackSlot" type="TextureRect" parent="EquipmentPanel7"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 172.0
+offset_top = -85.0
+offset_right = 212.0
+offset_bottom = -45.0
+grow_vertical = 2
+texture = ExtResource("17_rc7pm")
+expand_mode = 4
+
+[node name="GlovesSlot" type="TextureRect" parent="EquipmentPanel7"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 26.0
+offset_top = 14.0
+offset_right = 66.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("18_h8urj")
+expand_mode = 4
+
+[node name="EquipmentPanel8" type="Panel" parent="."]
+visible = false
+texture_filter = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -391.0
+offset_top = -96.0
+offset_right = -64.0
+offset_bottom = 278.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = ExtResource("5_gppie")
+
+[node name="Name" type="RichTextLabel" parent="EquipmentPanel8"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="EquipmentPanel8"]
+self_modulate = Color(0.56325173, 0.4779824, 0.5207176, 1)
+texture_filter = 1
+position = Vector2(165, 188.01416)
+scale = Vector2(2.370535, 3.6119552)
+texture = ExtResource("5_rsrlt")
+
+[node name="HeadSlot" type="TextureRect" parent="EquipmentPanel8"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_top = 18.0
+offset_right = 20.0
+offset_bottom = 58.0
+grow_horizontal = 2
+texture = ExtResource("5_am7sw")
+
+[node name="ShouldersSlot" type="TextureRect" parent="EquipmentPanel8"]
+texture_filter = 1
+layout_mode = 1
+offset_left = 81.0
+offset_top = 55.0
+offset_right = 121.0
+offset_bottom = 95.0
+texture = ExtResource("6_pgems")
+expand_mode = 4
+
+[node name="ChestSlot" type="TextureRect" parent="EquipmentPanel8"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -36.0
+offset_right = 20.0
+offset_bottom = 4.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("6_ixkb2")
+expand_mode = 4
+
+[node name="Weapon1Slot" type="TextureRect" parent="EquipmentPanel8"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -47.5
+offset_top = -58.0
+offset_right = -7.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("7_mms7u")
+expand_mode = 4
+
+[node name="Weapon2Slot" type="TextureRect" parent="EquipmentPanel8"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 8.5
+offset_top = -58.0
+offset_right = 48.5
+offset_bottom = -18.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = ExtResource("9_rsrlt")
+expand_mode = 4
+
+[node name="Ring1Slot" type="TextureRect" parent="EquipmentPanel8"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 76.0
+offset_top = -21.0
+offset_right = 116.0
+offset_bottom = 19.0
+grow_vertical = 2
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="Ring2Slot" type="TextureRect" parent="EquipmentPanel8"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 214.0
+offset_top = -21.0
+offset_right = 254.0
+offset_bottom = 19.0
+grow_vertical = 2
+texture = ExtResource("8_281ki")
+expand_mode = 4
+
+[node name="NecklaceSlot" type="TextureRect" parent="EquipmentPanel8"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 116.0
+offset_top = 102.0
+offset_right = 156.0
+offset_bottom = 142.0
+texture = ExtResource("9_w37wn")
+expand_mode = 4
+
+[node name="AmuletSlot" type="TextureRect" parent="EquipmentPanel8"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 207.0
+offset_top = 55.0
+offset_right = 247.0
+offset_bottom = 95.0
+texture = ExtResource("10_kg6a8")
+expand_mode = 4
+
+[node name="BeltSlot" type="TextureRect" parent="EquipmentPanel8"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 13.0
+offset_right = 20.0
+offset_bottom = 53.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("13_lbtxw")
+expand_mode = 4
+
+[node name="LegsSlot" type="TextureRect" parent="EquipmentPanel8"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = 63.0
+offset_right = 20.0
+offset_bottom = 103.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("14_gp2h7")
+expand_mode = 4
+
+[node name="Trinket1Slot" type="TextureRect" parent="EquipmentPanel8"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 64.0
+offset_top = 81.0
+offset_right = 104.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="Trinket2Slot" type="TextureRect" parent="EquipmentPanel8"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 224.0
+offset_top = 81.0
+offset_right = 264.0
+offset_bottom = 121.0
+grow_vertical = 2
+texture = ExtResource("15_4hs1h")
+expand_mode = 4
+
+[node name="BootsSlot" type="TextureRect" parent="EquipmentPanel8"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 263.0
+offset_top = 14.0
+offset_right = 303.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("16_dcyds")
+expand_mode = 4
+
+[node name="BackSlot" type="TextureRect" parent="EquipmentPanel8"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 172.0
+offset_top = -85.0
+offset_right = 212.0
+offset_bottom = -45.0
+grow_vertical = 2
+texture = ExtResource("17_rc7pm")
+expand_mode = 4
+
+[node name="GlovesSlot" type="TextureRect" parent="EquipmentPanel8"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 26.0
+offset_top = 14.0
+offset_right = 66.0
+offset_bottom = 54.0
+grow_vertical = 2
+texture = ExtResource("18_h8urj")
+expand_mode = 4
 
 [connection signal="pressed" from="EquipmentButton" to="." method="_on_equipment_button_pressed"]
 [connection signal="pressed" from="ShopButton" to="." method="_on_shop_button_pressed"]

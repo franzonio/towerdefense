@@ -50,6 +50,7 @@ texture_filter = 1
 script = ExtResource("1_4c57u")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
+position = Vector2(960, 540)
 sprite_frames = SubResource("SpriteFrames_ycdy4")
 autoplay = "default"
 frame_progress = 0.570919
@@ -60,10 +61,10 @@ position = Vector2(1, 0)
 navigation_polygon = SubResource("NavigationPolygon_fssbs")
 
 [node name="Camera2D" type="Camera2D" parent="."]
-limit_left = -960
-limit_top = -540
-limit_right = 960
-limit_bottom = 540
+limit_left = 0
+limit_top = 0
+limit_right = 1920
+limit_bottom = 1080
 script = ExtResource("3_84ssy")
 
 [node name="GladiatorSpawner" type="MultiplayerSpawner" parent="."]
@@ -73,39 +74,39 @@ spawn_path = NodePath(".")
 [node name="SpawnPoints" type="Node2D" parent="."]
 
 [node name="SpawnPoint0" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(-931, -149)
+position = Vector2(86, 404)
 
 [node name="SpawnPoint1" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(19, -17)
+position = Vector2(1024, 551)
 
 [node name="SpawnPoint2" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(-571, 186)
+position = Vector2(434, 754)
 
 [node name="SpawnPoint3" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(64, 96)
+position = Vector2(1069, 664)
 
 [node name="SpawnPoint4" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(-18, -78)
+position = Vector2(987, 490)
 
 [node name="SpawnPoint5" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(524, -118)
+position = Vector2(1529, 450)
 
 [node name="SpawnPoint6" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(-50, 120)
+position = Vector2(955, 688)
 
 [node name="SpawnPoint7" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(549, 138)
+position = Vector2(1554, 706)
 
 [node name="MeetingPoints" type="Node2D" parent="."]
 
 [node name="MeetingPoint0" type="Marker2D" parent="MeetingPoints"]
-position = Vector2(-329, -113)
+position = Vector2(676, 455)
 
 [node name="MeetingPoint1" type="Marker2D" parent="MeetingPoints"]
-position = Vector2(311, -117)
+position = Vector2(1316, 451)
 
 [node name="MeetingPoint2" type="Marker2D" parent="MeetingPoints"]
-position = Vector2(-288, 160)
+position = Vector2(717, 728)
 
 [node name="MeetingPoint3" type="Marker2D" parent="MeetingPoints"]
-position = Vector2(306, 147)
+position = Vector2(1311, 715)

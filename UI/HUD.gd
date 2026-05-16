@@ -55,8 +55,6 @@ var selected_slot := ""
 var equipment_button_parent_name
 
 @onready var shop_grid = $Shop/VBoxContainer/ShopGridContainer
-@onready var refresh_button = $Shop/VBoxContainer/HBoxContainer/RefreshButton
-@onready var equipment_panel = $EquipmentPanel
 @onready var inventory_grid = $Inventory/InventoryGridContainer
 @onready var countdown_label = $IntermissionTimerLabel
 @onready var shop = $Shop
@@ -64,14 +62,27 @@ var equipment_button_parent_name
 @onready var stance_menu = $StancePanel/StanceMenu
 @onready var attack_menu = $AttackPanel/AttackMenu
 @onready var exp_button = $ExpButton
+@onready var refresh_button = $Shop/VBoxContainer/HBoxContainer/RefreshButton
 
-@onready var head_slot = $EquipmentPanel/HeadSlot
-@onready var chest_slot = $EquipmentPanel/ChestSlot
-@onready var shoulders_slot = $EquipmentPanel/ShouldersSlot
-@onready var weapon1_slot = $EquipmentPanel/Weapon1Slot
-@onready var weapon2_slot = $EquipmentPanel/Weapon2Slot
-@onready var ring1_slot = $EquipmentPanel/Ring1Slot
-@onready var ring2_slot = $EquipmentPanel/Ring2Slot
+@onready var equipment_panel = $EquipmentPanel1
+@onready var equipment_panel_name = $EquipmentPanel1/Name
+@onready var head_slot = $EquipmentPanel1/HeadSlot
+@onready var chest_slot = $EquipmentPanel1/ChestSlot
+@onready var shoulders_slot = $EquipmentPanel1/ShouldersSlot
+@onready var weapon1_slot = $EquipmentPanel1/Weapon1Slot
+@onready var weapon2_slot = $EquipmentPanel1/Weapon2Slot
+@onready var ring1_slot = $EquipmentPanel1/Ring1Slot
+@onready var ring2_slot = $EquipmentPanel1/Ring2Slot
+
+@onready var equipment_panel2 = $EquipmentPanel2
+@onready var equipment_panel_name2 = $EquipmentPanel2/Name
+@onready var head_slot2 = $EquipmentPanel2/HeadSlot
+@onready var chest_slot2 = $EquipmentPanel2/ChestSlot
+@onready var shoulders_slot2 = $EquipmentPanel2/ShouldersSlot
+@onready var weapon1_slot2 = $EquipmentPanel2/Weapon1Slot
+@onready var weapon2_slot2 = $EquipmentPanel2/Weapon2Slot
+@onready var ring1_slot2 = $EquipmentPanel2/Ring1Slot
+@onready var ring2_slot2 = $EquipmentPanel2/Ring2Slot
 
 @onready var attribute_panel = $AttributePanel
 @onready var health_panel = $AttributePanel/VBoxContainer/Health
@@ -301,7 +312,7 @@ var craft_active = ""
 @onready var amulet_of_royals = preload("res://ShopCards/EquipmentCards/Amulet/AmuletOfRoyals.tscn")
 @onready var amulet_of_the_emperor = preload("res://ShopCards/EquipmentCards/Amulet/AmuletOfTheEmperor.tscn")
 
-
+var rename_panels_done = 0
 
 func _ready():
 	round_now = 0
@@ -345,8 +356,9 @@ func _ready():
 	craft_bench_popup.add_item("Move to inventory", 0)
 	craft_bench_popup.id_pressed.connect(_on_craft_bench_popup_pressed)
 
+	
 	shop.visible = false
-	equipment_panel.visible = false
+	#equipment_panel.visible = false
 	attribute_panel.visible = false
 	
 	if multiplayer.is_server(): GameState_.initialize_card_stock()
@@ -703,43 +715,111 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 	await get_tree().process_frame
 	chat_scroll.scroll_vertical = chat_scroll.get_v_scroll_bar().max_value
 
-func _on_add_item_to_equipment(id, item_dict, category):
-	if multiplayer.get_unique_id() != id: return
+func update_equipment_ui():
+	#if multiplayer.get_unique_id() != id: return
+	# here we need to update EquipmentPanelX with all peers equipment
+	var all_ids = all_gladiators.keys()
+	var all_item_slots = ["weapon1", "weapon2", "head", "shoulders", "chest", "belt", 
+						  "gloves", "boots", "legs", "amulet", "ring1", "ring2"]
 	
-	var item_slot
 	var card_scene_map := {}
 	for card in all_cards:
 		card_scene_map[card[1]] = card[0]  # card[1] is name, card[0] is scene
 	
-	var item_name = item_dict.keys()[0]
-	var hands = item_dict[item_name].get("hands", -1)
+	for id in all_ids:
+		equipment_panel = get_node("_EquipmentPanel" + str(id))
+		equipment_panel_name = get_node("_EquipmentPanel" + str(id) + "/Name")
+		weapon1_slot = get_node("_EquipmentPanel" + str(id) + "/Weapon1Slot")
+		weapon2_slot = get_node("_EquipmentPanel" + str(id) + "/Weapon2Slot")
+		ring1_slot = get_node("_EquipmentPanel" + str(id) + "/Ring1Slot")
+		ring2_slot = get_node("_EquipmentPanel" + str(id) + "/Ring2Slot")
+		
 
-	# Find corresponding scene
-	if card_scene_map.has(item_name):
-		var card_instance = card_scene_map[item_name].instantiate()
+		var color = all_gladiators[id].get("color", Color.WHITE)
+		var hex_color = color.to_html()
+		var formatted = "[color=%s]%s[/color]" % [hex_color, all_gladiators[id]["name"]]
+		equipment_panel_name.bbcode_enabled = true
+		equipment_panel_name.text = formatted
 		
-		if hands == 2 and get_node("EquipmentPanel/Weapon1Slot").get_children() == [] and get_node("EquipmentPanel/Weapon2Slot").get_children() == []:
-			item_slot = get_node("EquipmentPanel/Weapon1Slot")
-			$EquipmentPanel/Weapon2Slot.visible = false
+		equipment_panel.visible = true
+		var get_spawn_point = all_gladiators[id].get("spawn_point", Vector2(0,0))
+		if get_spawn_point != Vector2(0,0): equipment_panel.position = all_gladiators[id]["spawn_point"]
 		
-		elif hands == 1 and category in ["weapon1", "weapon2"]:
-			item_slot = get_node("EquipmentPanel/Weapon" + category[-1] + "Slot")
+		for slot in all_item_slots:
 			
-		elif category in ["ring1", "ring2"]:
-			item_slot = get_node("EquipmentPanel/Ring" + category[-1] + "Slot")
+			#if item_dict is {} -> free child on slot
+			#if item_name is "unarmed" -> free child on slot
+			var item_slot
+			var item_dict = all_gladiators[id][slot]
+			if item_dict == {}: 
+				var slot_ = slot.capitalize().strip_edges().replace(" ", "") + "Slot"
+				var node = get_node("_EquipmentPanel" + str(id) + "/" + slot_)
+				item_slot = node.get_children()
+				for i in item_slot:
+					i.queue_free()
+				continue
+
+			var item_name = item_dict.keys()[0]
+			if item_name == "unarmed": 
+				var slot_ = slot.capitalize().strip_edges().replace(" ", "") + "Slot"
+				var node = get_node("_EquipmentPanel" + str(id) + "/" + slot_)
+				item_slot = node.get_children()
+				for i in item_slot:
+					i.queue_free()
+				continue
 			
-		else: 
-			item_slot = $EquipmentPanel.find_child(category.capitalize()+"Slot", true, false)
+			#var category = item_dict[item_name].get("category", "")
+			
 		
-		card_instance.button_parent.connect(_on_equipment_pressed)
-		card_instance.pressed.connect(_on_equipment_item_pressed.bind(item_name, category))
-		card_instance.set_multiplayer_authority(multiplayer.get_unique_id())
-		item_slot.add_child(card_instance)
-		card_instance.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-		card_instance.custom_minimum_size = item_slot.size
-		
-	else:
-		print("⚠️ No matching scene for item:", item_name)
+			
+			var hands = item_dict[item_name].get("hands", -1)
+
+			# Find corresponding scene
+			if card_scene_map.has(item_name):
+				var card_instance = card_scene_map[item_name].instantiate()
+				
+				#var a = weapon1_slot.get_children()
+				#var b = weapon2_slot.get_children()
+				
+				if hands == 2 and weapon1_slot.get_children() == [] and weapon2_slot.get_children() == []:
+					item_slot = weapon1_slot
+					weapon2_slot.visible = false
+				
+				elif hands == 1 and slot in ["weapon1", "weapon2"]:
+					item_slot = get_node("_EquipmentPanel" + str(id) +"/Weapon" + slot[-1] + "Slot")
+					
+				elif slot in ["ring1", "ring2"]:
+					item_slot = get_node("_EquipmentPanel" + str(id) +"/Ring" + slot[-1] + "Slot")
+					
+				else: 
+					item_slot = get_node("_EquipmentPanel" + str(id)).find_child(slot.capitalize()+"Slot", true, false)
+				
+				var slot_available = 0
+				if item_slot == null: return
+				if item_slot.get_children() == []: slot_available = 1
+				
+				
+				
+				if slot_available == 1:
+					card_instance.button_parent.connect(_on_equipment_pressed)
+					card_instance.pressed.connect(_on_equipment_item_pressed.bind(item_name, slot))
+					card_instance.set_multiplayer_authority(multiplayer.get_unique_id())
+					
+					card_instance.setup(item_dict)
+					
+					item_slot.add_child(card_instance)
+					card_instance.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+					card_instance.custom_minimum_size = item_slot.size
+					card_instance["theme_override_colors/font_disabled_color"] = Color(1,1,1,1)
+					card_instance["theme_override_colors/icon_disabled_color"] = Color(1,1,1,1)
+					
+					if multiplayer.get_unique_id() != id: card_instance.disabled = true
+					
+					#await get_tree().process_frame
+					#card_instance.modulate.a = 1.0
+					
+				else:
+					print("⚠️ No matching scene for item:", item_name)
 
 func _on_add_item_to_inventory(id, item_dict, slot_name):
 	if id != multiplayer.get_unique_id():
@@ -773,15 +853,16 @@ func _on_remove_item_from_equipment(id, item_dict, category):
 		$EquipmentPanel/Weapon2Slot.visible = true
 	
 	elif hands == 1 and category in ["weapon1", "weapon2"]:
-		item_slot = get_node("EquipmentPanel/Weapon" + category[-1] + "Slot")
+		item_slot = get_node("_EquipmentPanel" + str(id) +"/Weapon" + category[-1] + "Slot")
 		
 	elif category in ["ring1", "ring2"]:
-		item_slot = get_node("EquipmentPanel/Ring" + category[-1] + "Slot")
+		item_slot = get_node("_EquipmentPanel" + str(id) +"/Ring" + category[-1] + "Slot")
 		
 	else: 
-		item_slot = $EquipmentPanel.find_child(category.capitalize()+"Slot", true, false)
+		item_slot = get_node("_EquipmentPanel" + str(id)).find_child(category.capitalize()+"Slot", true, false)
 	
 	item_slot.get_child(0).queue_free()
+	update_equipment_ui()
 
 func _on_remove_item_from_inventory(id, _item_dict, slot_name):
 	if multiplayer.get_unique_id() != id: return
@@ -789,19 +870,31 @@ func _on_remove_item_from_inventory(id, _item_dict, slot_name):
 	
 func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
 	all_gladiators = _all_gladiators
+	if rename_panels_done == 0:
+		rename_equipment_panels(all_gladiators)
+		rename_panels_done = 1
+	update_equipment_ui()
 	if peer_id == multiplayer.get_unique_id():
+		
+		
+		var disp = pretty_print_dict(all_gladiators)
+		print(disp)
+		
+		#if all_gladiators[peer_id].get("spawn_point", [-1, -1])[0] != -1:
+		#	equipment_panel.position = all_gladiators[peer_id]["spawn_point"]
+		
 		player_gladiator_data = all_gladiators[peer_id]
 		update_craft_ui()
 		#update_inventory_ui(peer_id)
-		#update_equipment_ui()
 		update_attribute_ui()
 		update_concede_ui()
 		update_stance_ui()
 		update_attack_ui()
 		update_gold(all_gladiators[peer_id]["gold"])
 		update_experience(all_gladiators[peer_id]["exp"])
+		
 	populate_hud()
-	
+	 
 func update_craft_ui():
 	var crafting_mats = all_gladiators[multiplayer.get_unique_id()].get("crafting_mats", {})
 	
@@ -872,90 +965,7 @@ func update_attribute_ui():
 	flagellation_mastery_panel.text = "Flagellation Mastery: " + str(int(attributes["flagellation_mastery"]))
 	shield_mastery_panel.text = "Shield Mastery: " + str(int(attributes["shield_mastery"]))
 	unarmed_mastery_panel.text = "Unarmed: " + str(int(attributes["unarmed_mastery"]))
-	
-func update_equipment_ui(): 
-	for slot in equipment_panel.get_children():
-		for i in slot.get_children():
-			i.queue_free()
-			
-	var head_name
-	var chest_name 
-	var shoulders_name
-	var weapon1_name
-	var weapon2_name
-	var ring1_name 
-	var ring2_name 
-	
-	if all_gladiators[multiplayer.get_unique_id()]["head"] != {}:
-		head_name = all_gladiators[multiplayer.get_unique_id()]["head"].keys()[0]
-	else:
-		head_name = "empty"
-	
-	if all_gladiators[multiplayer.get_unique_id()]["shoulders"] != {}:
-		shoulders_name = all_gladiators[multiplayer.get_unique_id()]["shoulders"].keys()[0]
-	else:
-		shoulders_name = "empty"
-	
-	if all_gladiators[multiplayer.get_unique_id()]["chest"] != {}:
-		chest_name = all_gladiators[multiplayer.get_unique_id()]["chest"].keys()[0]
-	else:
-		chest_name = "empty"
-	
-	if all_gladiators[multiplayer.get_unique_id()]["weapon1"] != {}:
-		weapon1_name = all_gladiators[multiplayer.get_unique_id()]["weapon1"].keys()[0]
-	else:
-		weapon1_name = "empty"
-		
-	if all_gladiators[multiplayer.get_unique_id()]["weapon1"] != {}:
-		weapon1_name = all_gladiators[multiplayer.get_unique_id()]["weapon1"].keys()[0]
-	else:
-		weapon1_name = "empty"
-		
-	if all_gladiators[multiplayer.get_unique_id()]["weapon2"] != {}:
-		weapon2_name = all_gladiators[multiplayer.get_unique_id()]["weapon2"].keys()[0]
-	else:
-		weapon2_name = "empty"
-		
-	if all_gladiators[multiplayer.get_unique_id()]["ring1"] != {}:
-		ring1_name = all_gladiators[multiplayer.get_unique_id()]["ring1"].keys()[0]
-	else:
-		ring1_name = "empty"
-	
-	if all_gladiators[multiplayer.get_unique_id()]["ring2"] != {}:
-		ring2_name = all_gladiators[multiplayer.get_unique_id()]["ring2"].keys()[0]
-	else:
-		ring2_name = "empty"
-	
-	var all_equipment_slots = [head_slot, chest_slot, shoulders_slot, weapon1_slot, weapon2_slot, ring1_slot, ring2_slot]
-	var all_equipped_items_name = [head_name, chest_name, shoulders_name, weapon1_name, weapon2_name, ring1_name, ring2_name]
-	
-	for i in all_equipped_items_name.size()-1: 
-		var item_slot = all_equipment_slots[i]
-		var item_name = all_equipped_items_name[i]
-		var card_found = 0
-		
-		for card_map in all_cards:
-			if card_map[1] == item_name:
-				var item_instance = card_map[0].instantiate()
-				item_instance.button_parent.connect(_on_equipment_pressed)
-				item_instance.pressed.connect(_on_equipment_item_pressed.bind(item_name))
-				item_instance.set_multiplayer_authority(multiplayer.get_unique_id())
-				item_slot.add_child(item_instance)
-				item_instance.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
-				item_instance.custom_minimum_size = item_slot.size
-				card_found = 1
-				continue
-			elif item_name == "empty" or item_name == "unarmed":
-				card_found = 1
-				continue
-				
-		if card_found == 0: 
-			if multiplayer.is_server():
-				GameState_.add_to_peer_log(multiplayer.get_unique_id(), "No card defined for item " + str(item_name) + ". Please report this as a bug.")
-			else:
-				GameState_.rpc_id(1, "add_to_peer_log", multiplayer.get_unique_id(), "No card defined for item " + str(item_name) + ". Please report this as a bug.")
-			#print("No card defined for item " + str(item_name))
-			
+
 func _on_equipment_pressed(parent_name: String):
 	equipment_button_parent_name = parent_name
 	
@@ -1124,7 +1134,7 @@ func _on_inventory_item_pressed(item_name: String, slot_name: String):
 
 	
 	if craft_active:
-		print("Requesting to use " + craft_active + " on " + selected_item_name)
+		#print("Requesting to use " + craft_active + " on " + selected_item_name)
 		
 		if multiplayer.is_server():
 			GameState_.use_craft_mat_on_item(multiplayer.get_unique_id(), craft_active, selected_item_name, selected_slot)
@@ -1240,12 +1250,12 @@ func _on_refresh_button_pressed():
 
 func _on_equipment_button_pressed():
 	equipment_pressed = !equipment_pressed
-	if equipment_pressed: 
-		equipment_panel.visible = true
-		attribute_panel.visible = true
-	else: 
-		equipment_panel.visible = false
-		attribute_panel.visible = false
+	if equipment_pressed: 1
+		#equipment_panel.visible = true
+		#attribute_panel.visible = true
+	else: 1
+		#equipment_panel.visible = false
+		#attribute_panel.visible = false
 
 func _on_shop_button_pressed():
 	shop_pressed = !shop_pressed
@@ -1461,10 +1471,10 @@ func _on_no_button_up() -> void:
 func enable_craft_with_material(crafting_mat, toggled_on):
 	
 	if toggled_on: 
-		print("Started crafting with " + crafting_mat)
+		#print("Started crafting with " + crafting_mat)
 		craft_active = crafting_mat
 	else: 
-		print("Stopped crafting with " + crafting_mat)
+		#print("Stopped crafting with " + crafting_mat)
 		craft_active = ""
 	
 
@@ -1476,3 +1486,47 @@ func _on_scroll_of_luck_toggled(toggled_on: bool):
 
 func _on_scroll_of_injection_toggled(toggled_on: bool) -> void:
 	enable_craft_with_material("scroll_of_injection", toggled_on)
+
+
+func pretty_print_dict(data: Dictionary, indent: int = 0) -> String:
+	var out := ""
+	var pad := "    ".repeat(indent)
+
+	for key in data.keys():
+		var value = data[key]
+
+		if typeof(value) == TYPE_DICTIONARY:
+			out += "%s%s:\n" % [pad, str(key)]
+			out += pretty_print_dict(value, indent + 1)
+
+		elif typeof(value) == TYPE_ARRAY:
+			out += "%s%s: [\n" % [pad, str(key)]
+			for item in value:
+				if typeof(item) in [TYPE_DICTIONARY, TYPE_ARRAY]:
+					out += pretty_print_dict(item, indent + 1)
+				else:
+					out += "%s    %s,\n" % [pad, str(item)]
+			out += "%s]\n" % pad
+
+		else:
+			out += "%s%s: %s\n" % [pad, str(key), str(value)]
+
+	#print(out)
+	return out
+
+
+func rename_equipment_panels(all_gladiators: Dictionary) -> void:
+	var ids := all_gladiators.keys()
+	ids.sort()  # optional but keeps order stable
+
+	var count := ids.size()
+	var max_panels := 8
+
+	# Loop only through the number of gladiators
+	for i in range(min(count, max_panels)):
+		var old_name := "EquipmentPanel" + str(i + 1)
+		if has_node(old_name):
+			var panel := get_node(old_name)
+			panel.name = "_EquipmentPanel" + str(ids[i])  # rename to gladiator ID
+		else:
+			push_warning("Node '%s' not found in scene" % old_name)

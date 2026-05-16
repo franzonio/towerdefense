@@ -129,7 +129,7 @@ func start_next_round():
 	# Get active player IDs (players still in the game)
 	var active_players = player_ids
 	
-	print("active_players: " + str(active_players))
+	#print("active_players: " + str(active_players))
 
 	if active_players.size() <= 1:
 		print("🏆 Game over or only one player left.")
@@ -168,19 +168,19 @@ func start_next_round():
 			spawn_duel_between(p1, p2, spawn_index)
 			spawn_index += 1
 		elif p1 != null:
-			print("✅ %s gets a free win this round (bye)." % p1)
+			#print("✅ %s gets a free win this round (bye)." % p1)
 			spawn_duel_between(p1, p2, spawn_index)
 			spawn_index += 1
 			register_duel_result(p1, -1)
 		elif p2 != null:
-			print("✅ %s gets a free win this round (bye)." % p2)
+			#print("✅ %s gets a free win this round (bye)." % p2)
 			spawn_duel_between(p1, p2, spawn_index)
 			spawn_index += 1
 			register_duel_result(p2, -1)
 		elif p1 == null and p2 == null: total_duels -= 1
 
 	current_round_index += 1
-	print("current_round_index: " + str(current_round_index))
+	#print("current_round_index: " + str(current_round_index))
 	if global_round_counter >= 2: GameState_.reroll_cards_new_round(active_players)
 	
 	# INTERMISSION PHASE
@@ -202,7 +202,7 @@ func too_many_null_duels(_round: Array) -> bool:
 	return false
 
 func register_duel_result(winner_id: int, loser_id: int = -1):
-	print("⚔️ Registering result for winner:", winner_id, " loser:", loser_id)
+	#print("⚔️ Registering result for winner:", winner_id, " loser:", loser_id)
 	_on_duel_finished(winner_id, loser_id)
 
 
@@ -214,12 +214,16 @@ func _on_gladiator_attribute_changed(new_all_gladiators: Dictionary):
 func spawn_duel_between(peer1, peer2, index: int):
 	var spawn_point_left = GameState_.spawn_points["left"][index]
 	var spawn_point_right = GameState_.spawn_points["right"][index]
+	
 	var meeting_point = GameState_.meeting_points[index % 4].global_position
 	var glad1
 	var glad2
 	if peer1 != null and peer2 != null:
 		var data1 = data[peer1]
 		var data2 = data[peer2]
+		#GameState_.set_spawn_point(peer1, spawn_point_left)
+		#GameState_.set_spawn_point(peer2, spawn_point_right)
+		
 		glad1 = gladiator_spawner.spawn({
 			"scene": "res://Player/Gladiator.tscn",
 			"peer_id": peer1,
@@ -236,8 +240,11 @@ func spawn_duel_between(peer1, peer2, index: int):
 			"spawn_point": spawn_point_right,
 			"meeting_point": meeting_point
 		})
+		
 	elif peer1 != null and peer2 == null:
 		var data1 = GameState_.all_gladiators[peer1]
+		#GameState_.set_spawn_point(peer1, spawn_point_left)
+		
 		glad1 = gladiator_spawner.spawn({
 			"scene": "res://Player/Gladiator.tscn",
 			"peer_id": peer1,
@@ -248,6 +255,8 @@ func spawn_duel_between(peer1, peer2, index: int):
 		})
 	elif peer1 == null and peer2 != null:
 		var data2 = GameState_.all_gladiators[peer2]
+		#GameState_.set_spawn_point(peer2, spawn_point_right)
+		
 		glad2 = gladiator_spawner.spawn({
 			"scene": "res://Player/Gladiator.tscn",
 			"peer_id": peer2,
@@ -265,14 +274,14 @@ func spawn_duel_between(peer1, peer2, index: int):
 
 func _on_duel_finished(winner_id: int, loser_id: int): #yes
 	await get_tree().process_frame
-	print("winner_id: " + str(winner_id))
+	#print("winner_id: " + str(winner_id))
 	if duel_results.has(winner_id): return  # Already processed
 	if winner_id == -1 or loser_id == -1: return
 	
 	duel_results[winner_id] = true
 	duel_results[loser_id] = false
 	
-	print("duel_results: " + str(duel_results))
+	#print("duel_results: " + str(duel_results))
 	
 	var base_gold = 3
 	#var winner_current_streak = GameState_.all_gladiators[winner_id]["streak"]
@@ -294,7 +303,7 @@ func _on_duel_finished(winner_id: int, loser_id: int): #yes
 			#print("player_ids: " + str(player_ids))
 			#print("all_gladiators: " + str (GameState_.all_gladiators))
 			for id in player_ids: 
-				print("life for " + str(id) + ": " + str(GameState_.all_gladiators[id]["player_life"]))
+				#print("life for " + str(id) + ": " + str(GameState_.all_gladiators[id]["player_life"]))
 				if id != null:
 					if GameState_.all_gladiators[id]["player_life"] <= 0:
 						ids_to_eliminate.append(id)
@@ -311,21 +320,21 @@ func _on_duel_finished(winner_id: int, loser_id: int): #yes
 				#await get_tree().process_frame
 				#await get_tree().process_frame
 				#await get_tree().process_frame
-			print("all_gladiators after erase: " + str (GameState_.all_gladiators))
+			#print("all_gladiators after erase: " + str (GameState_.all_gladiators))
 				
 	#if multiplayer.is_server():
-		print("len(player_ids): " + str(len(player_ids)) + " " + str(player_ids))
+		#print("len(player_ids): " + str(len(player_ids)) + " " + str(player_ids))
 		if duel_results.size() >= len(player_ids)/2.0: #total_duels*2:
 			#GameState_.add_to_log(get_multiplayer_authority(), "✅ All duels finished")
-			print("duel_results.size(): " + str(duel_results.size()))
+			#print("duel_results.size(): " + str(duel_results.size()))
 			await get_tree().create_timer(4.0).timeout  # Short break
-			print("after wait 4s")
+			#print("after wait 4s")
 			despawn_all_gladiators()
-			print("after despawn_all_gladiators()")
+			#print("after despawn_all_gladiators()")
 			duel_results.clear()
 			total_duels = 0
 			await get_tree().create_timer(4.0).timeout
-			print("after wait 4s, #2")
+			#print("after wait 4s, #2")
 			if player_ids.size() >= 2: 
 				start_next_round()
 			if player_ids.size() == 1: 
@@ -349,7 +358,7 @@ func remove_eliminated_from_rounds(eliminated_id: int):
 
 #@rpc("authority")
 func despawn_all_gladiators():  #yes
-	print("✅ Removing all gladiators from map")
+	#print("✅ Removing all gladiators from map")
 	var sync1 = get_node_or_null("/root/Main/GladiatorSpawner/Gladiator/MultiplayerSynchronizer")
 	var sync2 = get_node_or_null("/root/Main/GladiatorSpawner/Gladiator8/MultiplayerSynchronizer")
 	var sync3 = get_node_or_null("/root/Main/GladiatorSpawner/Gladiator2/MultiplayerSynchronizer")
@@ -378,7 +387,7 @@ func despawn_all_gladiators():  #yes
 		await get_tree().create_timer(0.1).timeout
 		if is_instance_valid(g): 
 			g.queue_free() 
-			print(str(g) + " was removed from map.")
+			#print(str(g) + " was removed from map.")
 
 @rpc("any_peer")
 func _on_peer_disconnected(id: int):

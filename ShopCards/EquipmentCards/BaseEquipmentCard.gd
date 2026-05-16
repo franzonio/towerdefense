@@ -44,6 +44,7 @@ var orig_absorb
 var equipment_script 
 var equipment_instance
 var equipment_data 
+var crafted_item_dict = {}
 
 func _ready():
 	equipment_script = load("res://Equipment.gd")
@@ -98,6 +99,9 @@ func _ready():
 		if all_gladiators != null:
 			_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
 			
+	
+func setup(_item_dict):
+	crafted_item_dict = _item_dict
 	
 func find_value_recursive(target_dict: Dictionary, target_key: String):
 	# 1. Check if the key exists at the current level
@@ -161,8 +165,14 @@ func _on_update_gold_req_shop(_id, gold):
 				name_label.bbcode_text = "[color=%s]%s[/color] \n💰%d " % [color, label_display, cost] 
 				
 			''' JUST ADDED THIS LINE, DOES IT WORK PROPERLY?'''
-			tooltip_text = get_item_tooltip(item_dict[equipment_name])
 			
+			
+			
+			if crafted_item_dict != {}:
+				tooltip_text = get_item_tooltip(crafted_item_dict[equipment_name])
+			else:
+				tooltip_text = get_item_tooltip(item_dict[equipment_name])
+				
 	#else: 1#print("no item dict!")
 
 func _on_equipment_card_updated(id, updated_item_dict, slot, item):
@@ -177,10 +187,16 @@ func _on_equipment_card_updated(id, updated_item_dict, slot, item):
 	if "slot" in slot: 
 		if parent_name != slot: return
 		tooltip_text = ""
-		tooltip_text = get_item_tooltip(updated_item_dict[item])
+		if crafted_item_dict != {}:
+			tooltip_text = get_item_tooltip(crafted_item_dict[item])
+		else:
+			tooltip_text = get_item_tooltip(updated_item_dict[item])
 	elif ucfirst(slot) in parent_name:
 		tooltip_text = ""
-		tooltip_text = get_item_tooltip(updated_item_dict[item])
+		if crafted_item_dict != {}:
+			tooltip_text = get_item_tooltip(crafted_item_dict[item])
+		else:
+			tooltip_text = get_item_tooltip(updated_item_dict[item])
 		
 
 	
@@ -214,7 +230,10 @@ func _on_send_equipment_dict_to_peer(id, _item_dict):
 		original_item_dict = item_dict.duplicate(true)
 		
 		if tooltip_text == "": 
-			tooltip_text = get_item_tooltip(item)
+			if crafted_item_dict != {}:
+				tooltip_text = get_item_tooltip(crafted_item_dict[equipment_name])
+			else:
+				tooltip_text = get_item_tooltip(item_dict[equipment_name])
 	
 
 

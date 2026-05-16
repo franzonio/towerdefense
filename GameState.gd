@@ -195,7 +195,7 @@ func update_all_equipment_cards(id):
 
 @rpc("any_peer", "call_local")
 func update_gold_req_in_shop_for_peer(id, gold):
-	print(all_gladiators)
+	#pretty_print_dict(all_gladiators)
 	emit_signal("signal_update_gold_req_in_shop_for_peer", id, gold)
 
 @rpc("any_peer", "call_local")
@@ -587,7 +587,7 @@ func equip_item(peer_id, equipment, selected_slot):
 				#print("Removing " + selected_slot + " from inventory")
 				rpc_id(peer_id, "remove_item_from_inventory", peer_id, item_dict, selected_slot)
 				rpc_id(peer_id, "add_item_to_equipment", peer_id, item_dict, category)
-				rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id][category], category, equipment)
+				#rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id][category], category, equipment)
 				#update_all_equipment_cards(peer_id)
 				
 			prev_total_modifier_bonuses = all_gladiators[peer_id].get("total_modifier_bonuses", {})
@@ -610,7 +610,7 @@ func equip_item(peer_id, equipment, selected_slot):
 			# TODO Apply item modifier bonuses
 			#if modifier_bonuses != {}: 1 
 			
-			print(all_gladiators[peer_id]["attributes"]["endurance"])
+			#print(all_gladiators[peer_id]["attributes"]["endurance"])
 			#print(all_gladiators[peer_id])
 			
 			# Add weight of item
@@ -618,6 +618,8 @@ func equip_item(peer_id, equipment, selected_slot):
 				
 			#print(all_gladiators[peer_id])
 			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
+			#rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id][category], category, equipment)
+			
 			update_all_equipment_cards(peer_id)
 		else: add_to_peer_log(peer_id, "[INFO] ❌Need " + str(str_req) + " strength to equip item, you have " + str(int(all_gladiators[peer_id]["attributes"]["strength"])) + "!")
 	else: add_to_peer_log(peer_id, "[INFO] ❌Item requires level " + str(lvl_req) + " to equip, you are level " + str(all_gladiators[peer_id]["level"]))
@@ -912,7 +914,7 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int):
 			if all_gladiators.has(id):
 				var key = "increased_" + attribute
 				var amount_after_bonuses = float(amount)*RACE_MODIFIERS[race][attribute]*(1+float(total_modifier_bonuses.get(key, 0))/100)
-				print("amount_after_bonuses: " + str(amount_after_bonuses))
+				#print("amount_after_bonuses: " + str(amount_after_bonuses))
 				all_gladiators[id]["attributes"][attribute] += amount_after_bonuses
 				all_gladiators[id]["gold"] -= cost
 				emit_signal("gladiator_attribute_changed", all_gladiators)
@@ -956,18 +958,18 @@ func modify_gladiator_life(id: int, life_lost: int):
 
 func submit_gladiator(data: Dictionary):
 	gladiator_data = data
-	print("Submiting gladiator for peer: %d" % [multiplayer.get_unique_id()])
+	#print("Submiting gladiator for peer: %d" % [multiplayer.get_unique_id()])
 	if multiplayer.get_unique_id() == 1:
 		_store_gladiator(multiplayer.get_unique_id(), data)
 	else:
-		print("📨 Sending gladiator to host via rpc_id...")
+		#print("📨 Sending gladiator to host via rpc_id...")
 		_submit_gladiator_remote.rpc_id(1, data)
 	
 
 @rpc("any_peer", "call_local")
 func _submit_gladiator_remote(data: Dictionary):
 	var sender_id = multiplayer.get_remote_sender_id()
-	print("✅ Host received gladiator from peer:", sender_id)
+	#print("✅ Host received gladiator from peer:", sender_id)
 	_store_gladiator(sender_id, data)
 
 func _store_gladiator(peer_id: int, data: Dictionary):
@@ -996,7 +998,7 @@ func _store_gladiator(peer_id: int, data: Dictionary):
 	for i in multiplayer.get_peers():
 		if i == 0: continue
 		total_peers += 1
-	print("all_gladiators.size(): " + str(all_gladiators.size()) + " | multiplayer.get_peers(): " + str(multiplayer.get_peers()))
+	#print("all_gladiators.size(): " + str(all_gladiators.size()) + " | multiplayer.get_peers(): " + str(multiplayer.get_peers()))
 	if all_gladiators.size() == total_peers+1:# and len(multiplayer.get_peers()) > 1:  # >= NetworkManager_.max_players + 1:
 		
 		#await get_tree().create_timer(2).timeout
@@ -1010,7 +1012,7 @@ func _store_gladiator(peer_id: int, data: Dictionary):
 		
 @rpc("authority")
 func _start_game():
-	print("All gladiators submitted! Starting game...")
+	#print("All gladiators submitted! Starting game...")
 	players_ready_list = []
 	get_tree().change_scene_to_file.bind("res://main.tscn").call_deferred()
 
@@ -1019,12 +1021,10 @@ func erase_all_data():
 
 func _assign_authority():
 	if multiplayer.is_server():
-		print("🌐 Assigning multiplayer authority on host " + str(multiplayer.get_unique_id()))
+		#print("🌐 Assigning multiplayer authority on host " + str(multiplayer.get_unique_id()))
 		set_multiplayer_authority(multiplayer.get_unique_id())
 		
-		print("✅ Authority set to:", get_multiplayer_authority())
-	else:
-		print("ℹ️ Client does not assign authority")
+		#print("✅ Authority set to:", get_multiplayer_authority())
 
 func kill_peer(id: int):
 	emit_signal("killed_by_server_signal", id)
@@ -1036,7 +1036,7 @@ func reroll_cards_new_round(_active_players: Array):
 	
 @rpc("authority", "call_local")
 func reroll_cards_new_round_send_signal(_active_players: Array):
-	print("Emitting signal reroll_cards_new_round, active_players = " + str(_active_players))
+	#print("Emitting signal reroll_cards_new_round, active_players = " + str(_active_players))
 	emit_signal("reroll_cards_new_round_signal", _active_players)
 
 
@@ -1128,11 +1128,12 @@ func use_craft_mat_on_item(id, craft_mat, item, slot):
 			
 	all_gladiators[id]["crafting_mats"][craft_mat] -= 1
 	all_gladiators[id]["inventory"][slot] = item_dict_to_craft.duplicate(true)
-	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
-	rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
-	rpc_id(id, "update_equipment_card", id, all_gladiators[id]["inventory"][slot], slot, item)
 	
-	print(all_gladiators[id])
+	#rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+	rpc_id(id, "update_equipment_card", id, all_gladiators[id]["inventory"][slot], slot, item)
+	rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+	
+	#pretty_print_dict(all_gladiators[id])
 
 
 
@@ -1490,4 +1491,35 @@ func get_possible_bonuses_for_item(item_dict):
 	# 			drains X dmg per sec, inc dmg % / attack speed %
 
 	return possible_bonuses
+	
+func pretty_print_dict(data: Dictionary, indent: int = 0) -> String:
+	var out := ""
+	var pad := "    ".repeat(indent)
+
+	for key in data.keys():
+		var value = data[key]
+
+		if typeof(value) == TYPE_DICTIONARY:
+			out += "%s%s:\n" % [pad, str(key)]
+			out += pretty_print_dict(value, indent + 1)
+
+		elif typeof(value) == TYPE_ARRAY:
+			out += "%s%s: [\n" % [pad, str(key)]
+			for item in value:
+				if typeof(item) in [TYPE_DICTIONARY, TYPE_ARRAY]:
+					out += pretty_print_dict(item, indent + 1)
+				else:
+					out += "%s    %s,\n" % [pad, str(item)]
+			out += "%s]\n" % pad
+
+		else:
+			out += "%s%s: %s\n" % [pad, str(key), str(value)]
+
+	#print(out)
+	return out
+
+@rpc("any_peer", "call_local")
+func set_spawn_point(peer, point):
+	all_gladiators[peer]["spawn_point"] = point
+	rpc("send_gladiator_data_to_peer", peer, all_gladiators[peer], all_gladiators)
 	

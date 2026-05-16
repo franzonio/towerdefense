@@ -22,7 +22,6 @@ icon = ExtResource("3_d6x88")
 expand_icon = true
 script = ExtResource("3_y2lo4")
 equipment_name = "battleworn_blade"
-cost = 20
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 0

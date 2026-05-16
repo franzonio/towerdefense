@@ -500,11 +500,11 @@ func check_for_attack(delta: float):
 func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_chance, _crit_multi):
 	# crit_chance = 1 + (wep_base_crit*local_wep_crit_bonus)*(1+global_crit_bonus)
 	
-	print("live: before bonuses: " + str(_hit_chance) + " | " + str(_crit_chance) + " | " + str(_crit_multi))
+	#print("live: before bonuses: " + str(_hit_chance) + " | " + str(_crit_chance) + " | " + str(_crit_multi))
 	_hit_chance += combined_gladiator_bonuses.get("added_hit_chance", 0)/100.0
 	_crit_chance = _crit_chance*(1+combined_gladiator_bonuses.get("global_increased_crit_chance", 0)/100.0)
 	_crit_multi = _crit_multi*(1+combined_gladiator_bonuses.get("global_increased_crit_multi", 0)/100.0)
-	print("live: after bonuses: " + str(_hit_chance) + " | " + str(_crit_chance) + " | " + str(_crit_multi))
+	#print("live: after bonuses: " + str(_hit_chance) + " | " + str(_crit_chance) + " | " + str(_crit_multi))
 	var life_on_hit = combined_gladiator_bonuses.get("life_on_hit", 0)
 	
 	var added_min_dmg = 0
@@ -632,7 +632,7 @@ func receive_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_
 func _on_killed_by_server_signal(id):
 	if get_multiplayer_authority() == id: 
 		die()
-		print(str(id) + " was killed by host.")
+		#print(str(id) + " was killed by host.")
 
 @rpc("any_peer", "call_local")
 func die():
@@ -693,6 +693,8 @@ func handle_ai_movement(delta):
 func initialize_gladiator(data, opponent_id, _spawn_point, meeting_point, peer_id):
 	spawn_point = _spawn_point
 	position = _spawn_point
+	data["spawn_point"] = _spawn_point
+	#print("global_position " + str(opponent_id) + ": " + str(data["spawn_point"]))
 	
 	owner_id = peer_id
 	if opponent_id: 
@@ -797,7 +799,7 @@ func update_gladiator_after_strategy(hit_chance_penalty, dodge_mod):
 @rpc("any_peer", "call_local")
 func update_gladiator(data: Dictionary):
 	combined_gladiator_bonuses = data.get("total_modifier_bonuses", {})
-	print("combined_gladiator_bonuses: " + str(combined_gladiator_bonuses))
+	#print("combined_gladiator_bonuses: " + str(combined_gladiator_bonuses))
 	
 	recalculated_hit_chance = 0
 	#print("update_gladiator: " + str(data))
@@ -905,7 +907,7 @@ func update_gladiator(data: Dictionary):
 	weapon2_durability = data["weapon2"][weapon2_name]["durability"]
 	
 	life_on_block = combined_gladiator_bonuses.get("life_on_block", 0)
-	print("life_on_block ready: " + str(life_on_block))
+	#print("life_on_block ready: " + str(life_on_block))
 	shield_absorb = data["weapon2"][weapon2_name].get("absorb", -1)
 	weapon1_can_parry = data["weapon1"][weapon1_name]["parry"]
 	weapon2_can_parry = data["weapon2"][weapon2_name]["parry"]
