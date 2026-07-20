@@ -1,39 +1,14 @@
-[gd_scene load_steps=10 format=3 uid="uid://caiuxrar36pdn"]
+[gd_scene load_steps=6 format=3 uid="uid://caiuxrar36pdn"]
 
 [ext_resource type="Script" uid="uid://ddffo2pk1p66v" path="res://Main.gd" id="1_4c57u"]
-[ext_resource type="Texture2D" uid="uid://bk8morudcswu7" path="res://Assets/Map/battlefield_grass-Sheet.png" id="2_5vw27"]
+[ext_resource type="Texture2D" uid="uid://d1cvx365jvinu" path="res://Assets/Map/background.png" id="2_h2yge"]
 [ext_resource type="Script" uid="uid://cs4ijuksemqna" path="res://Camera2D.gd" id="3_84ssy"]
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_5vw27"]
-atlas = ExtResource("2_5vw27")
-region = Rect2(0, 0, 1920, 1080)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_kek77"]
-atlas = ExtResource("2_5vw27")
-region = Rect2(1920, 0, 1920, 1080)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_4c57u"]
-atlas = ExtResource("2_5vw27")
-region = Rect2(3840, 0, 1920, 1080)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_efxa6"]
-atlas = ExtResource("2_5vw27")
-region = Rect2(5760, 0, 1920, 1080)
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ycdy4"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": SubResource("AtlasTexture_5vw27")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_kek77")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_4c57u")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_efxa6")
+"texture": ExtResource("2_h2yge")
 }],
 "loop": true,
 "name": &"default",
@@ -51,9 +26,10 @@ script = ExtResource("1_4c57u")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(960, 540)
+scale = Vector2(3.9999998, 4)
 sprite_frames = SubResource("SpriteFrames_ycdy4")
 autoplay = "default"
-frame_progress = 0.570919
+frame_progress = 0.21111122
 
 [node name="NavigationRegion2D" type="NavigationRegion2D" parent="."]
 visible = false
@@ -74,7 +50,7 @@ spawn_path = NodePath(".")
 [node name="SpawnPoints" type="Node2D" parent="."]
 
 [node name="SpawnPoint0" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(86, 404)
+position = Vector2(300, 400)
 
 [node name="SpawnPoint1" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(1024, 551)
@@ -86,7 +62,7 @@ position = Vector2(434, 754)
 position = Vector2(1069, 664)
 
 [node name="SpawnPoint4" type="Marker2D" parent="SpawnPoints"]
-position = Vector2(987, 490)
+position = Vector2(760, 400)
 
 [node name="SpawnPoint5" type="Marker2D" parent="SpawnPoints"]
 position = Vector2(1529, 450)
@@ -100,7 +76,7 @@ position = Vector2(1554, 706)
 [node name="MeetingPoints" type="Node2D" parent="."]
 
 [node name="MeetingPoint0" type="Marker2D" parent="MeetingPoints"]
-position = Vector2(676, 455)
+position = Vector2(527, 402)
 
 [node name="MeetingPoint1" type="Marker2D" parent="MeetingPoints"]
 position = Vector2(1316, 451)

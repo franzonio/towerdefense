@@ -20,7 +20,6 @@ theme_override_icons/icon = ExtResource("2_3cgbi")
 expand_icon = true
 script = ExtResource("3_ig11g")
 equipment_name = "wooden_sword"
-cost = 20
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]
 layout_mode = 0

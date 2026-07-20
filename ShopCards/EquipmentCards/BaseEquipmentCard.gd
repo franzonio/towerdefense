@@ -22,14 +22,20 @@ signal mouse_inside_equipment_card_signal(mouse_inside_equipment_card: bool)
 
 var name_color := "ab9b8e"#"ef692f"
 var base_text_color := "ab9b8e"#"927e6a"
-var base_value_color := "d2c9a5"#"efd8a1"
-var req_ok_color := "d2c9a5"#"efd8a1"
-var req_nok_color := "79444a"#"ef3a0c"
-var mod_color := "3c9f9c"#"8caba1"
+var base_value_color := "#EBE6D3"#"efd8a1"
+var req_ok_color := "#EBE6D3"#"efd8a1"
+var req_nok_color := "#774349"#"ef3a0c"
+var mod_color := "#00877E"#"8caba1"
 
-var weapon_color := "d2c9a5"#Color.DARK_GRAY.to_html(false)
-var armor_color := "ba9158"#Color.BURLYWOOD.to_html(false)
-var jewellery_color := "b3a555"#Color.GOLDENROD.to_html(false)
+#var weapon_color := "d2c9a5"#Color.DARK_GRAY.to_html(false)
+#var armor_color := "ba9158"#Color.BURLYWOOD.to_html(false)
+#var jewellery_color := "b3a555"#Color.GOLDENROD.to_html(false)
+
+var tier 
+var t1_color := "D1B187"
+var t2_color := "#00877E"
+var t3_color := "#D2B600"
+var t4_color := "#D2004F"
 
 var label_display
 
@@ -45,13 +51,22 @@ var equipment_script
 var equipment_instance
 var equipment_data 
 var crafted_item_dict = {}
+var cost_label
 
 func _ready():
+	add_theme_color_override("icon_hover_color", Color(1.27, 1.27, 1.27, 1.0))#"ffffffb5") #b00098
+	add_theme_color_override("icon_disabled_color", "ffffff")
+	add_theme_color_override("icon_hover_pressed_color", "ffffffb5")
+	add_theme_color_override("icon_pressed_color", "ffffffb5")
+	flat = true
+	pivot_offset = Vector2(128,128)
+	
 	equipment_script = load("res://Equipment.gd")
 	equipment_instance = equipment_script.new()
 	equipment_data = equipment_instance.all_equipment
 	var item = find_value_recursive(equipment_data, equipment_name)
 	cost = item["price"]
+	tier = item["tier"]
 	
 	set_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
 	#ProjectSettings.set_setting("gui/timers/tooltip_delay_sec", 5.0)
@@ -86,16 +101,32 @@ func _ready():
 		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		name_label.scroll_active = false
-		name_label.position.y = -100
+		name_label.position.y = -70
 		name_label.position.x = 30
-		
 		name_label.size = Vector2(128,128)
-		
-		#name_label.set_anchors_preset(Control.PRESET_TOP_WIDE)
 		name_label.add_theme_color_override("font_outline_color", Color.BLACK)
 		name_label.add_theme_constant_override("outline_size", 5)
-		"theme_override_constants/outline_size"
+		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		
+		cost_label = RichTextLabel.new()
+		cost_label.add_theme_font_size_override("normal_font_size", 32)
+		cost_label.add_theme_font_size_override("bold_font_size", 32)
+		cost_label.bbcode_enabled = true
+		cost_label.fit_content = false
+		cost_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		cost_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		cost_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		cost_label.scroll_active = false
+		cost_label.position.y = 158
+		cost_label.position.x = 30#100
+		cost_label.size = Vector2(128,128)
+		cost_label.add_theme_color_override("font_outline_color", Color.BLACK)
+		cost_label.add_theme_constant_override("outline_size", 5)
+		cost_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		
+		add_child(cost_label)
 		add_child(name_label)
+		
 		if all_gladiators != null:
 			_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
 			
@@ -119,7 +150,12 @@ func find_value_recursive(target_dict: Dictionary, target_key: String):
 	return null
 
 func _make_custom_tooltip(for_text):
-	
+	if modulate.a == 0:
+		tooltip_text = ""
+		return ""   # disables tooltip
+	if for_text == "": 
+		return
+		
 	var label = RichTextLabel.new()
 	label.set_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
 	label.add_theme_font_size_override("normal_font_size", 20)
@@ -140,6 +176,16 @@ func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int, _player_gladiato
 	all_gladiators = _all_gladiators
 	_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
 
+func set_text_color(tier):
+	var color
+	
+	if tier == 1: color = t1_color
+	elif tier == 2: color = t2_color
+	elif tier == 3: color = t3_color
+	elif tier == 4: color = t4_color
+		
+	return color
+
 func _on_update_gold_req_shop(_id, gold):
 	#print("_on_update_gold_req_shop: " + str(_id))
 	
@@ -153,16 +199,17 @@ func _on_update_gold_req_shop(_id, gold):
 			var item_type = item_dict[equipment_name]["type"]
 			var color = Color.WHITE.to_html(false)
 			
-			if item_type == "weapon": color = weapon_color
-			elif item_type == "armor": color = armor_color
-			elif item_type == "jewellery": color = jewellery_color
-			
-			
-			
-			if gold < cost:
-				name_label.bbcode_text = "[color=%s]%s[/color] \n💰[color=%s]%d[/color] " % [color, label_display, req_nok_color, cost] 
-			else:
-				name_label.bbcode_text = "[color=%s]%s[/color] \n💰%d " % [color, label_display, cost] 
+			color = set_text_color(tier)
+			#var color = "#CD8900"
+			var gold_color = "#d2b600"
+	
+			if parent_name == "ShopGridContainer":
+				if gold < cost:
+					name_label.bbcode_text = "[color=%s]%s[/color]" % [color, label_display] 
+					cost_label.bbcode_text = "[color=%s]%d[/color]" 	% [req_nok_color, cost]
+				else:
+					name_label.bbcode_text = "[color=%s]%s[/color]" % [color, label_display] 
+					cost_label.bbcode_text = "[color=%s]$ %d[/color]" 	% [gold_color, cost]
 				
 			''' JUST ADDED THIS LINE, DOES IT WORK PROPERLY?'''
 			
@@ -247,13 +294,12 @@ func format_name(raw_name: String) -> String:
 	return joined.capitalize()                 # → "Simple Sword"
 
 func _on_mouse_entered():
-	#print(unique_id)
-	#var my_id = multiplayer.get_unique_id()
+	pivot_offset = size / 2
 	mouse_inside_button = true
 	emit_signal("mouse_inside_equipment_card_signal", mouse_inside_button)
 	if parent_name == "ShopGridContainer":
 		var tween := get_tree().create_tween()
-		tween.tween_property(self, "scale", Vector2(1.05, 1.05), 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+		tween.tween_property(self, "scale", Vector2(1.1, 1.1), 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 		
 
 	
@@ -266,7 +312,6 @@ func _on_mouse_exited():
 		tween.tween_property(self, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 
 func _on_button_up():
-	
 	emit_signal("button_parent", parent_name)
 	
 	if parent_name == "ShopGridContainer": 
@@ -294,11 +339,13 @@ func buy_equipment():
 		await get_tree().create_timer(0.15).timeout
 		#print(added)
 		if added:
+			tooltip_text = ""
 			print("💰Bought " + equipment_name + " card")
 			mouse_inside_button = false
 			disabled = true
 			var tween := get_tree().create_tween()
-			tween.tween_property(self, "modulate:a", 0, 0.2).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+			tween.tween_property(self, "modulate:a", 0, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+			TweenFX.fold_out(self, 0.2)
 
 func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data):
 	if peer_id == multiplayer.get_unique_id():
@@ -344,9 +391,7 @@ func get_item_tooltip(item_data: Dictionary):
 	var type = item_data.get("type", "None")
 	var absorb = item_data.get("absorb", -1)
 	
-	if type == "jewellery": name_color = jewellery_color
-	elif type == "armor": name_color = armor_color
-	elif type == "weapon": name_color = weapon_color
+	name_color = set_text_color(tier)
 
 	var tooltip = "[color=%s]%s[/color]\n" % [name_color, display_name]
 	#tooltip += "%Level %d\n" % [level]
@@ -466,7 +511,7 @@ func get_item_tooltip(item_data: Dictionary):
 		"axe_mastery": "Axe Mastery",
 		"mace_mastery": "Mace Mastery",
 		"stabbing_mastery": "Stabbing Mastery",
-		"flagellation_mastery": "flagellation Mastery",
+		"flagellation_mastery": "Flagellation Mastery",
 		"shield_mastery": "Shield Mastery",
 		"unarmed_mastery": "Unarmed Mastery",
 		
@@ -512,7 +557,7 @@ func get_item_tooltip(item_data: Dictionary):
 				var value1 = mods_bonuses[key][0]
 				var value2 = mods_bonuses[key][1]
 				mod_lines.append("[color=%s]%.2f%% life drained per second\n %.0f%% increased damage[/color]" % [mod_color, value1, value2])
-			if key == "to_gold_income":
+			elif key == "to_gold_income":
 				var value = mods_bonuses[key]
 				var label = mod_labels.get(key, key.capitalize())
 				mod_lines.append("[color=%s]Gain %s extra gold per round[/color]" % [mod_color, value])

@@ -84,20 +84,20 @@ def main():
 
     # 1. Update Weapons
     weapon_keys = [
-        'min_dmg', 'max_dmg', 'weight', 'speed', 'crit_chance', 
+        'tier', 'min_dmg', 'max_dmg', 'weight', 'speed', 'crit_chance', 
         'crit_multi', 'durability', 'str_req', 'skill_req', 'price'
     ]
     content, unused_w = update_category('weapons_base_stats.csv', content, weapon_keys, "Weapons")
 
     # 2. Update Shields
     shield_keys = [
-        'absorb', 'weight', 'durability', 'str_req', 'skill_req', 'price', 'stock', 'level'
+        'tier', 'absorb', 'weight', 'durability', 'str_req', 'skill_req', 'price', 'stock', 'level'
     ]
     content, unused_s = update_category('shield_base_stats.csv', content, shield_keys, "Shields")
 
     # 3. Update Armor
     armor_keys = [
-        'absorb', 'weight', 'str_req', 'price', 'stock', 'level'
+        'tier', 'absorb', 'weight', 'str_req', 'price', 'stock', 'level'
     ]
     content, unused_a = update_category('armor_base_stats.csv', content, armor_keys, "Armor")
 

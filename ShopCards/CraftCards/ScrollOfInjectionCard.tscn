@@ -11,6 +11,7 @@ scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme = ExtResource("1_31r7l")
+theme_override_colors/icon_hover_color = Color(1.9614621, 1.9614621, 1.9614621, 1)
 theme_override_icons/icon = ExtResource("2_6a4qw")
 expand_icon = true
 script = ExtResource("1_eylmr")

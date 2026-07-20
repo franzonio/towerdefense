@@ -1,0 +1,703 @@
+[gd_scene load_steps=5 format=3 uid="uid://bt21imgkgrpjm"]
+
+[ext_resource type="Script" uid="uid://bfpo3nty4nyn7" path="res://UI/AttributeAllocation.gd" id="1_tvy0e"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_tvy0e"]
+properties/0/path = NodePath(".:total_peers")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+
+[sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ers0q"]
+load_path = "res://.godot/imported/battlefield_grass.png-e5cddb3c47484e286f5272d6124ff1c1.ctex"
+
+[sub_resource type="LabelSettings" id="LabelSettings_5miig"]
+font_size = 26
+font_color = Color(0.928571, 0.68508, 0.36248, 1)
+outline_size = 2
+outline_color = Color(0, 0, 0, 1)
+
+[node name="AttributeAllocation" type="Control"]
+texture_filter = 1
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tvy0e")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_tvy0e")
+
+[node name="Background" type="TextureRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("CompressedTexture2D_ers0q")
+expand_mode = 1
+
+[node name="Panel" type="Panel" parent="."]
+self_modulate = Color(0, 0, 0, 0.52549)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="GridContainer" type="GridContainer" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -186.5
+offset_top = -151.5
+offset_right = 186.5
+offset_bottom = 151.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/h_separation = 50
+columns = 4
+
+[node name="Health_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Health" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "How much health your gladiator has when starting a duel."
+mouse_filter = 1
+text = "Health"
+
+[node name="Health_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Health_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Health_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Health_Sub" type="Button" parent="GridContainer/Health_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Health_Add" type="Button" parent="GridContainer/Health_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Strength_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="Strength" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Strength impacts how heavy weapons your gladiator can wield, and how hard you hit."
+mouse_filter = 1
+text = "Strength"
+
+[node name="Strength_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Strength_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Strength_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+alignment = 2
+
+[node name="Strength_Sub" type="Button" parent="GridContainer/Strength_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Strength_Add" type="Button" parent="GridContainer/Strength_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Quickness_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Quickness" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Quickness determines how fast your gladiator attacks."
+mouse_filter = 1
+text = "Quickness"
+
+[node name="Quickness_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Quickness_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Quickness_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Quickness_Sub" type="Button" parent="GridContainer/Quickness_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Quickness_Add" type="Button" parent="GridContainer/Quickness_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Crit Rating_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Crit Rating" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Criticality determines the likelihood of landing a crushing blow."
+mouse_filter = 1
+text = "Criticality"
+
+[node name="Crit Rating_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Crit Rating_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Crit Rating_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Crit Rating_Sub" type="Button" parent="GridContainer/Crit Rating_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Crit Rating_Add" type="Button" parent="GridContainer/Crit Rating_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Avoidance_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Avoidance" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Avoidance determines the likelihood of dodging in incoming attack."
+mouse_filter = 1
+text = "Avoidance"
+
+[node name="Avoidance_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Avoidance_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Avoidance_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Avoidance_Sub" type="Button" parent="GridContainer/Avoidance_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Avoidance_Add" type="Button" parent="GridContainer/Avoidance_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Resilience_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Resilience" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Resilience determines the effectiveness of your armor."
+mouse_filter = 1
+text = "Resilience"
+
+[node name="Resilience_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Resilience_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Resilience_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Resilience_Sub" type="Button" parent="GridContainer/Resilience_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Resilience_Add" type="Button" parent="GridContainer/Resilience_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Endurance_Modifier" type="Label" parent="GridContainer"]
+layout_direction = 2
+layout_mode = 2
+
+[node name="Endurance" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Endurance determines how long the gladiator can fight before collapsing from fatigue"
+mouse_filter = 1
+text = "Endurance"
+
+[node name="Endurance_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Endurance_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Endurance_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 8
+
+[node name="Endurance_Sub" type="Button" parent="GridContainer/Endurance_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Endurance_Add" type="Button" parent="GridContainer/Endurance_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="1" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="2" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="3" type="Label" parent="GridContainer"]
+layout_mode = 2
+text = "             "
+
+[node name="4" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 6
+
+[node name="Sword Mastery_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Sword Mastery" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
+mouse_filter = 1
+text = "Sword Mastery"
+
+[node name="Sword Mastery_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Sword Mastery_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Sword Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Sword Mastery_Sub" type="Button" parent="GridContainer/Sword Mastery_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Sword Mastery_Add" type="Button" parent="GridContainer/Sword Mastery_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Axe Mastery_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Axe Mastery" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
+mouse_filter = 1
+text = "Axe Mastery"
+
+[node name="Axe Mastery_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Axe Mastery_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Axe Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Axe Mastery_Sub" type="Button" parent="GridContainer/Axe Mastery_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Axe Mastery_Add" type="Button" parent="GridContainer/Axe Mastery_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Stabbing Mastery_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Stabbing Mastery" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
+mouse_filter = 1
+text = "Dagger Mastery"
+
+[node name="Stabbing Mastery_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Stabbing Mastery_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Stabbing Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Stabbing Mastery_Sub" type="Button" parent="GridContainer/Stabbing Mastery_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Stabbing Mastery_Add" type="Button" parent="GridContainer/Stabbing Mastery_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Mace Mastery_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Mace Mastery" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
+mouse_filter = 1
+text = "Mace Mastery"
+
+[node name="Mace Mastery_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Mace Mastery_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Mace Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Mace Mastery_Sub" type="Button" parent="GridContainer/Mace Mastery_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Mace Mastery_Add" type="Button" parent="GridContainer/Mace Mastery_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Flagellation Mastery_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Flagellation Mastery" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
+mouse_filter = 1
+text = "Flagellation Mastery"
+
+[node name="Flagellation Mastery_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Flagellation Mastery_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Flagellation Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Flagellation Mastery_Sub" type="Button" parent="GridContainer/Flagellation Mastery_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Flagellation Mastery_Add" type="Button" parent="GridContainer/Flagellation Mastery_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Shield Mastery_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Shield Mastery" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
+mouse_filter = 1
+text = "Shield Mastery"
+
+[node name="Shield Mastery_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Shield Mastery_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Shield Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Shield Mastery_Sub" type="Button" parent="GridContainer/Shield Mastery_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Shield Mastery_Add" type="Button" parent="GridContainer/Shield Mastery_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="Unarmed Mastery_Modifier" type="Label" parent="GridContainer"]
+layout_mode = 2
+
+[node name="Unarmed Mastery" type="Label" parent="GridContainer"]
+layout_mode = 2
+tooltip_text = "Weapon mastery determines how well your gladiator can handle a weapon in relation to its requirement."
+mouse_filter = 1
+text = "Unarmed Mastery"
+
+[node name="Unarmed Mastery_Value" type="Label" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+text = "0"
+
+[node name="Unarmed Mastery_Final" type="Label" parent="GridContainer"]
+visible = false
+layout_mode = 2
+size_flags_horizontal = 6
+text = "0"
+
+[node name="Unarmed Mastery_Buttons" type="HBoxContainer" parent="GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 10
+
+[node name="Unarmed Mastery_Sub" type="Button" parent="GridContainer/Unarmed Mastery_Buttons"]
+layout_mode = 2
+text = "-"
+
+[node name="Unarmed Mastery_Add" type="Button" parent="GridContainer/Unarmed Mastery_Buttons"]
+layout_mode = 2
+text = "+"
+
+[node name="RemainingLabel" type="Label" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -38.0
+offset_top = 283.0
+offset_right = 116.0
+offset_bottom = 306.0
+grow_horizontal = 2
+text = "Remaining points: X"
+
+[node name="StartGameContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -35.5
+offset_top = -173.0
+offset_right = 35.5
+offset_bottom = -142.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="PlayersReadyLabel" type="Label" parent="StartGameContainer"]
+texture_filter = 1
+layout_mode = 2
+text = "0/8 ready"
+horizontal_alignment = 1
+
+[node name="ConfirmButton" type="Button" parent="."]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -35.5
+offset_top = -102.0
+offset_right = 35.5
+offset_bottom = -71.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Confirm"
+
+[node name="GoBack" type="Button" parent="."]
+texture_filter = 1
+layout_mode = 1
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 73.0
+offset_bottom = 39.0
+text = "Disconnect"
+
+[node name="ChatPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -251.0
+offset_right = 541.0
+offset_bottom = -39.0
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ChatScroll" type="ScrollContainer" parent="ChatPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ChatLog" type="VBoxContainer" parent="ChatPanel/ChatScroll"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -35.0
+offset_right = 541.0
+offset_bottom = -4.0
+grow_vertical = 0
+
+[node name="ChatInput" type="LineEdit" parent="HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+placeholder_text = "Type here..."
+keep_editing_on_text_submit = true
+clear_button_enabled = true
+draw_control_chars = true
+caret_blink = true
+
+[node name="SendButton" type="Button" parent="HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 8
+text = "Send"
+
+[node name="RaceSelectionTitle" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -128.5
+offset_top = 58.0
+offset_right = 128.5
+offset_bottom = 94.0
+grow_horizontal = 2
+text = "CHOOSE YOUR RACE"
+label_settings = SubResource("LabelSettings_5miig")
+horizontal_alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.5
+offset_top = -68.0
+offset_right = 32.5
+offset_bottom = 68.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Human" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Human"
+
+[node name="Elf" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Elf"
+
+[node name="Orc" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Orc"
+
+[node name="Troll" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Troll"
+
+[connection signal="pressed" from="GridContainer/Strength_Buttons/Strength_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Quickness_Buttons/Quickness_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Crit Rating_Buttons/Crit Rating_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Avoidance_Buttons/Avoidance_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Resilience_Buttons/Resilience_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Endurance_Buttons/Endurance_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Sword Mastery_Buttons/Sword Mastery_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Axe Mastery_Buttons/Axe Mastery_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Stabbing Mastery_Buttons/Stabbing Mastery_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Mace Mastery_Buttons/Mace Mastery_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Flagellation Mastery_Buttons/Flagellation Mastery_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Shield Mastery_Buttons/Shield Mastery_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="pressed" from="GridContainer/Unarmed Mastery_Buttons/Unarmed Mastery_Sub" to="." method="_on_strength_sub_pressed"]

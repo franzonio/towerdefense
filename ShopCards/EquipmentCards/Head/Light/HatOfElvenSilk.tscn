@@ -18,6 +18,5 @@ icon = ExtResource("2_veuse")
 expand_icon = true
 script = ExtResource("2_y2dax")
 equipment_name = "hat_of_elven_silk"
-cost = 20
 
 [connection signal="button_up" from="." to="." method="_on_button_up"]

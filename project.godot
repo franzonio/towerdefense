@@ -8,6 +8,10 @@
 
 config_version=5
 
+[animation]
+
+warnings/check_invalid_track_paths=false
+
 [application]
 
 config/name="Gladiator"
@@ -21,13 +25,19 @@ config/icon="res://icon.svg"
 NetworkManager_="*res://Scripts/NetworkManager.gd"
 GameState_="*res://GameState.tscn"
 SteamManager_="*res://Scripts/Multiplayer/SteamManager.gd"
+TweenFX="*res://addons/TweenFX/TweenFX.gd"
 
 [display]
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
+window/size/no_focus=true
 window/stretch/mode="canvas_items"
 window/dpi/allow_hidpi=false
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/TweenFX/plugin.cfg")
 
 [gui]
 
@@ -97,5 +107,5 @@ focus_chat={
 
 [rendering]
 
-textures/canvas_textures/default_texture_filter=0
+textures/canvas_textures/default_texture_filter=3
 textures/vram_compression/import_etc2_astc=true

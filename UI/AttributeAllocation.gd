@@ -157,7 +157,7 @@ func _on_peer_disconnected(id: int):
 func on_race_selected(race: String):
 	#print("multiplayer.get_unique_id(): " + str(multiplayer.get_unique_id()))
 	var color = player_colors[multiplayer.get_unique_id()]
-	var hex_color = color.to_html()
+	var hex_color = color#color.to_html()
 	var formatted = "[color=%s]%s[/color]" % [hex_color, GameState_.selected_name]
 	rpc("broadcast_peer", multiplayer.get_unique_id(), formatted + " selected " + race.to_upper() + "!")
 	#if !multiplayer.is_server(): rpc("broadcast_peer", multiplayer.get_unique_id(), formatted + " selected " + race.to_upper() + "!")
@@ -172,6 +172,7 @@ func on_race_selected(race: String):
 	_update_ui()
 
 func _on_colors_received(_id, colors):
+	print("Received colors from host: " + str(colors))
 	player_colors = colors
 	
 func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
@@ -268,7 +269,7 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 	print("_add_message")
 	#var gladiator = all_gladiators.get(sender_id)
 	var color = player_colors[sender_id]#Color.WHITE#gladiator.get("color", Color.WHITE)
-	var hex_color = color.to_html()
+	var hex_color = color#color.to_html()
 
 	var formatted = "%s [color=%s]%s[/color]: %s" % [timestamp, hex_color, sender_name, message]
 
@@ -300,19 +301,19 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 	
 func _initialize_attributes():
 	attributes = {
-		"strength": 60.0,
-		"quickness": 81.0,
+		"strength": 100.0,
+		"quickness": 1.0,
 		"crit_rating": 10.0,
 		"avoidance": 31.0,
-		"health": 50.0,
+		"health": 550.0,
 		"resilience": 1.0,
-		"endurance": 100.0,
-		"sword_mastery": 40.0,
-		"axe_mastery": 40.0,
-		"mace_mastery": 40.0,
-		"stabbing_mastery": 40.0,
-		"flagellation_mastery": 40.0,
-		"shield_mastery": 40.0,
+		"endurance": 1000.0,
+		"sword_mastery": 450.0,
+		"axe_mastery": 450.0,
+		"mace_mastery": 450.0,
+		"stabbing_mastery": 450.0,
+		"flagellation_mastery": 450.0,
+		"shield_mastery": 450.0,
 		"unarmed_mastery": 40.0,
 	}
 	# Override with starting values if any
@@ -411,7 +412,7 @@ func _on_confirm():
 	var final_attributes = apply_race_modifiers(GameState_.selected_race).duplicate()
 	
 	var color = player_colors[multiplayer.get_unique_id()]
-	var hex_color = color.to_html()
+	var hex_color = color#color.to_html()
 	var formatted = "[color=%s]%s[/color] is ready!" % [hex_color, GameState_.selected_name]
 	if !multiplayer.is_server(): rpc("broadcast_peer", multiplayer.get_unique_id(), formatted)
 	# Prepare your data
@@ -520,7 +521,7 @@ func _bind_scroll_input(button: Button, attr: String, is_add_button: bool):
 func go_back():
 	if !multiplayer.is_server():
 		var color = player_colors[multiplayer.get_unique_id()]
-		var hex_color = color.to_html()
+		var hex_color = color#color.to_html()
 		var formatted = "[color=%s]%s[/color][color=%s] disconnected![/color]" % [hex_color, GameState_.selected_name, Color.RED.to_html()]
 		rpc("broadcast_peer", multiplayer.get_unique_id(), formatted)
 		await get_tree().create_timer(1.0).timeout # 11
@@ -530,7 +531,7 @@ func go_back():
 		get_tree().set_multiplayer(null)
 	else: 
 		var color = player_colors[multiplayer.get_unique_id()]
-		var hex_color = color.to_html()
+		var hex_color = color#color.to_html()
 		var formatted = "[color=%s]%s[/color][color=%s] (host) disconnected![/color]" % [hex_color, GameState_.selected_name, Color.RED.to_html()]
 		rpc("broadcast_peer", multiplayer.get_unique_id(), formatted)
 		await get_tree().create_timer(1.0).timeout # 11

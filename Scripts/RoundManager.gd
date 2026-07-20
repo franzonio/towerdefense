@@ -311,7 +311,7 @@ func _on_duel_finished(winner_id: int, loser_id: int): #yes
 			#print("ids_to_eliminate: " + str(ids_to_eliminate))
 			for id in ids_to_eliminate:
 				var _name = GameState_.all_gladiators[id]["name"]
-				var color = GameState_.all_gladiators[id]["color"].to_html()
+				var color = GameState_.all_gladiators[id]["color"]#.to_html()
 				var formatted = "[color=%s]%s[/color]" % [color, _name]
 				GameState_.add_to_log(get_multiplayer_authority(), "❌" + formatted + " is eliminated!❌")
 				#GameState_.all_gladiators.erase(id)
@@ -339,7 +339,7 @@ func _on_duel_finished(winner_id: int, loser_id: int): #yes
 				start_next_round()
 			if player_ids.size() == 1: 
 				var _name = GameState_.all_gladiators[player_ids[0]]["name"]
-				var color = GameState_.all_gladiators[player_ids[0]]["color"].to_html()
+				var color = GameState_.all_gladiators[player_ids[0]]["color"]#.to_html()
 				var formatted = "[color=%s]%s[/color]" % [color, _name]
 				#GameState_.add_to_log(get_multiplayer_authority(), "⭐ " + formatted + " WON THE GAME! ⭐")
 				#print("⭐ " + formatted + " WON THE GAME! ⭐")
@@ -395,7 +395,7 @@ func _on_peer_disconnected(id: int):
 	var _name = GameState_.all_gladiators[id].get("name", "")
 	if _name == "": 
 		return
-	var color = GameState_.all_gladiators[id]["color"].to_html()
+	var color = GameState_.all_gladiators[id]["color"]#.to_html()
 	var formatted = "[color=%s]%s[/color]" % [color, _name]
 	GameState_.kill_peer(id)
 	GameState_.add_to_log(get_multiplayer_authority(), "❌" + formatted + " disconnected!❌")

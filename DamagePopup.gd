@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 var float_speed = -30
 var lifetime = 3
@@ -18,29 +18,35 @@ func show_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_suc
 		# Has decimals, show two
 		formatted = "%.2f" % amount
 		
+		
+	#if amount == 0 and block_success:
+		#print("pause")
+		
+		
 	if not hit_success:
-		customize_popup_font(Color.DARK_ORANGE, 30, "MISS", spawn_point, "up")
+		customize_popup_font("cd8900", 30, "MISS", spawn_point, "up")
 	elif raw_damage == -1: # THORNS OR BLOOD RAGE
-		customize_popup_font(Color.PURPLE, 25, formatted, spawn_point, "behind")
+		customize_popup_font("#b00098", 25, formatted, spawn_point, "behind")
 	elif amount < 0: # SELF HEAL
 		customize_popup_font(Color.GREEN, 25, "+"+str(int(abs(amount))), spawn_point, "down")
 	elif dodge_success:
-		customize_popup_font(Color.WHITE, 30, "DODGE", spawn_point, "up")
+		customize_popup_font("d2c9a5", 30, "DODGE", spawn_point, "up")
 	elif block_success and defender_weapon2_broken == 0:
-		customize_popup_font(Color.WHITE, 30, "BLOCK (" + str(int(clamp(raw_damage - shield_absorb, 0, 9999))) + ")", spawn_point, "up")
+		customize_popup_font("d2c9a5", 30, "BLOCK (" + str(int(clamp(raw_damage - shield_absorb, 0, 9999))) + ")", spawn_point, "up")
 	elif block_success and defender_weapon2_broken == 1:
-		customize_popup_font(Color.RED, 30, "🛡️DESTROYED", spawn_point, "up")
+		customize_popup_font("d2004f", 30, "🛡️DESTROYED", spawn_point, "up")
 	elif parry_success and defender_weapon1_broken == 0 and defender_weapon2_broken == 0:
-		customize_popup_font(Color.WHITE, 30, "PARRY (" + str(int(raw_damage)) + ")", spawn_point, "up")
+		customize_popup_font("d2c9a5", 30, "PARRY (" + str(int(raw_damage)) + ")", spawn_point, "up")
 	elif parry_success and defender_weapon1_broken == 1 and defender_weapon2_broken == 0:
-		customize_popup_font(Color.RED, 30, "🗡️DESTROYED", spawn_point, "up")
+		customize_popup_font("d2004f", 30, "🗡️DESTROYED", spawn_point, "up")
 	elif parry_success and defender_weapon1_broken == 0 and defender_weapon2_broken == 1:
-		customize_popup_font(Color.RED, 30, "🗡️DESTROYED", spawn_point, "up")
+		customize_popup_font("d2004f", 30, "🗡️DESTROYED", spawn_point, "up")
 	else:
-		if crit != 1:
-			customize_popup_font(Color.RED, 40, str(int(amount)), spawn_point, "up")
-		else:
-			customize_popup_font(Color.YELLOW, 30, str(int(amount)), spawn_point, "up")
+		if crit != 1 and not block_success:
+			customize_popup_font("d2004f", 40, str(int(amount)), spawn_point, "up")
+			#TweenFX.critical_hit($Label, 0.2)
+		elif crit == 1 and not block_success:
+			customize_popup_font("d2b600", 30, str(int(amount)), spawn_point, "up")
 
 
 func customize_popup_font(color: Color, size, text: String, spawn_point, _direction):
@@ -55,27 +61,28 @@ func customize_popup_font(color: Color, size, text: String, spawn_point, _direct
 	if _direction == "up":
 		if side == "left": 
 			$Label.position.x = 50
-			$Label.position.y = -100
+			$Label.position.y = 100
 		if side == "right": 
-			$Label.position.x = 200
-			$Label.position.y = -100
+			$Label.position.x = 150
+			$Label.position.y = 100
 	
 	if _direction == "behind":
 		if side == "left": 
-			$Label.position.x = 100
-			#$Label.position.y = -100
+			$Label.position.x = 0
+			$Label.position.y = 100
 		if side == "right": 
-			$Label.position.x = 175
-			#$Label.position.y = -100
+			$Label.position.x = 180
+			$Label.position.y = 100
 			
-	if _direction == "down":
+	if _direction == "down": 
 		if side == "left": 
-			$Label.position.x = 100
-			$Label.position.y = 15
+			$Label.position.x = 50
+			$Label.position.y = 200
 		if side == "right": 
-			$Label.position.x = 170
-			$Label.position.y = 15
+			$Label.position.x = 150
+			$Label.position.y = 200
 	
+	pivot_offset = Vector2($Label.position.x + 20, $Label.position.y + 11.5)
 	#print("asd: " + str($Label.position))
 	#await get_tree().create_timer(2).timeout
 	modulate.a = 1.0  # Fully visible
@@ -85,12 +92,12 @@ func find_spawn_side(target):
 		for point in GameState_.spawn_points[side]:
 			if point == target:
 				return side
-	return "unknown"  # Or null if you prefer
+	return "unknown"  # Or null
 
 func _process(delta):
 	
 	
-	
+	#await get_tree().create_timer(1).timeout
 	if direction == "up": 
 		position.y += float_speed * delta
 		position.x += alternate*0.25*float_speed * delta

@@ -54,8 +54,8 @@ var all_cards_stock
 
 var exp_for_level = {"1": 0, "2": 10, "3": 12, "4": 14, "5": 18, "6": 22, "7": 26, "8": 30, "9": 34, "10": 36}
 
-var peer_colors = [Color.ANTIQUE_WHITE, Color.AQUAMARINE, Color.CHOCOLATE, Color.DEEP_PINK,
-				   Color.DODGER_BLUE,   Color.KHAKI,      Color.YELLOW,    Color.RED]
+var peer_colors = ["4b726e", "d2c9a5", "b3a555", "ba9158",
+				   "79444a",   "c77b58",     "847875",    "927441"]
 var player_colors := {}
 var _players = []
 var players_ready_list = []
@@ -228,8 +228,8 @@ func grant_exp_for_peer(id: int, amount: int, cost: int):
 
 @rpc("any_peer", "call_local")
 func grant_gold_for_peer(id: int, base_amount: int, opponent_id: int, winner: bool):
-	var peer_color = all_gladiators[id]["color"].to_html()
-	var opponent_color = all_gladiators[opponent_id]["color"].to_html()
+	var peer_color = all_gladiators[id]["color"]#.to_html()
+	var opponent_color = all_gladiators[opponent_id]["color"]#.to_html()
 	
 	var peer_name = "[color=%s]%s[/color]" % [peer_color, all_gladiators[id]["name"]]
 	var opponent_name = "[color=%s]%s[/color]" % [opponent_color, all_gladiators[opponent_id]["name"]]
@@ -903,7 +903,7 @@ func buy_craft_card(id, craft_name, cost):
 		add_to_peer_log(id, "[INFO] ❌No " + craft_name + " cards left in stock!")
 	
 @rpc("any_peer", "call_local")
-func buy_attribute_card(id: int, amount: int, attribute: String, cost: int):
+func buy_attribute_card(id: int, amount: int, attribute: String, cost: int, modify_stock = true):
 	var success := false
 	if all_cards_stock[attribute] >= 1:
 		if all_gladiators[id]["gold"] >= cost:
@@ -918,7 +918,9 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int):
 				all_gladiators[id]["attributes"][attribute] += amount_after_bonuses
 				all_gladiators[id]["gold"] -= cost
 				emit_signal("gladiator_attribute_changed", all_gladiators)
-				adjust_card_stock(attribute, "remove")
+				
+				if modify_stock: 
+					adjust_card_stock(attribute, "remove")
 				success = true
 				rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
 				rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
@@ -948,7 +950,7 @@ func modify_gladiator_life(id: int, life_lost: int):
 	if all_gladiators.has(id):
 		var color = all_gladiators[id]["color"]
 		var glad_name = all_gladiators[id]["name"]
-		var hex_color = color.to_html()
+		var hex_color = color#color.to_html()
 		var formatted = "[color=%s]%s[/color] was defeated and lost [color=%s]%s life [/color]" % [hex_color, glad_name, Color.RED.to_html(), str(life_lost)]
 		
 		add_to_log(get_multiplayer_authority(), formatted)
@@ -1349,7 +1351,7 @@ func get_possible_bonuses_for_item(item_dict):
 			"increased_resilience": str(randi_range(item_level, 2*item_level)),
 			"increased_endurance": str(randi_range(item_level, 2*item_level)),
 			
-			"blood_rage": str([randf_range(0.25, 0.75), randi_range(item_level, 3*item_level)]),
+			"blood_rage": [randf_range(0.25, 0.75), randi_range(item_level, 3*item_level)],
 			"to_gold_income": str(clamp(randi_range(1, item_level/1.5), 1, 9999))
 		}
 		
