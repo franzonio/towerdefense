@@ -4,132 +4,132 @@ var prev_life_dict = {}
 var life_dict = {}
 
 @onready var vfx_pngs = {
-	# Sword
-	"sword1": preload("res://Assets/Equipment/vfx/sword_t1_vfx.png"),
-	"sword2": preload("res://Assets/Equipment/vfx/sword_t2_vfx.png"),
-	"sword3": preload("res://Assets/Equipment/vfx/sword_t3_vfx.png"),
-	"sword4": preload("res://Assets/Equipment/vfx/sword_t4_vfx.png"),
-	
-	"stabbing1": preload("res://Assets/Equipment/vfx/stabbing_t1_vfx.png"),
-	"stabbing2": preload("res://Assets/Equipment/vfx/stabbing_t2_vfx.png"),
-	"stabbing3": preload("res://Assets/Equipment/vfx/stabbing_t3_vfx.png"),
-	"stabbing4": preload("res://Assets/Equipment/vfx/stabbing_t4_vfx.png"),
-	
-	"mace1": preload("res://Assets/Equipment/vfx/mace_t1_vfx.png"),
-	"mace2": preload("res://Assets/Equipment/vfx/mace_t2_vfx.png"),
-	"mace3": preload("res://Assets/Equipment/vfx/mace_t3_vfx.png"),
-	"mace4": preload("res://Assets/Equipment/vfx/mace_t4_vfx.png"),
-	
-	"axe1": preload("res://Assets/Equipment/vfx/axe_t1_vfx.png"),
-	"axe2": preload("res://Assets/Equipment/vfx/axe_t2_vfx.png"),
-	"axe3": preload("res://Assets/Equipment/vfx/axe_t3_vfx.png"),
-	"axe4": preload("res://Assets/Equipment/vfx/axe_t4_vfx.png"),
-	
-	"flagellation1": preload("res://Assets/Equipment/vfx/flagellation_t1_vfx.png"),
-	"flagellation2": preload("res://Assets/Equipment/vfx/flagellation_t2_vfx.png"),
-	"flagellation3": preload("res://Assets/Equipment/vfx/flagellation_t3_vfx.png"),
-	"flagellation4": preload("res://Assets/Equipment/vfx/flagellation_t4_vfx.png"),
-	
-	
-	"shield1": null,
-	"shield2": null,
-	"shield3": null,
-	"shield4": null,
-	
+
+	"sword1": preload("res://Assets/Equipment/vfx/sword_t1_vfx.png"), 
+	"sword2": preload("res://Assets/Equipment/vfx/sword_t2_vfx.png"), 
+	"sword3": preload("res://Assets/Equipment/vfx/sword_t3_vfx.png"), 
+	"sword4": preload("res://Assets/Equipment/vfx/sword_t4_vfx.png"), 
+
+	"stabbing1": preload("res://Assets/Equipment/vfx/stabbing_t1_vfx.png"), 
+	"stabbing2": preload("res://Assets/Equipment/vfx/stabbing_t2_vfx.png"), 
+	"stabbing3": preload("res://Assets/Equipment/vfx/stabbing_t3_vfx.png"), 
+	"stabbing4": preload("res://Assets/Equipment/vfx/stabbing_t4_vfx.png"), 
+
+	"mace1": preload("res://Assets/Equipment/vfx/mace_t1_vfx.png"), 
+	"mace2": preload("res://Assets/Equipment/vfx/mace_t2_vfx.png"), 
+	"mace3": preload("res://Assets/Equipment/vfx/mace_t3_vfx.png"), 
+	"mace4": preload("res://Assets/Equipment/vfx/mace_t4_vfx.png"), 
+
+	"axe1": preload("res://Assets/Equipment/vfx/axe_t1_vfx.png"), 
+	"axe2": preload("res://Assets/Equipment/vfx/axe_t2_vfx.png"), 
+	"axe3": preload("res://Assets/Equipment/vfx/axe_t3_vfx.png"), 
+	"axe4": preload("res://Assets/Equipment/vfx/axe_t4_vfx.png"), 
+
+	"flagellation1": preload("res://Assets/Equipment/vfx/flagellation_t1_vfx.png"), 
+	"flagellation2": preload("res://Assets/Equipment/vfx/flagellation_t2_vfx.png"), 
+	"flagellation3": preload("res://Assets/Equipment/vfx/flagellation_t3_vfx.png"), 
+	"flagellation4": preload("res://Assets/Equipment/vfx/flagellation_t4_vfx.png"), 
+
+
+	"shield1": null, 
+	"shield2": null, 
+	"shield3": null, 
+	"shield4": null, 
+
 	"unarmed": preload("res://Assets/Equipment/vfx/unarmed_vfx.png")
 }
 
 @onready var wep_pngs = {
-	# Mace
-	"wooden_hammer": preload("res://Assets/Equipment/Mace/mace_t1_light_128x128.png"),
-	"steel_hammer": preload("res://Assets/Equipment/Mace/mace_t2_light_128x128.png"),
-	"verdant_mallet": preload("res://Assets/Equipment/Mace/mace_t3_light_128x128.png"),
-	"diamond_mallet": preload("res://Assets/Equipment/Mace/mace_t4_light_128x128.png"),
-	"battleworn_mace": preload("res://Assets/Equipment/Mace/mace_t1_heavy_128x128.png"),
-	"iron_mace": preload("res://Assets/Equipment/Mace/mace_t2_heavy_128x128.png"),
-	"emberized_crusher": preload("res://Assets/Equipment/Mace/mace_t3_heavy_128x128.png"),
-	"crimson_crusher": preload("res://Assets/Equipment/Mace/mace_t4_heavy_128x128.png"),
-	"barbaric_warhammer": preload("res://Assets/Equipment/Mace/mace_t1_2h_128x128.png"),
-	"knightly_warhammer": preload("res://Assets/Equipment/Mace/mace_t2_2h_128x128.png"),
-	"draconic_skullbasher": preload("res://Assets/Equipment/Mace/mace_t3_2h_128x128.png"),
-	"demonic_skullbasher": preload("res://Assets/Equipment/Mace/mace_t4_2h_128x128.png"),
 
-	# Axe
-	"wooden_hatchet": preload("res://Assets/Equipment/Axe/axe_t1_light_128x128.png"),
-	"steel_hatchet": preload("res://Assets/Equipment/Axe/axe_t2_light_128x128.png"),
-	"verdant_splitter": preload("res://Assets/Equipment/Axe/axe_t3_light_128x128.png"),
-	"diamond_splitter": preload("res://Assets/Equipment/Axe/axe_t4_light_128x128.png"),
-	"battleworn_axe": preload("res://Assets/Equipment/Axe/axe_t1_heavy_128x128.png"),
-	"iron_axe": preload("res://Assets/Equipment/Axe/axe_t2_heavy_128x128.png"),
-	"emberized_cleaver": preload("res://Assets/Equipment/Axe/axe_t3_heavy_128x128.png"),
-	"crimson_cleaver": preload("res://Assets/Equipment/Axe/axe_t4_heavy_128x128.png"),
-	"barbaric_decapitator": preload("res://Assets/Equipment/Axe/axe_2h_t1_heavy_128x128.png"),
-	"knightly_decapitator": preload("res://Assets/Equipment/Axe/axe_2h_t2_heavy_128x128.png"),
-	"draconic_executioner": preload("res://Assets/Equipment/Axe/axe_2h_t3_heavy_128x128.png"),
-	"demonic_executioner": preload("res://Assets/Equipment/Axe/axe_2h_t4_heavy_128x128.png"),
+	"wooden_hammer": preload("res://Assets/Equipment/Mace/mace_t1_light_128x128.png"), 
+	"steel_hammer": preload("res://Assets/Equipment/Mace/mace_t2_light_128x128.png"), 
+	"verdant_mallet": preload("res://Assets/Equipment/Mace/mace_t3_light_128x128.png"), 
+	"diamond_mallet": preload("res://Assets/Equipment/Mace/mace_t4_light_128x128.png"), 
+	"battleworn_mace": preload("res://Assets/Equipment/Mace/mace_t1_heavy_128x128.png"), 
+	"iron_mace": preload("res://Assets/Equipment/Mace/mace_t2_heavy_128x128.png"), 
+	"emberized_crusher": preload("res://Assets/Equipment/Mace/mace_t3_heavy_128x128.png"), 
+	"crimson_crusher": preload("res://Assets/Equipment/Mace/mace_t4_heavy_128x128.png"), 
+	"barbaric_warhammer": preload("res://Assets/Equipment/Mace/mace_t1_2h_128x128.png"), 
+	"knightly_warhammer": preload("res://Assets/Equipment/Mace/mace_t2_2h_128x128.png"), 
+	"draconic_skullbasher": preload("res://Assets/Equipment/Mace/mace_t3_2h_128x128.png"), 
+	"demonic_skullbasher": preload("res://Assets/Equipment/Mace/mace_t4_2h_128x128.png"), 
 
-	# Stabbing
-	"wooden_dagger": preload("res://Assets/Equipment/Stabbing/stabbing_t1_light_128x128.png"),
-	"steel_dagger": preload("res://Assets/Equipment/Stabbing/stabbing_t2_light_128x128.png"),
-	"verdant_shard": preload("res://Assets/Equipment/Stabbing/stabbing_t3_light_128x128.png"),
-	"diamond_shard": preload("res://Assets/Equipment/Stabbing/stabbing_t4_light_128x128.png"),
-	"battleworn_carver": preload("res://Assets/Equipment/Stabbing/stabbing_t1_heavy_128x128.png"),
-	"iron_carver": preload("res://Assets/Equipment/Stabbing/stabbing_t2_heavy_128x128.png"),
-	"emberized_stiletto": preload("res://Assets/Equipment/Stabbing/stabbing_t3_heavy_128x128.png"),
-	"crimson_stiletto": preload("res://Assets/Equipment/Stabbing/stabbing_t4_heavy_128x128.png"),
-	"barbaric_pike": preload("res://Assets/Equipment/Stabbing/stabbing_t1_2h_128x128.png"),
-	"knightly_pike": preload("res://Assets/Equipment/Stabbing/stabbing_t2_2h_128x128.png"),
-	"draconic_trident": preload("res://Assets/Equipment/Stabbing/stabbing_t3_2h_128x128.png"),
-	"demonic_trident": preload("res://Assets/Equipment/Stabbing/stabbing_t4_2h_128x128.png"),
 
-	# Flagellation
-	"wooden_whip": preload("res://Assets/Equipment/Flagellation/flagellation_t1_light_128x128.png"),
-	"steel_whip": preload("res://Assets/Equipment/Flagellation/flagellation_t2_light_128x128.png"),
-	"verdant_knout": preload("res://Assets/Equipment/Flagellation/flagellation_t3_light_128x128.png"),
-	"diamond_knout": preload("res://Assets/Equipment/Flagellation/flagellation_t4_light_128x128.png"),
-	"battleworn_flail": preload("res://Assets/Equipment/Flagellation/flagellation_t1_heavy_128x128.png"),
-	"iron_flail": preload("res://Assets/Equipment/Flagellation/flagellation_t2_heavy_128x128.png"),
-	"emberized_scourge": preload("res://Assets/Equipment/Flagellation/flagellation_t3_heavy_128x128.png"),
-	"crimson_scourge": preload("res://Assets/Equipment/Flagellation/flagellation_t4_heavy_128x128.png"),
-	"barbaric_chainflogger": preload("res://Assets/Equipment/Flagellation/flagellation_t1_2h_128x128.png"),
-	"knightly_spikes": preload("res://Assets/Equipment/Flagellation/flagellation_t2_2h_128x128.png"),
-	"draconic_disemboweler": preload("res://Assets/Equipment/Flagellation/flagellation_t3_2h_128x128.png"),
-	"demonic_torturer": preload("res://Assets/Equipment/Flagellation/flagellation_t4_2h_128x128.png"),
+	"wooden_hatchet": preload("res://Assets/Equipment/Axe/axe_t1_light_128x128.png"), 
+	"steel_hatchet": preload("res://Assets/Equipment/Axe/axe_t2_light_128x128.png"), 
+	"verdant_splitter": preload("res://Assets/Equipment/Axe/axe_t3_light_128x128.png"), 
+	"diamond_splitter": preload("res://Assets/Equipment/Axe/axe_t4_light_128x128.png"), 
+	"battleworn_axe": preload("res://Assets/Equipment/Axe/axe_t1_heavy_128x128.png"), 
+	"iron_axe": preload("res://Assets/Equipment/Axe/axe_t2_heavy_128x128.png"), 
+	"emberized_cleaver": preload("res://Assets/Equipment/Axe/axe_t3_heavy_128x128.png"), 
+	"crimson_cleaver": preload("res://Assets/Equipment/Axe/axe_t4_heavy_128x128.png"), 
+	"barbaric_decapitator": preload("res://Assets/Equipment/Axe/axe_2h_t1_heavy_128x128.png"), 
+	"knightly_decapitator": preload("res://Assets/Equipment/Axe/axe_2h_t2_heavy_128x128.png"), 
+	"draconic_executioner": preload("res://Assets/Equipment/Axe/axe_2h_t3_heavy_128x128.png"), 
+	"demonic_executioner": preload("res://Assets/Equipment/Axe/axe_2h_t4_heavy_128x128.png"), 
 
-	# Sword
-	"wooden_sword": preload("res://Assets/Equipment/Sword/sword_t1_light_128x128.png"),
-	"steel_sword": preload("res://Assets/Equipment/Sword/sword_t2_light_128x128.png"),
-	"verdant_slicer": preload("res://Assets/Equipment/Sword/sword_t3_light_128x128.png"),
-	"diamond_slicer": preload("res://Assets/Equipment/Sword/sword_t4_light_128x128.png"),
-	"battleworn_blade": preload("res://Assets/Equipment/Sword/sword_t1_heavy_128x128.png"),
-	"iron_blade": preload("res://Assets/Equipment/Sword/sword_t2_heavy_128x128.png"),
-	"emberized_slasher": preload("res://Assets/Equipment/Sword/sword_t3_heavy_128x128.png"),
-	"crimson_slasher": preload("res://Assets/Equipment/Sword/sword_t4_heavy_128x128.png"),
-	"barbaric_claymore": preload("res://Assets/Equipment/Sword/sword_t1_2h_128x128.png"),
-	"knightly_claymore": preload("res://Assets/Equipment/Sword/sword_t2_2h_128x128.png"),
-	"draconic_edge": preload("res://Assets/Equipment/Sword/sword_t3_2h_128x128.png"),
-	"demonic_edge": preload("res://Assets/Equipment/Sword/sword_t4_2h_128x128.png"),
 
-	# Shield
-	"wooden_guard": preload("res://Assets/Equipment/Shield/shield_light_t1_128x128.png"),
-	"steel_guard": preload("res://Assets/Equipment/Shield/shield_light_t2_128x128.png"),
-	"verdant_aegis": preload("res://Assets/Equipment/Shield/shield_light_t3_128x128.png"),
-	"diamond_aegis": preload("res://Assets/Equipment/Shield/shield_light_t4_128x128.png"),
-	"battleworn_wall": preload("res://Assets/Equipment/Shield/shield_heavy_t1_128x128.png"),
-	"iron_wall": preload("res://Assets/Equipment/Shield/shield_heavy_t2_128x128.png"),
-	"emberized_bulwark": preload("res://Assets/Equipment/Shield/shield_heavy_t3_128x128.png"),
-	"crimson_bulwark": preload("res://Assets/Equipment/Shield/shield_heavy_t4_128x128.png"),
+	"wooden_dagger": preload("res://Assets/Equipment/Stabbing/stabbing_t1_light_128x128.png"), 
+	"steel_dagger": preload("res://Assets/Equipment/Stabbing/stabbing_t2_light_128x128.png"), 
+	"verdant_shard": preload("res://Assets/Equipment/Stabbing/stabbing_t3_light_128x128.png"), 
+	"diamond_shard": preload("res://Assets/Equipment/Stabbing/stabbing_t4_light_128x128.png"), 
+	"battleworn_carver": preload("res://Assets/Equipment/Stabbing/stabbing_t1_heavy_128x128.png"), 
+	"iron_carver": preload("res://Assets/Equipment/Stabbing/stabbing_t2_heavy_128x128.png"), 
+	"emberized_stiletto": preload("res://Assets/Equipment/Stabbing/stabbing_t3_heavy_128x128.png"), 
+	"crimson_stiletto": preload("res://Assets/Equipment/Stabbing/stabbing_t4_heavy_128x128.png"), 
+	"barbaric_pike": preload("res://Assets/Equipment/Stabbing/stabbing_t1_2h_128x128.png"), 
+	"knightly_pike": preload("res://Assets/Equipment/Stabbing/stabbing_t2_2h_128x128.png"), 
+	"draconic_trident": preload("res://Assets/Equipment/Stabbing/stabbing_t3_2h_128x128.png"), 
+	"demonic_trident": preload("res://Assets/Equipment/Stabbing/stabbing_t4_2h_128x128.png"), 
+
+
+	"wooden_whip": preload("res://Assets/Equipment/Flagellation/flagellation_t1_light_128x128.png"), 
+	"steel_whip": preload("res://Assets/Equipment/Flagellation/flagellation_t2_light_128x128.png"), 
+	"verdant_knout": preload("res://Assets/Equipment/Flagellation/flagellation_t3_light_128x128.png"), 
+	"diamond_knout": preload("res://Assets/Equipment/Flagellation/flagellation_t4_light_128x128.png"), 
+	"battleworn_flail": preload("res://Assets/Equipment/Flagellation/flagellation_t1_heavy_128x128.png"), 
+	"iron_flail": preload("res://Assets/Equipment/Flagellation/flagellation_t2_heavy_128x128.png"), 
+	"emberized_scourge": preload("res://Assets/Equipment/Flagellation/flagellation_t3_heavy_128x128.png"), 
+	"crimson_scourge": preload("res://Assets/Equipment/Flagellation/flagellation_t4_heavy_128x128.png"), 
+	"barbaric_chainflogger": preload("res://Assets/Equipment/Flagellation/flagellation_t1_2h_128x128.png"), 
+	"knightly_spikes": preload("res://Assets/Equipment/Flagellation/flagellation_t2_2h_128x128.png"), 
+	"draconic_disemboweler": preload("res://Assets/Equipment/Flagellation/flagellation_t3_2h_128x128.png"), 
+	"demonic_torturer": preload("res://Assets/Equipment/Flagellation/flagellation_t4_2h_128x128.png"), 
+
+
+	"wooden_sword": preload("res://Assets/Equipment/Sword/sword_t1_light_128x128.png"), 
+	"steel_sword": preload("res://Assets/Equipment/Sword/sword_t2_light_128x128.png"), 
+	"verdant_slicer": preload("res://Assets/Equipment/Sword/sword_t3_light_128x128.png"), 
+	"diamond_slicer": preload("res://Assets/Equipment/Sword/sword_t4_light_128x128.png"), 
+	"battleworn_blade": preload("res://Assets/Equipment/Sword/sword_t1_heavy_128x128.png"), 
+	"iron_blade": preload("res://Assets/Equipment/Sword/sword_t2_heavy_128x128.png"), 
+	"emberized_slasher": preload("res://Assets/Equipment/Sword/sword_t3_heavy_128x128.png"), 
+	"crimson_slasher": preload("res://Assets/Equipment/Sword/sword_t4_heavy_128x128.png"), 
+	"barbaric_claymore": preload("res://Assets/Equipment/Sword/sword_t1_2h_128x128.png"), 
+	"knightly_claymore": preload("res://Assets/Equipment/Sword/sword_t2_2h_128x128.png"), 
+	"draconic_edge": preload("res://Assets/Equipment/Sword/sword_t3_2h_128x128.png"), 
+	"demonic_edge": preload("res://Assets/Equipment/Sword/sword_t4_2h_128x128.png"), 
+
+
+	"wooden_guard": preload("res://Assets/Equipment/Shield/shield_light_t1_128x128.png"), 
+	"steel_guard": preload("res://Assets/Equipment/Shield/shield_light_t2_128x128.png"), 
+	"verdant_aegis": preload("res://Assets/Equipment/Shield/shield_light_t3_128x128.png"), 
+	"diamond_aegis": preload("res://Assets/Equipment/Shield/shield_light_t4_128x128.png"), 
+	"battleworn_wall": preload("res://Assets/Equipment/Shield/shield_heavy_t1_128x128.png"), 
+	"iron_wall": preload("res://Assets/Equipment/Shield/shield_heavy_t2_128x128.png"), 
+	"emberized_bulwark": preload("res://Assets/Equipment/Shield/shield_heavy_t3_128x128.png"), 
+	"crimson_bulwark": preload("res://Assets/Equipment/Shield/shield_heavy_t4_128x128.png"), 
 }
 
 @onready var esc_menu = $EscMenu
-@onready var resume_button = $EscMenu/Resume
-@onready var options_button = $EscMenu/Options
-@onready var disconnect_button = $EscMenu/Disconnect
-@onready var confirm_disconnect = $EscMenu/ConfirmDisconnect
+@onready var resume_button = $EscMenu / Resume
+@onready var options_button = $EscMenu / Options
+@onready var disconnect_button = $EscMenu / Disconnect
+@onready var confirm_disconnect = $EscMenu / ConfirmDisconnect
 
-@onready var inventory_popup := $InventoryPopup
-@onready var equipment_popup := $EquipmentPopup
-@onready var craft_bench_popup := $CraftbenchPopup
+@onready var inventory_popup: = $InventoryPopup
+@onready var equipment_popup: = $EquipmentPopup
+@onready var craft_bench_popup: = $CraftbenchPopup
 @onready var label_round = $Label_Round
 @onready var label_gold = $Label_Gold
 @onready var label_xp = $Label_Experience
@@ -142,10 +142,10 @@ var label_gold_position
 const MAX_MESSAGES = 50
 const MAX_LENGTH = 255
 
-@onready var chat_log = $Panel/ChatScroll/ChatLog
-@onready var chat_input = $HBoxContainer/ChatInput
-@onready var send_button = $HBoxContainer/SendButton
-@onready var chat_scroll = $Panel/ChatScroll
+@onready var chat_log = $Panel / ChatScroll / ChatLog
+@onready var chat_input = $HBoxContainer / ChatInput
+@onready var send_button = $HBoxContainer / SendButton
+@onready var chat_scroll = $Panel / ChatScroll
 
 @export var round_now = 0
 @export var time_passed: float = 0.0
@@ -159,72 +159,75 @@ const MAX_LENGTH = 255
 
 var player_gladiator_data
 var all_gladiators
-#var countdown_label 
-#var shop
-var intermission := true
-var shop_pressed := false
-var equipment_pressed := false
-var chat_input_pressed := false
-var msg_just_sent := false
-#var shop_grid
-#var inventory_grid
-#var equipment_panel
-#var refresh_button
+
+
+var intermission: = true
+var shop_pressed: = false
+var equipment_pressed: = false
+var chat_input_pressed: = false
+var msg_just_sent: = false
+
+
+
+
 @export var all_cards: Array
-#var _all_cards
+
 var reroll_start_of_intermission
-var is_refreshing := false
+var is_refreshing: = false
 @export var card_stock: Dictionary
 
-var selected_item_name := ""
-var selected_slot := ""
+var selected_item_name: = ""
+var selected_slot: = ""
 var equipment_button_parent_name
 var name_and_chat_outline_thickness = 6
 
+var is_shop_locked: = false
+
 @onready var shop_grid = $ShopGridContainer
-@onready var inventory_grid = $Inventory/InventoryGridContainer
+@onready var inventory_grid = $Inventory / InventoryGridContainer
 @onready var countdown_label = $IntermissionTimerLabel
 @onready var shop = $Shop
-@onready var concede_threshold_menu = $ConcedePanel/ConcedeThresholdMenu
-@onready var stance_menu = $StancePanel/StanceMenu
-@onready var attack_menu = $AttackPanel/AttackMenu
+@onready var concede_threshold_menu = $ConcedePanel / ConcedeThresholdMenu
+@onready var stance_menu = $StancePanel / StanceMenu
+@onready var attack_menu = $AttackPanel / AttackMenu
 @onready var exp_button = $ExpButton
 @onready var refresh_button = $RefreshButton
+@onready var lock_button = $LockShop
 
 var equipment_panel_inspect
 var equipment_panel
 var equipment_panel_picture
 var equipment_panel_name
-var head_slot 
-var chest_slot 
-var shoulders_slot 
+var head_slot
+var chest_slot
+var shoulders_slot
 var weapon1_slot
 var weapon2_slot
-var ring1_slot 
+var ring1_slot
 var ring2_slot
 
 var prev_gold = 0
-#var prev_lvl = 1
 
-#@onready var equipment_panel = $EquipmentPanel1
-#@onready var equipment_panel_name = $EquipmentPanel1/Name
-#@onready var head_slot = $EquipmentPanel1/HeadSlot
-#@onready var chest_slot = $EquipmentPanel1/ChestSlot
-#@onready var shoulders_slot = $EquipmentPanel1/ShouldersSlot
-#@onready var weapon1_slot = $EquipmentPanel1/Weapon1Slot
-#@onready var weapon2_slot = $EquipmentPanel1/Weapon2Slot
-#@onready var ring1_slot = $EquipmentPanel1/Ring1Slot
-#@onready var ring2_slot = $EquipmentPanel1/Ring2Slot
-#
-#@onready var equipment_panel2 = $EquipmentPanel2
-#@onready var equipment_panel_name2 = $EquipmentPanel2/Name
-#@onready var head_slot2 = $EquipmentPanel2/HeadSlot
-#@onready var chest_slot2 = $EquipmentPanel2/ChestSlot
-#@onready var shoulders_slot2 = $EquipmentPanel2/ShouldersSlot
-#@onready var weapon1_slot2 = $EquipmentPanel2/Weapon1Slot
-#@onready var weapon2_slot2 = $EquipmentPanel2/Weapon2Slot
-#@onready var ring1_slot2 = $EquipmentPanel2/Ring1Slot
-#@onready var ring2_slot2 = $EquipmentPanel2/Ring2Slot
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @onready var elf_picture = preload("res://Assets/EquipmentPanel/elf2.png")
 @onready var human_picture = preload("res://Assets/EquipmentPanel/human2.png")
@@ -232,45 +235,45 @@ var prev_gold = 0
 @onready var troll_picture = preload("res://Assets/EquipmentPanel/troll.png")
 
 @onready var attribute_panel = $AttributePanel
-@onready var health_panel = $AttributePanel/VBoxContainer/Health
-@onready var strength_panel = $AttributePanel/VBoxContainer/Strength
-@onready var endurance_panel = $AttributePanel/VBoxContainer/Endurance
-@onready var criticality_panel = $AttributePanel/VBoxContainer/Criticality
-@onready var avoidance_panel = $AttributePanel/VBoxContainer/Avoidance
-@onready var quickness_panel = $AttributePanel/VBoxContainer/Quickness
-@onready var resilience_panel = $AttributePanel/VBoxContainer/Resilience
-@onready var sword_mastery_panel = $AttributePanel/VBoxContainer/SwordMastery
-@onready var axe_mastery_panel = $AttributePanel/VBoxContainer/AxeMastery
-@onready var stabbing_mastery_panel = $AttributePanel/VBoxContainer/StabbingMastery
-@onready var mace_mastery_panel = $AttributePanel/VBoxContainer/MaceMastery
-@onready var flagellation_mastery_panel = $AttributePanel/VBoxContainer/FlagellationMastery
-@onready var shield_mastery_panel = $AttributePanel/VBoxContainer/ShieldMastery
-@onready var unarmed_mastery_panel = $AttributePanel/VBoxContainer/UnarmedMastery
+@onready var health_panel = $AttributePanel / VBoxContainer / Health
+@onready var strength_panel = $AttributePanel / VBoxContainer / Strength
+@onready var endurance_panel = $AttributePanel / VBoxContainer / Endurance
+@onready var criticality_panel = $AttributePanel / VBoxContainer / Criticality
+@onready var avoidance_panel = $AttributePanel / VBoxContainer / Avoidance
+@onready var quickness_panel = $AttributePanel / VBoxContainer / Quickness
+@onready var resilience_panel = $AttributePanel / VBoxContainer / Resilience
+@onready var sword_mastery_panel = $AttributePanel / VBoxContainer / SwordMastery
+@onready var axe_mastery_panel = $AttributePanel / VBoxContainer / AxeMastery
+@onready var stabbing_mastery_panel = $AttributePanel / VBoxContainer / StabbingMastery
+@onready var mace_mastery_panel = $AttributePanel / VBoxContainer / MaceMastery
+@onready var flagellation_mastery_panel = $AttributePanel / VBoxContainer / FlagellationMastery
+@onready var shield_mastery_panel = $AttributePanel / VBoxContainer / ShieldMastery
+@onready var unarmed_mastery_panel = $AttributePanel / VBoxContainer / UnarmedMastery
 
-@onready var health_icon_panel = $AttributePanel/VBoxContainer/HealthIcon
-@onready var strength_icon_panel = $AttributePanel/VBoxContainer/StrengthIcon
-@onready var endurance_icon_panel = $AttributePanel/VBoxContainer/EnduranceIcon
-@onready var criticality_icon_panel = $AttributePanel/VBoxContainer/CriticalityIcon
-@onready var avoidance_icon_panel = $AttributePanel/VBoxContainer/AvoidanceIcon
-@onready var quickness_icon_panel = $AttributePanel/VBoxContainer/QuicknessIcon
-@onready var resilience_icon_panel = $AttributePanel/VBoxContainer/ResilienceIcon
-@onready var sword_mastery_icon_panel = $AttributePanel/VBoxContainer/SwordIcon
-@onready var axe_mastery_icon_panel = $AttributePanel/VBoxContainer/AxeIcon
-@onready var stabbing_mastery_icon_panel = $AttributePanel/VBoxContainer/StabbingIcon
-@onready var mace_mastery_icon_panel = $AttributePanel/VBoxContainer/MaceIcon
-@onready var flagellation_mastery_icon_panel = $AttributePanel/VBoxContainer/FlagellationIcon
-@onready var shield_mastery_icon_panel = $AttributePanel/VBoxContainer/ShieldIcon
+@onready var health_icon_panel = $AttributePanel / VBoxContainer / HealthIcon
+@onready var strength_icon_panel = $AttributePanel / VBoxContainer / StrengthIcon
+@onready var endurance_icon_panel = $AttributePanel / VBoxContainer / EnduranceIcon
+@onready var criticality_icon_panel = $AttributePanel / VBoxContainer / CriticalityIcon
+@onready var avoidance_icon_panel = $AttributePanel / VBoxContainer / AvoidanceIcon
+@onready var quickness_icon_panel = $AttributePanel / VBoxContainer / QuicknessIcon
+@onready var resilience_icon_panel = $AttributePanel / VBoxContainer / ResilienceIcon
+@onready var sword_mastery_icon_panel = $AttributePanel / VBoxContainer / SwordIcon
+@onready var axe_mastery_icon_panel = $AttributePanel / VBoxContainer / AxeIcon
+@onready var stabbing_mastery_icon_panel = $AttributePanel / VBoxContainer / StabbingIcon
+@onready var mace_mastery_icon_panel = $AttributePanel / VBoxContainer / MaceIcon
+@onready var flagellation_mastery_icon_panel = $AttributePanel / VBoxContainer / FlagellationIcon
+@onready var shield_mastery_icon_panel = $AttributePanel / VBoxContainer / ShieldIcon
 
-@onready var points_left_label = $AttributePanel/PointsLeft
-@onready var points_info = $AttributePanel/Info
+@onready var points_left_label = $AttributePanel / PointsLeft
+@onready var points_info = $AttributePanel / Info
 
 @onready var attribute_icons = [health_icon_panel, strength_icon_panel, endurance_icon_panel, criticality_icon_panel, 
-				avoidance_icon_panel, quickness_icon_panel, resilience_icon_panel, sword_mastery_icon_panel, axe_mastery_icon_panel, 
-				stabbing_mastery_icon_panel, mace_mastery_icon_panel, flagellation_mastery_icon_panel, shield_mastery_icon_panel]
+	avoidance_icon_panel, quickness_icon_panel, resilience_icon_panel, sword_mastery_icon_panel, axe_mastery_icon_panel, 
+	stabbing_mastery_icon_panel, mace_mastery_icon_panel, flagellation_mastery_icon_panel, shield_mastery_icon_panel]
 
-@onready var scroll_of_luck = $CraftingContainer/CraftingMats/ScrollOfLuck
-@onready var scroll_of_injection = $CraftingContainer/CraftingMats/ScrollOfInjection
-#@onready var crafting_bench = $CraftingContainer/CraftingBench
+@onready var scroll_of_luck = $CraftingContainer / CraftingMats / ScrollOfLuck
+@onready var scroll_of_injection = $CraftingContainer / CraftingMats / ScrollOfInjection
+
 @onready var crafting_container = $CraftingContainer
 @onready var shop_button = $ShopButton
 
@@ -281,16 +284,16 @@ var weight_limits = {"Weightless": 10, "Lightweight": 18, "Midweight": 28, "Heav
 var exp_for_level = {"1": 0, "2": 10, "3": 12, "4": 14, "5": 18, "6": 22, "7": 26, "8": 30, "9": 34, "10": 36}
 var max_lvl
 
-var equipment_script 
+var equipment_script
 var equipment_instance
-var equipment_data 
-#@onready var all_equipment_slots = [head_slot, chest_slot, weapon1_slot, weapon2_slot, ring1_slot, ring2_slot]
+var equipment_data
+
 signal concede_threshold_changed(value: int)
 signal stance_changed(value: int)
 signal attack_changed(value: int)
 var craft_active = ""
 
-### ATTRIBUTES ###
+
 @onready var strength_card = preload("res://ShopCards/AttributeCards/StrengthCard.tscn")
 @onready var health_card = preload("res://ShopCards/AttributeCards/HealthCard.tscn")
 @onready var avoidance_card = preload("res://ShopCards/AttributeCards/AvoidanceCard.tscn")
@@ -305,11 +308,11 @@ var craft_active = ""
 @onready var stabbing_mastery_card = preload("res://ShopCards/AttributeCards/StabbingMasteryCard.tscn")
 @onready var flagellation_mastery_card = preload("res://ShopCards/AttributeCards/FlagellationMasteryCard.tscn")
 
-### CRAFTING ###
+
 @onready var scroll_of_luck_card = preload("res://ShopCards/CraftCards/ScrollOfLuckCard.tscn")
 @onready var scroll_of_injection_card = preload("res://ShopCards/CraftCards/ScrollOfInjectionCard.tscn")
 
-### AXE ###
+
 @onready var wooden_hatchet_card = preload("res://ShopCards/EquipmentCards/Axe/1h/WoodenHatchet.tscn")
 @onready var steel_hatchet_card = preload("res://ShopCards/EquipmentCards/Axe/1h/SteelHatchet.tscn")
 @onready var verdant_splitter_card = preload("res://ShopCards/EquipmentCards/Axe/1h/VerdantSplitter.tscn")
@@ -325,7 +328,7 @@ var craft_active = ""
 @onready var draconic_executioner_card = preload("res://ShopCards/EquipmentCards/Axe/2h/DraconicExecutioner.tscn")
 @onready var demonic_executioner_card = preload("res://ShopCards/EquipmentCards/Axe/2h/DemonicExecutioner.tscn")
 
-### FLAGELLATION ###
+
 @onready var wooden_whip_card = preload("res://ShopCards/EquipmentCards/Flagellation/1h/WoodenWhip.tscn")
 @onready var steel_whip_card = preload("res://ShopCards/EquipmentCards/Flagellation/1h/SteelWhip.tscn")
 @onready var verdant_knout_card = preload("res://ShopCards/EquipmentCards/Flagellation/1h/VerdantKnout.tscn")
@@ -341,7 +344,7 @@ var craft_active = ""
 @onready var draconic_disemboweler_card = preload("res://ShopCards/EquipmentCards/Flagellation/2h/DraconicDisemboweler.tscn")
 @onready var demonic_torturer_card = preload("res://ShopCards/EquipmentCards/Flagellation/2h/DemonicTorturer.tscn")
 
-### MACE ###
+
 @onready var wooden_hammer_card = preload("res://ShopCards/EquipmentCards/Mace/1h/WoodenHammer.tscn")
 @onready var steel_hammer_card = preload("res://ShopCards/EquipmentCards/Mace/1h/SteelHammer.tscn")
 @onready var verdant_mallet_card = preload("res://ShopCards/EquipmentCards/Mace/1h/VerdantMallet.tscn")
@@ -357,7 +360,7 @@ var craft_active = ""
 @onready var draconic_skullbasher_card = preload("res://ShopCards/EquipmentCards/Mace/2h/DraconicSkullbasher.tscn")
 @onready var demonic_skullbasher_card = preload("res://ShopCards/EquipmentCards/Mace/2h/DemonicSkullbasher.tscn")
 
-### STABBING ###
+
 @onready var wooden_dagger_card = preload("res://ShopCards/EquipmentCards/Stabbing/1h/WoodenDagger.tscn")
 @onready var steel_dagger_card = preload("res://ShopCards/EquipmentCards/Stabbing/1h/SteelDagger.tscn")
 @onready var verdant_shard_card = preload("res://ShopCards/EquipmentCards/Stabbing/1h/VerdantShard.tscn")
@@ -373,7 +376,7 @@ var craft_active = ""
 @onready var draconic_trident_card = preload("res://ShopCards/EquipmentCards/Stabbing/2h/DraconicTrident.tscn")
 @onready var demonic_trident_card = preload("res://ShopCards/EquipmentCards/Stabbing/2h/DemonicTrident.tscn")
 
-### SWORD ###
+
 @onready var wooden_sword_card = preload("res://ShopCards/EquipmentCards/Sword/1h/WoodenSword.tscn")
 @onready var steel_sword_card = preload("res://ShopCards/EquipmentCards/Sword/1h/SteelSword.tscn")
 @onready var verdant_slicer_card = preload("res://ShopCards/EquipmentCards/Sword/1h/VerdantSlicer.tscn")
@@ -389,7 +392,7 @@ var craft_active = ""
 @onready var draconic_edge_card = preload("res://ShopCards/EquipmentCards/Sword/2h/DraconicEdge.tscn")
 @onready var demonic_edge_card = preload("res://ShopCards/EquipmentCards/Sword/2h/DemonicEdge.tscn")
 
-### SHIELD ###
+
 @onready var wooden_guard_card = preload("res://ShopCards/EquipmentCards/Shield/Light/WoodenGuard.tscn")
 @onready var steel_guard_card = preload("res://ShopCards/EquipmentCards/Shield/Light/SteelGuard.tscn")
 @onready var verdant_aegis_card = preload("res://ShopCards/EquipmentCards/Shield/Light/VerdantAegis.tscn")
@@ -399,7 +402,7 @@ var craft_active = ""
 @onready var emberized_bulwark_card = preload("res://ShopCards/EquipmentCards/Shield/Heavy/EmberizedBulwark.tscn")
 @onready var crimson_bulwark_card = preload("res://ShopCards/EquipmentCards/Shield/Heavy/CrimsonBulwark.tscn")
 
-### BELT ###
+
 @onready var leather_belt_card = preload("res://ShopCards/EquipmentCards/Belt/Light/LeatherBelt.tscn")
 @onready var tailored_belt_card = preload("res://ShopCards/EquipmentCards/Belt/Light/TailoredBelt.tscn")
 @onready var strap_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Belt/Light/StrapOfElvenSilk.tscn")
@@ -409,7 +412,7 @@ var craft_active = ""
 @onready var girdle_of_kings_card = preload("res://ShopCards/EquipmentCards/Belt/Heavy/GirdleOfKings.tscn")
 @onready var bloodsteel_girdle_card = preload("res://ShopCards/EquipmentCards/Belt/Heavy/BloodsteelGirdle.tscn")
 
-### BOOTS ###
+
 @onready var leather_boots_card = preload("res://ShopCards/EquipmentCards/Boots/Light/LeatherBoots.tscn")
 @onready var tailored_boots_card = preload("res://ShopCards/EquipmentCards/Boots/Light/TailoredBoots.tscn")
 @onready var treads_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Boots/Light/TreadsOfElvenSilk.tscn")
@@ -419,7 +422,7 @@ var craft_active = ""
 @onready var sabatons_of_kings_card = preload("res://ShopCards/EquipmentCards/Boots/Heavy/SabatonsOfKings.tscn")
 @onready var bloodsteel_sabatons_card = preload("res://ShopCards/EquipmentCards/Boots/Heavy/BloodsteelSabatons.tscn")
 
-### CHEST ###
+
 @onready var leather_vest_card = preload("res://ShopCards/EquipmentCards/Chest/Light/LeatherVest.tscn")
 @onready var tailored_vest_card = preload("res://ShopCards/EquipmentCards/Chest/Light/TailoredVest.tscn")
 @onready var garb_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Chest/Light/GarbOfElvenSilk.tscn")
@@ -429,7 +432,7 @@ var craft_active = ""
 @onready var carapace_of_kings_card = preload("res://ShopCards/EquipmentCards/Chest/Heavy/CarapaceOfKings.tscn")
 @onready var bloodsteel_carapace_card = preload("res://ShopCards/EquipmentCards/Chest/Heavy/BloodsteelCarapace.tscn")
 
-### GLOVES ###
+
 @onready var leather_gloves_card = preload("res://ShopCards/EquipmentCards/Gloves/Light/LeatherGloves.tscn")
 @onready var tailored_gloves_card = preload("res://ShopCards/EquipmentCards/Gloves/Light/TailoredGloves.tscn")
 @onready var hands_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Gloves/Light/HandsOfElvenSilk.tscn")
@@ -439,7 +442,7 @@ var craft_active = ""
 @onready var grips_of_kings_card = preload("res://ShopCards/EquipmentCards/Gloves/Heavy/GripsOfKings.tscn")
 @onready var bloodsteel_grips_card = preload("res://ShopCards/EquipmentCards/Gloves/Heavy/BloodsteelGrips.tscn")
 
-### HEAD ###
+
 @onready var leather_cap_card = preload("res://ShopCards/EquipmentCards/Head/Light/LeatherCap.tscn")
 @onready var tailored_cap_card = preload("res://ShopCards/EquipmentCards/Head/Light/TailoredCap.tscn")
 @onready var hat_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Head/Light/HatOfElvenSilk.tscn")
@@ -449,7 +452,7 @@ var craft_active = ""
 @onready var barbute_of_kings_card = preload("res://ShopCards/EquipmentCards/Head/Heavy/BarbuteOfKings.tscn")
 @onready var bloodsteel_barbute_card = preload("res://ShopCards/EquipmentCards/Head/Heavy/BarbuteOfKings.tscn")
 
-### LEGS ###
+
 @onready var leather_pantaloons_card = preload("res://ShopCards/EquipmentCards/Legs/Light/LeatherPantaloons.tscn")
 @onready var tailored_pantaloons_card = preload("res://ShopCards/EquipmentCards/Legs/Light/TailoredPantaloons.tscn")
 @onready var legwraps_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Legs/Light/LegwrapsOfElvenSilk.tscn")
@@ -459,7 +462,7 @@ var craft_active = ""
 @onready var legguards_of_kings_card = preload("res://ShopCards/EquipmentCards/Legs/Heavy/LegguardsOfKings.tscn")
 @onready var bloodsteel_legguards_card = preload("res://ShopCards/EquipmentCards/Legs/Heavy/BloodsteelLegguards.tscn")
 
-### SHOULDERS ###
+
 @onready var leather_shoulders_card = preload("res://ShopCards/EquipmentCards/Shoulders/Light/LeatherShoulders.tscn")
 @onready var tailored_shoulders_card = preload("res://ShopCards/EquipmentCards/Shoulders/Light/TailoredShoulders.tscn")
 @onready var mantle_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Shoulders/Light/MantleOfElvenSilk.tscn")
@@ -469,19 +472,19 @@ var craft_active = ""
 @onready var pauldrons_of_kings_card = preload("res://ShopCards/EquipmentCards/Shoulders/Heavy/PauldronsOfKings.tscn")
 @onready var bloodsteel_pauldrons_card = preload("res://ShopCards/EquipmentCards/Shoulders/Heavy/BloodsteelPauldrons.tscn")
 
-### RING ###
+
 @onready var ring_of_stone_card = preload("res://ShopCards/EquipmentCards/Ring/RingOfStone.tscn")
 @onready var ring_of_noble_tears = preload("res://ShopCards/EquipmentCards/Ring/RingOfNobleTears.tscn")
 @onready var ring_of_royals = preload("res://ShopCards/EquipmentCards/Ring/RingOfRoyals.tscn")
 @onready var ring_of_the_emperor = preload("res://ShopCards/EquipmentCards/Ring/RingOfTheEmperor.tscn")
 
-### AMULET ###
+
 @onready var amulet_of_stone_card = preload("res://ShopCards/EquipmentCards/Amulet/AmuletOfStone.tscn")
 @onready var amulet_of_noble_tears = preload("res://ShopCards/EquipmentCards/Amulet/AmuletOfNobleTears.tscn")
 @onready var amulet_of_royals = preload("res://ShopCards/EquipmentCards/Amulet/AmuletOfRoyals.tscn")
 @onready var amulet_of_the_emperor = preload("res://ShopCards/EquipmentCards/Amulet/AmuletOfTheEmperor.tscn")
 
-var is_rerolling := false
+var is_rerolling: = false
 
 var rename_panels_done = 0
 var points_left = 150
@@ -501,7 +504,8 @@ func _ready():
 	wep2_broken = 0
 	race_modifiers = GameState_.RACE_MODIFIERS
 	label_gold_position = label_gold.position
-	
+
+	lock_button["focus_mode"] = 0
 	refresh_button["focus_mode"] = 0
 	scroll_of_injection["focus_mode"] = 0
 	scroll_of_luck["focus_mode"] = 0
@@ -512,30 +516,30 @@ func _ready():
 	concede_threshold_menu["focus_mode"] = 0
 	stance_menu["focus_mode"] = 0
 	attack_menu["focus_mode"] = 0
-	#chat_input["focus_mode"] = 0
-	
-	
+
+
+
 	round_now = 1
 	esc_menu.visible = false
 	confirm_disconnect.visible = false
-	#refresh_button.visible = false
+
 	equipment_script = load("res://Equipment.gd")
 	equipment_instance = equipment_script.new()
 	equipment_data = equipment_instance.all_equipment
-	#print(equipment_data)
-	
+
+
 	GameState_.connect("gladiator_life_changed", Callable(self, "_on_life_changed"))
 	GameState_.connect("countdown_updated", Callable(self, "_on_countdown_updated"))
 	GameState_.connect("card_stock_changed", Callable(self, "_on_card_stock_changed"))
 	GameState_.connect("send_gladiator_data_to_peer_signal", Callable(self, "_on_send_gladiator_data_to_peer_signal"))
-	GameState_.connect("broadcast_log_signal", Callable(self, "_on_log_received"))	
-	GameState_.connect("reroll_cards_new_round_signal", Callable(self, "_on_reroll_cards_new_round_signal"))	
-	
+	GameState_.connect("broadcast_log_signal", Callable(self, "_on_log_received"))
+	GameState_.connect("reroll_cards_new_round_signal", Callable(self, "_on_reroll_cards_new_round_signal"))
+
 	GameState_.connect("add_item_to_inventory_signal", Callable(self, "_on_add_item_to_inventory"))
 	GameState_.connect("remove_item_from_inventory_signal", Callable(self, "_on_remove_item_from_inventory"))
 	GameState_.connect("add_item_to_equipment_signal", Callable(self, "_on_add_item_to_equipment"))
 	GameState_.connect("remove_item_from_equipment_signal", Callable(self, "_on_remove_item_from_equipment"))
-	
+
 	health_icon_panel.add_theme_stylebox_override("disabled", health_icon_panel.get_theme_stylebox("normal"))
 	strength_icon_panel.add_theme_stylebox_override("disabled", strength_icon_panel.get_theme_stylebox("normal"))
 	endurance_icon_panel.add_theme_stylebox_override("disabled", endurance_icon_panel.get_theme_stylebox("normal"))
@@ -553,58 +557,58 @@ func _ready():
 	send_button.pressed.connect(_on_send_pressed)
 	chat_input.text_submitted.connect(_on_send_pressed)
 
-	
-	
+
+
 	inventory_popup.clear()
 	inventory_popup.add_item("Equip", 0)
 	inventory_popup.add_item("Sell", 1)
 	inventory_popup.id_pressed.connect(_on_inventory_popup_pressed)
-	
+
 	equipment_popup.clear()
 	equipment_popup.add_item("Unequip", 0)
 	equipment_popup.add_item("Sell", 1)
 	equipment_popup.id_pressed.connect(_on_equipment_popup_pressed)
-	
+
 	craft_bench_popup.clear()
 	craft_bench_popup.add_item("Move to inventory", 0)
 	craft_bench_popup.id_pressed.connect(_on_craft_bench_popup_pressed)
 
-	
+
 	shop_grid.visible = true
 	refresh_button.visible = true
 	label_buy_roll.visible = true
-	#equipment_panel.visible = false
-	#attribute_panel.visible = false
-	
+
+
+
 	if multiplayer.is_server(): GameState_.initialize_card_stock()
 	else: GameState_.rpc_id(1, "initialize_card_stock")
 	await get_tree().create_timer(1).timeout
 	all_cards = get_all_cards()
-	
+
 	if multiplayer.is_server():
 		GameState_.refresh_gladiator_data(multiplayer.get_unique_id())
 	else:
 		GameState_.rpc_id(1, "refresh_gladiator_data", multiplayer.get_unique_id())
-	
+
 	fix_icon_bonuses()
-	
+
 	await get_tree().create_timer(0.8).timeout
-	
-	populate_hud()  # Initial draw
+
+	populate_hud()
 	roll_cards()
 	refresh_button.disabled = false
-	
+
 	concede_threshold_menu.connect("item_selected", Callable(self, "_on_threshold_selected"))
 	stance_menu.connect("item_selected", Callable(self, "_on_stance_selected"))
 	attack_menu.connect("item_selected", Callable(self, "_on_attack_type_selected"))
-	
+
 	var keys = exp_for_level.keys()
 	var int_keys = []
 	for k in keys:
 		int_keys.append(int(k))
 
-	int_keys.sort()  # Sorts in place
-	max_lvl = str(int_keys[-1])  # "10"
+	int_keys.sort()
+	max_lvl = str(int_keys[-1])
 
 func fix_icon_bonuses():
 	health_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
@@ -620,38 +624,38 @@ func fix_icon_bonuses():
 	flagellation_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
 	mace_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
 	shield_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-	
-func _process(delta: float) -> void:
+
+func _process(delta: float) -> void :
 	prev_lvl = current_lvl
 	if all_gladiators:
 		current_lvl = int(all_gladiators[multiplayer.get_unique_id()].get("level", 1))
-	
+
 	if prev_lvl < current_lvl:
 		points_left += 5
 		attribute_panel.modulate = "ffffff"
 		TweenFX.spotlight(attribute_panel)
 		update_attribute_ui()
-		label_xp.scale = Vector2(1,1)
+		label_xp.scale = Vector2(1, 1)
 		label_xp.modulate = "ffffff"
-		label_xp.pivot_offset = label_xp.size/2
+		label_xp.pivot_offset = label_xp.size / 2
 		TweenFX.spotlight(label_xp, 0.2, Color("03877d"))
 		TweenFX.pulsate(label_xp, 0.4, 1.1)
 	if points_left < 0:
 		points_left = 0
-	
+
 	time_passed += delta
-	#print("mouse position: " + str(get_viewport().get_mouse_position()))
+
 	if !intermission: label_round.bbcode_text = "[color=%s]Day  %s\n%s[/color]" % ["d2c9a5", str(round_now), str(int(time_passed))]
-	if intermission: 
+	if intermission:
 		concede_threshold_menu.disabled = false
 		stance_menu.disabled = false
 		attack_menu.disabled = false
-	else: 
+	else:
 		concede_threshold_menu.disabled = true
 		stance_menu.disabled = true
 		attack_menu.disabled = true
-	
-	if Input.is_action_just_pressed("focus_chat"):# and not chat_input.has_focus():
+
+	if Input.is_action_just_pressed("focus_chat"):
 		chat_input.grab_focus()
 	if Input.is_action_just_pressed("toggle_shop") and not chat_input.has_focus():
 		if $ShopButton:
@@ -665,215 +669,215 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("buy_exp") and not chat_input.has_focus():
 		if $ExpButton:
 			$ExpButton.emit_signal("button_up")
-	
+
 func _unhandled_input(event):
-	
-	if event.is_action_pressed("ui_cancel"):  # ESC by default
+
+	if event.is_action_pressed("ui_cancel"):
 		if esc_menu.visible:
 			esc_menu.visible = false
 		else:
 			esc_menu.visible = true
-	
+
 func get_all_cards():
 	all_cards = [
-		### ATTRIBUTES ###
-		[strength_card, "strength", card_stock["strength"]],
-		[health_card, "health", card_stock["health"]],
-		[criticality_card, "crit_rating", card_stock["crit_rating"]],
-		[endurance_card, "endurance", card_stock["endurance"]],
-		[quickness_card, "quickness", card_stock["quickness"]],
-		[resilience_card, "resilience", card_stock["resilience"]],
-		[avoidance_card, "avoidance", card_stock["avoidance"]],
 
-		### CRAFTING MATERIALS ###
-		[scroll_of_luck_card, "scroll_of_luck", card_stock["scroll_of_luck"]],
-		[scroll_of_injection_card, "scroll_of_injection", card_stock["scroll_of_injection"]],
+		[strength_card, "strength", card_stock["strength"]], 
+		[health_card, "health", card_stock["health"]], 
+		[criticality_card, "crit_rating", card_stock["crit_rating"]], 
+		[endurance_card, "endurance", card_stock["endurance"]], 
+		[quickness_card, "quickness", card_stock["quickness"]], 
+		[resilience_card, "resilience", card_stock["resilience"]], 
+		[avoidance_card, "avoidance", card_stock["avoidance"]], 
 
-		### WEAPON MASTERY ###
-		[sword_mastery_card, "sword_mastery", card_stock["sword_mastery"]],
-		[axe_mastery_card, "axe_mastery", card_stock["axe_mastery"]],
-		[shield_mastery_card, "shield_mastery", card_stock["shield_mastery"]],
-		[stabbing_mastery_card, "stabbing_mastery", card_stock["stabbing_mastery"]],
-		[flagellation_mastery_card, "flagellation_mastery", card_stock["flagellation_mastery"]],
-		[mace_mastery_card, "mace_mastery", card_stock["mace_mastery"]],
 
-		### CHESTS ###
-		[leather_vest_card, "leather_vest", card_stock["leather_vest"]],
-		[tailored_vest_card, "tailored_vest", card_stock["tailored_vest"]],
-		[garb_of_elven_silk_card, "garb_of_elven_silk", card_stock["garb_of_elven_silk"]],
-		[garb_of_sin_card, "garb_of_sin", card_stock["garb_of_sin"]],
-		[plate_cuirass_card, "plate_cuirass", card_stock["plate_cuirass"]],
-		[steelforged_cuirass_card, "steelforged_cuirass", card_stock["steelforged_cuirass"]],
-		[carapace_of_kings_card, "carapace_of_kings", card_stock["carapace_of_kings"]],
-		[bloodsteel_carapace_card, "bloodsteel_carapace", card_stock["bloodsteel_carapace"]],
+		[scroll_of_luck_card, "scroll_of_luck", card_stock["scroll_of_luck"]], 
+		[scroll_of_injection_card, "scroll_of_injection", card_stock["scroll_of_injection"]], 
 
-		### HEADS ###
-		[leather_cap_card, "leather_cap", card_stock["leather_cap"]],
-		[tailored_cap_card, "tailored_cap", card_stock["tailored_cap"]],
-		[hat_of_elven_silk_card, "hat_of_elven_silk", card_stock["hat_of_elven_silk"]],
-		[hat_of_sin_card, "hat_of_sin", card_stock["hat_of_sin"]],
-		[plate_helmet_card, "plate_helmet", card_stock["plate_helmet"]],
-		[steelforged_helmet_card, "steelforged_helmet", card_stock["steelforged_helmet"]],
-		[barbute_of_kings_card, "barbute_of_kings", card_stock["barbute_of_kings"]],
-		[bloodsteel_barbute_card, "bloodsteel_barbute", card_stock["bloodsteel_barbute"]],
 
-		### SHOULDERS ###
-		[leather_shoulders_card, "leather_shoulders", card_stock["leather_shoulders"]],
-		[tailored_shoulders_card, "tailored_shoulders", card_stock["tailored_shoulders"]],
-		[mantle_of_elven_silk_card, "mantle_of_elven_silk", card_stock["mantle_of_elven_silk"]],
-		[mantle_of_sin_card, "mantle_of_sin", card_stock["mantle_of_sin"]],
-		[plate_spaulders_card, "plate_spaulders", card_stock["plate_spaulders"]],
-		[steelforged_spaulders_card, "steelforged_spaulders", card_stock["steelforged_spaulders"]],
-		[pauldrons_of_kings_card, "pauldrons_of_kings", card_stock["pauldrons_of_kings"]],
-		[bloodsteel_pauldrons_card, "bloodsteel_pauldrons", card_stock["bloodsteel_pauldrons"]],
+		[sword_mastery_card, "sword_mastery", card_stock["sword_mastery"]], 
+		[axe_mastery_card, "axe_mastery", card_stock["axe_mastery"]], 
+		[shield_mastery_card, "shield_mastery", card_stock["shield_mastery"]], 
+		[stabbing_mastery_card, "stabbing_mastery", card_stock["stabbing_mastery"]], 
+		[flagellation_mastery_card, "flagellation_mastery", card_stock["flagellation_mastery"]], 
+		[mace_mastery_card, "mace_mastery", card_stock["mace_mastery"]], 
 
-		### BELT ###
-		[leather_belt_card, "leather_belt", card_stock["leather_belt"]],
-		[tailored_belt_card, "tailored_belt", card_stock["tailored_belt"]],
-		[strap_of_elven_silk_card, "strap_of_elven_silk", card_stock["strap_of_elven_silk"]],
-		[strap_of_sin_card, "strap_of_sin", card_stock["strap_of_sin"]],
-		[plate_waistguard_card, "plate_waistguard", card_stock["plate_waistguard"]],
-		[steelforged_waistguard_card, "steelforged_waistguard", card_stock["steelforged_waistguard"]],
-		[girdle_of_kings_card, "girdle_of_kings", card_stock["girdle_of_kings"]],
-		[bloodsteel_girdle_card, "bloodsteel_girdle", card_stock["bloodsteel_girdle"]],
 
-		### BOOTS ###
-		[leather_boots_card, "leather_boots", card_stock["leather_boots"]],
-		[tailored_boots_card, "tailored_boots", card_stock["tailored_boots"]],
-		[treads_of_elven_silk_card, "treads_of_elven_silk", card_stock["treads_of_elven_silk"]],
-		[treads_of_sin_card, "treads_of_sin", card_stock["treads_of_sin"]],
-		[plate_greaves_card, "plate_greaves", card_stock["plate_greaves"]],
-		[steelforged_greaves_card, "steelforged_greaves", card_stock["steelforged_greaves"]],
-		[sabatons_of_kings_card, "sabatons_of_kings", card_stock["sabatons_of_kings"]],
-		[bloodsteel_sabatons_card, "bloodsteel_sabatons", card_stock["bloodsteel_sabatons"]],
+		[leather_vest_card, "leather_vest", card_stock["leather_vest"]], 
+		[tailored_vest_card, "tailored_vest", card_stock["tailored_vest"]], 
+		[garb_of_elven_silk_card, "garb_of_elven_silk", card_stock["garb_of_elven_silk"]], 
+		[garb_of_sin_card, "garb_of_sin", card_stock["garb_of_sin"]], 
+		[plate_cuirass_card, "plate_cuirass", card_stock["plate_cuirass"]], 
+		[steelforged_cuirass_card, "steelforged_cuirass", card_stock["steelforged_cuirass"]], 
+		[carapace_of_kings_card, "carapace_of_kings", card_stock["carapace_of_kings"]], 
+		[bloodsteel_carapace_card, "bloodsteel_carapace", card_stock["bloodsteel_carapace"]], 
 
-		### GLOVES ###
-		[leather_gloves_card, "leather_gloves", card_stock["leather_gloves"]],
-		[tailored_gloves_card, "tailored_gloves", card_stock["tailored_gloves"]],
-		[hands_of_elven_silk_card, "hands_of_elven_silk", card_stock["hands_of_elven_silk"]],
-		[hands_of_sin_card, "hands_of_sin", card_stock["hands_of_sin"]],
-		[plate_gauntlets_card, "plate_gauntlets", card_stock["plate_gauntlets"]],
-		[steelforged_gauntlets_card, "steelforged_gauntlets", card_stock["steelforged_gauntlets"]],
-		[grips_of_kings_card, "grips_of_kings", card_stock["grips_of_kings"]],
-		[bloodsteel_grips_card, "bloodsteel_grips", card_stock["bloodsteel_grips"]],
 
-		### LEGS ###
-		[leather_pantaloons_card, "leather_pantaloons", card_stock["leather_pantaloons"]],
-		[tailored_pantaloons_card, "tailored_pantaloons", card_stock["tailored_pantaloons"]],
-		[legwraps_of_elven_silk_card, "legwraps_of_elven_silk", card_stock["legwraps_of_elven_silk"]],
-		[legwraps_of_sin_card, "legwraps_of_sin", card_stock["legwraps_of_sin"]],
-		[plate_legs_card, "plate_legs", card_stock["plate_legs"]],
-		[steelforged_Legs_card, "steelforged_legs", card_stock["steelforged_legs"]],
-		[legguards_of_kings_card, "legguards_of_kings", card_stock["legguards_of_kings"]],
-		[bloodsteel_legguards_card, "bloodsteel_legguards", card_stock["bloodsteel_legguards"]],
+		[leather_cap_card, "leather_cap", card_stock["leather_cap"]], 
+		[tailored_cap_card, "tailored_cap", card_stock["tailored_cap"]], 
+		[hat_of_elven_silk_card, "hat_of_elven_silk", card_stock["hat_of_elven_silk"]], 
+		[hat_of_sin_card, "hat_of_sin", card_stock["hat_of_sin"]], 
+		[plate_helmet_card, "plate_helmet", card_stock["plate_helmet"]], 
+		[steelforged_helmet_card, "steelforged_helmet", card_stock["steelforged_helmet"]], 
+		[barbute_of_kings_card, "barbute_of_kings", card_stock["barbute_of_kings"]], 
+		[bloodsteel_barbute_card, "bloodsteel_barbute", card_stock["bloodsteel_barbute"]], 
 
-		### SWORD ###
-		[wooden_sword_card, "wooden_sword", card_stock["wooden_sword"]],
-		[steel_sword_card, "steel_sword", card_stock["steel_sword"]],
-		[verdant_slicer_card, "verdant_slicer", card_stock["verdant_slicer"]],
-		[diamond_slicer_card, "diamond_slicer", card_stock["diamond_slicer"]],
-		[battleworn_blade_card, "battleworn_blade", card_stock["battleworn_blade"]],
-		[iron_blade_card, "iron_blade", card_stock["iron_blade"]],
-		[emberized_slasher_card, "emberized_slasher", card_stock["emberized_slasher"]],
-		[crimson_slasher_card, "crimson_slasher", card_stock["crimson_slasher"]],
-		[barbaric_claymore_card, "barbaric_claymore", card_stock["barbaric_claymore"]],
-		[knightly_claymore_card, "knightly_claymore", card_stock["knightly_claymore"]],
-		[draconic_edge_card, "draconic_edge", card_stock["draconic_edge"]],
-		[demonic_edge_card, "demonic_edge", card_stock["demonic_edge"]],
 
-		### AXE ###
-		[wooden_hatchet_card, "wooden_hatchet", card_stock["wooden_hatchet"]],
-		[steel_hatchet_card, "steel_hatchet", card_stock["steel_hatchet"]],
-		[verdant_splitter_card, "verdant_splitter", card_stock["verdant_splitter"]],
-		[diamond_splitter_card, "diamond_splitter", card_stock["diamond_splitter"]],
-		[battleworn_axe_card, "battleworn_axe", card_stock["battleworn_axe"]],
-		[iron_axe_card, "iron_axe", card_stock["iron_axe"]],
-		[emberized_cleaver_card, "emberized_cleaver", card_stock["emberized_cleaver"]],
-		[crimson_cleaver_card, "crimson_cleaver", card_stock["crimson_cleaver"]],
-		[barbaric_decapitator_card, "barbaric_decapitator", card_stock["barbaric_decapitator"]],
-		[knightly_decapitator_card, "knightly_decapitator", card_stock["knightly_decapitator"]],
-		[draconic_executioner_card, "draconic_executioner", card_stock["draconic_executioner"]],
-		[demonic_executioner_card, "demonic_executioner", card_stock["demonic_executioner"]],
+		[leather_shoulders_card, "leather_shoulders", card_stock["leather_shoulders"]], 
+		[tailored_shoulders_card, "tailored_shoulders", card_stock["tailored_shoulders"]], 
+		[mantle_of_elven_silk_card, "mantle_of_elven_silk", card_stock["mantle_of_elven_silk"]], 
+		[mantle_of_sin_card, "mantle_of_sin", card_stock["mantle_of_sin"]], 
+		[plate_spaulders_card, "plate_spaulders", card_stock["plate_spaulders"]], 
+		[steelforged_spaulders_card, "steelforged_spaulders", card_stock["steelforged_spaulders"]], 
+		[pauldrons_of_kings_card, "pauldrons_of_kings", card_stock["pauldrons_of_kings"]], 
+		[bloodsteel_pauldrons_card, "bloodsteel_pauldrons", card_stock["bloodsteel_pauldrons"]], 
 
-		### STABBING ###
-		[wooden_dagger_card, "wooden_dagger", card_stock["wooden_dagger"]],
-		[steel_dagger_card, "steel_dagger", card_stock["steel_dagger"]],
-		[verdant_shard_card, "verdant_shard", card_stock["verdant_shard"]],
-		[diamond_shard_card, "diamond_shard", card_stock["diamond_shard"]],
-		[battleworn_carver_card, "battleworn_carver", card_stock["battleworn_carver"]],
-		[iron_carver_card, "iron_carver", card_stock["iron_carver"]],
-		[emberized_stiletto_card, "emberized_stiletto", card_stock["emberized_stiletto"]],
-		[crimson_stiletto_card, "crimson_stiletto", card_stock["crimson_stiletto"]],
-		[barbaric_pike_card, "barbaric_pike", card_stock["barbaric_pike"]],
-		[knightly_pike_card, "knightly_pike", card_stock["knightly_pike"]],
-		[draconic_trident_card, "draconic_trident", card_stock["draconic_trident"]],
-		[demonic_trident_card, "demonic_trident", card_stock["demonic_trident"]],
 
-		### FLAGELLATION ###
-		[wooden_whip_card, "wooden_whip", card_stock["wooden_whip"]],
-		[steel_whip_card, "steel_whip", card_stock["steel_whip"]],
-		[verdant_knout_card, "verdant_knout", card_stock["verdant_knout"]],
-		[diamond_knout_card, "diamond_knout", card_stock["diamond_knout"]],
-		[battleworn_flail_card, "battleworn_flail", card_stock["battleworn_flail"]],
-		[iron_flail_card, "iron_flail", card_stock["iron_flail"]],
-		[emberized_scourge_card, "emberized_scourge", card_stock["emberized_scourge"]],
-		[crimson_scourge_card, "crimson_scourge", card_stock["crimson_scourge"]],
-		[barbaric_chainflogger_card, "barbaric_chainflogger", card_stock["barbaric_chainflogger"]],
-		[knightly_spikes_card, "knightly_spikes", card_stock["knightly_spikes"]],
-		[draconic_disemboweler_card, "draconic_disemboweler", card_stock["draconic_disemboweler"]],
-		[demonic_torturer_card, "demonic_torturer", card_stock["demonic_torturer"]],
+		[leather_belt_card, "leather_belt", card_stock["leather_belt"]], 
+		[tailored_belt_card, "tailored_belt", card_stock["tailored_belt"]], 
+		[strap_of_elven_silk_card, "strap_of_elven_silk", card_stock["strap_of_elven_silk"]], 
+		[strap_of_sin_card, "strap_of_sin", card_stock["strap_of_sin"]], 
+		[plate_waistguard_card, "plate_waistguard", card_stock["plate_waistguard"]], 
+		[steelforged_waistguard_card, "steelforged_waistguard", card_stock["steelforged_waistguard"]], 
+		[girdle_of_kings_card, "girdle_of_kings", card_stock["girdle_of_kings"]], 
+		[bloodsteel_girdle_card, "bloodsteel_girdle", card_stock["bloodsteel_girdle"]], 
 
-		### MACE ###
-		[wooden_hammer_card, "wooden_hammer", card_stock["wooden_hammer"]],
-		[steel_hammer_card, "steel_hammer", card_stock["steel_hammer"]],
-		[verdant_mallet_card, "verdant_mallet", card_stock["verdant_mallet"]],
-		[diamond_mallet_card, "diamond_mallet", card_stock["diamond_mallet"]],
-		[battleworn_mace_card, "battleworn_mace", card_stock["battleworn_mace"]],
-		[iron_mace_card, "iron_mace", card_stock["iron_mace"]],
-		[emberized_crusher_card, "emberized_crusher", card_stock["emberized_crusher"]],
-		[crimson_crusher_card, "crimson_crusher", card_stock["crimson_crusher"]],
-		[barbaric_warhammer_card, "barbaric_warhammer", card_stock["barbaric_warhammer"]],
-		[knightly_warhammer_card, "knightly_warhammer", card_stock["knightly_warhammer"]],
-		[draconic_skullbasher_card, "draconic_skullbasher", card_stock["draconic_skullbasher"]],
-		[demonic_skullbasher_card, "demonic_skullbasher", card_stock["demonic_skullbasher"]],
 
-		### SHIELD ###
-		[wooden_guard_card, "wooden_guard", card_stock["wooden_guard"]],
-		[steel_guard_card, "steel_guard", card_stock["steel_guard"]],
-		[verdant_aegis_card, "verdant_aegis", card_stock["verdant_aegis"]],
-		[diamond_aegis_card, "diamond_aegis", card_stock["diamond_aegis"]],
-		[battleworn_wall_card, "battleworn_wall", card_stock["battleworn_wall"]],
-		[iron_wall_card, "iron_wall", card_stock["iron_wall"]],
-		[emberized_bulwark_card, "emberized_bulwark", card_stock["emberized_bulwark"]],
-		[crimson_bulwark_card, "crimson_bulwark", card_stock["crimson_bulwark"]],
+		[leather_boots_card, "leather_boots", card_stock["leather_boots"]], 
+		[tailored_boots_card, "tailored_boots", card_stock["tailored_boots"]], 
+		[treads_of_elven_silk_card, "treads_of_elven_silk", card_stock["treads_of_elven_silk"]], 
+		[treads_of_sin_card, "treads_of_sin", card_stock["treads_of_sin"]], 
+		[plate_greaves_card, "plate_greaves", card_stock["plate_greaves"]], 
+		[steelforged_greaves_card, "steelforged_greaves", card_stock["steelforged_greaves"]], 
+		[sabatons_of_kings_card, "sabatons_of_kings", card_stock["sabatons_of_kings"]], 
+		[bloodsteel_sabatons_card, "bloodsteel_sabatons", card_stock["bloodsteel_sabatons"]], 
 
-		### RINGS ###
-		[ring_of_stone_card, "ring_of_stone", card_stock["ring_of_stone"]],
-		[ring_of_noble_tears, "ring_of_noble_tears", card_stock["ring_of_noble_tears"]],
-		[ring_of_royals, "ring_of_royals", card_stock["ring_of_royals"]],
-		[ring_of_the_emperor, "ring_of_the_emperor", card_stock["ring_of_the_emperor"]],
 
-		### AMULETS ###
-		[amulet_of_stone_card, "amulet_of_stone", card_stock["amulet_of_stone"]],
-		[amulet_of_noble_tears, "amulet_of_noble_tears", card_stock["amulet_of_noble_tears"]],
-		[amulet_of_royals, "amulet_of_royals", card_stock["amulet_of_royals"]],
-		[amulet_of_the_emperor, "amulet_of_the_emperor", card_stock["amulet_of_the_emperor"]],
+		[leather_gloves_card, "leather_gloves", card_stock["leather_gloves"]], 
+		[tailored_gloves_card, "tailored_gloves", card_stock["tailored_gloves"]], 
+		[hands_of_elven_silk_card, "hands_of_elven_silk", card_stock["hands_of_elven_silk"]], 
+		[hands_of_sin_card, "hands_of_sin", card_stock["hands_of_sin"]], 
+		[plate_gauntlets_card, "plate_gauntlets", card_stock["plate_gauntlets"]], 
+		[steelforged_gauntlets_card, "steelforged_gauntlets", card_stock["steelforged_gauntlets"]], 
+		[grips_of_kings_card, "grips_of_kings", card_stock["grips_of_kings"]], 
+		[bloodsteel_grips_card, "bloodsteel_grips", card_stock["bloodsteel_grips"]], 
+
+
+		[leather_pantaloons_card, "leather_pantaloons", card_stock["leather_pantaloons"]], 
+		[tailored_pantaloons_card, "tailored_pantaloons", card_stock["tailored_pantaloons"]], 
+		[legwraps_of_elven_silk_card, "legwraps_of_elven_silk", card_stock["legwraps_of_elven_silk"]], 
+		[legwraps_of_sin_card, "legwraps_of_sin", card_stock["legwraps_of_sin"]], 
+		[plate_legs_card, "plate_legs", card_stock["plate_legs"]], 
+		[steelforged_Legs_card, "steelforged_legs", card_stock["steelforged_legs"]], 
+		[legguards_of_kings_card, "legguards_of_kings", card_stock["legguards_of_kings"]], 
+		[bloodsteel_legguards_card, "bloodsteel_legguards", card_stock["bloodsteel_legguards"]], 
+
+
+		[wooden_sword_card, "wooden_sword", card_stock["wooden_sword"]], 
+		[steel_sword_card, "steel_sword", card_stock["steel_sword"]], 
+		[verdant_slicer_card, "verdant_slicer", card_stock["verdant_slicer"]], 
+		[diamond_slicer_card, "diamond_slicer", card_stock["diamond_slicer"]], 
+		[battleworn_blade_card, "battleworn_blade", card_stock["battleworn_blade"]], 
+		[iron_blade_card, "iron_blade", card_stock["iron_blade"]], 
+		[emberized_slasher_card, "emberized_slasher", card_stock["emberized_slasher"]], 
+		[crimson_slasher_card, "crimson_slasher", card_stock["crimson_slasher"]], 
+		[barbaric_claymore_card, "barbaric_claymore", card_stock["barbaric_claymore"]], 
+		[knightly_claymore_card, "knightly_claymore", card_stock["knightly_claymore"]], 
+		[draconic_edge_card, "draconic_edge", card_stock["draconic_edge"]], 
+		[demonic_edge_card, "demonic_edge", card_stock["demonic_edge"]], 
+
+
+		[wooden_hatchet_card, "wooden_hatchet", card_stock["wooden_hatchet"]], 
+		[steel_hatchet_card, "steel_hatchet", card_stock["steel_hatchet"]], 
+		[verdant_splitter_card, "verdant_splitter", card_stock["verdant_splitter"]], 
+		[diamond_splitter_card, "diamond_splitter", card_stock["diamond_splitter"]], 
+		[battleworn_axe_card, "battleworn_axe", card_stock["battleworn_axe"]], 
+		[iron_axe_card, "iron_axe", card_stock["iron_axe"]], 
+		[emberized_cleaver_card, "emberized_cleaver", card_stock["emberized_cleaver"]], 
+		[crimson_cleaver_card, "crimson_cleaver", card_stock["crimson_cleaver"]], 
+		[barbaric_decapitator_card, "barbaric_decapitator", card_stock["barbaric_decapitator"]], 
+		[knightly_decapitator_card, "knightly_decapitator", card_stock["knightly_decapitator"]], 
+		[draconic_executioner_card, "draconic_executioner", card_stock["draconic_executioner"]], 
+		[demonic_executioner_card, "demonic_executioner", card_stock["demonic_executioner"]], 
+
+
+		[wooden_dagger_card, "wooden_dagger", card_stock["wooden_dagger"]], 
+		[steel_dagger_card, "steel_dagger", card_stock["steel_dagger"]], 
+		[verdant_shard_card, "verdant_shard", card_stock["verdant_shard"]], 
+		[diamond_shard_card, "diamond_shard", card_stock["diamond_shard"]], 
+		[battleworn_carver_card, "battleworn_carver", card_stock["battleworn_carver"]], 
+		[iron_carver_card, "iron_carver", card_stock["iron_carver"]], 
+		[emberized_stiletto_card, "emberized_stiletto", card_stock["emberized_stiletto"]], 
+		[crimson_stiletto_card, "crimson_stiletto", card_stock["crimson_stiletto"]], 
+		[barbaric_pike_card, "barbaric_pike", card_stock["barbaric_pike"]], 
+		[knightly_pike_card, "knightly_pike", card_stock["knightly_pike"]], 
+		[draconic_trident_card, "draconic_trident", card_stock["draconic_trident"]], 
+		[demonic_trident_card, "demonic_trident", card_stock["demonic_trident"]], 
+
+
+		[wooden_whip_card, "wooden_whip", card_stock["wooden_whip"]], 
+		[steel_whip_card, "steel_whip", card_stock["steel_whip"]], 
+		[verdant_knout_card, "verdant_knout", card_stock["verdant_knout"]], 
+		[diamond_knout_card, "diamond_knout", card_stock["diamond_knout"]], 
+		[battleworn_flail_card, "battleworn_flail", card_stock["battleworn_flail"]], 
+		[iron_flail_card, "iron_flail", card_stock["iron_flail"]], 
+		[emberized_scourge_card, "emberized_scourge", card_stock["emberized_scourge"]], 
+		[crimson_scourge_card, "crimson_scourge", card_stock["crimson_scourge"]], 
+		[barbaric_chainflogger_card, "barbaric_chainflogger", card_stock["barbaric_chainflogger"]], 
+		[knightly_spikes_card, "knightly_spikes", card_stock["knightly_spikes"]], 
+		[draconic_disemboweler_card, "draconic_disemboweler", card_stock["draconic_disemboweler"]], 
+		[demonic_torturer_card, "demonic_torturer", card_stock["demonic_torturer"]], 
+
+
+		[wooden_hammer_card, "wooden_hammer", card_stock["wooden_hammer"]], 
+		[steel_hammer_card, "steel_hammer", card_stock["steel_hammer"]], 
+		[verdant_mallet_card, "verdant_mallet", card_stock["verdant_mallet"]], 
+		[diamond_mallet_card, "diamond_mallet", card_stock["diamond_mallet"]], 
+		[battleworn_mace_card, "battleworn_mace", card_stock["battleworn_mace"]], 
+		[iron_mace_card, "iron_mace", card_stock["iron_mace"]], 
+		[emberized_crusher_card, "emberized_crusher", card_stock["emberized_crusher"]], 
+		[crimson_crusher_card, "crimson_crusher", card_stock["crimson_crusher"]], 
+		[barbaric_warhammer_card, "barbaric_warhammer", card_stock["barbaric_warhammer"]], 
+		[knightly_warhammer_card, "knightly_warhammer", card_stock["knightly_warhammer"]], 
+		[draconic_skullbasher_card, "draconic_skullbasher", card_stock["draconic_skullbasher"]], 
+		[demonic_skullbasher_card, "demonic_skullbasher", card_stock["demonic_skullbasher"]], 
+
+
+		[wooden_guard_card, "wooden_guard", card_stock["wooden_guard"]], 
+		[steel_guard_card, "steel_guard", card_stock["steel_guard"]], 
+		[verdant_aegis_card, "verdant_aegis", card_stock["verdant_aegis"]], 
+		[diamond_aegis_card, "diamond_aegis", card_stock["diamond_aegis"]], 
+		[battleworn_wall_card, "battleworn_wall", card_stock["battleworn_wall"]], 
+		[iron_wall_card, "iron_wall", card_stock["iron_wall"]], 
+		[emberized_bulwark_card, "emberized_bulwark", card_stock["emberized_bulwark"]], 
+		[crimson_bulwark_card, "crimson_bulwark", card_stock["crimson_bulwark"]], 
+
+
+		[ring_of_stone_card, "ring_of_stone", card_stock["ring_of_stone"]], 
+		[ring_of_noble_tears, "ring_of_noble_tears", card_stock["ring_of_noble_tears"]], 
+		[ring_of_royals, "ring_of_royals", card_stock["ring_of_royals"]], 
+		[ring_of_the_emperor, "ring_of_the_emperor", card_stock["ring_of_the_emperor"]], 
+
+
+		[amulet_of_stone_card, "amulet_of_stone", card_stock["amulet_of_stone"]], 
+		[amulet_of_noble_tears, "amulet_of_noble_tears", card_stock["amulet_of_noble_tears"]], 
+		[amulet_of_royals, "amulet_of_royals", card_stock["amulet_of_royals"]], 
+		[amulet_of_the_emperor, "amulet_of_the_emperor", card_stock["amulet_of_the_emperor"]], 
 	]
 
-		
+
 	return all_cards
-	
+
 func get_equipment_by_name(item_name: String):
 	for category in equipment_data.keys():
 		var items = equipment_data[category]
 		if items.has(item_name):
-			var result := {}
+			var result: = {}
 			result[item_name] = items[item_name]
 			return result
-	return {}  # Return empty if not found
-	
+	return {}
+
 func _input(event):
-	
+
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		if not chat_input.get_global_rect().has_point(event.position):
 			chat_input.release_focus()
@@ -884,7 +888,7 @@ func _input(event):
 		scroll_of_luck.release_focus()
 		scroll_of_injection.button_pressed = false
 		scroll_of_injection.release_focus()
-	
+
 func _on_send_pressed(_submitted_text = ""):
 	var msg = chat_input.text.strip_edges()
 	if msg.length() == 0 or msg.length() > MAX_LENGTH:
@@ -900,8 +904,8 @@ func _on_send_pressed(_submitted_text = ""):
 
 
 func _on_log_received(message):
-	#var now = Time.get_datetime_dict_from_system()
-	#var timestamp = "[%02d:%02d]" % [now.hour, now.minute]
+
+
 	var formatted = "%s" % [message]
 
 	var label = RichTextLabel.new()
@@ -909,26 +913,26 @@ func _on_log_received(message):
 	label.text = formatted
 	label["theme_override_constants/outline_size"] = name_and_chat_outline_thickness
 
-	# Ensure it expands and wraps
+
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD
 	label.fit_content = true
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	label.scroll_active = false
 
-	# Add to chat log
+
 	chat_log.add_child(label)
 
-	# Remove old messages
+
 	if chat_log.get_child_count() > MAX_MESSAGES:
 		chat_log.get_child(0).queue_free()
 
-	# Scroll to bottom
+
 	await get_tree().process_frame
 	await get_tree().process_frame
 	chat_scroll.scroll_vertical = chat_scroll.get_v_scroll_bar().max_value
-	
-	
+
+
 @rpc("any_peer", "call_local")
 func broadcast_message(sender_id, sender_name: String, timestamp: String, message: String):
 	_add_message(sender_id, sender_name, timestamp, message)
@@ -937,7 +941,7 @@ func broadcast_message(sender_id, sender_name: String, timestamp: String, messag
 func _add_message(sender_id, sender_name: String, timestamp: String, message: String):
 	var gladiator = all_gladiators.get(sender_id)
 	var color = gladiator.get("color", Color.WHITE)
-	var hex_color = color#color.to_html()
+	var hex_color = color
 
 	var formatted = "%s [color=%s]%s[/color]: %s" % [timestamp, hex_color, sender_name, message]
 
@@ -946,59 +950,59 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 	label["theme_override_constants/outline_size"] = name_and_chat_outline_thickness
 	label.text = formatted
 
-	# Ensure it expands and wraps
+
 	label.autowrap_mode = TextServer.AUTOWRAP_WORD
 	label.fit_content = true
 	label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	label.size_flags_vertical = Control.SIZE_SHRINK_BEGIN
 	label.scroll_active = false
 
-	# Add to chat log
+
 	chat_log.add_child(label)
 
-	# Debug print
-	#print("Added chat message:", formatted)
 
-	# Remove old messages
+
+
+
 	if chat_log.get_child_count() > MAX_MESSAGES:
 		chat_log.get_child(0).queue_free()
 
-	# Scroll to bottom
+
 	await get_tree().process_frame
 	await get_tree().process_frame
 	chat_scroll.scroll_vertical = chat_scroll.get_v_scroll_bar().max_value
 
 func update_equipment_ui():
-	#if multiplayer.get_unique_id() != id: return
-	# here we need to update EquipmentPanelX with all peers equipment
+
+
 	var all_ids = all_gladiators.keys()
 	var all_item_slots = ["weapon1", "weapon2", "head", "shoulders", "chest", "belt", 
-						  "gloves", "boots", "legs", "amulet", "ring1", "ring2"]
-	
-	var card_scene_map := {}
+		"gloves", "boots", "legs", "amulet", "ring1", "ring2"]
+
+	var card_scene_map: = {}
 	for card in all_cards:
-		card_scene_map[card[1]] = card[0]  # card[1] is name, card[0] is scene
-	
-	
-	
+		card_scene_map[card[1]] = card[0]
+
+
+
 	for id in all_ids:
-		var wep2_slots = get_node_or_null("_EquipmentPanel" + str(id) + "/PanelContainerBottom/BottomPanel/Weapon2Slot")#$EquipmentPanel1/PanelContainerBottom/BottomPanel/Weapon2Slot.visible = true
+		var wep2_slots = get_node_or_null("_EquipmentPanel" + str(id) + "/PanelContainerBottom/BottomPanel/Weapon2Slot")
 		wep2_slots.visible = true
-		
+
 		equipment_panel_inspect = get_node("_EquipmentPanel" + str(id) + "/InspectLabel")
 		equipment_panel = get_node("_EquipmentPanel" + str(id))
 		equipment_panel_name = get_node("_EquipmentPanel" + str(id) + "/PanelContainer/Name")
 		equipment_panel_picture = get_node("_EquipmentPanel" + str(id) + "/EquipmentPanelPicture")
-		
+
 		equipment_panel_inspect.bbcode_enabled = true
 		var _text
-		
+
 		var strength = all_gladiators[id]["attributes"]["strength"]
 		var quickness = all_gladiators[id]["attributes"]["quickness"]
 		var crit_rating = all_gladiators[id]["attributes"]["crit_rating"]
 		var avoidance = all_gladiators[id]["attributes"]["avoidance"]
 		var health = all_gladiators[id]["attributes"]["health"]
-		#var resilience = all_gladiators[id]["attributes"]["resilience"]
+
 		var endurance = all_gladiators[id]["attributes"]["endurance"]
 		var sword_mastery = all_gladiators[id]["attributes"]["sword_mastery"]
 		var axe_mastery = all_gladiators[id]["attributes"]["axe_mastery"]
@@ -1007,48 +1011,48 @@ func update_equipment_ui():
 		var flagellation_mastery = all_gladiators[id]["attributes"]["flagellation_mastery"]
 		var shield_mastery = all_gladiators[id]["attributes"]["shield_mastery"]
 		var unarmed_mastery = all_gladiators[id]["attributes"]["unarmed_mastery"]
-		
-		#var weapon1_name = all_gladiators[id]["weapon1"].keys()[0]
-		#var weapon2_name = all_gladiators[id]["weapon2"].keys()[0]
-		#var hands = all_gladiators[id]["weapon1"][weapon1_name]["hands"]
-		
+
+
+
+
+
 		var weight = all_gladiators[id]["weight"]
-		var physique = strength + health + endurance/2
-		var agility = [quickness, crit_rating/2, avoidance, sword_mastery/3, axe_mastery/3, mace_mastery/3, 
-						stabbing_mastery/3, flagellation_mastery/3, shield_mastery/3, unarmed_mastery/3].reduce(func(a, b): return a + b)
-		
+		var physique = strength + health + endurance / 2
+		var agility = [quickness, crit_rating / 2, avoidance, sword_mastery / 3, axe_mastery / 3, mace_mastery / 3, 
+			stabbing_mastery / 3, flagellation_mastery / 3, shield_mastery / 3, unarmed_mastery / 3].reduce( func(a, b): return a + b)
+
 		var gladiator_physique_class
 		for physique_class in physique_limits.keys():
 			if physique <= physique_limits[physique_class]:
 				gladiator_physique_class = physique_class
 				break
 			else: gladiator_physique_class = "Legendary"
-		
+
 		var gladiator_agility_class
 		for agility_class in agility_limits.keys():
 			if agility <= agility_limits[agility_class]:
 				gladiator_agility_class = agility_class
 				break
 			else: gladiator_agility_class = "Legendary"
-		
+
 		var gladiator_weight_class
 		for weight_class in weight_limits.keys():
 			if weight <= weight_limits[weight_class]:
 				gladiator_weight_class = weight_class
 				break
 			else: gladiator_weight_class = "Massive"
-		
+
 		var inspect_text = ""
-		#if hands == 2: inspect_text += format_name(weapon1_name)
-		#else: inspect_text += format_name(weapon1_name) + "  |  " + format_name(weapon2_name)
+
+
 		var age = all_gladiators[id]["age"]
 		inspect_text += "[color=%s]%s[/color]\n" % ["d2c9a5", age]
 		inspect_text += "[color=%s]Physique:[/color] [color=%s] %s [/color]\n" % ["cd8900", "d2c9a5", gladiator_physique_class]
 		inspect_text += "[color=%s]Agility:[/color] [color=%s] %s [/color] \n" % ["d2b600", "d2c9a5", gladiator_agility_class]
 		inspect_text += "[color=%s]Weight:[/color] [color=%s] %s [/color]" % ["847875", "d2c9a5", gladiator_weight_class]
 		equipment_panel_inspect.bbcode_text = inspect_text
-		
-		
+
+
 		var race = all_gladiators[id].get("race", "???")
 		if race == "Troll":
 			equipment_panel_picture.texture = troll_picture
@@ -1058,32 +1062,32 @@ func update_equipment_ui():
 			equipment_panel_picture.texture = human_picture
 		elif race == "Elf":
 			equipment_panel_picture.texture = elf_picture
-			
-		#weapon1_slot = get_node("_EquipmentPanel" + str(id) + "/Weapon1Slot")
-		#weapon2_slot = get_node("_EquipmentPanel" + str(id) + "/Weapon2Slot")
-		#ring1_slot = get_node("_EquipmentPanel" + str(id) + "/Ring1Slot")
-		#ring2_slot = get_node("_EquipmentPanel" + str(id) + "/Ring2Slot")
-		
+
+
+
+
+
+
 		var color = all_gladiators[id].get("color", Color.WHITE)
-		var hex_color = color#color.to_html()
+		var hex_color = color
 		var formatted = "[color=%s]%s[/color]" % [hex_color, all_gladiators[id]["name"]]
 		equipment_panel_name.bbcode_enabled = true
 		equipment_panel_name.bbcode_text = formatted
 		equipment_panel_name["theme_override_constants/outline_size"] = name_and_chat_outline_thickness
-		
+
 		equipment_panel.visible = true
-		var get_spawn_point = all_gladiators[id].get("spawn_point", Vector2(0,0))
+		var get_spawn_point = all_gladiators[id].get("spawn_point", Vector2(0, 0))
 		var side = find_spawn_side(get_spawn_point)
-		if get_spawn_point != Vector2(0,0): 
+		if get_spawn_point != Vector2(0, 0):
 			equipment_panel.position = all_gladiators[id]["spawn_point"]
-			
+
 		var mainhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/MainHand")
 		var offhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/OffHand")
 		var vfx_mainhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/VfxMainHand")
 		var vfx_offhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/VfxOffHand")
 		var animation_parent = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations")
-		
-		
+
+
 		var wep1_name = all_gladiators[id].get("weapon1", "???").keys()[0]
 		var wep2_name = all_gladiators[id].get("weapon2", "???").keys()[0]
 		var wep1_category = all_gladiators[id].get("weapon1", "???")[wep1_name]["category"]
@@ -1091,47 +1095,47 @@ func update_equipment_ui():
 		var wep1_tier = all_gladiators[id].get("weapon1", "???")[wep1_name].get("tier", "???")
 		var wep2_tier = all_gladiators[id].get("weapon2", "???")[wep2_name].get("tier", "???")
 		var wep1_hands = all_gladiators[id].get("weapon1", "???")[wep1_name].get("hands", "???")
-		
-		
+
+
 		var wep1_vfx_effect
 		var wep2_vfx_effect
-		
+
 		if wep2_category == "shield": pass
-			#offhand.position = Vector2(329.0, 78)
-			#offhand.rotation = 340.5
-			#offhand.skew = 21
+
+
+
 		else: pass
-			#offhand.position = Vector2(334, 84)
-			#offhand.rotation = 360
-			#offhand.skew = 0
-		
-		
+
+
+
+
+
 		if wep1_category == "unarmed":
 			wep1_vfx_effect = wep1_category
 		else:
 			wep1_vfx_effect = wep1_category + str(wep1_tier)
-			
+
 		if wep2_category == "unarmed":
 			wep2_vfx_effect = wep2_category
 		else:
 			wep2_vfx_effect = wep2_category + str(wep2_tier)
-		
+
 		var _slot = get_node("_EquipmentPanel" + str(id) + "/PanelContainerBottom/BottomPanel/Weapon1Slot")
 		var wep1_slot
 		if _slot.get_child_count() > 0:
-			wep1_slot = _slot.get_child(0) 
+			wep1_slot = _slot.get_child(0)
 			wep1_slot.modulate = "ffffff"
 		else:
 			wep1_slot = null
-		
+
 		_slot = get_node("_EquipmentPanel" + str(id) + "/PanelContainerBottom/BottomPanel/Weapon2Slot")
 		var wep2_slot
 		if _slot.get_child_count() > 0:
-			wep2_slot = _slot.get_child(0) 
+			wep2_slot = _slot.get_child(0)
 			wep2_slot.modulate = "ffffff"
 		else:
 			wep2_slot = null
-		
+
 		if wep1_vfx_effect.contains("?"):
 			vfx_mainhand.texture = null
 		elif wep_statuses[id][0] == 1:
@@ -1140,143 +1144,145 @@ func update_equipment_ui():
 		else:
 			if vfx_pngs.has(wep1_vfx_effect):
 				vfx_mainhand.texture = vfx_pngs[wep1_vfx_effect]
-			else: 
+			else:
 				vfx_mainhand.texture = null
-				
+
 		if wep1_hands == 2 and wep_statuses[id][1] == 1:
-			#wep1_slot.modulate = "#d2004f" # THIS CAUSED CRASH WHEN NULL
+			if wep1_slot != null: wep1_slot.modulate = "#d2004f"
+
 			vfx_mainhand.texture = vfx_pngs["unarmed"]
 			vfx_offhand.texture = vfx_pngs["unarmed"]
 		else:
 			if wep2_vfx_effect.contains("?"):
 				vfx_offhand.texture = null
 			elif wep_statuses[id][1] == 1:
-				#wep2_slot.modulate = "#d2004f" # THIS CAUSED CRASH WHEN NULL
+				if wep2_slot != null: wep2_slot.modulate = "#d2004f"
+
 				vfx_offhand.texture = vfx_pngs["unarmed"]
 			else:
 				if vfx_pngs.has(wep2_vfx_effect):
 					vfx_offhand.texture = vfx_pngs[wep2_vfx_effect]
-				else: 
+				else:
 					vfx_offhand.texture = null
-			
-		
-		if wep1_name == "unarmed" or wep_statuses[id][0] == 1: 
+
+
+		if wep1_name == "unarmed" or wep_statuses[id][0] == 1:
 			mainhand.texture = null
-		else: 
+		else:
 			if wep_pngs.has(wep1_name):
 				mainhand.texture = wep_pngs[wep1_name]
 			else:
 				mainhand.texture = null
-		
-		if wep2_name == "unarmed" or wep_statuses[id][1] == 1: 
+
+		if wep2_name == "unarmed" or wep_statuses[id][1] == 1:
 			offhand.texture = null
-		else: 
+		else:
 			if wep_pngs.has(wep2_name):
 				offhand.texture = wep_pngs[wep2_name]
 			else:
 				offhand.texture = null
-		
-		
-		
+
+
+
 		if id == multiplayer.get_unique_id():
-			if side == "left": attribute_panel.position = equipment_panel.position - Vector2(180,0)
-			elif side == "right": attribute_panel.position = equipment_panel.position + Vector2(300,0)
-		
-		if side == "left": 
+			if side == "left": attribute_panel.position = equipment_panel.position - Vector2(180, 0)
+			elif side == "right": attribute_panel.position = equipment_panel.position + Vector2(300, 0)
+
+		if side == "left":
 			animation_parent.scale.x = 1
-		elif side == "right": 
+		elif side == "right":
 			animation_parent.scale.x = -1
-			animation_parent.position = Vector2(300,0)
-		
+			animation_parent.position = Vector2(300, 0)
+
 		for slot in all_item_slots:
 			var item_slot
 			var item_dict = all_gladiators[id][slot]
-			if item_dict == {}: 
+			if item_dict == {}:
 				var slot_ = slot.capitalize().strip_edges().replace(" ", "") + "Slot"
-				
+
 				var node = get_node_or_null("_EquipmentPanel" + str(id) + "/PanelContainerRight/RightPanel/" + slot_)
-				if node == null: 
+				if node == null:
 					node = get_node_or_null("_EquipmentPanel" + str(id) + "/PanelContainerLeft/LeftPanel/" + slot_)
-				if node == null: 
+				if node == null:
 					node = get_node_or_null("_EquipmentPanel" + str(id) + "/PanelContainerBottom/BottomPanel/" + slot_)
-				
+
 				item_slot = node.get_children()
 				for i in item_slot:
 					i.queue_free()
 				continue
 
 			var item_name = item_dict.keys()[0]
-			if item_name == "unarmed": 
+			if item_name == "unarmed":
 				var slot_ = slot.capitalize().strip_edges().replace(" ", "") + "Slot"
-				
+
 				var node = get_node_or_null("_EquipmentPanel" + str(id) + "/PanelContainerRight/RightPanel/" + slot_)
-				if node == null: 
+				if node == null:
 					node = get_node_or_null("_EquipmentPanel" + str(id) + "/PanelContainerLeft/LeftPanel/" + slot_)
-				if node == null: 
+				if node == null:
 					node = get_node_or_null("_EquipmentPanel" + str(id) + "/PanelContainerBottom/BottomPanel/" + slot_)
-				
+
 				item_slot = node.get_children()
 				for i in item_slot:
 					i.queue_free()
 				continue
-			
+
 			var hands = item_dict[item_name].get("hands", -1)
-			
+
 			if hands == 2:
 				offhand.texture = null
 			if hands == 2 and wep_statuses[id][1] == 1:
 				mainhand.texture = null
 				offhand.texture = null
-			
-			# Find corresponding scene
+
+
 			if card_scene_map.has(item_name):
 				var card_instance = card_scene_map[item_name].instantiate()
-				
+
 				item_slot = find_item_slot(slot, hands, id)
-				
+
 				var slot_available = 0
 				if item_slot == null: return
-				if item_slot.get_children() == []: 
+				if item_slot.get_children() == []:
 					slot_available = 1
-				
+
 				if slot_available == 1:
 					card_instance.button_parent.connect(_on_equipment_pressed)
 					card_instance.pressed.connect(_on_equipment_item_pressed.bind(item_name, slot))
 					card_instance.set_multiplayer_authority(multiplayer.get_unique_id())
-					
+
 					card_instance.setup(item_dict)
-					
+
 					item_slot.add_child(card_instance)
 					card_instance["focus_mode"] = 0
 					card_instance.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 					card_instance.custom_minimum_size = item_slot.size
-					card_instance["theme_override_colors/font_disabled_color"] = Color(1,1,1,1)
-					card_instance["theme_override_colors/icon_disabled_color"] = Color(1,1,1,1)
-					
-					if multiplayer.get_unique_id() != id: 
+					card_instance["theme_override_colors/font_disabled_color"] = Color(1, 1, 1, 1)
+					card_instance["theme_override_colors/icon_disabled_color"] = Color(1, 1, 1, 1)
+
+					if multiplayer.get_unique_id() != id:
 						card_instance.disabled = true
 						card_instance.add_theme_stylebox_override("disabled", card_instance.get_theme_stylebox("normal"))
-					
+
 				else:
 					continue
 
 func _on_add_item_to_inventory(id, item_dict, slot_name):
 	if id != multiplayer.get_unique_id():
 		return
-	#print("_on_add_item_to_inventory")
-	var card_scene_map := {}
+
+	var card_scene_map: = {}
 	for card in all_cards:
-		card_scene_map[card[1]] = card[0]  # card[1] is name, card[0] is scene
-	
+		card_scene_map[card[1]] = card[0]
+
 	var item_name = item_dict.keys()[0]
 
-	# Find corresponding scene
+
 	if card_scene_map.has(item_name):
 		var card_instance = card_scene_map[item_name].instantiate()
 		card_instance.button_down.connect(_on_inventory_item_pressed.bind(item_name, slot_name))
-		card_instance.set_multiplayer_authority(multiplayer.get_unique_id())  # Optional, for sync
+		card_instance.set_multiplayer_authority(multiplayer.get_unique_id())
 		card_instance["focus_mode"] = 0
-		$Inventory/InventoryGridContainer.find_child(slot_name, true, false).add_child(card_instance)
+		$Inventory / InventoryGridContainer.find_child(slot_name, true, false).add_child(card_instance)
 	else:
 		print("⚠️ No matching scene for item:", item_name)
 
@@ -1284,47 +1290,47 @@ func _on_add_item_to_inventory(id, item_dict, slot_name):
 func _on_remove_item_from_equipment(id, item_dict, category):
 	if multiplayer.get_unique_id() != id: return
 	var item_slot
-	
+
 	var item_name = item_dict.keys()[0]
 	var hands = item_dict[item_name].get("hands", -1)
-	
+
 	item_slot = find_item_slot(category, hands, id)
-	if hands == 2: 
-		var wep2slot = get_node("_EquipmentPanel" + str(id) +"/PanelContainerBottom/BottomPanel/Weapon2Slot")
+	if hands == 2:
+		var wep2slot = get_node("_EquipmentPanel" + str(id) + "/PanelContainerBottom/BottomPanel/Weapon2Slot")
 		wep2slot.visible = true
-	
+
 	item_slot.get_child(0).queue_free()
 	update_equipment_ui()
 
 func find_item_slot(category, hands, id):
 	var item_slot
-	var wep2slot = get_node("_EquipmentPanel" + str(id) +"/PanelContainerBottom/BottomPanel/Weapon2Slot")
-	#wep2slot.visible = true
+	var wep2slot = get_node("_EquipmentPanel" + str(id) + "/PanelContainerBottom/BottomPanel/Weapon2Slot")
+
 	if hands == 2:
-		item_slot = get_node("_EquipmentPanel" + str(id) +"/PanelContainerBottom/BottomPanel/Weapon1Slot")
-		#$EquipmentPanel/BottomPanel/Weapon2Slot.visible = true
-		
+		item_slot = get_node("_EquipmentPanel" + str(id) + "/PanelContainerBottom/BottomPanel/Weapon1Slot")
+
+
 		wep2slot.visible = false
-		
+
 	elif hands == 1 and category in ["weapon1", "weapon2"]:
-		item_slot = get_node("_EquipmentPanel" + str(id) +"/PanelContainerBottom/BottomPanel/Weapon" + category[-1] + "Slot")
-		
+		item_slot = get_node("_EquipmentPanel" + str(id) + "/PanelContainerBottom/BottomPanel/Weapon" + category[-1] + "Slot")
+
 	elif category in ["ring1", "ring2"]:
-		item_slot = get_node("_EquipmentPanel" + str(id) +"/PanelContainerRight/RightPanel/Ring" + category[-1] + "Slot")
-		
-	else: 
-		
-		item_slot = get_node_or_null("_EquipmentPanel" + str(id) + "/PanelContainerRight/RightPanel").find_child(category.capitalize()+"Slot", true, false)
+		item_slot = get_node("_EquipmentPanel" + str(id) + "/PanelContainerRight/RightPanel/Ring" + category[-1] + "Slot")
+
+	else:
+
+		item_slot = get_node_or_null("_EquipmentPanel" + str(id) + "/PanelContainerRight/RightPanel").find_child(category.capitalize() + "Slot", true, false)
 
 		if item_slot == null:
-			item_slot = get_node_or_null("_EquipmentPanel" + str(id) + "/PanelContainerLeft/LeftPanel").find_child(category.capitalize()+"Slot", true, false)
-	
+			item_slot = get_node_or_null("_EquipmentPanel" + str(id) + "/PanelContainerLeft/LeftPanel").find_child(category.capitalize() + "Slot", true, false)
+
 	return item_slot
 
 func _on_remove_item_from_inventory(id, _item_dict, slot_name):
 	if multiplayer.get_unique_id() != id: return
-	$Inventory/InventoryGridContainer.find_child(slot_name, true, false).get_child(0).queue_free()
-	
+	$Inventory / InventoryGridContainer.find_child(slot_name, true, false).get_child(0).queue_free()
+
 func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
 	all_gladiators = _all_gladiators
 	if rename_panels_done == 0:
@@ -1335,30 +1341,31 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data
 			life_dict[id] = 999999
 		rename_panels_done = 1
 	update_equipment_ui()
+	fix_icon_bonuses()
 	if peer_id == multiplayer.get_unique_id():
-		
-		
-		#var disp = pretty_print_dict(all_gladiators)
-		#print(disp)
-		
-		#if all_gladiators[peer_id].get("spawn_point", [-1, -1])[0] != -1:
-		#	equipment_panel.position = all_gladiators[peer_id]["spawn_point"]
-		
+
+
+
+
+
+
+
+
 		player_gladiator_data = all_gladiators[peer_id]
 		update_craft_ui()
-		#update_inventory_ui(peer_id)
+
 		update_attribute_ui()
 		update_concede_ui()
 		update_stance_ui()
 		update_attack_ui()
 		update_gold(all_gladiators[peer_id]["gold"])
 		update_experience(all_gladiators[peer_id]["exp"])
-		
+		label_gold.get_income_details(all_gladiators[peer_id].get("income_last_round", {}))
 	populate_hud()
-	 
+
 func update_craft_ui():
 	var crafting_mats = all_gladiators[multiplayer.get_unique_id()].get("crafting_mats", {})
-	
+
 	if crafting_mats["scroll_of_luck"] == 0:
 		scroll_of_luck.get_child(0).text = ""
 		scroll_of_luck.disabled = true
@@ -1372,60 +1379,60 @@ func update_craft_ui():
 	else:
 		scroll_of_injection.get_child(0).text = str(crafting_mats["scroll_of_injection"])
 		scroll_of_injection.disabled = false
-	
+
 func update_stance_ui():
 	var previous_index = stance_menu.get_selected_id()
 	var options = ["Normal", 
-					"Defensive", 
-					"Offensive", 
-					"Jester"]
+		"Defensive", 
+		"Offensive", 
+		"Jester"]
 	stance_menu.clear()
 	for option in options: stance_menu.add_item(option)
 	if previous_index == -1: stance_menu.select(0)
 	else: stance_menu.select(previous_index)
-	
+
 func update_attack_ui():
 	var previous_index = attack_menu.get_selected_id()
 	var options = ["Normal", 
-					"Light", 
-					"Heavy"]
+		"Light", 
+		"Heavy"]
 	attack_menu.clear()
 	for option in options: attack_menu.add_item(option)
 	if previous_index == -1: attack_menu.select(0)
 	else: attack_menu.select(previous_index)
-	
+
 func update_concede_ui():
 	var previous_index = concede_threshold_menu.get_selected_id()
-	#print(previous_index)
+
 	var attributes = all_gladiators[multiplayer.get_unique_id()].get("attributes", {})
-	var options = ["50% (" + str(int(round(0.5*attributes["health"]))) + " hp)", 
-					"40% (" + str(int(round(0.4*attributes["health"]))) + " hp)", 
-					"30% (" + str(int(round(0.3*attributes["health"]))) + " hp)", 
-					"20% (" + str(int(round(0.2*attributes["health"]))) + " hp)", 
-					"10% (" + str(int(round(0.1*attributes["health"]))) + " hp)", 
-					"0% ("  + str(int(round(0.0*attributes["health"]))) + " hp)"]
-					
+	var options = ["50% (" + str(int(round(0.5 * attributes["health"]))) + " hp)", 
+		"40% (" + str(int(round(0.4 * attributes["health"]))) + " hp)", 
+		"30% (" + str(int(round(0.3 * attributes["health"]))) + " hp)", 
+		"20% (" + str(int(round(0.2 * attributes["health"]))) + " hp)", 
+		"10% (" + str(int(round(0.1 * attributes["health"]))) + " hp)", 
+		"0% (" + str(int(round(0.0 * attributes["health"]))) + " hp)"]
+
 	concede_threshold_menu.clear()
 	for option in options: concede_threshold_menu.add_item(option)
 	if previous_index == -1: concede_threshold_menu.select(0)
 	else: concede_threshold_menu.select(previous_index)
-	
-func update_attribute_ui(): 
+
+func update_attribute_ui():
 	var attributes = all_gladiators[multiplayer.get_unique_id()].get("attributes", {})
-	health_panel.text = str(int(attributes["health"]))#"Health: " + str(int(attributes["health"]))
-	strength_panel.text = str(int(attributes["strength"]))#"Strength: " + str(int(attributes["strength"]))
-	endurance_panel.text = str(int(attributes["endurance"]))#"Endurance: " + str(int(attributes["endurance"]))
-	criticality_panel.text = str(int(attributes["crit_rating"]))#"Criticality: " + str(int(attributes["crit_rating"]))
-	avoidance_panel.text = str(int(attributes["avoidance"]))#"Avoidance: " + str(int(attributes["avoidance"]))
-	quickness_panel.text = str(int(attributes["quickness"]))#"Quickness: " + str(int(attributes["quickness"]))
-	resilience_panel.text = str(int(attributes["resilience"]))#"Resilience: " + str(int(attributes["resilience"]))
-	sword_mastery_panel.text = str(int(attributes["sword_mastery"]))#"Sword Mastery: " + str(int(attributes["sword_mastery"]))
-	axe_mastery_panel.text = str(int(attributes["axe_mastery"]))#"Axe Mastery: " + str(int(attributes["axe_mastery"]))
-	stabbing_mastery_panel.text = str(int(attributes["stabbing_mastery"]))#"Stabbing Mastery: " + str(int(attributes["stabbing_mastery"]))
-	mace_mastery_panel.text = str(int(attributes["mace_mastery"]))#"Mace Mastery: " + str(int(attributes["mace_mastery"]))
-	flagellation_mastery_panel.text = str(int(attributes["flagellation_mastery"]))#"Flagellation Mastery: " + str(int(attributes["flagellation_mastery"]))
-	shield_mastery_panel.text = str(int(attributes["shield_mastery"]))#"Shield Mastery: " + str(int(attributes["shield_mastery"]))
-	unarmed_mastery_panel.text = str(int(attributes["unarmed_mastery"]))#"Unarmed: " + str(int(attributes["unarmed_mastery"]))
+	health_panel.text = str(int(attributes["health"]))
+	strength_panel.text = str(int(attributes["strength"]))
+	endurance_panel.text = str(int(attributes["endurance"]))
+	criticality_panel.text = str(int(attributes["crit_rating"]))
+	avoidance_panel.text = str(int(attributes["avoidance"]))
+	quickness_panel.text = str(int(attributes["quickness"]))
+	resilience_panel.text = str(int(attributes["resilience"]))
+	sword_mastery_panel.text = str(int(attributes["sword_mastery"]))
+	axe_mastery_panel.text = str(int(attributes["axe_mastery"]))
+	stabbing_mastery_panel.text = str(int(attributes["stabbing_mastery"]))
+	mace_mastery_panel.text = str(int(attributes["mace_mastery"]))
+	flagellation_mastery_panel.text = str(int(attributes["flagellation_mastery"]))
+	shield_mastery_panel.text = str(int(attributes["shield_mastery"]))
+	unarmed_mastery_panel.text = str(int(attributes["unarmed_mastery"]))
 	points_left_label.text = "Points left: " + str(points_left)
 
 	attribute_panel.visible = true
@@ -1439,42 +1446,42 @@ func update_attribute_ui():
 		points_info.visible = false
 		points_left_label.visible = false
 		for icon in attribute_icons:
-			icon.disabled = true	
-			
-	
-	
-		#health_icon_panel.disabled = false
-		#strength_icon_panel.disabled = false
-		#endurance_icon_panel.disabled = false
-		#criticality_icon_panel.disabled = false
-		#avoidance_icon_panel.disabled = false
-		#quickness_icon_panel.disabled = false
-		#resilience_icon_panel.disabled = false
-		#sword_mastery_icon_panel.disabled = false
-		#axe_mastery_icon_panel.disabled = false
-		#stabbing_mastery_icon_panel.disabled = false
-		#mace_mastery_icon_panel.disabled = false
-		#flagellation_mastery_icon_panel.disabled = false
-		#shield_mastery_icon_panel.disabled = false
-	
+			icon.disabled = true
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 func _on_equipment_pressed(parent_name: String):
 	equipment_button_parent_name = parent_name
-	
-	#print("_on_equipment_pressed: " + str(parent_name))
-	
+
+
+
 func update_inventory_ui(glad_id: int):
 	var gladiator_inventory = all_gladiators[glad_id]["inventory"]
-	#print("peer " + str(glad_id) + " inventory: " + str(gladiator_inventory))
-	
-	# Clear existing grid
+
+
+
 	for child in inventory_grid.get_children():
 		child.queue_free()
 
-	# Build a lookup from all_cards
-	var card_scene_map := {}
+
+	var card_scene_map: = {}
 	for card in all_cards:
-		card_scene_map[card[1]] = card[0]  # card[1] is name, card[0] is scene
+		card_scene_map[card[1]] = card[0]
 
 	for slot_name in gladiator_inventory.keys():
 		var slot_data = gladiator_inventory[slot_name]
@@ -1482,11 +1489,11 @@ func update_inventory_ui(glad_id: int):
 		if typeof(slot_data) == TYPE_DICTIONARY and slot_data.size() > 0:
 			var item_name = slot_data.keys()[0]
 
-			# Find corresponding scene
+
 			if card_scene_map.has(item_name):
 				var card_instance = card_scene_map[item_name].instantiate()
 				card_instance.pressed.connect(_on_inventory_item_pressed.bind(item_name, slot_name))
-				card_instance.set_multiplayer_authority(multiplayer.get_unique_id())  # Optional, for sync
+				card_instance.set_multiplayer_authority(multiplayer.get_unique_id())
 				card_instance["focus_mode"] = 0
 				inventory_grid.add_child(card_instance)
 			else:
@@ -1495,26 +1502,26 @@ func update_inventory_ui(glad_id: int):
 func _on_attack_type_selected(index: int):
 	var selected_text = attack_menu.get_item_text(index)
 	var type = ""
-	
+
 	if selected_text == "Normal": type = "normal"
 	elif selected_text == "Light": type = "light"
 	elif selected_text == "Heavy": type = "heavy"
-	
+
 	if multiplayer.is_server():
 		GameState_.peer_attack_type(multiplayer.get_unique_id(), type)
 	else:
 		GameState_.rpc_id(1, "peer_attack_type", multiplayer.get_unique_id(), type)
 
 
-func _on_stance_selected(index: int): 
+func _on_stance_selected(index: int):
 	var selected_text = stance_menu.get_item_text(index)
 	var stance = ""
-	
+
 	if selected_text == "Normal": stance = "normal"
 	elif selected_text == "Defensive": stance = "defensive"
 	elif selected_text == "Offensive": stance = "offensive"
 	elif selected_text == "Jester": stance = "jester"
-	
+
 	if multiplayer.is_server():
 		GameState_.peer_stance(multiplayer.get_unique_id(), stance)
 	else:
@@ -1526,7 +1533,7 @@ func _on_threshold_selected(index: int):
 	regex.compile("^\\d+")
 	var result = regex.search(selected_text)
 	var threshold = result.get_string() if result != null else "0"
-	threshold = float(threshold)/100
+	threshold = float(threshold) / 100
 
 	if multiplayer.is_server():
 		GameState_.peer_concede(multiplayer.get_unique_id(), threshold)
@@ -1534,38 +1541,38 @@ func _on_threshold_selected(index: int):
 		GameState_.rpc_id(1, "peer_concede", multiplayer.get_unique_id(), threshold)
 
 	emit_signal("concede_threshold_changed", threshold)
-	#print("📉 Threshold selected:", threshold)
+
 
 
 func _on_equipment_popup_pressed(id: int):
 	match id:
 		0:
-			if !intermission: 
+			if !intermission:
 				if multiplayer.is_server():
 					GameState_.add_to_peer_log(multiplayer.get_unique_id(), "[INFO] ❌Cannot unequip item during duel!")
 				else:
 					GameState_.rpc_id(1, "add_to_peer_log", multiplayer.get_unique_id(), "[INFO] ❌Cannot unequip item during duel!")
-				
-				#GameState_.rpc("add_to_peer_log", "Cannot unequip item during duel!")
+
+
 				return
-			
+
 			if multiplayer.is_server():
 				GameState_.unequip_item(multiplayer.get_unique_id(), selected_item_name, equipment_button_parent_name, selected_slot)
 			else:
 				GameState_.rpc_id(1, "unequip_item", multiplayer.get_unique_id(), selected_item_name, equipment_button_parent_name, selected_slot)
-			
-			
+
+
 			await get_tree().create_timer(0.2).timeout
-			
+
 		1:
-			if !intermission: 
+			if !intermission:
 				if multiplayer.is_server():
 					GameState_.add_to_peer_log(multiplayer.get_unique_id(), "[INFO] ❌Cannot sell equipped item during duel!")
 				else:
 					GameState_.rpc_id(1, "add_to_peer_log", multiplayer.get_unique_id(), "[INFO] ❌Cannot sell equipped item during duel!")
 				return
-				
-			#print("Sell from equipment not implemented yet")
+
+
 			if multiplayer.is_server():
 				GameState_.sell_from_equipment(multiplayer.get_unique_id(), selected_item_name, equipment_button_parent_name, selected_slot)
 			else:
@@ -1574,24 +1581,24 @@ func _on_equipment_popup_pressed(id: int):
 func _on_inventory_popup_pressed(id: int):
 	match id:
 		0:
-			#print("Equip requested for ", selected_item_name, " from ", selected_slot)
-			
-			if !intermission: 
+
+
+			if !intermission:
 				if multiplayer.is_server():
 					GameState_.add_to_peer_log(multiplayer.get_unique_id(), "[INFO] ❌Cannot equip item during duel!")
 				else:
 					GameState_.rpc_id(1, "add_to_peer_log", multiplayer.get_unique_id(), "[INFO] ❌Cannot equip item during duel!")
 				return
-			
+
 			if multiplayer.is_server():
 				GameState_.equip_item(multiplayer.get_unique_id(), selected_item_name, selected_slot)
 			else:
 				GameState_.rpc_id(1, "equip_item", multiplayer.get_unique_id(), selected_item_name, selected_slot)
-			
+
 			await get_tree().create_timer(0.2).timeout
-			
+
 		1:
-			#print("Sell requested for ", selected_item_name, " from ", selected_slot)
+
 			if multiplayer.is_server():
 				GameState_.sell_from_inventory(multiplayer.get_unique_id(), selected_item_name, selected_slot)
 			else:
@@ -1601,39 +1608,39 @@ func _on_inventory_popup_pressed(id: int):
 func _on_craft_bench_popup_pressed(id: int):
 	match id:
 		0: pass
-			
-	
+
+
 
 func _on_equipment_item_pressed(item_name: String, category):
-	# Store selected item info (you can make these class vars if needed)
+
 	selected_slot = category
 	selected_item_name = item_name
 
-	# Show popup near mouse
+
 	equipment_popup.set_position(get_viewport().get_mouse_position())
 	equipment_popup.popup()
 
 func _on_inventory_item_pressed(item_name: String, slot_name: String):
-	#print(card_instance)
+
 	selected_item_name = item_name
 	selected_slot = slot_name
-	#print("\nslot1: " + str(all_gladiators[multiplayer.get_unique_id()]["inventory"]["slot1"]))
-	#print("slot2: " + str(all_gladiators[multiplayer.get_unique_id()]["inventory"]["slot2"]))
-	#print("slot3: " + str(all_gladiators[multiplayer.get_unique_id()]["inventory"]["slot3"]))
-	#print("slot4: " + str(all_gladiators[multiplayer.get_unique_id()]["inventory"]["slot4"]))
-	#print("Pressed " + str(selected_slot))
 
-	# Show popup near mouse
 
-	
+
+
+
+
+
+
+
 	if craft_active:
-		#print("Requesting to use " + craft_active + " on " + selected_item_name)
-		
+
+
 		if multiplayer.is_server():
 			GameState_.use_craft_mat_on_item(multiplayer.get_unique_id(), craft_active, selected_item_name, selected_slot)
 		else:
 			GameState_.rpc_id(1, "use_craft_mat_on_item", multiplayer.get_unique_id(), craft_active, selected_item_name, selected_slot)
-			
+
 		scroll_of_luck.button_pressed = false
 		scroll_of_injection.button_pressed = false
 		craft_active = ""
@@ -1641,136 +1648,137 @@ func _on_inventory_item_pressed(item_name: String, slot_name: String):
 		inventory_popup.set_position(get_viewport().get_mouse_position())
 		inventory_popup.popup()
 
-	
+
 func clear_shop_grid():
-	
+
 	var tweens = []
-	#TweenFX.fade_out(shop_grid, 0.3)
+
 	for child in shop_grid.get_children():
-		
-		# Skip cards that are already faded out (invisible)
+
+
 		if child.modulate.a <= 0.05:
 			print(child.modulate.a)
 			child.queue_free()
 			continue
 
-		var tween := get_tree().create_tween()
+		var tween: = get_tree().create_tween()
 		tween.tween_property(child, "modulate:a", 0.0, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-		
+
 		if child:
-			var node_ref := child
-			tween.tween_callback(func(): if node_ref: node_ref.queue_free())
+			var node_ref: = child
+			tween.tween_callback( func(): if node_ref: node_ref.queue_free())
 
 		tweens.append(tween)
 
 	if tweens.size() > 0:
 		await tweens[-1].finished
 
-	#await get_tree().create_timer(1).timeout
-	#refresh_button.disabled = false
+
+
 
 func roll_cards():
 	shop_grid.modulate.a = 1
 	all_cards = get_all_cards()
 	var weighted_random_cards = weighted_random_selection(all_cards, 5)
-	#var i = 1
-	
-	#print(shop_grid.get_children().size())
-	#print(shop_grid.get_children())
+
+
 	for card in weighted_random_cards:
 		var card_instance = card.instantiate()
 		card_instance.set_multiplayer_authority(multiplayer.get_unique_id())
 		card_instance.modulate.a = 0
 		card_instance["focus_mode"] = 0
 		shop_grid.add_child(card_instance)
-		
-		var tween := get_tree().create_tween()
+
+		var tween: = get_tree().create_tween()
 		tween.set_parallel(true)
 		tween.tween_property(card_instance, "modulate:a", 1.0, 0.4)
 		tween.tween_property(card_instance, "scale", Vector2.ONE, 0.1)
-		
+
 		await get_tree().create_timer(0.05).timeout
 
 func _on_reroll_cards_new_round_signal(active_players: Array):
 	if is_rerolling:
 		print("blocked dual rerolls")
 		return
-	
-	await get_tree().process_frame 
-	
+	if is_shop_locked:
+		print("skipping reroll due to locked shop")
+		return
+
+	await get_tree().process_frame
+
 	for player in active_players:
 		if multiplayer.get_unique_id() == player:
-			#is_rerolling = true
+
 			refresh_button.disabled = true
 			await get_tree().create_timer(1).timeout
 			reroll_cards()
 			refresh_button.disabled = false
-			#is_rerolling = false
-			
+
+
 func reroll_cards():
 	if is_rerolling:
 		print("blocked dual rerolls")
 		return
-		
+
 	is_rerolling = true
 	refresh_button.disabled = true
-	
+
 	await clear_shop_grid()
 	await roll_cards()
-	
+
 	refresh_button.disabled = false
 	is_rerolling = false
-	
-func weighted_random_selection(_all_cards: Array, count: int = 5):
-	var selected := []
-	var pool := []
 
-	# Step 1: Build a pool based on weights
-	#print("\n" + str(multiplayer.get_unique_id()) + "🃏weighted_random_selection: " + str(_all_cards))
+func weighted_random_selection(_all_cards: Array, count: int = 5):
+	var selected: = []
+	var pool: = []
+
+
+
 	for pair in _all_cards:
 		var item = pair[0]
 		var item_name = pair[1]
 		var stock = int(pair[2])
-		
-		var item_dict = get_equipment_by_name(item_name)
-		#print("item_dict: " + str(item_dict))
-		#print("all_gladiators: " + str(all_gladiators))
-		if item_dict != {}:
-			# Only add cards that are below player level + 1
-			if item_dict[item_name]["level"] > int(all_gladiators[multiplayer.get_unique_id()]["level"]) + 1: 
-				continue
-			
-		for i in stock:
-			pool.append(item)  # Add item 'stock' times
 
-	# Step 2: Randomly pick items from the pool
+		var item_dict = get_equipment_by_name(item_name)
+
+
+		if item_dict != {}:
+
+			if item_dict[item_name]["level"] > int(all_gladiators[multiplayer.get_unique_id()]["level"]) + 1:
+				continue
+
+		for i in stock:
+			pool.append(item)
+
+
 	for i in count:
 		if pool.is_empty():
 			break
-		var index := randi() % pool.size()
+		var index: = randi() % pool.size()
 		selected.append(pool[index])
-	
+
 	return selected
 
 
 
 func _on_refresh_button_pressed():
-	
+
 	if refresh_button.disabled:
 		return
-	#update_inventory_ui(multiplayer.get_unique_id())
+
 	if is_refreshing:
 		return
-		
+
 	if gold < 2:
 		return
-		
+
 	if multiplayer.is_server():
 		GameState_.buy_reroll(multiplayer.get_unique_id())
 	else:
 		GameState_.rpc_id(1, "buy_reroll", multiplayer.get_unique_id())
-		
-	refresh_button.pivot_offset = refresh_button.size/2
+
+	refresh_button.pivot_offset = refresh_button.size / 2
 	TweenFX.spin(refresh_button, 0.5)
 	is_refreshing = true
 	refresh_button.disabled = true
@@ -1778,72 +1786,72 @@ func _on_refresh_button_pressed():
 	await get_tree().create_timer(0.8).timeout
 	refresh_button.disabled = false
 	is_refreshing = false
-	
+
 
 func _on_equipment_button_pressed():
 	equipment_pressed = !equipment_pressed
 	if equipment_pressed: pass
-		#equipment_panel.visible = true
-		#attribute_panel.visible = true
+
+
 	else: pass
-		#equipment_panel.visible = false
-		#attribute_panel.visible = false
+
+
 
 func _on_shop_button_pressed():
 	shop_pressed = !shop_pressed
-	if shop_pressed: 
+	if shop_pressed:
 		shop_grid.visible = true
 		refresh_button.visible = true
 		label_buy_roll.visible = true
-	else: 
+	else:
 		shop_grid.visible = false
 		refresh_button.visible = false
 		label_buy_roll.visible = false
-	#else: countdown_label.visible = true
-	#pass # Replace with function body.
 
-func _on_card_stock_initialized(new_attr_cards_stock: Dictionary): 
+
+
+func _on_card_stock_initialized(new_attr_cards_stock: Dictionary):
 	card_stock = new_attr_cards_stock
-	#print("\n" + str(multiplayer.get_unique_id()) + "🃏Start card stock: " + str(card_stock))
 
-func _on_card_stock_changed(new_all_cards_stock: Dictionary): 
+
+func _on_card_stock_changed(new_all_cards_stock: Dictionary):
 	card_stock = new_all_cards_stock
-	#print("\n" + str(multiplayer.get_unique_id()) + "🃏_on_card_stock_changed: " + str(card_stock))
-	
+
+
 func _on_countdown_updated(time_left: int):
 	if time_left > 0: intermission = true
-	if intermission: 
+	if intermission:
 		label_round.bbcode_text = "[color=%s]Day  %s\n - [/color]" % ["d2c9a5", str(round_now)]
 		if reroll_start_of_intermission:
 			round_now += 1
 			reroll_start_of_intermission = 0
-		#update_countdown_labels(time_left)
-		if countdown_label: 
+
+		if countdown_label:
 			countdown_label.text = "%d" % time_left
 			if time_left <= 3:
-				countdown_label.pivot_offset = countdown_label.size/2
-				countdown_label.scale = Vector2(1,1)
+				countdown_label.pivot_offset = countdown_label.size / 2
+				countdown_label.scale = Vector2(1, 1)
 				countdown_label.modulate = "ffffff"
 				TweenFX.pulsate(countdown_label, 0.5)
 				TweenFX.spotlight(countdown_label, 0.5)
-		
+
 		if time_left == 0:
 			reroll_start_of_intermission = 1
-			#intermission = false
+
 			time_passed = 0
 			await get_tree().create_timer(1.0).timeout
 			countdown_label.text = ""
-	
-	
-	
+
+
+
 func get_visual_slot(peer_id: int) -> int:
 	var peer_ids = GameState_.all_gladiators.keys()
-	peer_ids.sort()  # Optional: ensures consistent display order
+	peer_ids.sort()
 
 	var index = peer_ids.find(peer_id)
 	if index == -1:
-		return 1  # Fallback to Player1 if not found
-	return index + 1  # HUD containers are named Player1–8
+		return 1
+	return index + 1
 
 func _on_life_changed(peer_id: int, new_life: int):
 	var container_name = "Player%d" % get_visual_slot(peer_id)
@@ -1854,21 +1862,21 @@ func _on_life_changed(peer_id: int, new_life: int):
 
 	life_label = container.get_node("TextureRect/PlayerLife")
 	life_label.text = "❤️ %d" % new_life
-	
+
 func populate_hud():
 	var peer_ids = all_gladiators.keys()
-	peer_ids.sort()  # Optional but stable
+	peer_ids.sort()
 
-	#print(str(multiplayer.get_unique_id()) + " is populating HUD")
-	#print("Peers: " + str(peer_ids))
 
-	for i in range(min(peer_ids.size(), 8)):  # Clamp to available HUD slots
+
+
+	for i in range(min(peer_ids.size(), 8)):
 		var peer_id = peer_ids[i]
-		#if peer_id == 1: continue
+
 		var gladiator_data = all_gladiators[peer_id]
 		var container_name = "Player%d/TextureRect" % (i + 1)
 		var player = "Player%d" % (i + 1)
-		
+
 		var player_container = $VBoxContainer.get_node_or_null(container_name)
 		if player_container == null:
 			push_warning("Missing container: %s" % container_name)
@@ -1878,66 +1886,66 @@ func populate_hud():
 		name_label = player_container.get_node("PlayerInfo/PlayerName")
 		race_label = player_container.get_node("PlayerInfo/PlayerRace")
 		life_label = player_container.get_node("PlayerLife")
-		#inspect_label = player_container.get_node("Inspect")
-		#print(str(peer_id) + " gladiator_data[level]: " + all_gladiators[peer_id]["level"])
-		
+
+
+
 		var color = gladiator_data.get("color", Color.WHITE)
 		var _name = gladiator_data.get("name", "Unknown")
-		
-		
-		
+
+
+
 		name_label.bbcode_enabled = true
 		name_label.bbcode_text = "[color=%s]%s[/color]" % [color, _name]
-		#name_label.text = str(gladiator_data.get("name", "Unknown"))
-		
+
+
 		race_label.text = str(gladiator_data.get("race", "???")) + "       Lvl " + all_gladiators[peer_id]["level"]
-		
+
 		prev_life_dict[peer_id] = life_dict[peer_id]
 		life_dict[peer_id] = int(gladiator_data.get("player_life", 0))
-		
-		var texture_rect = $VBoxContainer.get_node_or_null(player+"/TextureRect")
+
+		var texture_rect = $VBoxContainer.get_node_or_null(player + "/TextureRect")
 		texture_rect.scale = Vector2(1, 1)
 		texture_rect.modulate = "ffffff"
-		texture_rect.pivot_offset = texture_rect.size/2
+		texture_rect.pivot_offset = texture_rect.size / 2
 		if life_dict[peer_id] < prev_life_dict[peer_id]:
 			TweenFX.critical_hit(texture_rect)
 			TweenFX.shake(texture_rect, 0.6, 3)
-			#TweenFX.blink(texture_rect)
-			#TweenFX.spotlight(texture_rect, 1.5)
-		
+
+
+
 		var life = int(gladiator_data.get("player_life", 0))
 		life_label.text = "❤️ %d" % life
-		#inspect_label.text = ""
-		
-		
-		
+
+
+
+
 func update_gold(amount: int):
 	prev_gold = gold
 	gold = amount
-	
+
 	if prev_gold == gold: return
-	
+
 	label_gold.bbcode_text = "[color=%s]$ %s[/color]" % ["d2b600", str(amount)]
-	label_gold.pivot_offset = label_gold.size/2
-	label_gold.scale = Vector2(1,1)
+	label_gold.pivot_offset = label_gold.size / 2
+	label_gold.scale = Vector2(1, 1)
 	label_gold.modulate = "ffffff"
 	label_gold.position = label_gold_position
-	
+
 	if prev_gold > gold:
 		TweenFX.punch_out(label_gold, 0.2, 0.95)
 		TweenFX.spotlight(label_gold, 0.2, Color("#d2004f"))
 	if prev_gold < gold:
 		TweenFX.hop(label_gold)
 		TweenFX.spotlight(label_gold, 0.3)
-		#print("gained gold")
-		
+
+
 	label_buy_roll.bbcode_enabled = true
 	label_buy_exp.bbcode_enabled = true
 	if gold < 2:
 		label_buy_roll.bbcode_text = "[color=%s]$ 2[/color]" % ["79444a"]
 	else:
 		label_buy_roll.bbcode_text = "[color=%s]$ 2[/color]" % ["d2b600"]
-		
+
 	if gold < 5:
 		label_buy_exp.bbcode_text = "[color=%s]$ 5[/color]" % ["79444a"]
 	else:
@@ -1945,20 +1953,20 @@ func update_gold(amount: int):
 
 func update_experience(amount: int):
 	var _lvl = all_gladiators[multiplayer.get_unique_id()]["level"]
-	
+
 	if _lvl == max_lvl:
 		label_xp.bbcode_text = "[color=%s]Lv. %s[/color]" % ["d2c9a5", _lvl]
 		label_buy_exp.visible = false
 		exp_button.visible = false
-	else: 
-		var exp_to_lvl_up = str(exp_for_level[str(int(all_gladiators[multiplayer.get_unique_id()]["level"])+1)]) 
+	else:
+		var exp_to_lvl_up = str(exp_for_level[str(int(all_gladiators[multiplayer.get_unique_id()]["level"]) + 1)])
 		label_xp.bbcode_text = "[color=%s]Lv. %s  %s/%s[/color]" % ["d2c9a5", _lvl, str(amount), exp_to_lvl_up]
-	
+
 
 func _on_exp_button_button_up():
 	var amount = 4
 	var cost = 5
-	exp_button.pivot_offset = exp_button.size/2
+	exp_button.pivot_offset = exp_button.size / 2
 	exp_button.scale = Vector2(1, 1)
 	exp_button.modulate = "ffffff"
 	if gold > cost:
@@ -1969,87 +1977,87 @@ func _on_exp_button_button_up():
 		GameState_.rpc_id(1, "grant_exp_for_peer", multiplayer.get_unique_id(), amount, cost)
 
 func format_name(raw_name: String) -> String:
-	var parts = raw_name.split("_")            # → ["simple", "sword"]
-	var joined = ""                            
+	var parts = raw_name.split("_")
+	var joined = ""
 	for i in parts.size():
 		joined += parts[i]
 		if i < parts.size() - 1:
 			joined += " "
-	return joined.capitalize()                 # → "Simple Sword"
+	return joined.capitalize()
 
 
-func _on_resume_pressed() -> void:
+func _on_resume_pressed() -> void :
 	esc_menu.visible = false
 
-func _on_options_pressed() -> void:
+func _on_options_pressed() -> void :
 	print("Options not implemented yet.")
 
-func _on_disconnect_pressed() -> void:
+func _on_disconnect_pressed() -> void :
 	resume_button.visible = false
 	options_button.visible = false
 	disconnect_button.visible = false
 	confirm_disconnect.visible = true
 
-func _on_yes_button_up() -> void:
+func _on_yes_button_up() -> void :
 	if !multiplayer.is_server():
 		var gladiator = all_gladiators.get(multiplayer.get_unique_id(), {})
 		if gladiator == {}:
 			var color = gladiator.get("color", Color.WHITE)
-			var hex_color = color#color.to_html()
+			var hex_color = color
 			var formatted = "[color=%s]%s[/color][color=%s] disconnected![/color]" % [hex_color, GameState_.selected_name, Color.RED.to_html()]
 			rpc("broadcast_message", multiplayer.get_unique_id(), formatted)
-			
-		await get_tree().create_timer(1.0).timeout # 11
-		
+
+		await get_tree().create_timer(1.0).timeout
+
 		NetworkManager_.leave_game()
 		multiplayer.multiplayer_peer.close()
 		get_tree().set_multiplayer(null)
 		get_tree().change_scene_to_file("res://UI/MainMenu.tscn")
-	else: 
+	else:
 		var gladiator = all_gladiators.get(multiplayer.get_unique_id(), {})
 		if gladiator == {}:
 			var color = gladiator.get("color", Color.WHITE)
-			var hex_color = color#color.to_html()
+			var hex_color = color
 			var formatted = "[color=%s]%s[/color][color=%s] (host) disconnected![/color]" % [hex_color, GameState_.selected_name, Color.RED.to_html()]
 			rpc("broadcast_message", multiplayer.get_unique_id(), formatted)
-			await get_tree().create_timer(1.0).timeout # 11
-			
+			await get_tree().create_timer(1.0).timeout
+
 		GameState_.erase_all_data()
-		
+
 		NetworkManager_.leave_game()
 		multiplayer.multiplayer_peer.close()
 		get_tree().set_multiplayer(null)
 		get_tree().change_scene_to_file("res://UI/MainMenu.tscn")
 
-func _on_no_button_up() -> void:
+func _on_no_button_up() -> void :
 	resume_button.visible = true
 	options_button.visible = true
 	disconnect_button.visible = true
 	confirm_disconnect.visible = false
 
 func enable_craft_with_material(crafting_mat, toggled_on):
-	
-	if toggled_on: 
-		#print("Started crafting with " + crafting_mat)
+
+	if toggled_on:
+
 		craft_active = crafting_mat
-	else: 
-		#print("Stopped crafting with " + crafting_mat)
+	else:
+
 		craft_active = ""
-	
+
 
 
 func _on_scroll_of_luck_toggled(toggled_on: bool):
 	enable_craft_with_material("scroll_of_luck", toggled_on)
-	
 
 
-func _on_scroll_of_injection_toggled(toggled_on: bool) -> void:
+
+func _on_scroll_of_injection_toggled(toggled_on: bool) -> void :
 	enable_craft_with_material("scroll_of_injection", toggled_on)
 
 
 func pretty_print_dict(data: Dictionary, indent: int = 0) -> String:
-	var out := ""
-	var pad := "    ".repeat(indent)
+	var out: = ""
+	var pad: = "    ".repeat(indent)
 
 	for key in data.keys():
 		var value = data[key]
@@ -2070,23 +2078,23 @@ func pretty_print_dict(data: Dictionary, indent: int = 0) -> String:
 		else:
 			out += "%s%s: %s\n" % [pad, str(key), str(value)]
 
-	#print(out)
+
 	return out
 
 
-func rename_equipment_panels(_all_gladiators: Dictionary) -> void:
-	var ids := _all_gladiators.keys()
-	ids.sort()  # optional but keeps order stable
+func rename_equipment_panels(_all_gladiators: Dictionary) -> void :
+	var ids: = _all_gladiators.keys()
+	ids.sort()
 
-	var count := ids.size()
-	var max_panels := 8
+	var count: = ids.size()
+	var max_panels: = 8
 
-	# Loop only through the number of gladiators
+
 	for i in range(min(count, max_panels)):
-		var old_name := "EquipmentPanel" + str(i + 1)
+		var old_name: = "EquipmentPanel" + str(i + 1)
 		if has_node(old_name):
-			var panel := get_node(old_name)
-			panel.name = "_EquipmentPanel" + str(ids[i])  # rename to gladiator ID
+			var panel: = get_node(old_name)
+			panel.name = "_EquipmentPanel" + str(ids[i])
 		else:
 			push_warning("Node '%s' not found in scene" % old_name)
 
@@ -2097,7 +2105,7 @@ func get_amount():
 	else: amount = 1
 	return amount
 
-func _on_health_icon_button_up() -> void:
+func _on_health_icon_button_up() -> void :
 	var amount = get_amount()
 	if multiplayer.is_server():
 		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "health", 0, false)
@@ -2107,7 +2115,7 @@ func _on_health_icon_button_up() -> void:
 		points_left -= amount
 	update_attribute_ui()
 
-func _on_strength_icon_button_up() -> void:
+func _on_strength_icon_button_up() -> void :
 	var amount = get_amount()
 	if multiplayer.is_server():
 		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "strength", 0, false)
@@ -2117,7 +2125,7 @@ func _on_strength_icon_button_up() -> void:
 		points_left -= amount
 	update_attribute_ui()
 
-func _on_endurance_icon_button_up() -> void:
+func _on_endurance_icon_button_up() -> void :
 	var amount = get_amount()
 	if multiplayer.is_server():
 		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "endurance", 0, false)
@@ -2127,7 +2135,7 @@ func _on_endurance_icon_button_up() -> void:
 		points_left -= amount
 	update_attribute_ui()
 
-func _on_criticality_icon_button_up() -> void:
+func _on_criticality_icon_button_up() -> void :
 	var amount = get_amount()
 	if multiplayer.is_server():
 		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "crit_rating", 0, false)
@@ -2137,7 +2145,7 @@ func _on_criticality_icon_button_up() -> void:
 		points_left -= amount
 	update_attribute_ui()
 
-func _on_avoidance_icon_button_up() -> void:
+func _on_avoidance_icon_button_up() -> void :
 	var amount = get_amount()
 	if multiplayer.is_server():
 		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "avoidance", 0, false)
@@ -2147,7 +2155,7 @@ func _on_avoidance_icon_button_up() -> void:
 		points_left -= amount
 	update_attribute_ui()
 
-func _on_quickness_icon_button_up() -> void:
+func _on_quickness_icon_button_up() -> void :
 	var amount = get_amount()
 	if multiplayer.is_server():
 		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "quickness", 0, false)
@@ -2157,7 +2165,7 @@ func _on_quickness_icon_button_up() -> void:
 		points_left -= amount
 	update_attribute_ui()
 
-func _on_resilience_icon_button_up() -> void:
+func _on_resilience_icon_button_up() -> void :
 	var amount = get_amount()
 	if multiplayer.is_server():
 		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "resilience", 0, false)
@@ -2167,7 +2175,7 @@ func _on_resilience_icon_button_up() -> void:
 		points_left -= amount
 	update_attribute_ui()
 
-func _on_sword_icon_button_up() -> void:
+func _on_sword_icon_button_up() -> void :
 	var amount = get_amount()
 	if multiplayer.is_server():
 		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "sword_mastery", 0, false)
@@ -2177,7 +2185,7 @@ func _on_sword_icon_button_up() -> void:
 		points_left -= amount
 	update_attribute_ui()
 
-func _on_axe_icon_button_up() -> void:
+func _on_axe_icon_button_up() -> void :
 	var amount = get_amount()
 	if multiplayer.is_server():
 		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "axe_mastery", 0, false)
@@ -2187,7 +2195,7 @@ func _on_axe_icon_button_up() -> void:
 		points_left -= amount
 	update_attribute_ui()
 
-func _on_stabbing_icon_button_up() -> void:
+func _on_stabbing_icon_button_up() -> void :
 	var amount = get_amount()
 	if multiplayer.is_server():
 		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "stabbing_mastery", 0, false)
@@ -2197,7 +2205,7 @@ func _on_stabbing_icon_button_up() -> void:
 		points_left -= amount
 	update_attribute_ui()
 
-func _on_mace_icon_button_up() -> void:
+func _on_mace_icon_button_up() -> void :
 	var amount = get_amount()
 	if multiplayer.is_server():
 		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "mace_mastery", 0, false)
@@ -2207,7 +2215,7 @@ func _on_mace_icon_button_up() -> void:
 		points_left -= amount
 	update_attribute_ui()
 
-func _on_flagellation_icon_button_up() -> void:
+func _on_flagellation_icon_button_up() -> void :
 	var amount = get_amount()
 	if multiplayer.is_server():
 		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "flagellation_mastery", 0, false)
@@ -2217,7 +2225,7 @@ func _on_flagellation_icon_button_up() -> void:
 		points_left -= amount
 	update_attribute_ui()
 
-func _on_shield_icon_button_up() -> void:
+func _on_shield_icon_button_up() -> void :
 	var amount = get_amount()
 	if multiplayer.is_server():
 		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "shield_mastery", 0, false)
@@ -2227,23 +2235,23 @@ func _on_shield_icon_button_up() -> void:
 		points_left -= amount
 	update_attribute_ui()
 
-#@rpc("any_peer", "call_local")
+
 func play_animation(id, animation, _weapon, hand):
 	var _hand
 	var tier = _weapon.get("tier", -1)
-	#var category  = _weapon.get("category", "???")
-	if hand == "mainhand": 
+
+	if hand == "mainhand":
 		_hand = "MainHand"
 	elif hand == "offhand":
 		_hand = "OffHand"
-	
+
 	var animation_player = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/" + _hand + "AnimationPlayer")
-	#var offhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/OffHand")
+
 	var vfx = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/Vfx" + _hand)
 	vfx.modulate = "ffffff"
-	
 
-	
+
+
 	if animation_player.has_animation(animation):
 		if tier == 1:
 			vfx.modulate = "ffffffb2"
@@ -2253,88 +2261,104 @@ func play_animation(id, animation, _weapon, hand):
 			vfx.modulate = "ffffffe6"
 		elif tier == 4:
 			vfx.modulate = "ffffff"
-			
+
 		animation_player.play(animation)
-	
+
 func wep_broken(id, _wep1_broken, _wep2_broken):
 	wep_statuses[id] = [_wep1_broken, _wep2_broken]
 	update_equipment_ui()
-	#print(wep_statuses)
-	#wep1_broken = _wep1_broken
-	#wep2_broken = _wep2_broken
-	
+
+
+
+
 func find_spawn_side(target):
 	for side in GameState_.spawn_points.keys():
 		for point in GameState_.spawn_points[side]:
 			if point == target:
 				return side
-	return "unknown"  # Or null
+	return "unknown"
 
 func parry_animation(id, hand):
 	var mainhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/MainHand")
 	var offhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/OffHand")
 	mainhand["modulate"] = "ffffff"
 	offhand["modulate"] = "ffffff"
-	
+
 	if hand == "MainHand":
 		TweenFX.spotlight(mainhand, 0.3)
 		TweenFX.blink(mainhand, 0.1, 1)
 	elif hand == "OffHand":
 		TweenFX.spotlight(offhand, 0.3)
 		TweenFX.blink(offhand, 0.1, 1)
-	
-	
+
+
 func block_animation(id, hand):
 	var mainhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/MainHand")
 	var offhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/OffHand")
 	mainhand["modulate"] = "ffffff"
-	
+
 	var animation_player = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/OffHandAnimationPlayer")
-	
+
 	if animation_player.has_animation("block"):
 		animation_player.play("block")
-	
+
 	if hand == "MainHand":
 		TweenFX.spotlight(mainhand, 0.3, "d2c9a5")
-		#TweenFX.blink(mainhand, 0.1, 1)
+
 	elif hand == "OffHand":
 		TweenFX.spotlight(offhand, 0.3, "d2c9a5")
-		#TweenFX.blink(offhand, 0.1, 1)
+
 
 
 func hit_animation(id):
 	var _equipment_panel_picture = get_node("_EquipmentPanel" + str(id) + "/EquipmentPanelPicture")
 	_equipment_panel_picture["modulate"] = "ffffff"
 	TweenFX.spotlight(_equipment_panel_picture, 0.2, "d2c9a5")
-	
-	
+
+
 func crit_animation(id):
 	var _equipment_panel_picture = get_node("_EquipmentPanel" + str(id) + "/EquipmentPanelPicture")
 	_equipment_panel_picture["modulate"] = "ffffff"
 	TweenFX.spotlight(_equipment_panel_picture, 0.2, "79444a")
-	
-	
+
+
 func dodge_animation(id):
 	var _equipment_panel_picture = get_node("_EquipmentPanel" + str(id) + "/EquipmentPanelPicture")
-	
-	
+
+
 func update_hp(id, current_health, max_health):
 	if current_health < 0.6 * max_health and current_health >= 0.3 * max_health:
 		healthbar_color = Color("b3a555")
 	elif current_health < 0.3 * max_health:
 		healthbar_color = Color("78222c")
-	else: 
+	else:
 		healthbar_color = Color("77883b")
-	
+
 	var health_bar = get_node("_EquipmentPanel" + str(id) + "/HealthBar")
 	var health_bar_text = get_node("_EquipmentPanel" + str(id) + "/HealthBar/HealthBarText")
 	health_bar.max_value = max_health
 	health_bar.value = current_health
 	health_bar_text.text = str(int(current_health))
-	
+
 	var old_sb = health_bar.get_theme_stylebox("fill")
 
 	if old_sb:
-		var new_sb = old_sb.duplicate()   # ← deep copy
+		var new_sb = old_sb.duplicate()
 		new_sb.bg_color = healthbar_color
 		health_bar.add_theme_stylebox_override("fill", new_sb)
+
+
+func _on_lock_shop_pressed() -> void :
+	if is_refreshing:
+		print("can't lock shop due to rerolling ongoing")
+		return
+
+	is_shop_locked = !is_shop_locked
+	refresh_button.disabled = is_shop_locked
+
+	var cards = shop_grid.get_children()
+	for card in cards:
+		card.disabled = is_shop_locked
+
+	if is_shop_locked == true: shop_grid.modulate = "ffffffce"
+	else: shop_grid.modulate = "ffffff"

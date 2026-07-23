@@ -1,6 +1,6 @@
 [gd_scene load_steps=6 format=3 uid="uid://dq5vc2nol8y18"]
 
-[ext_resource type="Script" uid="uid://dsjfojqx1xb5k" path="res://Scripts/LobbyManager.gd" id="1_bpe3w"]
+[ext_resource type="Script" uid="uid://dsjfojqx1xb5k" path="res://Scripts/LobbyManager.gd" id="1"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ers0q"]
 load_path = "res://.godot/imported/battlefield_grass.png-e5cddb3c47484e286f5272d6124ff1c1.ctex"
@@ -26,7 +26,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_bpe3w")
+script = ExtResource("1")
 
 [node name="Background" type="TextureRect" parent="."]
 layout_mode = 1

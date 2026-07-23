@@ -1,11 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://c3ldvvj2q3fku"]
 
-[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_h2l8d"]
-[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="2_2ykro"]
-[ext_resource type="Texture2D" uid="uid://cqhdhoyg6o24y" path="res://Assets/CardAssets/EquipmentCardAssets/head_t2_light_128x128.png" id="2_acjdd"]
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1"]
+[ext_resource type="Texture2D" uid="uid://cqhdhoyg6o24y" path="res://Assets/CardAssets/EquipmentCardAssets/head_t2_light_128x128.png" id="2"]
+[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="3"]
 
 [node name="TailoredCap" type="Button"]
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = -508.0
@@ -13,11 +12,10 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("1_h2l8d")
-icon = ExtResource("2_acjdd")
+theme = ExtResource("1")
+icon = ExtResource("2")
 expand_icon = true
-script = ExtResource("2_2ykro")
+script = ExtResource("3")
 equipment_name = "tailored_cap"
-cost = 8
 
 [connection signal="button_up" from="." to="." method="_on_button_up"]

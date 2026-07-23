@@ -1,40 +1,44 @@
-[gd_scene load_steps=65 format=3 uid="uid://dutn6wxx1oapc"]
+[gd_scene load_steps=78 format=3 uid="uid://dutn6wxx1oapc"]
 
-[ext_resource type="Script" uid="uid://cpvmnjflyi4ln" path="res://UI/HUD.gd" id="1_yixhe"]
-[ext_resource type="Script" uid="uid://cd4mgamt3dion" path="res://UI/ExpButton.gd" id="3_4n7mi"]
-[ext_resource type="Texture2D" uid="uid://cd5rsplet8de7" path="res://Assets/CardAssets/CraftCardAssets/scroll_of_luck.png" id="3_rsrlt"]
-[ext_resource type="Texture2D" uid="uid://ck8sns2nu4t8h" path="res://Assets/CardAssets/CraftCardAssets/scroll_of_injection.png" id="4_lbtxw"]
-[ext_resource type="Texture2D" uid="uid://cdbks1srnvfgl" path="res://Assets/EquipmentPanel/head_slot.png" id="5_am7sw"]
-[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="5_gppie"]
-[ext_resource type="Texture2D" uid="uid://di0vlbdjk0255" path="res://Assets/Aseprite/Attributes/health.png" id="5_rsrlt"]
-[ext_resource type="Texture2D" uid="uid://cx76r8q2vqgvv" path="res://Assets/Aseprite/Attributes/strength.png" id="6_8ecy4"]
-[ext_resource type="Texture2D" uid="uid://doygxri08d3qs" path="res://Assets/EquipmentPanel/chest_slot.png" id="6_ixkb2"]
-[ext_resource type="Texture2D" uid="uid://b1uts6mpv1kwx" path="res://Assets/EquipmentPanel/shoulder_slot.png" id="6_pgems"]
-[ext_resource type="Texture2D" uid="uid://bmq3objsbdshm" path="res://Assets/Aseprite/Attributes/endurance.png" id="7_3yavs"]
-[ext_resource type="Texture2D" uid="uid://bt3dpb05qd083" path="res://Assets/EquipmentPanel/weapon_slot.png" id="7_mms7u"]
-[ext_resource type="Texture2D" uid="uid://wjv4m26sboy3" path="res://Assets/EquipmentPanel/ring_slot.png" id="8_281ki"]
-[ext_resource type="Texture2D" uid="uid://crrsom80gj47k" path="res://Assets/Aseprite/Attributes/criticality.png" id="8_sqq4o"]
-[ext_resource type="Texture2D" uid="uid://dc123cwv575n6" path="res://Assets/Aseprite/Attributes/avoidance.png" id="9_exw07"]
-[ext_resource type="Texture2D" uid="uid://c2mpo6wob3ggv" path="res://Assets/EquipmentPanel/shield_slot.png" id="9_rsrlt"]
-[ext_resource type="Texture2D" uid="uid://e4glytfe8804" path="res://Assets/EquipmentPanel/necklace_slot.png" id="9_w37wn"]
-[ext_resource type="Texture2D" uid="uid://uuhsexcwvpxj" path="res://Assets/Aseprite/Attributes/quickness.png" id="10_cjcxt"]
-[ext_resource type="Texture2D" uid="uid://b38741xtcou72" path="res://Assets/EquipmentPanel/amulet_slot.png" id="10_kg6a8"]
-[ext_resource type="Texture2D" uid="uid://bauu1dneus5ck" path="res://Assets/Aseprite/Attributes/resilience.png" id="11_kylmn"]
-[ext_resource type="Texture2D" uid="uid://cvnilip0qogng" path="res://Assets/Aseprite/Attributes/sword_mastery.png" id="12_ec1tb"]
-[ext_resource type="Texture2D" uid="uid://buq5scxopockj" path="res://Assets/Aseprite/Attributes/axe_mastery.png" id="13_ikkuv"]
-[ext_resource type="Texture2D" uid="uid://cj4xdr3v8sice" path="res://Assets/EquipmentPanel/belt_slot.png" id="13_lbtxw"]
-[ext_resource type="Texture2D" uid="uid://dr6x14n64yfjf" path="res://Assets/Aseprite/Attributes/stabbing_mastery.png" id="14_eyk8g"]
-[ext_resource type="Texture2D" uid="uid://2yb0vmubowa0" path="res://Assets/EquipmentPanel/legs_slot.png" id="14_gp2h7"]
-[ext_resource type="Texture2D" uid="uid://dl26mpyf8d2iv" path="res://Assets/Aseprite/Attributes/mace_mastery.png" id="15_1gabh"]
-[ext_resource type="Texture2D" uid="uid://v61ii8bhvfyw" path="res://Assets/EquipmentPanel/trinket_slot.png" id="15_4hs1h"]
-[ext_resource type="Texture2D" uid="uid://bddeyxky31tmc" path="res://Assets/Aseprite/Attributes/flagellation_mastery.png" id="16_2aqtr"]
-[ext_resource type="Texture2D" uid="uid://b6skn46js24kq" path="res://Assets/EquipmentPanel/boots_slot.png" id="16_dcyds"]
-[ext_resource type="Texture2D" uid="uid://blkdqari80i7h" path="res://Assets/Aseprite/Attributes/shield_mastery.png" id="17_3lr6k"]
-[ext_resource type="Texture2D" uid="uid://istsw06i80ul" path="res://Assets/EquipmentPanel/back_slot.png" id="17_rc7pm"]
-[ext_resource type="Texture2D" uid="uid://c0o5wotjquk3c" path="res://Assets/EquipmentPanel/gloves_slot.png" id="18_h8urj"]
-[ext_resource type="Texture2D" uid="uid://djkvo1q8lg3qp" path="res://Assets/Equipment/vfx/mace_t3_vfx.png" id="33_cjcxt"]
-[ext_resource type="Texture2D" uid="uid://c7d13628l7rct" path="res://Assets/Equipment/Sword/sword_t4_light_128x128.png" id="34_kylmn"]
-[ext_resource type="Texture2D" uid="uid://d36cf0gnh2djx" path="res://Assets/Equipment/Shield/shield_light_t4_128x128.png" id="35_kylmn"]
+[ext_resource type="Script" uid="uid://cpvmnjflyi4ln" path="res://UI/HUD.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://cd5rsplet8de7" path="res://Assets/CardAssets/CraftCardAssets/scroll_of_luck.png" id="2"]
+[ext_resource type="Script" uid="uid://hwl7lvjew3dh" path="res://UI/label_gold.gd" id="2_ikkuv"]
+[ext_resource type="Texture2D" uid="uid://ck8sns2nu4t8h" path="res://Assets/CardAssets/CraftCardAssets/scroll_of_injection.png" id="3"]
+[ext_resource type="Texture2D" uid="uid://di0vlbdjk0255" path="res://Assets/Aseprite/Attributes/health.png" id="4"]
+[ext_resource type="Script" uid="uid://cjqk8pkio8a34" path="res://UI/health_icon.gd" id="5"]
+[ext_resource type="Texture2D" uid="uid://cx76r8q2vqgvv" path="res://Assets/Aseprite/Attributes/strength.png" id="6"]
+[ext_resource type="Texture2D" uid="uid://bmq3objsbdshm" path="res://Assets/Aseprite/Attributes/endurance.png" id="7"]
+[ext_resource type="Texture2D" uid="uid://crrsom80gj47k" path="res://Assets/Aseprite/Attributes/criticality.png" id="8"]
+[ext_resource type="Texture2D" uid="uid://dc123cwv575n6" path="res://Assets/Aseprite/Attributes/avoidance.png" id="9"]
+[ext_resource type="Texture2D" uid="uid://uuhsexcwvpxj" path="res://Assets/Aseprite/Attributes/quickness.png" id="10"]
+[ext_resource type="Texture2D" uid="uid://bauu1dneus5ck" path="res://Assets/Aseprite/Attributes/resilience.png" id="11"]
+[ext_resource type="Texture2D" uid="uid://cvnilip0qogng" path="res://Assets/Aseprite/Attributes/sword_mastery.png" id="12"]
+[ext_resource type="Texture2D" uid="uid://buq5scxopockj" path="res://Assets/Aseprite/Attributes/axe_mastery.png" id="13"]
+[ext_resource type="Texture2D" uid="uid://dr6x14n64yfjf" path="res://Assets/Aseprite/Attributes/stabbing_mastery.png" id="14"]
+[ext_resource type="Texture2D" uid="uid://dl26mpyf8d2iv" path="res://Assets/Aseprite/Attributes/mace_mastery.png" id="15"]
+[ext_resource type="Texture2D" uid="uid://bddeyxky31tmc" path="res://Assets/Aseprite/Attributes/flagellation_mastery.png" id="16"]
+[ext_resource type="Texture2D" uid="uid://blkdqari80i7h" path="res://Assets/Aseprite/Attributes/shield_mastery.png" id="17"]
+[ext_resource type="Script" uid="uid://cd4mgamt3dion" path="res://UI/ExpButton.gd" id="18"]
+[ext_resource type="Script" uid="uid://dhwaceb7vkh5y" path="res://UI/concede_threshold_menu.gd" id="19"]
+[ext_resource type="Script" uid="uid://b2w22od5bjwq" path="res://UI/attack_menu.gd" id="20"]
+[ext_resource type="Script" uid="uid://b2pugqbkvithw" path="res://UI/stance_menu.gd" id="21"]
+[ext_resource type="Texture2D" uid="uid://e4glytfe8804" path="res://Assets/EquipmentPanel/necklace_slot.png" id="22"]
+[ext_resource type="Texture2D" uid="uid://istsw06i80ul" path="res://Assets/EquipmentPanel/back_slot.png" id="23"]
+[ext_resource type="Texture2D" uid="uid://cdbks1srnvfgl" path="res://Assets/EquipmentPanel/head_slot.png" id="24"]
+[ext_resource type="Texture2D" uid="uid://b1uts6mpv1kwx" path="res://Assets/EquipmentPanel/shoulder_slot.png" id="25"]
+[ext_resource type="Texture2D" uid="uid://doygxri08d3qs" path="res://Assets/EquipmentPanel/chest_slot.png" id="26"]
+[ext_resource type="Texture2D" uid="uid://cj4xdr3v8sice" path="res://Assets/EquipmentPanel/belt_slot.png" id="27"]
+[ext_resource type="Texture2D" uid="uid://2yb0vmubowa0" path="res://Assets/EquipmentPanel/legs_slot.png" id="28"]
+[ext_resource type="Texture2D" uid="uid://b6skn46js24kq" path="res://Assets/EquipmentPanel/boots_slot.png" id="29"]
+[ext_resource type="Texture2D" uid="uid://b38741xtcou72" path="res://Assets/EquipmentPanel/amulet_slot.png" id="30"]
+[ext_resource type="Texture2D" uid="uid://c0o5wotjquk3c" path="res://Assets/EquipmentPanel/gloves_slot.png" id="31"]
+[ext_resource type="Texture2D" uid="uid://wjv4m26sboy3" path="res://Assets/EquipmentPanel/ring_slot.png" id="32"]
+[ext_resource type="Texture2D" uid="uid://v61ii8bhvfyw" path="res://Assets/EquipmentPanel/trinket_slot.png" id="33"]
+[ext_resource type="Texture2D" uid="uid://bt3dpb05qd083" path="res://Assets/EquipmentPanel/weapon_slot.png" id="34"]
+[ext_resource type="Texture2D" uid="uid://c2mpo6wob3ggv" path="res://Assets/EquipmentPanel/shield_slot.png" id="35"]
+[ext_resource type="Texture2D" uid="uid://djkvo1q8lg3qp" path="res://Assets/Equipment/vfx/mace_t3_vfx.png" id="36"]
+[ext_resource type="Texture2D" uid="uid://c7d13628l7rct" path="res://Assets/Equipment/Sword/sword_t4_light_128x128.png" id="37"]
+[ext_resource type="Texture2D" uid="uid://d36cf0gnh2djx" path="res://Assets/Equipment/Shield/shield_light_t4_128x128.png" id="38"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_yixhe"]
 properties/0/path = NodePath(".:card_stock")
@@ -116,27 +120,132 @@ properties/25/path = NodePath("VBoxContainer/Player8/TextureRect/PlayerLife:text
 properties/25/spawn = true
 properties/25/replication_mode = 2
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5kwvm"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+border_color = Color(0.29411766, 0.23921569, 0.26666668, 0.8352941)
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_us337"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.7137255)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ca11x"]
+resource_local_to_scene = true
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dhyvq"]
+bg_color = Color(0.46666667, 0.45490196, 0.23137255, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+shadow_size = 6
+
+[sub_resource type="Theme" id="Theme_i6ua2"]
+resource_local_to_scene = true
+Button/icons/icon = null
+Button/styles/normal = SubResource("StyleBoxFlat_5kwvm")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_us337")
+Panel/styles/panel = SubResource("StyleBoxFlat_ca11x")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_ca11x")
+PopupMenu/colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+PopupMenu/colors/font_disabled_color = Color(0.8235294, 0.7882353, 0.64705884, 0.8745098)
+PopupMenu/colors/font_hover_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+PopupMenu/colors/font_outline_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+PopupMenu/constants/outline_size = 8
+PopupMenu/font_sizes/font_size = 22
+PopupMenu/styles/panel = SubResource("StyleBoxFlat_dhyvq")
+PopupPanel/styles/panel = SubResource("StyleBoxFlat_ca11x")
+
 [sub_resource type="LabelSettings" id="LabelSettings_ijstf"]
-font_size = 13
-
-[sub_resource type="LabelSettings" id="LabelSettings_4n7mi"]
-
-[sub_resource type="LabelSettings" id="LabelSettings_uk570"]
-font_size = 26
-
-[sub_resource type="LabelSettings" id="LabelSettings_pgems"]
+font_size = 15
 font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-outline_size = 6
+outline_size = 4
 outline_color = Color(0, 0, 0, 1)
 
-[sub_resource type="LabelSettings" id="LabelSettings_f2wx0"]
+[sub_resource type="LabelSettings" id="LabelSettings_4n7mi"]
+font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kylmn"]
+bg_color = Color(0.57254905, 0.57254905, 0.57254905, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ikkuv"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_eyk8g"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1gabh"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="LabelSettings" id="LabelSettings_pgems"]
+font_size = 22
+font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+outline_size = 8
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_yxlso"]
+resource_local_to_scene = true
 font_size = 20
 font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 outline_size = 5
 outline_color = Color(0, 0, 0, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2aqtr"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ec1tb"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8ecy4"]
 bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.5294118)
+border_color = Color(0, 0, 0, 1)
 corner_radius_top_left = 3
 corner_radius_top_right = 3
 corner_radius_bottom_right = 3
@@ -1781,7 +1890,7 @@ expand_margin_right = 1.0
 expand_margin_bottom = 1.0
 anti_aliasing = false
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cjcxt"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5wmwi"]
 resource_local_to_scene = true
 bg_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
 border_color = Color(0, 0, 0, 1)
@@ -1799,14 +1908,11 @@ outline_size = 31
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
-[sub_resource type="LabelSettings" id="LabelSettings_gppie"]
-outline_size = 6
-outline_color = Color(0, 0, 0, 1)
-
 [node name="HUD" type="CanvasLayer"]
-script = ExtResource("1_yixhe")
+script = ExtResource("1")
 
 [node name="FocusButton" type="Button" parent="."]
+modulate = Color(1, 1, 1, 0)
 offset_right = 8.0
 offset_bottom = 8.0
 toggle_mode = true
@@ -1814,37 +1920,60 @@ toggle_mode = true
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_yixhe")
 
-[node name="MarginContainer" type="MarginContainer" parent="."]
-texture_filter = 1
-anchors_preset = 10
-anchor_right = 1.0
-offset_bottom = 23.0
-grow_horizontal = 2
-
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
-layout_mode = 2
-
-[node name="Label_Round" type="Label" parent="MarginContainer/HBoxContainer"]
-layout_mode = 2
+[node name="Label_Round" type="RichTextLabel" parent="."]
+offset_left = 270.0
+offset_top = 14.0
+offset_right = 427.0
+offset_bottom = 97.0
 size_flags_horizontal = 3
+theme_override_colors/font_outline_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+theme_override_constants/line_separation = 0
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/normal_font_size = 38
+bbcode_enabled = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="Label_Gold" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="Label_Gold" type="RichTextLabel" parent="."]
 texture_filter = 1
-layout_mode = 2
+offset_left = 1516.0
+offset_top = 14.0
+offset_right = 1662.0
+offset_bottom = 53.0
 size_flags_horizontal = 8
-text = "💰 0"
+theme_override_colors/font_outline_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+theme_override_constants/line_separation = 0
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/normal_font_size = 38
+bbcode_enabled = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
+script = ExtResource("2_ikkuv")
 
-[node name="Label_Experience" type="Label" parent="MarginContainer/HBoxContainer"]
+[node name="Label_Experience" type="RichTextLabel" parent="."]
 texture_filter = 1
-layout_mode = 2
+offset_left = 1693.0
+offset_top = 14.0
+offset_right = 1890.0
+offset_bottom = 53.0
 size_flags_horizontal = 8
-text = "       🔹 0"
+theme_override_colors/font_outline_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+theme_override_constants/line_separation = 0
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/normal_font_size = 38
+bbcode_enabled = true
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
 offset_left = 18.0
-offset_top = 52.0
+offset_top = 22.0
 offset_right = 205.0
-offset_bottom = 456.0
+offset_bottom = 426.0
 pivot_offset = Vector2(1.33, 0)
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -1858,12 +1987,12 @@ size_flags_vertical = 3
 self_modulate = Color(1, 1, 1, 0.5254902)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="PlayerInfo" type="VBoxContainer" parent="VBoxContainer/Player1/TextureRect"]
 layout_mode = 0
 offset_left = 4.0
-offset_right = 91.0
+offset_right = 136.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 
@@ -1872,7 +2001,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/outline_size = 6
-fit_content = true
 scroll_active = false
 scroll_following = true
 autowrap_mode = 0
@@ -1882,36 +2010,28 @@ vertical_alignment = 1
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 4
 label_settings = SubResource("LabelSettings_ijstf")
 vertical_alignment = 1
 
 [node name="PlayerLife" type="Label" parent="VBoxContainer/Player1/TextureRect"]
 layout_mode = 0
-offset_left = 95.0
+offset_left = 137.0
 offset_right = 182.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 tooltip_text = "Remaining health"
 mouse_filter = 1
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 4
 label_settings = SubResource("LabelSettings_4n7mi")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Inspect" type="Label" parent="VBoxContainer/Player1/TextureRect"]
-layout_mode = 0
-offset_left = 186.0
-offset_right = 187.0
-offset_bottom = 47.0
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Player2" type="HBoxContainer" parent="VBoxContainer"]
 modulate = Color(1, 1, 1, 0)
-self_modulate = Color(1, 1, 1, 0.5254902)
 layout_mode = 2
 size_flags_vertical = 3
 
@@ -1919,12 +2039,12 @@ size_flags_vertical = 3
 self_modulate = Color(1, 1, 1, 0.5254902)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="PlayerInfo" type="VBoxContainer" parent="VBoxContainer/Player2/TextureRect"]
 layout_mode = 0
 offset_left = 4.0
-offset_right = 91.0
+offset_right = 136.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 
@@ -1933,38 +2053,32 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/outline_size = 6
+scroll_active = false
+scroll_following = true
 autowrap_mode = 0
 vertical_alignment = 1
-visible_characters = 11
 
 [node name="PlayerRace" type="Label" parent="VBoxContainer/Player2/TextureRect/PlayerInfo"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 4
 label_settings = SubResource("LabelSettings_ijstf")
 vertical_alignment = 1
 
 [node name="PlayerLife" type="Label" parent="VBoxContainer/Player2/TextureRect"]
 layout_mode = 0
-offset_left = 95.0
+offset_left = 137.0
 offset_right = 182.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 tooltip_text = "Remaining health"
 mouse_filter = 1
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 4
 label_settings = SubResource("LabelSettings_4n7mi")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Inspect" type="Label" parent="VBoxContainer/Player2/TextureRect"]
-layout_mode = 0
-offset_left = 186.0
-offset_right = 187.0
-offset_bottom = 47.0
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -1977,12 +2091,12 @@ size_flags_vertical = 3
 self_modulate = Color(1, 1, 1, 0.5254902)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="PlayerInfo" type="VBoxContainer" parent="VBoxContainer/Player3/TextureRect"]
 layout_mode = 0
 offset_left = 4.0
-offset_right = 91.0
+offset_right = 136.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 
@@ -1991,38 +2105,32 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/outline_size = 6
+scroll_active = false
+scroll_following = true
 autowrap_mode = 0
 vertical_alignment = 1
-visible_characters = 11
 
 [node name="PlayerRace" type="Label" parent="VBoxContainer/Player3/TextureRect/PlayerInfo"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 4
 label_settings = SubResource("LabelSettings_ijstf")
 vertical_alignment = 1
 
 [node name="PlayerLife" type="Label" parent="VBoxContainer/Player3/TextureRect"]
 layout_mode = 0
-offset_left = 95.0
+offset_left = 137.0
 offset_right = 182.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 tooltip_text = "Remaining health"
 mouse_filter = 1
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 4
 label_settings = SubResource("LabelSettings_4n7mi")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Inspect" type="Label" parent="VBoxContainer/Player3/TextureRect"]
-layout_mode = 0
-offset_left = 186.0
-offset_right = 187.0
-offset_bottom = 47.0
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -2035,12 +2143,12 @@ size_flags_vertical = 3
 self_modulate = Color(1, 1, 1, 0.5254902)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="PlayerInfo" type="VBoxContainer" parent="VBoxContainer/Player4/TextureRect"]
 layout_mode = 0
 offset_left = 4.0
-offset_right = 91.0
+offset_right = 136.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 
@@ -2049,38 +2157,32 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/outline_size = 6
+scroll_active = false
+scroll_following = true
 autowrap_mode = 0
 vertical_alignment = 1
-visible_characters = 11
 
 [node name="PlayerRace" type="Label" parent="VBoxContainer/Player4/TextureRect/PlayerInfo"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 4
 label_settings = SubResource("LabelSettings_ijstf")
 vertical_alignment = 1
 
 [node name="PlayerLife" type="Label" parent="VBoxContainer/Player4/TextureRect"]
 layout_mode = 0
-offset_left = 95.0
+offset_left = 137.0
 offset_right = 182.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 tooltip_text = "Remaining health"
 mouse_filter = 1
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 4
 label_settings = SubResource("LabelSettings_4n7mi")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Inspect" type="Label" parent="VBoxContainer/Player4/TextureRect"]
-layout_mode = 0
-offset_left = 186.0
-offset_right = 187.0
-offset_bottom = 47.0
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -2093,12 +2195,12 @@ size_flags_vertical = 3
 self_modulate = Color(1, 1, 1, 0.5254902)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="PlayerInfo" type="VBoxContainer" parent="VBoxContainer/Player5/TextureRect"]
 layout_mode = 0
 offset_left = 4.0
-offset_right = 91.0
+offset_right = 136.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 
@@ -2107,38 +2209,32 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/outline_size = 6
+scroll_active = false
+scroll_following = true
 autowrap_mode = 0
 vertical_alignment = 1
-visible_characters = 11
 
 [node name="PlayerRace" type="Label" parent="VBoxContainer/Player5/TextureRect/PlayerInfo"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 4
 label_settings = SubResource("LabelSettings_ijstf")
 vertical_alignment = 1
 
 [node name="PlayerLife" type="Label" parent="VBoxContainer/Player5/TextureRect"]
 layout_mode = 0
-offset_left = 95.0
+offset_left = 137.0
 offset_right = 182.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 tooltip_text = "Remaining health"
 mouse_filter = 1
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 4
 label_settings = SubResource("LabelSettings_4n7mi")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Inspect" type="Label" parent="VBoxContainer/Player5/TextureRect"]
-layout_mode = 0
-offset_left = 186.0
-offset_right = 187.0
-offset_bottom = 47.0
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -2151,12 +2247,12 @@ size_flags_vertical = 3
 self_modulate = Color(1, 1, 1, 0.5254902)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="PlayerInfo" type="VBoxContainer" parent="VBoxContainer/Player6/TextureRect"]
 layout_mode = 0
 offset_left = 4.0
-offset_right = 91.0
+offset_right = 136.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 
@@ -2165,38 +2261,32 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/outline_size = 6
+scroll_active = false
+scroll_following = true
 autowrap_mode = 0
 vertical_alignment = 1
-visible_characters = 11
 
 [node name="PlayerRace" type="Label" parent="VBoxContainer/Player6/TextureRect/PlayerInfo"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 4
 label_settings = SubResource("LabelSettings_ijstf")
 vertical_alignment = 1
 
 [node name="PlayerLife" type="Label" parent="VBoxContainer/Player6/TextureRect"]
 layout_mode = 0
-offset_left = 95.0
+offset_left = 137.0
 offset_right = 182.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 tooltip_text = "Remaining health"
 mouse_filter = 1
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 4
 label_settings = SubResource("LabelSettings_4n7mi")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Inspect" type="Label" parent="VBoxContainer/Player6/TextureRect"]
-layout_mode = 0
-offset_left = 186.0
-offset_right = 187.0
-offset_bottom = 47.0
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -2209,12 +2299,12 @@ size_flags_vertical = 3
 self_modulate = Color(1, 1, 1, 0.5254902)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="PlayerInfo" type="VBoxContainer" parent="VBoxContainer/Player7/TextureRect"]
 layout_mode = 0
 offset_left = 4.0
-offset_right = 91.0
+offset_right = 136.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 
@@ -2223,38 +2313,32 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/outline_size = 6
+scroll_active = false
+scroll_following = true
 autowrap_mode = 0
 vertical_alignment = 1
-visible_characters = 11
 
 [node name="PlayerRace" type="Label" parent="VBoxContainer/Player7/TextureRect/PlayerInfo"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 4
 label_settings = SubResource("LabelSettings_ijstf")
 vertical_alignment = 1
 
 [node name="PlayerLife" type="Label" parent="VBoxContainer/Player7/TextureRect"]
 layout_mode = 0
-offset_left = 95.0
+offset_left = 137.0
 offset_right = 182.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 tooltip_text = "Remaining health"
 mouse_filter = 1
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 4
 label_settings = SubResource("LabelSettings_4n7mi")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Inspect" type="Label" parent="VBoxContainer/Player7/TextureRect"]
-layout_mode = 0
-offset_left = 186.0
-offset_right = 187.0
-offset_bottom = 47.0
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -2267,12 +2351,12 @@ size_flags_vertical = 3
 self_modulate = Color(1, 1, 1, 0.5254902)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="PlayerInfo" type="VBoxContainer" parent="VBoxContainer/Player8/TextureRect"]
 layout_mode = 0
 offset_left = 4.0
-offset_right = 91.0
+offset_right = 136.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 
@@ -2281,38 +2365,32 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_constants/outline_size = 6
+scroll_active = false
+scroll_following = true
 autowrap_mode = 0
 vertical_alignment = 1
-visible_characters = 11
 
 [node name="PlayerRace" type="Label" parent="VBoxContainer/Player8/TextureRect/PlayerInfo"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 4
 label_settings = SubResource("LabelSettings_ijstf")
 vertical_alignment = 1
 
 [node name="PlayerLife" type="Label" parent="VBoxContainer/Player8/TextureRect"]
 layout_mode = 0
-offset_left = 95.0
+offset_left = 137.0
 offset_right = 182.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
 tooltip_text = "Remaining health"
 mouse_filter = 1
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 4
 label_settings = SubResource("LabelSettings_4n7mi")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Inspect" type="Label" parent="VBoxContainer/Player8/TextureRect"]
-layout_mode = 0
-offset_left = 186.0
-offset_right = 187.0
-offset_bottom = 47.0
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -2343,11 +2421,12 @@ grow_horizontal = 0
 grow_vertical = 0
 scale = Vector2(2, 2)
 tooltip_text = "Equipment"
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 text = "🤺"
 icon_alignment = 1
 
 [node name="ShopButton" type="Button" parent="."]
+visible = false
 modulate = Color(1, 1, 1, 0)
 anchors_preset = 3
 anchor_left = 1.0
@@ -2362,7 +2441,7 @@ grow_horizontal = 0
 grow_vertical = 0
 scale = Vector2(2, 2)
 tooltip_text = "Shop"
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 text = "💼"
 icon_alignment = 1
 
@@ -2371,42 +2450,98 @@ wait_time = 10.0
 one_shot = true
 autostart = true
 
-[node name="IntermissionTimerLabel" type="Label" parent="."]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -20.0
-offset_top = 11.0
-offset_right = 20.0
-offset_bottom = 47.0
-grow_horizontal = 2
-label_settings = SubResource("LabelSettings_uk570")
+[node name="IntermissionTimerLabel" type="RichTextLabel" parent="."]
+offset_left = 880.0
+offset_top = 269.0
+offset_right = 1037.0
+offset_bottom = 308.0
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+theme_override_constants/line_separation = 0
+theme_override_constants/outline_size = 12
+theme_override_font_sizes/normal_font_size = 38
+bbcode_enabled = true
+scroll_active = false
+horizontal_alignment = 1
+vertical_alignment = 1
 
-[node name="RefreshButton" type="Button" parent="."]
+[node name="LockShop" type="Button" parent="."]
 texture_filter = 1
 custom_minimum_size = Vector2(70, 0)
-offset_left = 1445.0
-offset_top = 157.0
-offset_right = 1515.0
-offset_bottom = 190.0
+offset_left = 1437.0
+offset_top = 59.0
+offset_right = 1530.0
+offset_bottom = 92.0
 pivot_offset = Vector2(35, 16.5)
 size_flags_horizontal = 4
 size_flags_vertical = 4
-theme = ExtResource("5_gppie")
-theme_override_constants/outline_size = 4
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 9
 theme_override_constants/icon_max_width = 0
 theme_override_constants/align_to_largest_stylebox = 0
 theme_override_constants/line_spacing = 0
 theme_override_font_sizes/font_size = 24
-disabled = true
-text = "Reroll"
+theme_override_styles/normal = SubResource("StyleBoxFlat_kylmn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ikkuv")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_eyk8g")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_1gabh")
+text = "LOCK"
+
+[node name="RefreshButton" type="Button" parent="."]
+texture_filter = 1
+custom_minimum_size = Vector2(70, 0)
+offset_left = 1437.0
+offset_top = 98.0
+offset_right = 1530.0
+offset_bottom = 131.0
+pivot_offset = Vector2(35, 16.5)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 9
+theme_override_constants/icon_max_width = 0
+theme_override_constants/align_to_largest_stylebox = 0
+theme_override_constants/line_spacing = 0
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_kylmn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ikkuv")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_eyk8g")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_1gabh")
+text = "REROLL"
+
+[node name="LabelBuyRoll" type="RichTextLabel" parent="."]
+offset_left = 1463.0
+offset_top = 129.0
+offset_right = 1503.0
+offset_bottom = 153.0
+theme_override_colors/default_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 22
+bbcode_enabled = true
+text = "$ 2"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="LabelBuyExp" type="RichTextLabel" parent="."]
+offset_left = 1707.0
+offset_top = 84.0
+offset_right = 1747.0
+offset_bottom = 108.0
+theme_override_colors/default_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 22
+bbcode_enabled = true
+text = "$ 5"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="ShopGridContainer" type="GridContainer" parent="."]
 custom_minimum_size = Vector2(960, 192)
 offset_left = 479.0
-offset_top = 60.999985
+offset_top = 1.9999847
 offset_right = 1439.0
-offset_bottom = 286.0
+offset_bottom = 227.0
 pivot_offset = Vector2(480, 112.5)
 columns = 5
 
@@ -2445,11 +2580,12 @@ alignment = 1
 
 [node name="ScrollOfLuck" type="Button" parent="CraftingContainer/CraftingMats"]
 texture_filter = 1
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 theme_override_font_sizes/font_size = 11
-theme_override_icons/icon = ExtResource("3_rsrlt")
+theme_override_icons/icon = ExtResource("2")
 toggle_mode = true
 autowrap_mode = 2
 autowrap_trim_flags = 0
@@ -2472,11 +2608,12 @@ vertical_alignment = 1
 
 [node name="ScrollOfInjection" type="Button" parent="CraftingContainer/CraftingMats"]
 texture_filter = 1
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 theme_override_font_sizes/font_size = 11
-theme_override_icons/icon = ExtResource("4_lbtxw")
+theme_override_icons/icon = ExtResource("3")
 toggle_mode = true
 autowrap_mode = 2
 autowrap_trim_flags = 0
@@ -2504,9 +2641,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -73.5
-offset_top = -98.0
-offset_right = 73.5
+offset_left = -269.0
+offset_top = -101.0
+offset_right = 271.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
@@ -2523,31 +2660,63 @@ custom_minimum_size = Vector2(0, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-columns = 4
+columns = 8
 
 [node name="slot1" type="PanelContainer" parent="Inventory/InventoryGridContainer"]
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="slot2" type="PanelContainer" parent="Inventory/InventoryGridContainer"]
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="slot3" type="PanelContainer" parent="Inventory/InventoryGridContainer"]
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="slot4" type="PanelContainer" parent="Inventory/InventoryGridContainer"]
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
+
+[node name="slot5" type="PanelContainer" parent="Inventory/InventoryGridContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource("Theme_i6ua2")
+
+[node name="slot6" type="PanelContainer" parent="Inventory/InventoryGridContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource("Theme_i6ua2")
+
+[node name="slot7" type="PanelContainer" parent="Inventory/InventoryGridContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource("Theme_i6ua2")
+
+[node name="slot8" type="PanelContainer" parent="Inventory/InventoryGridContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource("Theme_i6ua2")
 
 [node name="InventoryPopup" type="PopupMenu" parent="."]
 
@@ -2572,7 +2741,7 @@ offset_right = -934.0
 offset_bottom = 369.0
 grow_horizontal = 0
 grow_vertical = 2
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="AttributePanel_backup"]
 layout_mode = 1
@@ -2589,77 +2758,77 @@ grow_vertical = 2
 [node name="Health" type="Label" parent="AttributePanel_backup/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="Strength" type="Label" parent="AttributePanel_backup/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="Endurance" type="Label" parent="AttributePanel_backup/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="Criticality" type="Label" parent="AttributePanel_backup/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="Avoidance" type="Label" parent="AttributePanel_backup/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="Quickness" type="Label" parent="AttributePanel_backup/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="Resilience" type="Label" parent="AttributePanel_backup/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="Blank" type="Label" parent="AttributePanel_backup/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="SwordMastery" type="Label" parent="AttributePanel_backup/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="AxeMastery" type="Label" parent="AttributePanel_backup/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="StabbingMastery" type="Label" parent="AttributePanel_backup/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="MaceMastery" type="Label" parent="AttributePanel_backup/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="FlagellationMastery" type="Label" parent="AttributePanel_backup/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="ShieldMastery" type="Label" parent="AttributePanel_backup/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="UnarmedMastery" type="Label" parent="AttributePanel_backup/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="AttributePanel" type="Panel" parent="."]
 self_modulate = Color(1, 1, 1, 0.8627451)
@@ -2670,12 +2839,12 @@ anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
 offset_left = -583.0
-offset_top = 34.0
+offset_top = -58.0
 offset_right = -403.0
-offset_bottom = 334.0
+offset_bottom = 242.0
 grow_horizontal = 0
 grow_vertical = 2
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="VBoxContainer" type="GridContainer" parent="AttributePanel"]
 clip_contents = true
@@ -2683,10 +2852,10 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = 8.0
-offset_top = 9.0
-offset_right = -9.0
-offset_bottom = -7.0
+offset_left = 5.0
+offset_top = 4.0
+offset_right = -5.0
+offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
 columns = 5
@@ -2706,21 +2875,23 @@ theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 theme_override_constants/h_separation = 4
 disabled = true
-icon = ExtResource("5_rsrlt")
+icon = ExtResource("4")
 flat = true
 expand_icon = true
+script = ExtResource("5")
+attribute_name = "health"
 
 [node name="Health" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "123"
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 vertical_alignment = 1
 
 [node name="Blank7" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="StrengthIcon" type="Button" parent="AttributePanel/VBoxContainer"]
 custom_minimum_size = Vector2(35, 35)
@@ -2736,15 +2907,17 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
-icon = ExtResource("6_8ecy4")
+icon = ExtResource("6")
 flat = true
 expand_icon = true
+script = ExtResource("5")
+attribute_name = "strength"
 
 [node name="Strength" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "321"
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 vertical_alignment = 1
 
 [node name="EnduranceIcon" type="Button" parent="AttributePanel/VBoxContainer"]
@@ -2761,21 +2934,23 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
-icon = ExtResource("7_3yavs")
+icon = ExtResource("7")
 flat = true
 expand_icon = true
+script = ExtResource("5")
+attribute_name = "endurance"
 
 [node name="Endurance" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "231"
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 vertical_alignment = 1
 
 [node name="Blank8" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="CriticalityIcon" type="Button" parent="AttributePanel/VBoxContainer"]
 custom_minimum_size = Vector2(35, 35)
@@ -2791,15 +2966,17 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
-icon = ExtResource("8_sqq4o")
+icon = ExtResource("8")
 flat = true
 expand_icon = true
+script = ExtResource("5")
+attribute_name = "crit_rating"
 
 [node name="Criticality" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "25"
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 vertical_alignment = 1
 
 [node name="AvoidanceIcon" type="Button" parent="AttributePanel/VBoxContainer"]
@@ -2816,21 +2993,23 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
-icon = ExtResource("9_exw07")
+icon = ExtResource("9")
 flat = true
 expand_icon = true
+script = ExtResource("5")
+attribute_name = "avoidance"
 
 [node name="Avoidance" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "242"
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 vertical_alignment = 1
 
 [node name="Blank9" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="QuicknessIcon" type="Button" parent="AttributePanel/VBoxContainer"]
 custom_minimum_size = Vector2(35, 35)
@@ -2846,15 +3025,17 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
-icon = ExtResource("10_cjcxt")
+icon = ExtResource("10")
 flat = true
 expand_icon = true
+script = ExtResource("5")
+attribute_name = "quickness"
 
 [node name="Quickness" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "312"
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 vertical_alignment = 1
 
 [node name="ResilienceIcon" type="Button" parent="AttributePanel/VBoxContainer"]
@@ -2871,56 +3052,58 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
-icon = ExtResource("11_kylmn")
+icon = ExtResource("11")
 flat = true
 expand_icon = true
+script = ExtResource("5")
+attribute_name = "resilience"
 
 [node name="Resilience" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "4444"
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 vertical_alignment = 1
 
 [node name="Blank10" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="Blank" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="Blank2" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="Blank3" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="Blank12" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="Blank4" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="Blank5" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="Blank6" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="SwordIcon" type="Button" parent="AttributePanel/VBoxContainer"]
 custom_minimum_size = Vector2(35, 35)
@@ -2936,21 +3119,23 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
-icon = ExtResource("12_ec1tb")
+icon = ExtResource("12")
 flat = true
 expand_icon = true
+script = ExtResource("5")
+attribute_name = "sword_mastery"
 
 [node name="SwordMastery" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "3"
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 vertical_alignment = 1
 
 [node name="Blank11" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="AxeIcon" type="Button" parent="AttributePanel/VBoxContainer"]
 custom_minimum_size = Vector2(35, 35)
@@ -2966,15 +3151,17 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
-icon = ExtResource("13_ikkuv")
+icon = ExtResource("13")
 flat = true
 expand_icon = true
+script = ExtResource("5")
+attribute_name = "axe_mastery"
 
 [node name="AxeMastery" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "432"
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 vertical_alignment = 1
 
 [node name="StabbingIcon" type="Button" parent="AttributePanel/VBoxContainer"]
@@ -2991,21 +3178,23 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
-icon = ExtResource("14_eyk8g")
+icon = ExtResource("14")
 flat = true
 expand_icon = true
+script = ExtResource("5")
+attribute_name = "stabbing_mastery"
 
 [node name="StabbingMastery" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "523"
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 vertical_alignment = 1
 
 [node name="Blank13" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="MaceIcon" type="Button" parent="AttributePanel/VBoxContainer"]
 custom_minimum_size = Vector2(35, 35)
@@ -3021,15 +3210,17 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
-icon = ExtResource("15_1gabh")
+icon = ExtResource("15")
 flat = true
 expand_icon = true
+script = ExtResource("5")
+attribute_name = "mace_mastery"
 
 [node name="MaceMastery" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "253"
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 vertical_alignment = 1
 
 [node name="FlagellationIcon" type="Button" parent="AttributePanel/VBoxContainer"]
@@ -3046,21 +3237,23 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
-icon = ExtResource("16_2aqtr")
+icon = ExtResource("16")
 flat = true
 expand_icon = true
+script = ExtResource("5")
+attribute_name = "flagellation_mastery"
 
 [node name="FlagellationMastery" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "5234"
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 vertical_alignment = 1
 
 [node name="Blank14" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="ShieldIcon" type="Button" parent="AttributePanel/VBoxContainer"]
 custom_minimum_size = Vector2(35, 35)
@@ -3076,29 +3269,24 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
-icon = ExtResource("17_3lr6k")
+icon = ExtResource("17")
 flat = true
 expand_icon = true
+script = ExtResource("5")
+attribute_name = "shield_mastery"
 
 [node name="ShieldMastery" type="Label" parent="AttributePanel/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
 text = "634"
-label_settings = SubResource("LabelSettings_f2wx0")
+label_settings = SubResource("LabelSettings_yxlso")
 vertical_alignment = 1
 
 [node name="UnarmedMastery" type="Label" parent="AttributePanel/VBoxContainer"]
 visible = false
 layout_mode = 2
 size_flags_horizontal = 3
-label_settings = SubResource("LabelSettings_f2wx0")
-
-[node name="Info" type="RichTextLabel" parent="AttributePanel"]
-layout_mode = 0
-offset_left = 8.0
-offset_top = 300.0
-offset_right = 43.0
-offset_bottom = 300.0
+label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="PointsLeft" type="Label" parent="AttributePanel"]
 layout_mode = 1
@@ -3111,8 +3299,28 @@ offset_right = 33.5
 offset_bottom = -1.0
 grow_horizontal = 2
 size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
 text = "Points left: 5"
-label_settings = SubResource("LabelSettings_f2wx0")
+
+[node name="Info" type="Label" parent="AttributePanel"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 12.0
+offset_top = 135.0
+offset_right = 66.0
+offset_bottom = 170.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.7294118, 0.5686275, 0.34509805, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 4
+theme_override_font_sizes/font_size = 14
+text = "SHIFT  +5
+CTRL  +10"
 
 [node name="Panel" type="Panel" parent="."]
 self_modulate = Color(1, 1, 1, 0.5254902)
@@ -3120,13 +3328,13 @@ anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
 offset_left = 4.0
-offset_top = -251.0
+offset_top = -208.0
 offset_right = 541.0
 offset_bottom = -39.0
 grow_vertical = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="ChatScroll" type="ScrollContainer" parent="Panel"]
 layout_mode = 1
@@ -3160,7 +3368,7 @@ grow_vertical = 0
 texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 placeholder_text = "Type here..."
 keep_editing_on_text_submit = true
 clear_button_enabled = true
@@ -3169,26 +3377,32 @@ caret_blink = true
 
 [node name="SendButton" type="Button" parent="HBoxContainer"]
 texture_filter = 1
+custom_minimum_size = Vector2(60, 0)
 layout_mode = 2
 size_flags_horizontal = 8
-theme = ExtResource("5_gppie")
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_2aqtr")
 text = "Send"
 
 [node name="ExpButton" type="Button" parent="."]
-self_modulate = Color(1, 1, 1, 0)
 texture_filter = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -81.0
-offset_top = 182.0
-offset_right = -19.0
-offset_bottom = 216.0
+offset_left = -226.0
+offset_top = 53.0
+offset_right = -160.0
+offset_bottom = 87.0
 grow_horizontal = 0
-theme = ExtResource("5_gppie")
-text = "TRAIN
-💰5"
-script = ExtResource("3_4n7mi")
+theme = SubResource("Theme_i6ua2")
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_ec1tb")
+text = "TRAIN"
+script = ExtResource("18")
 
 [node name="ConcedePanel" type="Panel" parent="."]
 texture_filter = 1
@@ -3197,13 +3411,13 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -194.0
-offset_top = -219.0
-offset_right = -64.0
-offset_bottom = -164.0
+offset_left = -238.0
+offset_top = -286.0
+offset_right = -90.0
+offset_bottom = -221.0
 grow_horizontal = 0
 grow_vertical = 0
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="Label" type="Label" parent="ConcedePanel"]
 texture_filter = 1
@@ -3216,8 +3430,11 @@ offset_top = 4.0
 offset_right = 25.5
 offset_bottom = 27.0
 grow_horizontal = 2
+theme_override_colors/font_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 22
 text = "Concede"
-label_settings = SubResource("LabelSettings_pgems")
 
 [node name="ConcedeThresholdMenu" type="OptionButton" parent="ConcedePanel"]
 texture_filter = 1
@@ -3227,15 +3444,21 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -64.0
-offset_top = -33.0
-offset_right = 64.0
+offset_left = -65.625
+offset_top = -36.0
+offset_right = 65.625
+offset_bottom = -3.0
 grow_horizontal = 2
 grow_vertical = 0
-tooltip_text = "Give up at this threshold"
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 theme_override_colors/font_focus_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_pressed_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_hover_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+alignment = 1
+script = ExtResource("19")
 
 [node name="AttackPanel" type="Panel" parent="."]
 anchors_preset = 3
@@ -3243,13 +3466,13 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -194.0
-offset_top = -163.0
-offset_right = -64.0
-offset_bottom = -108.0
+offset_left = -238.0
+offset_top = -148.0
+offset_right = -90.0
+offset_bottom = -83.0
 grow_horizontal = 0
 grow_vertical = 0
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="Label" type="Label" parent="AttackPanel"]
 texture_filter = 1
@@ -3262,8 +3485,11 @@ offset_top = 4.0
 offset_right = 36.0
 offset_bottom = 27.0
 grow_horizontal = 2
+theme_override_colors/font_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 22
 text = "Attack Type"
-label_settings = SubResource("LabelSettings_pgems")
 
 [node name="AttackMenu" type="OptionButton" parent="AttackPanel"]
 layout_mode = 1
@@ -3272,16 +3498,20 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -64.0
+offset_left = -63.0
 offset_top = -33.0
-offset_right = 64.0
+offset_right = 63.0
+offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 0
-tooltip_text = "Normal - no impact
-Light - increases hit chance and reduces enemy dodge chance with lighter attacks
-Heavy - hits harder, but decreases hit chance and increases enemy dodge chance"
 theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 theme_override_colors/font_focus_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_pressed_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_hover_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+alignment = 1
+script = ExtResource("20")
 
 [node name="StancePanel" type="Panel" parent="."]
 anchors_preset = 3
@@ -3289,13 +3519,13 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -194.0
-offset_top = -108.0
-offset_right = -64.0
-offset_bottom = -53.0
+offset_left = -238.0
+offset_top = -217.0
+offset_right = -90.0
+offset_bottom = -152.0
 grow_horizontal = 0
 grow_vertical = 0
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="Label" type="Label" parent="StancePanel"]
 texture_filter = 1
@@ -3308,8 +3538,11 @@ offset_top = 4.0
 offset_right = 21.5
 offset_bottom = 27.0
 grow_horizontal = 2
+theme_override_colors/font_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 22
 text = "Stance"
-label_settings = SubResource("LabelSettings_pgems")
 
 [node name="StanceMenu" type="OptionButton" parent="StancePanel"]
 layout_mode = 1
@@ -3318,17 +3551,22 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -64.0
+offset_left = -63.0
 offset_top = -33.0
-offset_right = 64.0
+offset_right = 63.0
+offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 0
-tooltip_text = "Normal - no impact
-Offensive - increases attack speed and criticality, but reduces dodge and parry chance
-Defensive - increases dodge and parry chance, but reduces attack speed and criticality
-Jester - reduces enemy hit chance, but reduces your endurance"
 theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 theme_override_colors/font_focus_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_pressed_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_hover_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+alignment = 1
+item_count = 1
+popup/item_0/id = 0
+script = ExtResource("21")
 
 [node name="EquipmentPanel1" type="Panel" parent="."]
 texture_filter = 1
@@ -3337,14 +3575,14 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -398.0
-offset_top = 34.0
-offset_right = -98.0
-offset_bottom = 334.0
+offset_left = -401.0
+offset_top = -58.0
+offset_right = -101.0
+offset_bottom = 242.0
 grow_horizontal = 0
 grow_vertical = 2
 pivot_offset = Vector2(150, 150)
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="EquipmentPanelPicture" type="TextureRect" parent="EquipmentPanel1"]
 layout_mode = 1
@@ -3375,7 +3613,6 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_8ecy4")
 z_index = 2
 layout_mode = 2
 theme_override_font_sizes/normal_font_size = 21
-text = "name"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
@@ -3393,7 +3630,7 @@ offset_left = 348.0
 offset_top = -6.0
 offset_right = 380.0
 offset_bottom = 26.0
-texture = ExtResource("9_w37wn")
+texture = ExtResource("22")
 expand_mode = 4
 
 [node name="BackSlot" type="TextureRect" parent="EquipmentPanel1"]
@@ -3406,7 +3643,7 @@ offset_left = 260.0
 offset_top = 21.0
 offset_right = 292.0
 offset_bottom = 53.0
-texture = ExtResource("17_rc7pm")
+texture = ExtResource("23")
 expand_mode = 4
 
 [node name="PanelContainerLeft" type="PanelContainer" parent="EquipmentPanel1"]
@@ -3429,37 +3666,37 @@ layout_mode = 2
 [node name="HeadSlot" type="TextureRect" parent="EquipmentPanel1/PanelContainerLeft/LeftPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("5_am7sw")
+texture = ExtResource("24")
 expand_mode = 4
 
 [node name="ShouldersSlot" type="TextureRect" parent="EquipmentPanel1/PanelContainerLeft/LeftPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("6_pgems")
+texture = ExtResource("25")
 expand_mode = 4
 
 [node name="ChestSlot" type="TextureRect" parent="EquipmentPanel1/PanelContainerLeft/LeftPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("6_ixkb2")
+texture = ExtResource("26")
 expand_mode = 4
 
 [node name="BeltSlot" type="TextureRect" parent="EquipmentPanel1/PanelContainerLeft/LeftPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("13_lbtxw")
+texture = ExtResource("27")
 expand_mode = 4
 
 [node name="LegsSlot" type="TextureRect" parent="EquipmentPanel1/PanelContainerLeft/LeftPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("14_gp2h7")
+texture = ExtResource("28")
 expand_mode = 4
 
 [node name="BootsSlot" type="TextureRect" parent="EquipmentPanel1/PanelContainerLeft/LeftPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("16_dcyds")
+texture = ExtResource("29")
 expand_mode = 4
 
 [node name="PanelContainerRight" type="PanelContainer" parent="EquipmentPanel1"]
@@ -3485,37 +3722,37 @@ layout_mode = 2
 [node name="AmuletSlot" type="TextureRect" parent="EquipmentPanel1/PanelContainerRight/RightPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("10_kg6a8")
+texture = ExtResource("30")
 expand_mode = 4
 
 [node name="GlovesSlot" type="TextureRect" parent="EquipmentPanel1/PanelContainerRight/RightPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("18_h8urj")
+texture = ExtResource("31")
 expand_mode = 4
 
 [node name="Ring1Slot" type="TextureRect" parent="EquipmentPanel1/PanelContainerRight/RightPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("8_281ki")
+texture = ExtResource("32")
 expand_mode = 4
 
 [node name="Ring2Slot" type="TextureRect" parent="EquipmentPanel1/PanelContainerRight/RightPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("8_281ki")
+texture = ExtResource("32")
 expand_mode = 4
 
 [node name="Trinket1Slot" type="TextureRect" parent="EquipmentPanel1/PanelContainerRight/RightPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("15_4hs1h")
+texture = ExtResource("33")
 expand_mode = 4
 
 [node name="Trinket2Slot" type="TextureRect" parent="EquipmentPanel1/PanelContainerRight/RightPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("15_4hs1h")
+texture = ExtResource("33")
 expand_mode = 4
 
 [node name="PanelContainerBottom" type="PanelContainer" parent="EquipmentPanel1"]
@@ -3541,13 +3778,13 @@ layout_mode = 2
 [node name="Weapon1Slot" type="TextureRect" parent="EquipmentPanel1/PanelContainerBottom/BottomPanel"]
 custom_minimum_size = Vector2(43, 43)
 layout_mode = 2
-texture = ExtResource("7_mms7u")
+texture = ExtResource("34")
 expand_mode = 4
 
 [node name="Weapon2Slot" type="TextureRect" parent="EquipmentPanel1/PanelContainerBottom/BottomPanel"]
 custom_minimum_size = Vector2(43, 43)
 layout_mode = 2
-texture = ExtResource("9_rsrlt")
+texture = ExtResource("35")
 expand_mode = 4
 
 [node name="Animations" type="Node2D" parent="EquipmentPanel1"]
@@ -3557,7 +3794,7 @@ z_index = 12
 position = Vector2(401, 173.00002)
 rotation = 0.0052359877
 scale = Vector2(1.578125, 1.234375)
-texture = ExtResource("33_cjcxt")
+texture = ExtResource("36")
 hframes = 7
 frame = 6
 
@@ -3566,7 +3803,7 @@ z_index = 12
 position = Vector2(401, 128)
 rotation = 0.06632252
 scale = Vector2(1.578125, 1.234375)
-texture = ExtResource("33_cjcxt")
+texture = ExtResource("36")
 hframes = 7
 frame = 6
 
@@ -3574,13 +3811,13 @@ frame = 6
 z_index = 12
 position = Vector2(334, 184)
 rotation = 6.2831855
-texture = ExtResource("34_kylmn")
+texture = ExtResource("37")
 
 [node name="OffHand" type="Sprite2D" parent="EquipmentPanel1/Animations"]
 z_index = 12
 position = Vector2(334, 84)
 rotation = 6.2831855
-texture = ExtResource("35_kylmn")
+texture = ExtResource("38")
 
 [node name="MainHandAnimationPlayer" type="AnimationPlayer" parent="EquipmentPanel1/Animations"]
 root_node = NodePath(".")
@@ -3603,8 +3840,8 @@ offset_right = 72.266174
 offset_bottom = 210.04285
 rotation = -1.5708
 theme_override_styles/background = SubResource("StyleBoxFlat_exw07")
-theme_override_styles/fill = SubResource("StyleBoxFlat_cjcxt")
-value = 60.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_5wmwi")
+value = 100.0
 fill_mode = 2
 show_percentage = false
 
@@ -3630,33 +3867,18 @@ horizontal_alignment = 1
 [node name="InspectLabel" type="RichTextLabel" parent="EquipmentPanel1"]
 z_index = 2
 layout_mode = 0
-offset_left = 56.0
-offset_top = 190.0
-offset_right = 210.0
-offset_bottom = 241.0
+offset_left = 73.0
+offset_top = 168.0
+offset_right = 227.0
+offset_bottom = 240.0
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/normal_font_size = 16
-text = "Physique: Legendary
-Agility: Legendary
-Weight: Overweight"
 fit_content = true
 scroll_active = false
 autowrap_mode = 0
+horizontal_alignment = 1
 vertical_alignment = 1
 justification_flags = 0
-
-[node name="InspectContainer" type="PanelContainer" parent="EquipmentPanel1"]
-visible = false
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -94.0
-offset_top = 190.0
-offset_right = 60.0
-offset_bottom = 241.0
-grow_horizontal = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_8ecy4")
 
 [node name="EquipmentPanel2" type="Panel" parent="."]
 visible = false
@@ -3666,14 +3888,14 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -397.0
-offset_top = 34.0
-offset_right = -97.0
-offset_bottom = 334.0
+offset_left = -401.0
+offset_top = -58.0
+offset_right = -101.0
+offset_bottom = 242.0
 grow_horizontal = 0
 grow_vertical = 2
 pivot_offset = Vector2(150, 150)
-theme = ExtResource("5_gppie")
+theme = SubResource("Theme_i6ua2")
 
 [node name="EquipmentPanelPicture" type="TextureRect" parent="EquipmentPanel2"]
 layout_mode = 1
@@ -3722,7 +3944,7 @@ offset_left = 348.0
 offset_top = -6.0
 offset_right = 380.0
 offset_bottom = 26.0
-texture = ExtResource("9_w37wn")
+texture = ExtResource("22")
 expand_mode = 4
 
 [node name="BackSlot" type="TextureRect" parent="EquipmentPanel2"]
@@ -3735,7 +3957,7 @@ offset_left = 260.0
 offset_top = 21.0
 offset_right = 292.0
 offset_bottom = 53.0
-texture = ExtResource("17_rc7pm")
+texture = ExtResource("23")
 expand_mode = 4
 
 [node name="PanelContainerLeft" type="PanelContainer" parent="EquipmentPanel2"]
@@ -3758,37 +3980,37 @@ layout_mode = 2
 [node name="HeadSlot" type="TextureRect" parent="EquipmentPanel2/PanelContainerLeft/LeftPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("5_am7sw")
+texture = ExtResource("24")
 expand_mode = 4
 
 [node name="ShouldersSlot" type="TextureRect" parent="EquipmentPanel2/PanelContainerLeft/LeftPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("6_pgems")
+texture = ExtResource("25")
 expand_mode = 4
 
 [node name="ChestSlot" type="TextureRect" parent="EquipmentPanel2/PanelContainerLeft/LeftPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("6_ixkb2")
+texture = ExtResource("26")
 expand_mode = 4
 
 [node name="BeltSlot" type="TextureRect" parent="EquipmentPanel2/PanelContainerLeft/LeftPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("13_lbtxw")
+texture = ExtResource("27")
 expand_mode = 4
 
 [node name="LegsSlot" type="TextureRect" parent="EquipmentPanel2/PanelContainerLeft/LeftPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("14_gp2h7")
+texture = ExtResource("28")
 expand_mode = 4
 
 [node name="BootsSlot" type="TextureRect" parent="EquipmentPanel2/PanelContainerLeft/LeftPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("16_dcyds")
+texture = ExtResource("29")
 expand_mode = 4
 
 [node name="PanelContainerRight" type="PanelContainer" parent="EquipmentPanel2"]
@@ -3814,37 +4036,37 @@ layout_mode = 2
 [node name="AmuletSlot" type="TextureRect" parent="EquipmentPanel2/PanelContainerRight/RightPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("10_kg6a8")
+texture = ExtResource("30")
 expand_mode = 4
 
 [node name="GlovesSlot" type="TextureRect" parent="EquipmentPanel2/PanelContainerRight/RightPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("18_h8urj")
+texture = ExtResource("31")
 expand_mode = 4
 
 [node name="Ring1Slot" type="TextureRect" parent="EquipmentPanel2/PanelContainerRight/RightPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("8_281ki")
+texture = ExtResource("32")
 expand_mode = 4
 
 [node name="Ring2Slot" type="TextureRect" parent="EquipmentPanel2/PanelContainerRight/RightPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("8_281ki")
+texture = ExtResource("32")
 expand_mode = 4
 
 [node name="Trinket1Slot" type="TextureRect" parent="EquipmentPanel2/PanelContainerRight/RightPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("15_4hs1h")
+texture = ExtResource("33")
 expand_mode = 4
 
 [node name="Trinket2Slot" type="TextureRect" parent="EquipmentPanel2/PanelContainerRight/RightPanel"]
 custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
-texture = ExtResource("15_4hs1h")
+texture = ExtResource("33")
 expand_mode = 4
 
 [node name="PanelContainerBottom" type="PanelContainer" parent="EquipmentPanel2"]
@@ -3870,13 +4092,13 @@ layout_mode = 2
 [node name="Weapon1Slot" type="TextureRect" parent="EquipmentPanel2/PanelContainerBottom/BottomPanel"]
 custom_minimum_size = Vector2(43, 43)
 layout_mode = 2
-texture = ExtResource("7_mms7u")
+texture = ExtResource("34")
 expand_mode = 4
 
 [node name="Weapon2Slot" type="TextureRect" parent="EquipmentPanel2/PanelContainerBottom/BottomPanel"]
 custom_minimum_size = Vector2(43, 43)
 layout_mode = 2
-texture = ExtResource("9_rsrlt")
+texture = ExtResource("35")
 expand_mode = 4
 
 [node name="Animations" type="Node2D" parent="EquipmentPanel2"]
@@ -3886,7 +4108,7 @@ z_index = 12
 position = Vector2(401, 173.00002)
 rotation = 0.0052359877
 scale = Vector2(1.578125, 1.234375)
-texture = ExtResource("33_cjcxt")
+texture = ExtResource("36")
 hframes = 7
 frame = 6
 
@@ -3895,7 +4117,7 @@ z_index = 12
 position = Vector2(401, 128)
 rotation = 0.06632252
 scale = Vector2(1.578125, 1.234375)
-texture = ExtResource("33_cjcxt")
+texture = ExtResource("36")
 hframes = 7
 frame = 6
 
@@ -3903,13 +4125,13 @@ frame = 6
 z_index = 12
 position = Vector2(334, 184)
 rotation = 6.2831855
-texture = ExtResource("34_kylmn")
+texture = ExtResource("37")
 
 [node name="OffHand" type="Sprite2D" parent="EquipmentPanel2/Animations"]
 z_index = 12
 position = Vector2(334, 84)
 rotation = 6.2831855
-texture = ExtResource("35_kylmn")
+texture = ExtResource("38")
 
 [node name="MainHandAnimationPlayer" type="AnimationPlayer" parent="EquipmentPanel2/Animations"]
 root_node = NodePath(".")
@@ -3927,13 +4149,13 @@ libraries = {
 z_index = 8
 layout_mode = 0
 offset_left = 56.30249
-offset_top = 23.999878
+offset_top = 25.999878
 offset_right = 72.266174
-offset_bottom = 208.04285
+offset_bottom = 210.04285
 rotation = -1.5708
 theme_override_styles/background = SubResource("StyleBoxFlat_exw07")
-theme_override_styles/fill = SubResource("StyleBoxFlat_cjcxt")
-value = 60.0
+theme_override_styles/fill = SubResource("StyleBoxFlat_5wmwi")
+value = 100.0
 fill_mode = 2
 show_percentage = false
 
@@ -3956,6 +4178,22 @@ scale = Vector2(0.2, 0.2)
 label_settings = SubResource("LabelSettings_kylmn")
 horizontal_alignment = 1
 
+[node name="InspectLabel" type="RichTextLabel" parent="EquipmentPanel2"]
+z_index = 2
+layout_mode = 0
+offset_left = 73.0
+offset_top = 168.0
+offset_right = 227.0
+offset_bottom = 240.0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/normal_font_size = 16
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+horizontal_alignment = 1
+vertical_alignment = 1
+justification_flags = 0
+
 [node name="EscMenu" type="VBoxContainer" parent="."]
 z_index = 17
 anchors_preset = 8
@@ -3963,27 +4201,39 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -115.5
-offset_top = -66.5
-offset_right = 115.5
-offset_bottom = 66.5
+offset_left = -116.5
+offset_top = -109.0
+offset_right = 116.5
+offset_bottom = 72.5
 grow_horizontal = 2
 grow_vertical = 2
 
 [node name="Resume" type="Button" parent="EscMenu"]
 texture_filter = 1
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 30
 text = "Resume"
 
 [node name="Options" type="Button" parent="EscMenu"]
 texture_filter = 1
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 30
 text = "Options
 "
 
 [node name="Disconnect" type="Button" parent="EscMenu"]
 texture_filter = 1
+custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 30
 text = "Disconnect"
 
 [node name="ConfirmDisconnect" type="VBoxContainer" parent="EscMenu"]
@@ -3992,8 +4242,10 @@ layout_mode = 2
 [node name="ConfirmDisconnectLabel" type="Label" parent="EscMenu/ConfirmDisconnect"]
 texture_filter = 1
 layout_mode = 2
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
 text = "Are you sure you want to disconnect?"
-label_settings = SubResource("LabelSettings_gppie")
 horizontal_alignment = 1
 
 [node name="ConfirmDisconnectContainer" type="HBoxContainer" parent="EscMenu/ConfirmDisconnect"]
@@ -4004,36 +4256,21 @@ size_flags_vertical = 4
 [node name="Yes" type="Button" parent="EscMenu/ConfirmDisconnect/ConfirmDisconnectContainer"]
 texture_filter = 1
 layout_mode = 2
-text = "✅ Yes"
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_constants/outline_size = 6
+text = "Yes"
 
 [node name="No" type="Button" parent="EscMenu/ConfirmDisconnect/ConfirmDisconnectContainer"]
 texture_filter = 1
 layout_mode = 2
-text = "❌ No"
-
-[node name="Label_Gold" type="RichTextLabel" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="LabelBuyRoll" type="RichTextLabel" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Label_Round" type="RichTextLabel" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="LabelBuyExp" type="RichTextLabel" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Label_Experience" type="RichTextLabel" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+theme_override_colors/font_color = Color(0.4745098, 0.26666668, 0.2901961, 1)
+theme_override_constants/outline_size = 6
+text = " No "
 
 [connection signal="pressed" from="EquipmentButton" to="." method="_on_equipment_button_pressed"]
 [connection signal="pressed" from="ShopButton" to="." method="_on_shop_button_pressed"]
 [connection signal="toggled" from="ShopButton" to="." method="_on_shop_button_toggled"]
+[connection signal="pressed" from="LockShop" to="." method="_on_lock_shop_pressed"]
 [connection signal="pressed" from="RefreshButton" to="." method="_on_refresh_button_pressed"]
 [connection signal="toggled" from="CraftingContainer/CraftingMats/ScrollOfLuck" to="." method="_on_scroll_of_luck_toggled"]
 [connection signal="toggled" from="CraftingContainer/CraftingMats/ScrollOfInjection" to="." method="_on_scroll_of_injection_toggled"]

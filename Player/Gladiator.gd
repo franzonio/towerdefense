@@ -1,32 +1,32 @@
 extends CharacterBody2D
 
-#@onready var human_no_gear = preload("res://Assets/PlayerAssets/human_no_gear-Sheet.png")
-#@onready var human_t1_light = preload("res://Assets/PlayerAssets/human_t1_light-Sheet.png")
+
+
 @onready var DamagePopupScene = preload("res://DamagePopup.tscn")
 
-#@onready var synchronizer = $MultiplayerSynchronizer
-var no_wep = {"hands": 1,
-			"min_dmg": 1, 
-			"max_dmg": 3,
-			"durability": 1,
-			"crit_chance": 0.1,
-			"crit_multi": 1.1,
-			"speed": 0.25,
-			"range": 150,
-			"parry": false,
-			"block": false,
-			"price": 0,
-			"stock": 500,
-			"type": "weapon",
-			"category": "unarmed",
-			"str_req": 20,
-			"skill_req": 30,
-			"level": 1,
-			"modifiers": {
-				"attributes": {},
-				"bonuses": {}
-				}
-			}
+
+var no_wep = {"hands": 1, 
+	"min_dmg": 1, 
+	"max_dmg": 3, 
+	"durability": 1, 
+	"crit_chance": 0.1, 
+	"crit_multi": 1.1, 
+	"speed": 0.25, 
+	"range": 150, 
+	"parry": false, 
+	"block": false, 
+	"price": 0, 
+	"stock": 500, 
+	"type": "weapon", 
+	"category": "unarmed", 
+	"str_req": 20, 
+	"skill_req": 30, 
+	"level": 1, 
+	"modifiers": {
+		"attributes": {}, 
+		"bonuses": {}
+		}
+	}
 var no_wep_hit_chance = 0.7
 var no_wep_crit_chance = no_wep["crit_chance"]
 var no_wep_crit_multi = no_wep["crit_multi"]
@@ -34,29 +34,29 @@ var no_wep_attack_speed = no_wep["speed"]
 
 var time_passed = 0
 @onready var nav = $NavigationAgent2D
-#@onready var sprite = $Sprite
+
 @onready var sprite = $CharacterAnimationPlayer
 @onready var multiplayer_sync = $MultiplayerSynchronizer
 
 @export var speed: float = 250.0
-#@export var max_health: int = 100
-#var current_health: int = max_health
 
-#@export var name: String = ""
+
+
+
 @export var race: String = ""
-@export var level: String 
+@export var level: String
 @export var attributes: Dictionary = {}
 @export var gladiator_name: String = ""
 
-#@onready var nameLabel = $Name
 
-#var velocity: Vector2 = Vector2.ZERO
+
+
 @export var current_animation: String = "idle_right"
 @export var prev_animation: String = "idle_right"
 
-var input_vector := Vector2.ZERO
+var input_vector: = Vector2.ZERO
 
-####
+
 @export var weapon1_dmg_min: float
 @export var weapon1_dmg_max: float
 @export var weapon1_str_req: float
@@ -85,34 +85,34 @@ var input_vector := Vector2.ZERO
 @export var absorb_after_resilience: float
 @export var combined_avg_absorb: float
 @export var shield_absorb: int
-@export var armor_absorb := 1.0
+@export var armor_absorb: = 1.0
 @export var endurance_sec: float
 
 
-@export var strength := 1.0
-@export var quickness := 1.0
-@export var crit_rating := 1.0
-@export var avoidance := 1.0
-@export var max_health := 1.0
-@export var resilience := 1.0
-@export var endurance := 1.0
-@export var weapon_skill := 1.0
-@export var sword_mastery := 1.0
-@export var stabbing_mastery := 1.0
-@export var axe_mastery := 1.0
-@export var flagellation_mastery := 1.0
-@export var mace_mastery := 1.0
+@export var strength: = 1.0
+@export var quickness: = 1.0
+@export var crit_rating: = 1.0
+@export var avoidance: = 1.0
+@export var max_health: = 1.0
+@export var resilience: = 1.0
+@export var endurance: = 1.0
+@export var weapon_skill: = 1.0
+@export var sword_mastery: = 1.0
+@export var stabbing_mastery: = 1.0
+@export var axe_mastery: = 1.0
+@export var flagellation_mastery: = 1.0
+@export var mace_mastery: = 1.0
 
 var attack_type_str_mod = 1
 var glad_weapon1_category_skill
 var glad_weapon2_category_skill
 var recalculated_hit_chance = 0
- 
-#var weapon: Dictionary
 
 
- # === Damage calculations ===
-@export var attack_speed: float 
+
+
+
+@export var attack_speed: float
 @export var time_since_last_attack: float
 @export var crit_chance: Array
 @export var crit_multi: Array
@@ -127,20 +127,20 @@ var recalculated_hit_chance = 0
 
 var spawn_point
 
- # === Calculations ===
-@export var weight = 1
-@export var move_speed := 0
-@export var current_health = max_health
-@export var armor = (1+sqrt(resilience)/10.0) * armor_absorb				# flat damage reduction
-@export var dodge_chance = (avoidance/200.0) / ((avoidance/200.0)+1)		# decaying dodge_chance -> 1
-@export var seconds_to_live = endurance/3.0
 
-####
+@export var weight = 1
+@export var move_speed: = 0
+@export var current_health = max_health
+@export var armor = (1 + sqrt(resilience) / 10.0) * armor_absorb
+@export var dodge_chance = (avoidance / 200.0) / ((avoidance / 200.0) + 1)
+@export var seconds_to_live = endurance / 3.0
+
+
 var all_gladiators
 var target_position: Vector2 = Vector2.ZERO
 
-const ATTACK_RANGE := 1200.0
-@export var last_attack_time := -999.0
+const ATTACK_RANGE: = 1200.0
+@export var last_attack_time: = -999.0
 
 var current_attack_target: Node = null
 var attack_charge_time: float = 0.0
@@ -148,21 +148,21 @@ var attack_charge_time: float = 0.0
 var float_speed = -30
 var lifetime = 30
 
-var attack_right_animations: Array = []# all_animations.filter(func(name): return name.begins_with("attack_right"))
-var attack_left_animations: Array = []# = all_animations.filter(func(name): return name.begins_with("attack_left"))
+var attack_right_animations: Array = []
+var attack_left_animations: Array = []
 
 @export var opponent_peer_id: int = -1
 @onready var opponent: Node = null
-#@onready var round_manager = get_tree().get_root().get_node("Main/RoundManager")
 
-@export var in_combat := false
+
+@export var in_combat: = false
 var last_played_animation: String = ""
 @export var direction: Vector2 = Vector2.ZERO
 var owner_id
 @export var dead: int
 var opponent_dead = false
-@export var concede_threshold := 0.5
-@export var healthbar_color := Color("77883b")
+@export var concede_threshold: = 0.5
+@export var healthbar_color: = Color("77883b")
 
 var combined_gladiator_bonuses = {}
 var prev_sec = 0
@@ -175,22 +175,22 @@ signal died
 func _ready():
 	wep1_is_broken = 0
 	wep2_is_broken = 0
-	
+
 	$".".visible = true
 	if multiplayer.is_server():
 		GameState_.refresh_gladiator_data(multiplayer.get_unique_id())
 	else:
 		GameState_.rpc_id(1, "refresh_gladiator_data", multiplayer.get_unique_id())
-		
+
 	time_passed = -100000
 	prev_sec = 0
-	await get_tree().process_frame 
+	await get_tree().process_frame
 	dead = 0
 	add_to_group("gladiators")
-	
-	
+
+
 	direction = (target_position - global_position).normalized()
-	
+
 	if direction.x < 0:
 		face_towards = "left"
 		sprite.play("idle_left")
@@ -199,29 +199,29 @@ func _ready():
 		face_towards = "right"
 		sprite.play("idle_right")
 		flip_animations(false)
-	
+
 	sprite.play("idle_right")
-	
+
 	GameState_.connect("send_gladiator_data_to_peer_signal", Callable(self, "_on_send_gladiator_data_to_peer_signal"))
 	GameState_.connect("killed_by_server_signal", Callable(self, "_on_killed_by_server_signal"))
-	
+
 	if is_multiplayer_authority():
-		
+
 		var hud = get_node("/root/Main/HUD")
 		if hud:
 			hud.concede_threshold_changed.connect(_on_concede_threshold_changed)
-			
+
 	rpc("rpc_wep_broken", multiplayer.get_unique_id(), wep1_is_broken, wep2_is_broken)
-	
+
 	if is_multiplayer_authority():
 		rpc("rpc_update_hp", multiplayer.get_unique_id(), current_health, max_health)
-	
+
 	await get_tree().create_timer(1.0).timeout
-	
-	await get_tree().create_timer(10.0).timeout # 11
-		
+
+	await get_tree().create_timer(10.0).timeout
+
 	time_passed = 0
-	
+
 	if multiplayer.is_server(): update_all_gladiators(GameState_.all_gladiators)
 
 	await get_tree().create_timer(0.1).timeout
@@ -235,29 +235,29 @@ func _ready():
 		if opponent == null:
 			for g in get_tree().get_nodes_in_group("gladiators"):
 				if g.get_multiplayer_authority() == opponent_peer_id: opponent = g
-		
-		'''
-		var all_animations = sprite.sprite_frames.get_animation_names()
 
-		for animation_name in all_animations:
-			if animation_name.begins_with("attack_right"): attack_right_animations.append(animation_name)
-			if animation_name.begins_with("attack_left"): attack_left_animations.append(animation_name)
-		'''
-	
-# Only process input if this is OUR player
-func _process(delta: float) -> void:
+		"\n\t\tvar all_animations = sprite.sprite_frames.get_animation_names()\n\n\t\tfor animation_name in all_animations:\n\t\t\tif animation_name.begins_with(\"attack_right\"): attack_right_animations.append(animation_name)\n\t\t\tif animation_name.begins_with(\"attack_left\"): attack_left_animations.append(animation_name)\n\t\t"
+
+
+
+
+
+
+
+
+func _process(delta: float) -> void :
 	time_passed += delta
-	
+
 	if time_passed > 0 and int(time_passed) != prev_sec and !opponent_dead:
 		prev_sec = int(time_passed)
 		if is_multiplayer_authority():
-		
-			var blood_rage_dmg = combined_gladiator_bonuses.get("blood_rage", [0,0])
-			blood_rage_dmg = blood_rage_dmg[0]/100.0*max_health
-			#current_health -= max_health*blood_rage_dmg
-			if blood_rage_dmg > 0: 
+
+			var blood_rage_dmg = combined_gladiator_bonuses.get("blood_rage", [0, 0])
+			blood_rage_dmg = blood_rage_dmg[0] / 100.0 * max_health
+
+			if blood_rage_dmg > 0:
 				receive_damage(blood_rage_dmg, -1, 1, 0, 0, 0, 0, 0, weapon1_durability, weapon2_durability, 0, 0)
-	
+
 	if is_multiplayer_authority():
 		if opponent and opponent.dead and not opponent_dead:
 			opponent_dead = true
@@ -265,113 +265,113 @@ func _process(delta: float) -> void:
 			rpc("show_damage_popup", 0, -2, 1, 0, 0, 0, 0, 0, 0, 0, "WINNER")
 		if !dead and time_passed > endurance_sec and !opponent_dead:
 			dead = 1
-			#print("_process peer " + str(multiplayer.get_unique_id()) + " died")
+
 			rpc("die")
 
 func _physics_process(delta):
-	if is_multiplayer_authority() and opponent != null and is_instance_valid(opponent) and opponent.current_health > opponent.max_health*opponent.concede_threshold and opponent_peer_id:
-		
-		if opponent_dead: 
+	if is_multiplayer_authority() and opponent != null and is_instance_valid(opponent) and opponent.current_health > opponent.max_health * opponent.concede_threshold and opponent_peer_id:
+
+		if opponent_dead:
 			if face_towards == "right":
 				sprite.play("idle_right")
 			elif face_towards == "left":
 				sprite.play("idle_left")
 			return
-		
+
 		check_for_attack(delta)
 		handle_ai_movement(delta)
-		#handle_animation()
-		
-	else: 
-		if opponent_dead: 
+
+
+	else:
+		if opponent_dead:
 			if face_towards == "right":
 				sprite.play("idle_right")
 			elif face_towards == "left":
 				sprite.play("idle_left")
 			return
-		if current_animation.begins_with("attack"): 
+		if current_animation.begins_with("attack"):
 			sprite.play(current_animation)
-	
-		
+
+
 func flip_animations(flip):
-	#$vfx.flip_h = flip
-	#$GlovesBack.flip_h = flip
-	#$GlovesFront.flip_h = flip
-	#$WeaponFront.flip_h = flip
-	#$WeaponBack.flip_h = flip
-	#$Shoulders.flip_h = flip
-	#$Chest.flip_h = flip
-	#$Legs.flip_h = flip
-	#$Boots.flip_h = flip
-	#$Helmet.flip_h = flip
-	
+
+
+
+
+
+
+
+
+
+
+
 	if flip == false: 1
-		#$CollisionShape2D.position.x = -13.5
-		#$HealthBar.position.x = -13.5
-		#$Label.position.x = -13.5
-		#$Name.position.x = -94
+
+
+
+
 	else: 1
-		#$CollisionShape2D.position.x = 6
-		#$HealthBar.position.x = 6
-		#$Label.position.x = 6
-		#$Name.position.x = -74.5
-	
-	
+
+
+
+
+
+
 func _on_send_gladiator_data_to_peer_signal(_peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
 	all_gladiators = _all_gladiators
-	#update_item_textures.rpc()
-	
-	
+
+
+
 @rpc("any_peer", "call_local")
 func update_item_textures():
-	
-	var id = owner_id #multiplayer.get_unique_id()
-	#print("id: " + str(id))
-	#if 1: #multiplayer.get_unique_id() == id:# and is_multiplayer_authority():
-	
-	var weapon1 = all_gladiators[id].get("weapon1", {})#.keys()[0]
-	var weapon2 = all_gladiators[id].get("weapon2", {})#.keys()[0]
-	#var boots = all_gladiators[id].get("boots", {})#.keys()[0]
-	#var head = all_gladiators[id].get("head", {})#.keys()[0]
-	#var shoulders = all_gladiators[id].get("shoulders", {})#.keys()[0]
-	#var gloves = all_gladiators[id].get("gloves", {})#.keys()[0]
-	#var chest = all_gladiators[id].get("chest", {})#.keys()[0]
-		
+
+	var id = owner_id
+
+
+
+	var weapon1 = all_gladiators[id].get("weapon1", {})
+	var weapon2 = all_gladiators[id].get("weapon2", {})
+
+
+
+
+
+
 	$".".visible = true
-		
+
 func _on_concede_threshold_changed(value: float):
 	concede_threshold = value
-	
+
 func handle_animation():
-	if current_animation.begins_with("attack"): # and !sprite.is_playing(): 
+	if current_animation.begins_with("attack"):
 		sprite.play(current_animation)
 		if face_towards == "right":
 			current_animation = "idle_right"
 		elif face_towards == "left":
 			current_animation = "idle_left"
-		
+
 	elif current_animation.begins_with("idle") and !sprite.is_playing():
 		if face_towards == "right":
 			current_animation = "idle_right"
 		elif face_towards == "left":
 			current_animation = "idle_left"
 		sprite.play(current_animation)
-		
-		#if abs(direction.x) > abs(direction.y): current_animation = "walk_right" if direction.x > 0 else "walk_left"
-	
-	#if not sprite.is_connected("animation_finished", _on_any_animation_finished): 
-	#	sprite.animation_finished.connect(_on_any_animation_finished, CONNECT_ONE_SHOT)
-	
-	
-func _on_any_animation_finished(): 
-	
-	if current_animation == "die": 
+
+
+
+
+
+
+
+func _on_any_animation_finished():
+
+	if current_animation == "die":
 		emit_signal("died")
-	#else: 
-		#sprite.play(race+"_idle_right")
-	#else: 1#current_animation = "N/A"
-		
-		
+
+
+
+
+
 func check_for_attack(delta: float):
 	if opponent == null or !is_instance_valid(opponent):
 		current_attack_target = null
@@ -386,65 +386,65 @@ func check_for_attack(delta: float):
 			current_attack_target = opponent
 			attack_charge_time += delta
 
-			#print("opponent.current_health" + str(opponent.current_health))
-			if attack_charge_time >= attack_speed and opponent.current_health > opponent.max_health*opponent.concede_threshold and !opponent.dead:
-				
-				
-					
-				#elif face_towards == "left" and next_attack_weapon == 0: 
-				#	rpc("rpc_play_animation", multiplayer.get_unique_id(), "attack_mainhand_right")
-				#elif face_towards == "left" and next_attack_weapon == 1: 
-				#	rpc("rpc_play_animation", multiplayer.get_unique_id(), "attack_offhand_right")
-				
+
+			if attack_charge_time >= attack_speed and opponent.current_health > opponent.max_health * opponent.concede_threshold and !opponent.dead:
+
+
+
+
+
+
+
+
 				var dodge_modify = 1
 				var jester_penalty = 1
 				if all_gladiators[opponent_peer_id]["stance"] == "jester":
-					jester_penalty = 0.90
+					jester_penalty = 0.9
 				if all_gladiators[opponent_peer_id]["attack_type"] == "light":
 					dodge_modify = 1.4
 				if all_gladiators[opponent_peer_id]["attack_type"] == "heavy":
 					dodge_modify = 0.6
 				if recalculated_hit_chance == 0 and (jester_penalty or dodge_modify):
 					update_gladiator_after_strategy(jester_penalty, dodge_modify)
-				
+
 				var weapon
 				var _hit_chance
 				var _crit_chance
 				var _crit_multi
-				
-				if weapon1_durability <= 0: 
+
+				if weapon1_durability <= 0:
 					weapon1 = no_wep
 					weapon1_speed = no_wep_attack_speed
 					weapon1_can_parry = false
 					parry_chance[0] = 0
-				if weapon2_durability <= 0: 
+				if weapon2_durability <= 0:
 					if weapon_hands_to_carry == 2:
 						weapon_hands_to_carry = 1
 						weapon1 = no_wep
 						weapon1_speed = no_wep_attack_speed
 						weapon1_can_parry = false
 						parry_chance[0] = 0
-						#weapon1_can_block = false
+
 					weapon2_can_parry = false
 					weapon2 = no_wep
 					weapon2_speed = no_wep_attack_speed
 					weapon2_can_block = false
 					parry_chance[1] = 0
-				
-				if weapon_hands_to_carry == 1: 
-					var as_wep_base = 1/(weapon1_speed+weapon2_speed)
-					var as_exp_p1 = -(0.01+(weapon1_speed+weapon2_speed)/250.0)
-					var as_exp_p2 = (weapon1_speed+weapon2_speed)*quickness**(1-weight/250.0)
-					attack_speed = as_wep_base*exp(as_exp_p1*as_exp_p2) / (1+combined_gladiator_bonuses.get("increased_attack_speed", 0)/100.0)
-					
-				else: 
-					var as_wep_base = 1/weapon1_speed
-					var as_exp_p1 = -(0.01+weapon1_speed/250.0)
-					var as_exp_p2 = weapon1_speed*quickness**(1-weight/250.0)
-					attack_speed = as_wep_base*exp(as_exp_p1*as_exp_p2) / (1+combined_gladiator_bonuses.get("increased_attack_speed", 0)/100.0)
-					
-				
-				if next_attack_weapon == 0: 
+
+				if weapon_hands_to_carry == 1:
+					var as_wep_base = 1 / (weapon1_speed + weapon2_speed)
+					var as_exp_p1 = - (0.01 + (weapon1_speed + weapon2_speed) / 250.0)
+					var as_exp_p2 = (weapon1_speed + weapon2_speed) * quickness ** (1 - weight / 250.0)
+					attack_speed = as_wep_base * exp(as_exp_p1 * as_exp_p2) / (1 + combined_gladiator_bonuses.get("increased_attack_speed", 0) / 100.0)
+
+				else:
+					var as_wep_base = 1 / weapon1_speed
+					var as_exp_p1 = - (0.01 + weapon1_speed / 250.0)
+					var as_exp_p2 = weapon1_speed * quickness ** (1 - weight / 250.0)
+					attack_speed = as_wep_base * exp(as_exp_p1 * as_exp_p2) / (1 + combined_gladiator_bonuses.get("increased_attack_speed", 0) / 100.0)
+
+
+				if next_attack_weapon == 0:
 					weapon = weapon1
 					if weapon1_durability > 0:
 						_hit_chance = hit_chance[0]
@@ -456,10 +456,10 @@ func check_for_attack(delta: float):
 						_crit_multi = no_wep_crit_multi
 					prev_attack_weapon = next_attack_weapon
 					next_attack_weapon = 1
-					#print("live: weapon1")
-					
-				elif next_attack_weapon == 1: 
-					if weapon2_can_block == false: 
+
+
+				elif next_attack_weapon == 1:
+					if weapon2_can_block == false:
 						weapon = weapon2
 					else: weapon = weapon1
 					if weapon2_durability > 0:
@@ -472,25 +472,25 @@ func check_for_attack(delta: float):
 						_crit_multi = no_wep_crit_multi
 					prev_attack_weapon = next_attack_weapon
 					next_attack_weapon = 0
-					#print("live: weapon2")
-					
+
+
 				deal_attack(self, opponent, weapon, _hit_chance, _crit_chance, _crit_multi)
-				
+
 				var wep_category = weapon["category"]
-				
+
 				if weapon_hands_to_carry == 2:
 					if wep_category == "axe" or wep_category == "mace":
 						rpc("rpc_play_animation", multiplayer.get_unique_id(), wep_category + "_2h", weapon, "mainhand")
 					else:
 						rpc("rpc_play_animation", multiplayer.get_unique_id(), wep_category + "_mainhand", weapon, "mainhand")
 				else:
-					if prev_attack_weapon == 0: 
+					if prev_attack_weapon == 0:
 						rpc("rpc_play_animation", multiplayer.get_unique_id(), wep_category + "_mainhand", weapon, "mainhand")
-					elif prev_attack_weapon == 1 and not weapon2_can_block: 
+					elif prev_attack_weapon == 1 and not weapon2_can_block:
 						rpc("rpc_play_animation", multiplayer.get_unique_id(), wep_category + "_offhand", weapon, "offhand")
 					elif prev_attack_weapon == 1 and weapon2_can_block:
 						rpc("rpc_play_animation", multiplayer.get_unique_id(), wep_category + "_mainhand", weapon, "mainhand")
-				
+
 				attack_charge_time = 0.0
 		else:
 			attack_charge_time = 0.0
@@ -500,79 +500,79 @@ func check_for_attack(delta: float):
 		attack_charge_time = 0.0
 
 func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_chance, _crit_multi):
-	# crit_chance = 1 + (wep_base_crit*local_wep_crit_bonus)*(1+global_crit_bonus)
-	#print("defender: " + str(defender.parry_chance))
-	#print("attacker: " + str(attacker.parry_chance))
-	#print("live: before bonuses: " + str(_hit_chance) + " | " + str(_crit_chance) + " | " + str(_crit_multi))
-	_hit_chance += combined_gladiator_bonuses.get("added_hit_chance", 0)/100.0
-	_crit_chance = _crit_chance*(1+combined_gladiator_bonuses.get("global_increased_crit_chance", 0)/100.0)
-	_crit_multi = _crit_multi*(1+combined_gladiator_bonuses.get("global_increased_crit_multi", 0)/100.0)
-	#print("live: after bonuses: " + str(_hit_chance) + " | " + str(_crit_chance) + " | " + str(_crit_multi))
+
+
+
+
+	_hit_chance += combined_gladiator_bonuses.get("added_hit_chance", 0) / 100.0
+	_crit_chance = _crit_chance * (1 + combined_gladiator_bonuses.get("global_increased_crit_chance", 0) / 100.0)
+	_crit_multi = _crit_multi * (1 + combined_gladiator_bonuses.get("global_increased_crit_multi", 0) / 100.0)
+
 	var life_on_hit = combined_gladiator_bonuses.get("life_on_hit", 0)
-	
+
 	var added_min_dmg = 0
 	var added_max_dmg = 0
 	var min_base_dmg = _weapon["min_dmg"]
 	var max_base_dmg = _weapon["max_dmg"]
 	var added_dmg = _weapon["modifiers"]["bonuses"].get("added_dmg", "0").split("-")
-	
+
 	if added_dmg.size() > 1:
 		added_min_dmg = int(added_dmg[0])
 		added_max_dmg = int(added_dmg[1])
-		
-	var blood_rage_dmg = combined_gladiator_bonuses.get("blood_rage", [0,0])
+
+	var blood_rage_dmg = combined_gladiator_bonuses.get("blood_rage", [0, 0])
 	blood_rage_dmg = blood_rage_dmg[1]
-	var increased_dmg = 1.0 + float(_weapon["modifiers"]["bonuses"].get("increased_dmg", "0"))/100.0 + float(blood_rage_dmg)/100.0
-	var wep_min_dmg = int(round((min_base_dmg+added_min_dmg)*increased_dmg))
-	var wep_max_dmg = int(round((max_base_dmg+added_max_dmg)*increased_dmg))
-	
+	var increased_dmg = 1.0 + float(_weapon["modifiers"]["bonuses"].get("increased_dmg", "0")) / 100.0 + float(blood_rage_dmg) / 100.0
+	var wep_min_dmg = int(round((min_base_dmg + added_min_dmg) * increased_dmg))
+	var wep_max_dmg = int(round((max_base_dmg + added_max_dmg) * increased_dmg))
+
 	var wep_category = _weapon["category"]
 	var block_success = 0
-	var parry_success = 0	# default 0 means defender did not parry
-	var dodge_success = 0	# default 0 means defender did not dodge
-	var hit_success = 1		# default 1 means attacker hit successfully
+	var parry_success = 0
+	var dodge_success = 0
+	var hit_success = 1
 	var crit = 1.0
 	var defender_weapon1_destroyed = 0
 	var defender_weapon2_destroyed = 0
-	
+
 	if randf() > _hit_chance:
 		hit_success = 0
-			
+
 	var roll_wep_dmg = randf_range(wep_min_dmg, wep_max_dmg)
 	if hit_success and randf() < _crit_chance or attacker.next_attack_critical:
 		crit = _crit_multi
-		attacker.next_attack_critical = false  # reset after use
-		#roll_wep_dmg = randf_range((wep_min_dmg+wep_max_dmg)/2, wep_max_dmg)
+		attacker.next_attack_critical = false
 
-	var effective_str = attack_type_str_mod*strength
+
+	var effective_str = attack_type_str_mod * strength
 	var dmg_after_str = 0
 	var str_used_before_max = 0
-	
-	if roll_wep_dmg + effective_str/15.0 > _weapon["max_dmg"]:
-		str_used_before_max = (wep_max_dmg-roll_wep_dmg)*15
+
+	if roll_wep_dmg + effective_str / 15.0 > _weapon["max_dmg"]:
+		str_used_before_max = (wep_max_dmg - roll_wep_dmg) * 15
 		var str_left = effective_str - str_used_before_max
 		if wep_category == "stabbing":
-			dmg_after_str = roll_wep_dmg + str_used_before_max/15 + str_left/34
+			dmg_after_str = roll_wep_dmg + str_used_before_max / 15 + str_left / 34
 		elif wep_category == "sword":
-			dmg_after_str = roll_wep_dmg + str_used_before_max/15 + str_left/30
+			dmg_after_str = roll_wep_dmg + str_used_before_max / 15 + str_left / 30
 		elif wep_category == "axe":
-			dmg_after_str = roll_wep_dmg + str_used_before_max/15 + str_left/26
+			dmg_after_str = roll_wep_dmg + str_used_before_max / 15 + str_left / 26
 		elif wep_category == "mace":
-			dmg_after_str = roll_wep_dmg + str_used_before_max/15 + str_left/20
+			dmg_after_str = roll_wep_dmg + str_used_before_max / 15 + str_left / 20
 		elif wep_category == "flagellation":
-			dmg_after_str = roll_wep_dmg + str_used_before_max/15 + str_left/18
+			dmg_after_str = roll_wep_dmg + str_used_before_max / 15 + str_left / 18
 		elif wep_category == "unarmed":
-			dmg_after_str = roll_wep_dmg + str_used_before_max/15 + str_left/50
+			dmg_after_str = roll_wep_dmg + str_used_before_max / 15 + str_left / 50
 	else:
-		dmg_after_str = roll_wep_dmg + effective_str/15.0
+		dmg_after_str = roll_wep_dmg + effective_str / 15.0
 
-	var raw_damage = dmg_after_str*crit
-	
+	var raw_damage = dmg_after_str * crit
+
 	if raw_damage > 0 and randf() < defender.dodge_chance:
 		dodge_success = 1
 		defender.next_attack_critical = true
 		attacker.next_taken_hit_critical = true
-		
+
 	elif hit_success and defender.weapon2_can_block and defender.weapon2_durability > 0 and raw_damage > 0 and randf() < defender.block_chance:
 		block_success = 1
 		rpc("rpc_block_animation", opponent_peer_id, "OffHand")
@@ -581,8 +581,8 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 			wep2_is_broken = 1
 			defender_weapon2_destroyed = 1
 			defender.weapon2_can_block = false
-			
-			
+
+
 	elif hit_success and defender.weapon2_can_parry and defender.weapon2_durability > 0 and raw_damage > 0 and randf() < defender.parry_chance[1]:
 		parry_success = 1
 		rpc("rpc_parry_animation", opponent_peer_id, "OffHand")
@@ -591,7 +591,7 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 			wep2_is_broken = 1
 			defender_weapon2_destroyed = 1
 			defender.weapon2_can_parry = false
-			
+
 	elif hit_success and defender.weapon1_can_parry and defender.weapon2_durability < 0 and defender.weapon1_durability > 0 and raw_damage > 0 and randf() < defender.parry_chance[0]:
 		parry_success = 1
 		rpc("rpc_parry_animation", opponent_peer_id, "MainHand")
@@ -600,17 +600,17 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 			wep1_is_broken = 1
 			defender_weapon1_destroyed = 1
 			defender.weapon1_can_parry = false
-	
-	#print("defender.absorb_after_resilience: " + str(defender.absorb_after_resilience))
-	
-	var final_damage = hit_success*(1-dodge_success)*(1-parry_success)*(1-block_success)*roundf(clamp(raw_damage - defender.absorb_after_resilience, 0, 9999))
+
+
+
+	var final_damage = hit_success * (1 - dodge_success) * (1 - parry_success) * (1 - block_success) * roundf(clamp(raw_damage - defender.absorb_after_resilience, 0, 9999))
 
 	if hit_success and not dodge_success:
-		#current_health += life_on_hit
+
 		if life_on_hit > 0:
-			receive_damage(-life_on_hit, -2, 1, 0, 0, 0, 0, 0, weapon1_durability, weapon2_durability, 0, 0)
-		#$HealthBar.value = current_health
-		#$HealthBar/HealthBarText.text = str(int(current_health))
+			receive_damage( - life_on_hit, -2, 1, 0, 0, 0, 0, 0, weapon1_durability, weapon2_durability, 0, 0)
+
+
 
 	var opponent_thorns = all_gladiators[opponent_peer_id].get("total_modifier_bonuses", {}).get("thorns", 0)
 	if opponent_thorns > 0:
@@ -629,20 +629,20 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 func rpc_block_animation(id, hand):
 	await get_tree().create_timer(0.1).timeout
 	get_node("/root/Main/HUD").block_animation(id, hand)
-	
+
 @rpc("any_peer", "call_local")
 func rpc_parry_animation(id, hand):
 	await get_tree().create_timer(0.1).timeout
 	get_node("/root/Main/HUD").parry_animation(id, hand)
-	
+
 @rpc("any_peer", "call_local")
 func rpc_hit_animation(id):
 	get_node("/root/Main/HUD").hit_animation(id)
-	
+
 @rpc("any_peer", "call_local")
 func rpc_crit_animation(id):
 	get_node("/root/Main/HUD").crit_animation(id)
-	
+
 @rpc("any_peer", "call_local")
 func rpc_dodge_animation(id):
 	get_node("/root/Main/HUD").dodge_animation(id)
@@ -653,205 +653,210 @@ func rpc_play_animation(attacker_id, animation, weapon, hand):
 
 @rpc("any_peer", "call_local")
 func rpc_wep_broken(_opponent_peer_id, wep1_broken, wep2_broken):
-	#print(str(attacker_id) + ": in glad rpc_play_animation")
-	# This runs on ALL peers
+
+
 	get_node("/root/Main/HUD").wep_broken(_opponent_peer_id, wep1_broken, wep2_broken)
-	
+
 @rpc("any_peer", "call_local")
 func rpc_update_hp(id, hp, max_hp):
 	get_node("/root/Main/HUD").update_hp(id, hp, max_hp)
 
 @rpc("any_peer", "call_local")
 func receive_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_success, defender_weapon1_broken, 
-					defender_weapon2_broken, wep1_new_durability, wep2_new_durability, block_success, shield_absorb):
+			defender_weapon2_broken, wep1_new_durability, wep2_new_durability, block_success, shield_absorb):
 	await get_tree().create_timer(0.15).timeout
 	if !hit_success or dodge_success: next_attack_critical = true
-	if block_success and life_on_block != 0: 
-		rpc("show_damage_popup", -life_on_block, -2, 1, 0, 0, 0, 0, 0, 0, 0)
+	if block_success and life_on_block != 0:
+		rpc("show_damage_popup", - life_on_block, -2, 1, 0, 0, 0, 0, 0, 0, 0)
 		current_health += life_on_block
 	weapon1_durability = wep1_new_durability
 	weapon2_durability = wep2_new_durability
 	current_health -= amount
-	
+
 	if current_health > max_health: current_health = max_health
-	
+
 	rpc("rpc_update_hp", owner_id, current_health, max_health)
-	
+
 	if hit_success == 0: pass
 	elif dodge_success == 1: rpc("rpc_dodge_animation", owner_id)
 	elif hit_success == 1 and crit == 1 and not parry_success and not block_success: rpc("rpc_hit_animation", owner_id)
 	elif hit_success == 1 and crit != 1 and not parry_success and not block_success: rpc("rpc_crit_animation", owner_id)
-	
+
 	rpc("rpc_wep_broken", opponent_peer_id, wep1_is_broken, wep2_is_broken)
-	
-	rpc("show_damage_popup", amount, raw_damage, hit_success, dodge_success, crit, parry_success,
-	 						defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb)
-	if current_health <= concede_threshold*max_health and is_multiplayer_authority(): rpc("die")
+
+	rpc("show_damage_popup", amount, raw_damage, hit_success, dodge_success, crit, parry_success, 
+		defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb)
+	if current_health <= concede_threshold * max_health and is_multiplayer_authority(): rpc("die")
 
 func _on_killed_by_server_signal(id):
-	if get_multiplayer_authority() == id: 
+	if get_multiplayer_authority() == id:
 		die()
-		#print(str(id) + " was killed by host.")
+
 
 @rpc("any_peer", "call_local")
 func die():
 	if is_multiplayer_authority():
 		var health_loss
 		dead = 1
-		if current_health <= 0: health_loss = 15 + abs(current_health) 
+		if current_health <= 0: health_loss = 15 + abs(current_health)
 		else: health_loss = 5
-		if multiplayer.is_server(): GameState_.modify_gladiator_life(owner_id, health_loss)  # Run it locally too!
+		if multiplayer.is_server(): GameState_.modify_gladiator_life(owner_id, health_loss)
 		else: GameState_.modify_gladiator_life.rpc(owner_id, health_loss)
-		
+
 	set_physics_process(false)
 	set_process(false)
 	$CollisionShape2D.disabled = true
 	sprite.stop()
-	
-	#if not sprite.is_playing():
-	#	sprite.play(race+"_die")
-		
-	#print("die()  |  peer " + str(multiplayer.get_unique_id()) + " emits died signal")
+
+
+
+
+
 	emit_signal("died")
-	
+
 
 func handle_ai_movement(delta):
 	direction = (target_position - global_position).normalized()
 	var reached_target = false
-	
+
 	if !in_combat: velocity = direction * move_speed
-	elif in_combat: 
+	elif in_combat:
 		velocity = Vector2.ZERO
 		reached_target = true
-	
-	if global_position.distance_to(target_position) < ATTACK_RANGE/2.0: # Stop when close enough
+
+	if global_position.distance_to(target_position) < ATTACK_RANGE / 2.0:
 		velocity = Vector2.ZERO
 		reached_target = true
-	
+
 	position += velocity * delta
 
-	'''
-	if !current_animation.begins_with("attack"):# or current_animation != "N/A":
-		if !reached_target:
-			
-			if abs(direction.x) > abs(direction.y): current_animation = "walk_right" if direction.x > 0 else "walk_left"
-			else: current_animation = "walk_down" if direction.y > 0 else "walk_up"
-			prev_animation = current_animation
-		elif reached_target:
-			# Stop at idle direction depending on last move
-			if prev_animation == "walk_right": current_animation = "idle_right"
-			elif prev_animation == "walk_left": current_animation = "idle_left"
-			elif prev_animation == "walk_up": current_animation = "idle_right"
-			elif prev_animation == "walk_down": current_animation = "idle_left"
-	'''
+	"\n\tif !current_animation.begins_with(\"attack\"):# or current_animation != \"N/A\":\n\t\tif !reached_target:\n\t\t\t\n\t\t\tif abs(direction.x) > abs(direction.y): current_animation = \"walk_right\" if direction.x > 0 else \"walk_left\"\n\t\t\telse: current_animation = \"walk_down\" if direction.y > 0 else \"walk_up\"\n\t\t\tprev_animation = current_animation\n\t\telif reached_target:\n\t\t\t# Stop at idle direction depending on last move\n\t\t\tif prev_animation == \"walk_right\": current_animation = \"idle_right\"\n\t\t\telif prev_animation == \"walk_left\": current_animation = \"idle_left\"\n\t\t\telif prev_animation == \"walk_up\": current_animation = \"idle_right\"\n\t\t\telif prev_animation == \"walk_down\": current_animation = \"idle_left\"\n\t"
 
 
 
-# Called by the server to initialize this gladiator
-#@rpc("any_peer", "call_local")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 func initialize_gladiator(data, opponent_id, _spawn_point, meeting_point, peer_id):
 	spawn_point = _spawn_point
 	position = _spawn_point
 	data["spawn_point"] = _spawn_point
-	#print("global_position " + str(opponent_id) + ": " + str(data["spawn_point"]))
-	
+
+
 	owner_id = peer_id
-	if opponent_id: 
+	if opponent_id:
 		opponent_peer_id = opponent_id
 		target_position = meeting_point
 	else: target_position = position
-	
+
 	update_gladiator(data, peer_id)
 
 
 
 @rpc("any_peer", "call_local")
-func show_damage_popup(amount, raw_damage, hit_success, dodge_success, crit, parry_success,
-					defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb, winner = ""):
+func show_damage_popup(amount, raw_damage, hit_success, dodge_success, crit, parry_success, 
+			defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb, winner = ""):
 	var popup = DamagePopupScene.instantiate()
 	popup.top_level = true
 	popup.z_as_relative = false
 	popup.z_index = 999
-	if face_towards == "left": 
-		popup.global_position = global_position #+ Vector2(-100, 40)
-	elif face_towards == "right": 
-		popup.global_position = global_position #+ Vector2(-150, 40)
-		
-	#else: popup.global_position = global_position + Vector2(0, 40)
+	if face_towards == "left":
+		popup.global_position = global_position
+	elif face_towards == "right":
+		popup.global_position = global_position
 
-	
-	#await get_tree().create_timer(0.2).timeout
-	popup.show_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_success, spawn_point,
-	 				defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb, winner)
+
+
+
+
+	popup.show_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_success, spawn_point, 
+		defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb, winner)
 	$CanvasLayer.add_child(popup)
-	
-	if amount < 0: # heal
+
+	if amount < 0:
 		TweenFX.punch_in(popup, 0.1, 0.5)
-	elif raw_damage == -1: # thorns
+	elif raw_damage == -1:
 		TweenFX.critical_hit(popup, 0.2)
-	elif hit_success == 1 and crit != 1 and dodge_success == 0 and parry_success == 0 and block_success == 0: 
+	elif hit_success == 1 and crit != 1 and dodge_success == 0 and parry_success == 0 and block_success == 0:
 		TweenFX.critical_hit(popup, 0.5)
-		TweenFX.glitch(popup, 0.5, crit*40*amount/max_health, 6)
-	elif hit_success == 1 and crit == 1 and dodge_success == 0 and parry_success == 0 and block_success == 0: 
+		TweenFX.glitch(popup, 0.5, crit * 40 * amount / max_health, 6)
+	elif hit_success == 1 and crit == 1 and dodge_success == 0 and parry_success == 0 and block_success == 0:
 		TweenFX.critical_hit(popup, 0.2)
 
 
 func customize_popup_font(color: Color, size, text: String):
-		$Label.add_theme_color_override("font_color", color) 
-		$Label.add_theme_font_size_override("font_size", size)
-		$Label.text = text
-		$Label.modulate.a = 1.0  # Fully visible
+	$Label.add_theme_color_override("font_color", color)
+	$Label.add_theme_font_size_override("font_size", size)
+	$Label.text = text
+	$Label.modulate.a = 1.0
 
 
-func update_all_gladiators(data: Dictionary): 
+func update_all_gladiators(data: Dictionary):
 	for id in data:
 		for g in get_tree().get_nodes_in_group("gladiators"):
 			if g.owner_id == id:
-				#var stats = data[id]
+
 				if g.is_multiplayer_authority():
-					# Local node: update directly
+
 					g.update_gladiator(data[id], id)
 				else:
-					# Remote node: call via RPC on owner
+
 					g.rpc_id(g.get_multiplayer_authority(), "update_gladiator", data[id], id)
 
 func update_gladiator_after_strategy(hit_chance_penalty, dodge_mod):
-	glad_weapon1_category_skill = glad_weapon1_category_skill*hit_chance_penalty
-	glad_weapon2_category_skill = glad_weapon2_category_skill*hit_chance_penalty
-	
-	var hit_base_per_lvl = -(1.6-float(int(level))/12) # Less penalty for too low weapon mastery in low levels
-	var hit_skill_weight_1 = (glad_weapon1_category_skill/(weapon1_skill_req*(0.8 + weight/400.0))) # Reduce hit chance with weight
-	var hit_skill_weight_2 = (glad_weapon2_category_skill/(weapon2_skill_req*(0.8 + weight/400.0))) # Reduce hit chance with weight
-	var hit_curve_smoothness = 6+float(int(level))/4 # In low level, hit curve is more smooth (exponential part)
-	var wep1_difficulty = 1 # vary around 1 -> higher makes it easier to handle
-	var wep2_difficulty = 1 # vary around 1 -> higher makes it easier to handle
-	
+	glad_weapon1_category_skill = glad_weapon1_category_skill * hit_chance_penalty
+	glad_weapon2_category_skill = glad_weapon2_category_skill * hit_chance_penalty
+
+	var hit_base_per_lvl = - (1.6 - float(int(level)) / 12)
+	var hit_skill_weight_1 = (glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0)))
+	var hit_skill_weight_2 = (glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0)))
+	var hit_curve_smoothness = 6 + float(int(level)) / 4
+	var wep1_difficulty = 1
+	var wep2_difficulty = 1
+
 	if weapon2_can_block:
-		hit_chance = [wep1_difficulty + 1/(hit_base_per_lvl - (hit_skill_weight_1**hit_curve_smoothness)), 
-					wep1_difficulty + 1/(hit_base_per_lvl - (hit_skill_weight_1**hit_curve_smoothness))]
-	else: 
-		hit_chance = [wep1_difficulty + 1/(hit_base_per_lvl - (hit_skill_weight_1**hit_curve_smoothness)), 
-					  wep2_difficulty + 1/(hit_base_per_lvl - (hit_skill_weight_2**hit_curve_smoothness))]
-					
+		hit_chance = [wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness)), 
+			wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness))]
+	else:
+		hit_chance = [wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness)), 
+			wep2_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_2 ** hit_curve_smoothness))]
+
 	if weapon1_durability == 1: hit_chance[0] = no_wep_hit_chance
 	if weapon2_durability == 1: hit_chance[1] = no_wep_hit_chance
-					
-	avoidance = avoidance/dodge_mod
-	dodge_chance = ((2*avoidance/((1.1+0.05*weight)**1.5))/200) / ((2*avoidance/(1.1+0.05*weight)/200)+1)
-	
-	
+
+	avoidance = avoidance / dodge_mod
+	dodge_chance = ((2 * avoidance / ((1.1 + 0.05 * weight) ** 1.5)) / 200) / ((2 * avoidance / (1.1 + 0.05 * weight) / 200) + 1)
+
+
 	recalculated_hit_chance = 1
 
 @rpc("any_peer", "call_local")
 func update_gladiator(data: Dictionary, id):
 	combined_gladiator_bonuses = data.get("total_modifier_bonuses", {})
-	#print("combined_gladiator_bonuses: " + str(combined_gladiator_bonuses))
-	
+
+
 	recalculated_hit_chance = 0
-	#print("update_gladiator: " + str(data))
+
 	var chest_absorb = 0
 	var head_absorb = 0
 	var shoulders_absorb = 0
+	var belt_absorb = 0
+	var legs_absorb = 0
+	var boots_absorb = 0
+	var gloves_absorb = 0
+
 	if data.has("chest") and data["chest"].size() > 0:
 		var chest_name = data["chest"].keys()[0]
 		chest_absorb = data["chest"][chest_name].get("absorb", 0)
@@ -861,10 +866,24 @@ func update_gladiator(data: Dictionary, id):
 	if data.has("head") and data["head"].size() > 0:
 		var head_name = data["head"].keys()[0]
 		head_absorb = data["head"][head_name].get("absorb", 0)
-	
+
+	if data.has("belt") and data["belt"].size() > 0:
+		var belt_name = data["belt"].keys()[0]
+		belt_absorb = data["belt"][belt_name].get("absorb", 0)
+	if data.has("legs") and data["legs"].size() > 0:
+		var legs_name = data["legs"].keys()[0]
+		legs_absorb = data["legs"][legs_name].get("absorb", 0)
+	if data.has("boots") and data["boots"].size() > 0:
+		var boots_name = data["boots"].keys()[0]
+		boots_absorb = data["boots"][boots_name].get("absorb", 0)
+	if data.has("gloves") and data["gloves"].size() > 0:
+		var gloves_name = data["gloves"].keys()[0]
+		gloves_absorb = data["gloves"][gloves_name].get("absorb", 0)
+
+
 	var stance = data["stance"]
 	var attack_type = data["attack_type"]
-	
+
 	strength = data["attributes"]["strength"]
 	quickness = data["attributes"]["quickness"]
 	crit_rating = data["attributes"]["crit_rating"]
@@ -877,7 +896,7 @@ func update_gladiator(data: Dictionary, id):
 	stabbing_mastery = data["attributes"]["stabbing_mastery"]
 	mace_mastery = data["attributes"]["mace_mastery"]
 	flagellation_mastery = data["attributes"]["flagellation_mastery"]
-	
+
 	var stance_dodge_mod = 1
 	var stance_parry_block_mod = 1
 	var stance_attack_speed_mod = 1
@@ -885,139 +904,139 @@ func update_gladiator(data: Dictionary, id):
 	var stance_crit_multi_mod = 1
 	var stance_endurance_mod = 1
 	var attack_type_hit_mod = 1
-	
 
-	if stance == "defensive": 
+
+	if stance == "defensive":
 		stance_dodge_mod = 1.15
 		stance_parry_block_mod = 1.15
 		stance_attack_speed_mod = 0.9
 		stance_crit_chance_mod = 0.9
 		stance_crit_multi_mod = 0.9
-		
-	elif stance == "offensive": 
+
+	elif stance == "offensive":
 		stance_dodge_mod = 0.9
 		stance_parry_block_mod = 0.9
 		stance_attack_speed_mod = 1.1
 		stance_crit_chance_mod = 1.1
 		stance_crit_multi_mod = 1.1
-	elif stance == "jester": 
+	elif stance == "jester":
 		stance_endurance_mod = 0.9
-		
-	if attack_type == "light": 
+
+	if attack_type == "light":
 		attack_type_hit_mod = 1.1
 		attack_type_str_mod = 0.7
 	elif attack_type == "heavy":
 		attack_type_hit_mod = 0.9
 		attack_type_str_mod = 1.3
-	
-	
+
+
 	level = data["level"]
 	var weapon1_name = data["weapon1"].keys()[0]
 	var weapon2_name = data["weapon2"].keys()[0]
-	
+
 	weapon1_skill_req = data["weapon1"][weapon1_name]["skill_req"]
 	weapon1_str_req = data["weapon1"][weapon1_name]["str_req"]
 	weapon1_speed = data["weapon1"][weapon1_name]["speed"]
 	weapon1_range = data["weapon1"][weapon1_name]["range"]
 	weapon1_crit_chance = 1 + data["weapon1"][weapon1_name]["crit_chance"]
 	weapon1_crit_multi = data["weapon1"][weapon1_name]["crit_multi"]
-	
+
 	weapon2_skill_req = data["weapon2"][weapon2_name]["skill_req"]
 	weapon2_str_req = data["weapon2"][weapon2_name]["str_req"]
 	weapon2_speed = data["weapon2"][weapon2_name]["speed"]
 	weapon2_range = data["weapon2"][weapon2_name]["range"]
 	weapon2_crit_chance = 1 + data["weapon2"][weapon2_name]["crit_chance"]
 	weapon2_crit_multi = data["weapon2"][weapon2_name]["crit_multi"]
-	
+
 	armor_absorb = 1.0
 	concede_threshold = data["concede"]
-	#print(str(owner_id) + " concede: " + str(concede_threshold))
-	#print("\ndata" + str(data) + "\n")
-	
+
+
+
 	race = data["race"].to_lower()
 	gladiator_name = data.name
-	#$Name.label_settings.set_font_color(data["color"])
+
 	$Name.text = data.name
 	$Name.add_theme_color_override("font_color", data.color)
-	
 
-	
-	weight = data["weight"] - strength/40 # 100 str reduces weight with 2.5
-	var endurance_weight = 1 - weight/(100+weight) # less endurance with more weight
-	var endurance_decay = endurance/75 + 1
-	endurance_sec = randf_range(2,3) + stance_endurance_mod*endurance*endurance_weight/endurance_decay
+
+
+	weight = data["weight"] - strength / 40
+	var endurance_weight = 1 - weight / (100 + weight)
+	var endurance_decay = endurance / 75 + 1
+	endurance_sec = randf_range(2, 3) + stance_endurance_mod * endurance * endurance_weight / endurance_decay
 	weapon1 = data["weapon1"][weapon1_name]
 	weapon2 = data["weapon2"][weapon2_name]
 	weapon1_durability = data["weapon1"][weapon1_name]["durability"]
 	weapon2_durability = data["weapon2"][weapon2_name]["durability"]
-	
+
 	life_on_block = combined_gladiator_bonuses.get("life_on_block", 0)
-	#print("life_on_block ready: " + str(life_on_block))
+
 	shield_absorb = data["weapon2"][weapon2_name].get("absorb", -1)
 	weapon1_can_parry = data["weapon1"][weapon1_name]["parry"]
 	weapon2_can_parry = data["weapon2"][weapon2_name]["parry"]
 	weapon2_can_block = data["weapon2"][weapon2_name]["block"]
 	weapon_hands_to_carry = data["weapon1"][weapon1_name]["hands"]
-	
-	# Determine which weapon type is used, and set weapon_skill to players weapon_mastery
+
+
 	var weapon1_category = data["weapon1"][weapon1_name].get("category", "")
 	var weapon2_category = data["weapon2"][weapon2_name].get("category", "")
 	glad_weapon1_category_skill = data["attributes"][weapon1_category + "_mastery"]
 	glad_weapon2_category_skill = data["attributes"][weapon2_category + "_mastery"]
-	
-	var hit_base_per_lvl = -(1.6-float(level)/12) # Less penalty for too low weapon mastery in low levels
-	var hit_skill_weight_1 = (glad_weapon1_category_skill/(weapon1_skill_req*(0.8 + weight/400.0))) # Reduce hit chance with weight
-	var hit_skill_weight_2 = (glad_weapon2_category_skill/(weapon2_skill_req*(0.8 + weight/400.0))) # Reduce hit chance with weight
-	var hit_curve_smoothness = 6+float(level)/4 # In low level, hit curve is more smooth (exponential part)
-	var wep1_difficulty = 1 # vary around 1 -> higher makes it easier to handle
-	var wep2_difficulty = 1 # vary around 1 -> higher makes it easier to handle
 
-	
-	if weapon2_can_block: 
-		block_chance = stance_parry_block_mod*(0.8 - exp(-0.4*(2*glad_weapon2_category_skill / weapon2_skill_req-1.0))) + combined_gladiator_bonuses.get("increased_block_chance", 0)/100.0
-		
-		crit_multi = [stance_crit_multi_mod*((weapon1_crit_multi+(((1+weapon1_crit_multi)**weapon1_crit_multi)*crit_rating)/(weapon1_crit_multi*crit_rating+400))), 
-					stance_crit_multi_mod*((weapon1_crit_multi+(((1+weapon1_crit_multi)**weapon1_crit_multi)*crit_rating)/(weapon1_crit_multi*crit_rating+400)))]
-					
-		crit_chance = [(weapon1_crit_chance-1)+stance_crit_chance_mod*((weapon1_crit_chance**4)*crit_rating/(((weapon1_crit_chance**4)*crit_rating)+400)), 
-					(weapon1_crit_chance-1)+stance_crit_chance_mod*((weapon1_crit_chance**4)*crit_rating/(((weapon1_crit_chance**4)*crit_rating)+400))]
-		
-		hit_chance = [attack_type_hit_mod*(wep1_difficulty + 1/(hit_base_per_lvl - (hit_skill_weight_1**hit_curve_smoothness))), 
-					  attack_type_hit_mod*(wep1_difficulty + 1/(hit_base_per_lvl - (hit_skill_weight_1**hit_curve_smoothness)))]
-	else: 
+	var hit_base_per_lvl = - (1.6 - float(level) / 12)
+	var hit_skill_weight_1 = (glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0)))
+	var hit_skill_weight_2 = (glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0)))
+	var hit_curve_smoothness = 6 + float(level) / 4
+	var wep1_difficulty = 1
+	var wep2_difficulty = 1
+
+
+	if weapon2_can_block:
+		block_chance = stance_parry_block_mod * (0.8 - exp(-0.4 * (2 * glad_weapon2_category_skill / weapon2_skill_req - 1.0))) + combined_gladiator_bonuses.get("increased_block_chance", 0) / 100.0
+
+		crit_multi = [stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400))), 
+			stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400)))]
+
+		crit_chance = [(weapon1_crit_chance - 1) + stance_crit_chance_mod * ((weapon1_crit_chance ** 4) * crit_rating / (((weapon1_crit_chance ** 4) * crit_rating) + 400)), 
+			(weapon1_crit_chance - 1) + stance_crit_chance_mod * ((weapon1_crit_chance ** 4) * crit_rating / (((weapon1_crit_chance ** 4) * crit_rating) + 400))]
+
+		hit_chance = [attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness))), 
+			attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness)))]
+	else:
 		block_chance = 0
-		crit_multi = [stance_crit_multi_mod*((weapon1_crit_multi+(((1+weapon1_crit_multi)**weapon1_crit_multi)*crit_rating)/(weapon1_crit_multi*crit_rating+400))), 
-					stance_crit_multi_mod*((weapon2_crit_multi+(((1+weapon2_crit_multi)**weapon2_crit_multi)*crit_rating)/(weapon2_crit_multi*crit_rating+400)))]
-		
-		crit_chance = [(weapon1_crit_chance-1)+stance_crit_chance_mod*((weapon1_crit_chance**4)*crit_rating/(((weapon1_crit_chance**4)*crit_rating)+400)), 
-					(weapon2_crit_chance-1)+stance_crit_chance_mod*((weapon2_crit_chance**4)*crit_rating/(((weapon2_crit_chance**4)*crit_rating)+400))]
-		
-		hit_chance = [attack_type_hit_mod*(wep1_difficulty + 1/(hit_base_per_lvl - (hit_skill_weight_1**hit_curve_smoothness))), 
-					  attack_type_hit_mod*(wep2_difficulty + 1/(hit_base_per_lvl - (hit_skill_weight_2**hit_curve_smoothness)))]
-		
- # === Damage calculations ===
-	if weapon_hands_to_carry == 1: 
-		var as_wep_base = 1/(weapon1_speed+weapon2_speed)
-		var as_exp_p1 = -(0.01+(weapon1_speed+weapon2_speed)/250)
-		var as_exp_p2 = (weapon1_speed+weapon2_speed)*quickness**(1-weight/250)
-		attack_speed = as_wep_base*exp(as_exp_p1*as_exp_p2) / (1+combined_gladiator_bonuses.get("global_increased_attack_speed", 0)/100.0)
-		
+		crit_multi = [stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400))), 
+			stance_crit_multi_mod * ((weapon2_crit_multi + (((1 + weapon2_crit_multi) ** weapon2_crit_multi) * crit_rating) / (weapon2_crit_multi * crit_rating + 400)))]
+
+		crit_chance = [(weapon1_crit_chance - 1) + stance_crit_chance_mod * ((weapon1_crit_chance ** 4) * crit_rating / (((weapon1_crit_chance ** 4) * crit_rating) + 400)), 
+			(weapon2_crit_chance - 1) + stance_crit_chance_mod * ((weapon2_crit_chance ** 4) * crit_rating / (((weapon2_crit_chance ** 4) * crit_rating) + 400))]
+
+		hit_chance = [attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness))), 
+			attack_type_hit_mod * (wep2_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_2 ** hit_curve_smoothness)))]
+
+
+	if weapon_hands_to_carry == 1:
+		var as_wep_base = 1 / (weapon1_speed + weapon2_speed)
+		var as_exp_p1 = - (0.01 + (weapon1_speed + weapon2_speed) / 250)
+		var as_exp_p2 = (weapon1_speed + weapon2_speed) * quickness ** (1 - weight / 250)
+		attack_speed = as_wep_base * exp(as_exp_p1 * as_exp_p2) / (1 + combined_gladiator_bonuses.get("global_increased_attack_speed", 0) / 100.0)
+
 		var ratio1 = glad_weapon1_category_skill / weapon1_skill_req
 		var ratio2 = glad_weapon2_category_skill / weapon2_skill_req
-		parry_chance = [stance_parry_block_mod*(0.8 - exp(-0.4*(2*ratio1-1.0))), stance_parry_block_mod*(0.8 - exp(-0.4*(2*ratio2-1.0)))]
-		
-	else: 
-		var as_wep_base = 1/weapon1_speed
-		var as_exp_p1 = -(0.01+weapon1_speed/250)
-		var as_exp_p2 = weapon1_speed*quickness**(1-weight/250)
-		attack_speed = as_wep_base*exp(as_exp_p1*as_exp_p2) / (1+combined_gladiator_bonuses.get("global_increased_attack_speed", 0)/100.0)
-		
+		parry_chance = [stance_parry_block_mod * (0.8 - exp(-0.4 * (2 * ratio1 - 1.0))), stance_parry_block_mod * (0.8 - exp(-0.4 * (2 * ratio2 - 1.0)))]
+
+	else:
+		var as_wep_base = 1 / weapon1_speed
+		var as_exp_p1 = - (0.01 + weapon1_speed / 250)
+		var as_exp_p2 = weapon1_speed * quickness ** (1 - weight / 250)
+		attack_speed = as_wep_base * exp(as_exp_p1 * as_exp_p2) / (1 + combined_gladiator_bonuses.get("global_increased_attack_speed", 0) / 100.0)
+
 		var ratio1 = glad_weapon1_category_skill / weapon1_skill_req
-		parry_chance = [stance_parry_block_mod*(0.8 - exp(-0.4*(2*ratio1-1.0)))/2, stance_parry_block_mod*(0.8 - exp(-0.4*(2*ratio1-1.0)))/2]
-		
-	
-	
-	if weapon1_durability == 1:		# THIS MEANS EQUIPPING NO WEP IN SLOT
+		parry_chance = [stance_parry_block_mod * (0.8 - exp(-0.4 * (2 * ratio1 - 1.0))) / 2, stance_parry_block_mod * (0.8 - exp(-0.4 * (2 * ratio1 - 1.0))) / 2]
+
+
+
+	if weapon1_durability == 1:
 		crit_chance[0] = no_wep_crit_chance
 		crit_multi[0] = no_wep_crit_multi
 		hit_chance[0] = no_wep_hit_chance
@@ -1028,13 +1047,13 @@ func update_gladiator(data: Dictionary, id):
 
 	move_speed = 500
 	current_health = max_health
-	
-	combined_avg_absorb = (head_absorb + shoulders_absorb + chest_absorb)#/3.0
-	absorb_after_resilience = combined_avg_absorb#(1+sqrt(resilience)/10.0) * combined_avg_absorb				# flat damage reduction
-	dodge_chance = stance_dodge_mod*((2*avoidance/((1.1+0.05*weight)**1.5))/200) / ((2*avoidance/(1.1+0.05*weight)/200)+1)
-	#print(dodge_chance)
-	#dodge_chance = (avoidance/200.0) / ((avoidance/200.0)+1)		# decaying dodge_chance -> 1
-	seconds_to_live = endurance/3.0
+
+	combined_avg_absorb = (head_absorb + shoulders_absorb + chest_absorb + belt_absorb + legs_absorb + boots_absorb + gloves_absorb)
+	absorb_after_resilience = combined_avg_absorb
+	dodge_chance = stance_dodge_mod * ((2 * avoidance / ((1.1 + 0.05 * weight) ** 1.5)) / 200) / ((2 * avoidance / (1.1 + 0.05 * weight) / 200) + 1)
+
+
+	seconds_to_live = endurance / 3.0
 
 	time_since_last_attack = 0.0
 	next_attack_critical = false
@@ -1042,14 +1061,14 @@ func update_gladiator(data: Dictionary, id):
 	next_attack_weapon = 0
 
 	current_health = max_health
-	#rpc("rpc_update_hp", id, current_health, max_health)
+
 
 
 
 func collect_gladiator_bonuses(gladiator: Dictionary) -> Dictionary:
-	var merged := {}
-	var excluded_keys := ["inventory", "total_modifier_bonuses"]
-	var skip_weapon2 := false
+	var merged: = {}
+	var excluded_keys: = ["inventory", "total_modifier_bonuses"]
+	var skip_weapon2: = false
 
 	for key in gladiator.keys():
 		if excluded_keys.has(key):
@@ -1064,15 +1083,15 @@ func collect_gladiator_bonuses(gladiator: Dictionary) -> Dictionary:
 			if typeof(item) != TYPE_DICTIONARY:
 				continue
 
-			# Check if weapon1 is two-handed
+
 			if key == "weapon1" and item.has("hands") and item["hands"] == 2:
 				skip_weapon2 = true
 
-			# Skip weapon2 if weapon1 is two-handed
+
 			if key == "weapon2" and skip_weapon2 and item.has("type") and item["type"] == "weapon":
 				continue
 
-			# Collect bonuses
+
 			if item.has("modifiers") and item["modifiers"].has("bonuses"):
 				var bonuses = item["modifiers"]["bonuses"]
 				for bonus_key in bonuses.keys():

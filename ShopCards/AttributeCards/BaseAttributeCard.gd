@@ -1,4 +1,4 @@
-# BaseCard.gd
+
 extends Button
 
 @export var attribute_name: String = ""
@@ -9,15 +9,15 @@ var cost_label
 var parent_name
 var all_gladiators
 
-var mouse_inside_button := false
-var added := false
+var mouse_inside_button: = false
+var added: = false
 
-var name_color := "ef692f"#Color.GOLD.to_html(false)
-var base_text_color := "927e6a"#Color.DARK_GRAY.to_html(false)
-var base_value_color := "efd8a1"#Color.WHITE_SMOKE.to_html(false)
-var req_ok_color := "efd8a1"#Color.WHITE_SMOKE.to_html(false)
-var req_nok_color := "79444a"#Color.RED.to_html(false)
-var mod_color := "3c9f9c"#Color.DODGER_BLUE.to_html(false)
+var name_color: = "ef692f"
+var base_text_color: = "927e6a"
+var base_value_color: = "efd8a1"
+var req_ok_color: = "efd8a1"
+var req_nok_color: = "79444a"
+var mod_color: = "3c9f9c"
 
 var label_display
 var race_modifiers
@@ -28,16 +28,16 @@ var normal_text_color = "efd8a1"
 var no_bonus_color = "d2b600"
 
 func _ready():
-	add_theme_color_override("icon_hover_color", Color(1.27, 1.27, 1.27, 1.0))#"ffffffb5") #b00098
-	#add_theme_color_override("icon_disabled_color", "ffffff")
+	add_theme_color_override("icon_hover_color", Color(1.27, 1.27, 1.27, 1.0))
+	add_theme_color_override("icon_disabled_color", "ffffff")
 	add_theme_color_override("icon_hover_pressed_color", "ffffffb5")
 	add_theme_color_override("icon_pressed_color", "ffffffb5")
-	
+
 	flat = true
-	pivot_offset = size/2#Vector2(128,128)
-	
+	pivot_offset = size / 2
+
 	set_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
-	race_modifiers = GameState_.RACE_MODIFIERS#.get(GameState_.selected_race, {})
+	race_modifiers = GameState_.RACE_MODIFIERS
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 	GameState_.connect("card_buy_result", Callable(self, "_on_card_buy_result"))
@@ -45,12 +45,12 @@ func _ready():
 	GameState_.connect("send_gladiator_data_to_peer_card_signal", Callable(self, "_on_send_gladiator_data_to_peer_card_signal"))
 	GameState_.connect("update_equipment_card_signal", Callable(self, "_on_equipment_card_updated"))
 	GameState_.connect("signal_update_gold_req_in_shop_for_peer", Callable(self, "_on_update_gold_req_shop"))
-	
+
 	if multiplayer.is_server():
 		GameState_.refresh_gladiator_data_card(multiplayer.get_unique_id())
 	else:
 		GameState_.rpc_id(1, "refresh_gladiator_data_card", multiplayer.get_unique_id())
-	
+
 	parent_name = get_parent().name
 	if parent_name == "ShopGridContainer":
 		label_display = format_name(attribute_name)
@@ -64,12 +64,12 @@ func _ready():
 		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		name_label.scroll_active = false
 		name_label.position.y = -12
-		name_label.position.x = 30#100
-		name_label.size = Vector2(128,128)
+		name_label.position.x = 30
+		name_label.size = Vector2(128, 128)
 		name_label.add_theme_color_override("font_outline_color", Color("4d4539"))
 		name_label.add_theme_constant_override("outline_size", 12)
 		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		
+
 		cost_label = RichTextLabel.new()
 		cost_label.add_theme_font_size_override("normal_font_size", 32)
 		cost_label.add_theme_font_size_override("bold_font_size", 32)
@@ -80,41 +80,41 @@ func _ready():
 		cost_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		cost_label.scroll_active = false
 		cost_label.position.y = 120
-		cost_label.position.x = 30#100
-		cost_label.size = Vector2(128,128)
+		cost_label.position.x = 30
+		cost_label.size = Vector2(128, 128)
 		cost_label.add_theme_color_override("font_outline_color", Color("4d4539"))
 		cost_label.add_theme_constant_override("outline_size", 8)
 		cost_label["show_behind_parent"] = false
 		cost_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		
+
 		add_child(cost_label)
 		add_child(name_label)
-		
-		
-		
-		
-		
-		
+
+
+
+
+
+
 		if all_gladiators != null:
 			_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
-		
-		
-		
-		
+
+
+
+
 
 func _make_custom_tooltip(for_text):
 	if modulate.a == 0:
 		tooltip_text = ""
-		return ""   # disables tooltip
-	if for_text == "": 
+		return ""
+	if for_text == "":
 		return
-		
-	# StyleBox for background
-	var panel := PanelContainer.new()
-	var sb := StyleBoxFlat.new()
-	
-	sb.bg_color = Color("4d4539")            # background color
-	sb.border_color = Color("#77883b")        # border color
+
+
+	var panel: = PanelContainer.new()
+	var sb: = StyleBoxFlat.new()
+
+	sb.bg_color = Color("4d4539")
+	sb.border_color = Color("#77883b")
 	sb.border_width_left = 2
 	sb.border_width_right = 2
 	sb.border_width_top = 2
@@ -129,7 +129,7 @@ func _make_custom_tooltip(for_text):
 	sb.content_margin_bottom = 6
 
 	panel.add_theme_stylebox_override("panel", sb)
-	
+
 	var label = RichTextLabel.new()
 	label.set_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
 	label.add_theme_font_size_override("normal_font_size", 24)
@@ -142,23 +142,23 @@ func _make_custom_tooltip(for_text):
 	label.scroll_active = false
 	label.add_theme_color_override("font_outline_color", Color.BLACK)
 	label.add_theme_constant_override("outline_size", 12)
-	
+
 	panel.add_child(label)
-	
+
 	return panel
 
 func _on_update_gold_req_shop(_id, gold):
 	var color = "77883b"
 	var gold_color = "#d2b600"
-	
+
 	if parent_name == "ShopGridContainer":
 		if gold < cost:
-			name_label.bbcode_text = "[color=%s]+%d %s[/color]" % [color, amount, label_display] 
-			cost_label.bbcode_text = "[color=%s]$ %d[/color]" 	% [req_nok_color, cost]
+			name_label.bbcode_text = "[color=%s]+%d %s[/color]" % [color, amount, label_display]
+			cost_label.bbcode_text = "[color=%s]$ %d[/color]" % [req_nok_color, cost]
 		else:
-			name_label.bbcode_text = "[color=%s]+%d %s[/color]" % [color, amount, label_display] 
-			cost_label.bbcode_text = "[color=%s]$ %d[/color]" 	% [gold_color, cost]
-			
+			name_label.bbcode_text = "[color=%s]+%d %s[/color]" % [color, amount, label_display]
+			cost_label.bbcode_text = "[color=%s]$ %d[/color]" % [gold_color, cost]
+
 
 func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
 	all_gladiators = _all_gladiators
@@ -166,32 +166,32 @@ func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int, _player_gladiato
 	tooltip_text = get_attribute_tooltip(attribute_name)
 
 func format_name(raw_name: String) -> String:
-	var parts = raw_name.split("_")            # → ["simple", "sword"]
-	var joined = ""                            
+	var parts = raw_name.split("_")
+	var joined = ""
 	for i in parts.size():
 		joined += parts[i]
 		if i < parts.size() - 1:
 			joined += " "
-	return joined.capitalize()                 # → "Simple Sword"
+	return joined.capitalize()
 
 func _on_mouse_entered():
-	
+
 	pivot_offset = size / 2
 	mouse_inside_button = true
-	var tween := get_tree().create_tween()
+	var tween: = get_tree().create_tween()
 	tween.tween_property(self, "scale", Vector2(1.1, 1.1), 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
 func _on_mouse_exited():
 	mouse_inside_button = false
-	var tween := get_tree().create_tween()
+	var tween: = get_tree().create_tween()
 	tween.tween_property(self, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 
 func _on_button_up():
 	var _parent_name = get_parent().name
-	
-	if _parent_name == "ShopGridContainer": 
+
+	if _parent_name == "ShopGridContainer":
 		if is_multiplayer_authority(): buy_card()
-	if _parent_name == "InventoryGridContainer": 
+	if _parent_name == "InventoryGridContainer":
 		if is_multiplayer_authority(): handle_inventory()
 		print("Pressed inventory slot")
 
@@ -204,8 +204,8 @@ func buy_card():
 
 	if mouse_inside_button:
 		added = false
-		var id := multiplayer.get_unique_id()
-		
+		var id: = multiplayer.get_unique_id()
+
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(id, 5, attribute_name, cost)
 		else:
@@ -213,16 +213,16 @@ func buy_card():
 
 		disabled = true
 		await get_tree().create_timer(0.15).timeout
-		#print(added)
-		
+
+
 		if added:
 			tooltip_text = ""
-			#print("💰Bought " + attribute_name + " card")
+
 			mouse_inside_button = false
 			disabled = true
-			
-			#TweenFX.fold_out(self)
-			var tween := get_tree().create_tween()
+
+
+			var tween: = get_tree().create_tween()
 			tween.tween_property(self, "modulate:a", 0, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 			TweenFX.fold_out(self, 0.2)
 		else: disabled = false
@@ -235,11 +235,11 @@ func get_attribute_tooltip(_attribute_name):
 	var attribute_text = ""
 	var race = all_gladiators[multiplayer.get_unique_id()]["race"]
 	var race_mod = race_modifiers[race][_attribute_name]
-	
-	#print(_attribute_name + " " + str(race_mod))
-	if race_mod == 1: attribute_text =  "[color=%s]%s mod: [/color][color=%s]%s[/color]" % [normal_text_color, race, no_bonus_color, race_mod]
+
+
+	if race_mod == 1: attribute_text = "[color=%s]%s mod: [/color][color=%s]%s[/color]" % [normal_text_color, race, no_bonus_color, race_mod]
 	elif race_mod > 1: attribute_text = "[color=%s]%s mod: [/color][color=%s]%s[/color]" % [normal_text_color, race, pos_bonus_color, race_mod]
 	elif race_mod < 1: attribute_text = "[color=%s]%s mod: [/color][color=%s]%s[/color]" % [normal_text_color, race, neg_bonus_color, race_mod]
-	
-	
+
+
 	return attribute_text

@@ -27,7 +27,7 @@ func _make_custom_tooltip(for_text):
 	var sb := StyleBoxFlat.new()
 	
 	sb.bg_color = Color("4d4539")            # background color
-	sb.border_color = Color("#B00098")        # border color
+	sb.border_color = Color("gold")        # border color
 	sb.border_width_left = 2
 	sb.border_width_right = 2
 	sb.border_width_top = 2

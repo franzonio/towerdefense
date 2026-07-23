@@ -6,36 +6,36 @@ var direction = "up"
 var side
 var alternate = -1
 
-func show_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_success, spawn_point,
-				 defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb, winner = ""):
+func show_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_success, spawn_point, 
+				defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb, winner = ""):
 	if randf() > 0.5: alternate = 1
-			
+
 	if winner == "WINNER":
 		customize_popup_font(Color.GREEN, 40, "WINNER", spawn_point, "up")
 		return
-	#if typeof(amount) != TYPE_FLOAT and amount == "WINNER":
-	#	customize_popup_font(Color.GREEN, 30, "WINNER", spawn_point, "up")
-	#	return
-			
-	var formatted : String		
+
+
+
+
+	var formatted: String
 	if int(amount) == amount:
-		# It's effectively an integer
+
 		formatted = str(int(amount))
 	else:
-		# Has decimals, show two
+
 		formatted = "%.2f" % amount
-		
-		
-	#if amount == 0 and block_success:
-		#print("pause")
-		
-		
+
+
+
+
+
+
 	if not hit_success:
 		customize_popup_font("cd8900", 30, "MISS", spawn_point, "up")
-	elif raw_damage == -1: # THORNS OR BLOOD RAGE
+	elif raw_damage == -1:
 		customize_popup_font("#b00098", 25, formatted, spawn_point, "behind")
-	elif amount < 0: # SELF HEAL
-		customize_popup_font(Color.GREEN, 25, "+"+str(int(abs(amount))), spawn_point, "down")
+	elif amount < 0:
+		customize_popup_font(Color.GREEN, 25, "+" + str(int(abs(amount))), spawn_point, "down")
 	elif dodge_success:
 		customize_popup_font("d2c9a5", 30, "DODGE", spawn_point, "up")
 	elif block_success and defender_weapon2_broken == 0:
@@ -51,7 +51,7 @@ func show_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_suc
 	else:
 		if crit != 1 and not block_success:
 			customize_popup_font("d2004f", 40, str(int(amount)), spawn_point, "up")
-			#TweenFX.critical_hit($Label, 0.2)
+
 		elif crit == 1 and not block_success:
 			customize_popup_font("d2b600", 30, str(int(amount)), spawn_point, "up")
 
@@ -59,72 +59,72 @@ func show_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_suc
 func customize_popup_font(color: Color, size, text: String, spawn_point, _direction, winner = ""):
 	modulate.a = 0
 	direction = _direction
-	$Label.add_theme_color_override("font_color", color) 
+	$Label.add_theme_color_override("font_color", color)
 	$Label.add_theme_font_size_override("font_size", size)
 	$Label.add_theme_color_override("font_outline_color", Color.BLACK)
 	$Label.add_theme_constant_override("outline_size", 5)
 	$Label.text = text
 	side = find_spawn_side(spawn_point)
 	if _direction == "up":
-		if side == "left": 
+		if side == "left":
 			$Label.position.x = 50
 			$Label.position.y = 100
-		if side == "right": 
+		if side == "right":
 			$Label.position.x = 150
 			$Label.position.y = 100
-	
+
 	if _direction == "behind":
-		if side == "left": 
+		if side == "left":
 			$Label.position.x = 0
 			$Label.position.y = 100
-		if side == "right": 
+		if side == "right":
 			$Label.position.x = 180
 			$Label.position.y = 100
-			
-	if _direction == "down": 
-		if side == "left": 
+
+	if _direction == "down":
+		if side == "left":
 			$Label.position.x = 50
 			$Label.position.y = 200
-		if side == "right": 
+		if side == "right":
 			$Label.position.x = 150
 			$Label.position.y = 200
-	
+
 	pivot_offset = Vector2($Label.position.x + 20, $Label.position.y + 11.5)
-	#print("asd: " + str($Label.position))
-	#await get_tree().create_timer(2).timeout
-	modulate.a = 1.0  # Fully visible
+
+
+	modulate.a = 1.0
 
 func find_spawn_side(target):
 	for side in GameState_.spawn_points.keys():
 		for point in GameState_.spawn_points[side]:
 			if point == target:
 				return side
-	return "unknown"  # Or null
+	return "unknown"
 
 func _process(delta):
-	
-	
-	#await get_tree().create_timer(1).timeout
-	if direction == "up": 
+
+
+
+	if direction == "up":
 		position.y += float_speed * delta
-		position.x += alternate*0.25*float_speed * delta
-	elif direction == "down": 
+		position.x += alternate * 0.25 * float_speed * delta
+	elif direction == "down":
 		position.y -= float_speed * delta
-		position.x += alternate*0.25*float_speed * delta
-	elif direction == "front" and side == "left": 
+		position.x += alternate * 0.25 * float_speed * delta
+	elif direction == "front" and side == "left":
 		position.x -= float_speed * delta
-		position.y += alternate*0.25*float_speed * delta
+		position.y += alternate * 0.25 * float_speed * delta
 	elif direction == "front" and side == "right":
 		position.x += float_speed * delta
-		position.y += alternate*0.25*float_speed * delta
-	elif direction == "behind" and side == "left": 
+		position.y += alternate * 0.25 * float_speed * delta
+	elif direction == "behind" and side == "left":
 		position.x += float_speed * delta
-		position.y += alternate*0.25*float_speed * delta
-	elif direction == "behind" and side == "right": 
+		position.y += alternate * 0.25 * float_speed * delta
+	elif direction == "behind" and side == "right":
 		position.x -= float_speed * delta
-		position.y += alternate*0.25*float_speed * delta
-	
-	
+		position.y += alternate * 0.25 * float_speed * delta
+
+
 	modulate.a -= delta / lifetime
 	if modulate.a <= 0:
 		queue_free()

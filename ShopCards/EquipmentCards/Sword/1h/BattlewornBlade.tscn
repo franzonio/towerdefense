@@ -1,12 +1,11 @@
 [gd_scene load_steps=4 format=3 uid="uid://b0aivam81cw1e"]
 
-[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_dgqdi"]
-[ext_resource type="Texture2D" uid="uid://b1357o12csf1b" path="res://Assets/CardAssets/EquipmentCardAssets/sword_t1_heavy_128x128.png" id="3_d6x88"]
-[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="3_y2lo4"]
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1"]
+[ext_resource type="Texture2D" uid="uid://b1357o12csf1b" path="res://Assets/CardAssets/EquipmentCardAssets/sword_t1_heavy_128x128.png" id="2"]
+[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="3"]
 
 [node name="BattlewornBlade" type="Button"]
 texture_filter = 1
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = -1792.0
@@ -15,10 +14,10 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("1_dgqdi")
-icon = ExtResource("3_d6x88")
+theme = ExtResource("1")
+icon = ExtResource("2")
 expand_icon = true
-script = ExtResource("3_y2lo4")
+script = ExtResource("3")
 equipment_name = "battleworn_blade"
 
 [node name="RichTextLabel" type="RichTextLabel" parent="."]

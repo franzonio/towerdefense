@@ -35,6 +35,11 @@ window/size/no_focus=true
 window/stretch/mode="canvas_items"
 window/dpi/allow_hidpi=false
 
+[editor_overrides]
+
+text_editor/behavior/indent/type=0
+text_editor/behavior/indent/size=4
+
 [editor_plugins]
 
 enabled=PackedStringArray("res://addons/TweenFX/plugin.cfg")

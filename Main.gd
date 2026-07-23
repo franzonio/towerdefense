@@ -1,81 +1,81 @@
 extends Node2D
 
 var gladiator_scene = preload("res://Player/Gladiator.tscn")
-#@onready var pause_menu = $PauseMenu
-
-var weapon_dmg_min# := 3
-var weapon_dmg_max# := 5
-var weapon_req# := 20.0
-var weapon_speed# := 1
-var weapon_range# = 150
-var weapon_crit# := 1
-
-var armor_absorb# := 1
 
 
-var strength#: int = GameState_.gladiator_attributes["strength"]
-var weapon_skill#: int = GameState_.gladiator_attributes["weapon_skill"]
-var quickness#: int = GameState_.gladiator_attributes["quickness"]
-var crit_rating#: int = GameState_.gladiator_attributes["crit_rating"]
-var avoidance#: int = GameState_.gladiator_attributes["avoidance"]
+var weapon_dmg_min
+var weapon_dmg_max
+var weapon_req
+var weapon_speed
+var weapon_range
+var weapon_crit
 
-var max_health#: int = GameState_.gladiator_attributes["health"]
-var resilience#: int = GameState_.gladiator_attributes["resilience"]
-var endurance#: int = GameState_.gladiator_attributes["endurance"]
+var armor_absorb
 
-# === Damage calculations ===
-var attack_speed#: float = (1/weapon_speed)/(log(10+sqrt(quickness))/log(10))  # Seconds between attacks
-var time_since_last_attack#: float = 0.0
-var crit_chance# = weapon_crit*crit_rating/20.0
-var hit_chance# = (weapon_skill/weapon_req) - 0.20*weapon_skill/100
-var next_attack_critical := false
-var next_taken_hit_critical := false
 
-# === Calculations ===
-var weight #= 1
-var move_speed #:= 350.0
-var current_health #:= max_health
-var armor #:= (1+sqrt(resilience)/10.0) * armor_absorb				# flat damage reduction
-var dodge_chance #:= (avoidance/200.0) / ((avoidance/200.0)+1)		# decaying dodge_chance -> 1
-var seconds_to_live #:= endurance/3.0
+var strength
+var weapon_skill
+var quickness
+var crit_rating
+var avoidance
+
+var max_health
+var resilience
+var endurance
+
+
+var attack_speed
+var time_since_last_attack
+var crit_chance
+var hit_chance
+var next_attack_critical: = false
+var next_taken_hit_critical: = false
+
+
+var weight
+var move_speed
+var current_health
+var armor
+var dodge_chance
+var seconds_to_live
 
 @onready var spawn_points = $SpawnPoints.get_children()
 @onready var meeting_points = $MeetingPoints.get_children()
 
-var round_manager_scene := preload("res://Scenes/RoundManager.tscn")
+var round_manager_scene: = preload("res://Scenes/RoundManager.tscn")
 
 func _ready():
-	
+
 	GameState_.spawn_points["left"] = [
-		$SpawnPoints/SpawnPoint0.position,
-		$SpawnPoints/SpawnPoint1.position,
-		$SpawnPoints/SpawnPoint2.position,
-		$SpawnPoints/SpawnPoint3.position
+		$SpawnPoints / SpawnPoint0.position, 
+		$SpawnPoints / SpawnPoint1.position, 
+		$SpawnPoints / SpawnPoint2.position, 
+		$SpawnPoints / SpawnPoint3.position
 	]
 	GameState_.spawn_points["right"] = [
-		$SpawnPoints/SpawnPoint4.position,
-		$SpawnPoints/SpawnPoint5.position,
-		$SpawnPoints/SpawnPoint6.position,
-		$SpawnPoints/SpawnPoint7.position
+		$SpawnPoints / SpawnPoint4.position, 
+		$SpawnPoints / SpawnPoint5.position, 
+		$SpawnPoints / SpawnPoint6.position, 
+		$SpawnPoints / SpawnPoint7.position
 	]
 	GameState_.meeting_points = meeting_points
-	#print(GameState_.spawn_points)
+
 	var hud = preload("res://UI/HUD.tscn").instantiate()
 	hud.name = "HUD"
 	add_child(hud)
-	
+
 	$GladiatorSpawner.spawn_function = custom_spawn
-	
-	
+
+
 	if multiplayer.is_server():
 		print("added round_manager")
 		var round_manager = round_manager_scene.instantiate()
 		add_child(round_manager)
-		
+
 
 func custom_spawn(args: Dictionary) -> Node:
 	var scene_path = args.get("scene", "")
-	var peer_id = args.get("peer_id", 1)  # Default to 1 if missing
+	var peer_id = args.get("peer_id", 1)
 	var gladiator_data = args.get("gladiator_data", {})
 	var opponent_id = args.get("opponent_id", {})
 	var spawn_point = args.get("spawn_point", {})
@@ -84,10 +84,10 @@ func custom_spawn(args: Dictionary) -> Node:
 	var scene = load(scene_path)
 	var instance = scene.instantiate()
 
-	# Set authority (very important)
+
 	instance.set_multiplayer_authority(peer_id)
-	
-	# Call init
+
+
 	if instance.has_method("initialize_gladiator"):
 		instance.initialize_gladiator(gladiator_data, opponent_id, spawn_point, meeting_point, peer_id)
 

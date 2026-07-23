@@ -1,11 +1,10 @@
 [gd_scene load_steps=4 format=3 uid="uid://b436j5uordkts"]
 
-[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_nw10w"]
-[ext_resource type="Texture2D" uid="uid://dekv6qlwobylv" path="res://Assets/CardAssets/EquipmentCardAssets/head_t3_light_128x128.png" id="2_veuse"]
-[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="2_y2dax"]
+[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1"]
+[ext_resource type="Texture2D" uid="uid://dekv6qlwobylv" path="res://Assets/CardAssets/EquipmentCardAssets/head_t3_light_128x128.png" id="2"]
+[ext_resource type="Script" uid="uid://de1o6837cg5er" path="res://ShopCards/EquipmentCards/BaseEquipmentCard.gd" id="3"]
 
 [node name="HatOfElvenSilk" type="Button"]
-anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_right = -508.0
@@ -13,10 +12,10 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("1_nw10w")
-icon = ExtResource("2_veuse")
+theme = ExtResource("1")
+icon = ExtResource("2")
 expand_icon = true
-script = ExtResource("2_y2dax")
+script = ExtResource("3")
 equipment_name = "hat_of_elven_silk"
 
 [connection signal="button_up" from="." to="." method="_on_button_up"]

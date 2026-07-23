@@ -1,14 +1,14 @@
 [gd_scene load_steps=6 format=3 uid="uid://caiuxrar36pdn"]
 
-[ext_resource type="Script" uid="uid://ddffo2pk1p66v" path="res://Main.gd" id="1_4c57u"]
-[ext_resource type="Texture2D" uid="uid://d1cvx365jvinu" path="res://Assets/Map/background.png" id="2_h2yge"]
-[ext_resource type="Script" uid="uid://cs4ijuksemqna" path="res://Camera2D.gd" id="3_84ssy"]
+[ext_resource type="Script" uid="uid://ddffo2pk1p66v" path="res://Main.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://d1cvx365jvinu" path="res://Assets/Map/background.png" id="2"]
+[ext_resource type="Script" uid="uid://cs4ijuksemqna" path="res://Camera2D.gd" id="3"]
 
 [sub_resource type="SpriteFrames" id="SpriteFrames_ycdy4"]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("2_h2yge")
+"texture": ExtResource("2")
 }],
 "loop": true,
 "name": &"default",
@@ -17,12 +17,12 @@ animations = [{
 
 [sub_resource type="NavigationPolygon" id="NavigationPolygon_fssbs"]
 vertices = PackedVector2Array(1137, -80.2578, 1378.89, -83.8438, 1377.1, 83.0781, 1136.91, 85.0781, -1145.12, 99.1172, -1403.89, 102.852, -1402.1, -69.0078, -1145.77, -69.5078, 1141.91, 638, -1143.04, 638, -1147.96, -638, 1137, -638)
-polygons = Array[PackedInt32Array]([PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 5, 6, 7), PackedInt32Array(3, 8, 9, 4), PackedInt32Array(7, 10, 11, 0, 3, 4)])
-outlines = Array[PackedVector2Array]([PackedVector2Array(-1158, -648, -1155.81, -79.4949, -1412, -79, -1414, 113, -1155.08, 109.258, -1153, 648, 1152, 648, 1147, 95, 1387, 93, 1389, -94, 1147, -90.4112, 1147, -648)])
+polygons = [PackedInt32Array(0, 1, 2, 3), PackedInt32Array(4, 5, 6, 7), PackedInt32Array(3, 8, 9, 4), PackedInt32Array(7, 10, 11, 0, 3, 4)]
+outlines = [PackedVector2Array(-1158, -648, -1155.81, -79.4949, -1412, -79, -1414, 113, -1155.08, 109.258, -1153, 648, 1152, 648, 1147, 95, 1387, 93, 1389, -94, 1147, -90.4112, 1147, -648)]
 
 [node name="Main" type="Node2D"]
 texture_filter = 1
-script = ExtResource("1_4c57u")
+script = ExtResource("1")
 
 [node name="Sprite2D" type="AnimatedSprite2D" parent="."]
 position = Vector2(960, 540)
@@ -41,7 +41,7 @@ limit_left = 0
 limit_top = 0
 limit_right = 1920
 limit_bottom = 1080
-script = ExtResource("3_84ssy")
+script = ExtResource("3")
 
 [node name="GladiatorSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("uid://bh10l06wi8flh")

@@ -1,0 +1,9 @@
+﻿key,absorb,durability,level,price,skill,stock,str,tier,tot,weight
+<!MissingKey:0:13>,13,51,4,8,35,6,80,2,115,14
+<!MissingKey:1:21>,21,47,7,12,70,4,70,3,140,5
+<!MissingKey:2:16>,16,30,4,8,50,6,60,2,110,5
+<!MissingKey:3:16>,16,84,7,12,45,4,95,3,140,16
+<!MissingKey:4:9>,9,20,1,4,35,8,45,1,80,4
+<!MissingKey:5:7>,7,39,1,4,25,8,65,1,90,10
+<!MissingKey:6:29>,29,69,10,16,85,2,80,4,165,6
+<!MissingKey:7:19>,19,126,10,16,55,2,115,4,170,18

@@ -413,6 +413,7 @@ func grant_gold_for_peer(id: int, base_amount: int, opponent_id: int, winner: bo
 	var streak_bonus = 0
 	var streak_break_bonus = 0
 	var income_bonus = 0
+	var win_bonus = 0
 	
 	# 1. Streak bonus
 	if peer_streak > 0: # win-streak
@@ -449,13 +450,23 @@ func grant_gold_for_peer(id: int, base_amount: int, opponent_id: int, winner: bo
 			income_bonus += INCOME_GOLD_BONUSES[i]
 			break
 	
-	total_bonus = streak_bonus + streak_break_bonus + income_bonus
-	if winner: total_bonus += 1
+	if winner: win_bonus += 1
+	
+	
+	
 	#print(all_gladiators[id]["name"] + " total_bonus: " + str(total_bonus))
 	# 4. Final gold addition
 	var gold_from_gear = all_gladiators[id].get("total_modifier_bonuses", {})
 	gold_from_gear = gold_from_gear.get("to_gold_income", 0)
-	all_gladiators[id]["gold"] += base_amount + int(total_bonus) + gold_from_gear
+	
+	total_bonus = base_amount + win_bonus + income_bonus + streak_bonus + streak_break_bonus + gold_from_gear
+	
+	all_gladiators[id]["income_last_round"] = {
+		"base": base_amount, "win": win_bonus, "income": income_bonus, 
+		"streak": streak_bonus, "streak_break": streak_break_bonus, "gear": gold_from_gear}
+
+	
+	all_gladiators[id]["gold"] += int(total_bonus)
 	#print(str(base_amount + int(total_bonus)) + " gold for peer " + str(id))
 	rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
 	rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)

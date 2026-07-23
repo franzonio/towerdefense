@@ -1,8 +1,52 @@
-[gd_scene load_steps=4 format=3 uid="uid://vo1dmvmvcq7"]
+[gd_scene load_steps=7 format=3 uid="uid://vo1dmvmvcq7"]
 
-[ext_resource type="Theme" uid="uid://pw4o330eyt7c" path="res://ShopCards/card_tooltip_theme.tres" id="1_d2o61"]
-[ext_resource type="Script" uid="uid://dyyvc2btnvyo" path="res://ShopCards/AttributeCards/BaseAttributeCard.gd" id="1_momki"]
-[ext_resource type="Texture2D" uid="uid://dr7nismaqx0i7" path="res://Assets/CardAssets/AttributeCardAssets/axe_mastery.png" id="2_fy27w"]
+[ext_resource type="Texture2D" uid="uid://dr7nismaqx0i7" path="res://Assets/CardAssets/AttributeCardAssets/axe_mastery.png" id="1"]
+[ext_resource type="Script" uid="uid://dyyvc2btnvyo" path="res://ShopCards/AttributeCards/BaseAttributeCard.gd" id="2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5kwvm"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+border_color = Color(0.29411766, 0.23921569, 0.26666668, 0.8352941)
+corner_detail = 1
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_us337"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.7137255)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.29411766, 0.23921569, 0.26666668, 0.8352941)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 1
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_milwg"]
+resource_local_to_scene = true
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+border_width_left = 6
+border_width_top = 6
+border_width_right = 6
+border_width_bottom = 6
+border_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+border_blend = true
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+corner_detail = 1
+shadow_size = 5
+
+[sub_resource type="Theme" id="Theme_h38ae"]
+resource_local_to_scene = true
+Button/icons/icon = null
+Button/styles/normal = SubResource("StyleBoxFlat_5kwvm")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_us337")
+Panel/styles/panel = SubResource("StyleBoxFlat_milwg")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_milwg")
+PopupPanel/styles/panel = SubResource("StyleBoxFlat_milwg")
 
 [node name="AxeMasteryCard" type="Button"]
 layout_direction = 2
@@ -11,10 +55,10 @@ offset_bottom = 700.0
 scale = Vector2(0.5, 0.5)
 size_flags_horizontal = 3
 size_flags_vertical = 3
-theme = ExtResource("1_d2o61")
-theme_override_icons/icon = ExtResource("2_fy27w")
+theme = SubResource("Theme_h38ae")
+theme_override_icons/icon = ExtResource("1")
 expand_icon = true
-script = ExtResource("1_momki")
+script = ExtResource("2")
 attribute_name = "axe_mastery"
 amount = 5
 cost = 5
