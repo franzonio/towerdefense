@@ -122,7 +122,11 @@ func regenerate_null_pairs(_current_round: Array) -> Array:
 @rpc("any_peer", "call_local")
 func start_next_round():
 	global_round_counter += 1
-	GameState_.add_to_log(get_multiplayer_authority(), "🔄 Preparation...")
+	
+	# add check to add age modifiers
+	GameState_.add_age_modifiers(global_round_counter)
+	
+	#GameState_.add_to_log(get_multiplayer_authority(), "🔄 Preparation...")
 	#print("🔄 Preparation...")
 	#print("all_gladiators: " + str (GameState_.all_gladiators))
 	

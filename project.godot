@@ -43,7 +43,7 @@ enabled=PackedStringArray("res://addons/TweenFX/plugin.cfg")
 
 timers/tooltip_delay_sec=0.0
 theme/default_font_multichannel_signed_distance_field=true
-theme/custom_font="uid://v73oifh7pmn2"
+theme/custom_font="uid://gj2yvdauduyf"
 
 [input]
 

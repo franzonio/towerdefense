@@ -21,40 +21,37 @@ func _ready():
 	
 	
 func list_lobbies():
-	Steam.addRequestLobbyListDistanceFilter(Steam.LOBBY_DISTANCE_FILTER_DEFAULT)
+	#Steam.addRequestLobbyListDistanceFilter(Steam.LOBBY_DISTANCE_FILTER_WORLDWIDE)
+	Steam.addRequestLobbyListStringFilter("region", "global", Steam.LOBBY_COMPARISON_EQUAL)
 	Steam.requestLobbyList()
+	
+	#Steam.addRequestLobbyListStringFilter("region", "eu", Steam.LOBBY_COMPARISON_EQUAL)
+	#print("listing lobbies")
 
 func host_game(players):
 	print("Hosting Steam lobby")
-	Steam.createLobby(Steam.LobbyType.LOBBY_TYPE_PUBLIC, players)
+	Steam.createLobby(Steam.LOBBY_TYPE_PUBLIC, players)
 	is_host = true
 
 func join_game(lobby_id):
 	Steam.joinLobby(lobby_id)
 	print("Joining lobby ", lobby_id)
 	
-	#var peer := SteamMultiplayerPeer.new()
-	#peer.debug_level = SteamMultiplayerPeer.DEBUG_LEVEL_PEER
-	#peer.create_client(lobby_id, 0)
-	#multiplayer.multiplayer_peer = peer
-	
-	
-func _on_lobby_created(_result: int, lobby_id):
+func _on_lobby_created(result: int, lobby_id):
 	_lobby_id = lobby_id
-	print("On lobby created")
-	if _result == Steam.Result.RESULT_OK:
+	
+	if result == Steam.Result.RESULT_OK:
 		var peer := SteamMultiplayerPeer.new()
 		peer.debug_level = SteamMultiplayerPeer.DEBUG_LEVEL_PEER
 		peer.host_with_lobby(_lobby_id)
 		multiplayer.multiplayer_peer = peer
-		#hosted.emit()
 		
-		#_hosted_lobby_id = lobby_id
-		print("Created lobby: " + str(_lobby_id))
 		Steam.setLobbyJoinable(_lobby_id, true)
+		Steam.setLobbyData(lobby_id, "region", "global")
 		Steam.setLobbyData(_lobby_id, "name", LOBBY_NAME)
 		Steam.setLobbyData(_lobby_id, "mode", LOBBY_MODE)
 		emit_signal("lobby_created_signal", _lobby_id)
+		
 	else: print("Failed creating lobby")
 	
 func _on_lobby_joined(lobby_id: int, _permissions: int, _locked: bool, _response: int) -> void:
@@ -69,7 +66,6 @@ func _on_lobby_joined(lobby_id: int, _permissions: int, _locked: bool, _response
 	peer.debug_level = SteamMultiplayerPeer.DEBUG_LEVEL_PEER
 	peer.connect_to_lobby(lobby_id)
 	multiplayer.multiplayer_peer = peer
-	print("Joined lobby result: " + str(_response))
 	
 	
 func leave_game():

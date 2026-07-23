@@ -36,8 +36,6 @@ var time_passed = 0
 @onready var nav = $NavigationAgent2D
 #@onready var sprite = $Sprite
 @onready var sprite = $CharacterAnimationPlayer
-@onready var health_bar = $HealthBar
-@onready var health_bar_text = $HealthBar/HealthBarText
 @onready var multiplayer_sync = $MultiplayerSynchronizer
 
 @export var speed: float = 250.0
@@ -164,6 +162,7 @@ var owner_id
 @export var dead: int
 var opponent_dead = false
 @export var concede_threshold := 0.5
+@export var healthbar_color := Color("77883b")
 
 var combined_gladiator_bonuses = {}
 var prev_sec = 0
@@ -214,6 +213,9 @@ func _ready():
 			
 	rpc("rpc_wep_broken", multiplayer.get_unique_id(), wep1_is_broken, wep2_is_broken)
 	
+	if is_multiplayer_authority():
+		rpc("rpc_update_hp", multiplayer.get_unique_id(), current_health, max_health)
+	
 	await get_tree().create_timer(1.0).timeout
 	
 	await get_tree().create_timer(10.0).timeout # 11
@@ -228,12 +230,6 @@ func _ready():
 		GameState_.refresh_gladiator_data(multiplayer.get_unique_id())
 	else:
 		GameState_.rpc_id(1, "refresh_gladiator_data", multiplayer.get_unique_id())
-
-
-	$HealthBar.max_value = max_health
-	$HealthBar.value = max_health
-	#$HealthBar.bg_color = Color.FOREST_GREEN
-	$HealthBar/HealthBarText.text = str(int(current_health))
 
 	if opponent_peer_id:
 		if opponent == null:
@@ -261,20 +257,18 @@ func _process(delta: float) -> void:
 			#current_health -= max_health*blood_rage_dmg
 			if blood_rage_dmg > 0: 
 				receive_damage(blood_rage_dmg, -1, 1, 0, 0, 0, 0, 0, weapon1_durability, weapon2_durability, 0, 0)
-		#$HealthBar.value = current_health
-		#$HealthBar/HealthBarText.text = str(int(current_health))
-	
 	
 	if is_multiplayer_authority():
 		if opponent and opponent.dead and not opponent_dead:
 			opponent_dead = true
+			print("opponent_dead")
+			rpc("show_damage_popup", 0, -2, 1, 0, 0, 0, 0, 0, 0, 0, "WINNER")
 		if !dead and time_passed > endurance_sec and !opponent_dead:
 			dead = 1
 			#print("_process peer " + str(multiplayer.get_unique_id()) + " died")
 			rpc("die")
 
 func _physics_process(delta):
-	$HealthBar.value = current_health
 	if is_multiplayer_authority() and opponent != null and is_instance_valid(opponent) and opponent.current_health > opponent.max_health*opponent.concede_threshold and opponent_peer_id:
 		
 		if opponent_dead: 
@@ -485,7 +479,7 @@ func check_for_attack(delta: float):
 				var wep_category = weapon["category"]
 				
 				if weapon_hands_to_carry == 2:
-					if wep_category == "axe":
+					if wep_category == "axe" or wep_category == "mace":
 						rpc("rpc_play_animation", multiplayer.get_unique_id(), wep_category + "_2h", weapon, "mainhand")
 					else:
 						rpc("rpc_play_animation", multiplayer.get_unique_id(), wep_category + "_mainhand", weapon, "mainhand")
@@ -658,10 +652,14 @@ func rpc_play_animation(attacker_id, animation, weapon, hand):
 	get_node("/root/Main/HUD").play_animation(attacker_id, animation, weapon, hand)
 
 @rpc("any_peer", "call_local")
-func rpc_wep_broken(attacker_id, wep1_broken, wep2_broken):
+func rpc_wep_broken(_opponent_peer_id, wep1_broken, wep2_broken):
 	#print(str(attacker_id) + ": in glad rpc_play_animation")
 	# This runs on ALL peers
-	get_node("/root/Main/HUD").wep_broken(attacker_id, wep1_broken, wep2_broken)
+	get_node("/root/Main/HUD").wep_broken(_opponent_peer_id, wep1_broken, wep2_broken)
+	
+@rpc("any_peer", "call_local")
+func rpc_update_hp(id, hp, max_hp):
+	get_node("/root/Main/HUD").update_hp(id, hp, max_hp)
 
 @rpc("any_peer", "call_local")
 func receive_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_success, defender_weapon1_broken, 
@@ -674,9 +672,10 @@ func receive_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_
 	weapon1_durability = wep1_new_durability
 	weapon2_durability = wep2_new_durability
 	current_health -= amount
+	
 	if current_health > max_health: current_health = max_health
-	$HealthBar.value = current_health
-	$HealthBar/HealthBarText.text = str(int(current_health))
+	
+	rpc("rpc_update_hp", owner_id, current_health, max_health)
 	
 	if hit_success == 0: pass
 	elif dodge_success == 1: rpc("rpc_dodge_animation", owner_id)
@@ -762,13 +761,13 @@ func initialize_gladiator(data, opponent_id, _spawn_point, meeting_point, peer_i
 		target_position = meeting_point
 	else: target_position = position
 	
-	update_gladiator(data)
+	update_gladiator(data, peer_id)
 
 
 
 @rpc("any_peer", "call_local")
 func show_damage_popup(amount, raw_damage, hit_success, dodge_success, crit, parry_success,
-					defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb):
+					defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb, winner = ""):
 	var popup = DamagePopupScene.instantiate()
 	popup.top_level = true
 	popup.z_as_relative = false
@@ -783,7 +782,7 @@ func show_damage_popup(amount, raw_damage, hit_success, dodge_success, crit, par
 	
 	#await get_tree().create_timer(0.2).timeout
 	popup.show_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_success, spawn_point,
-	 				defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb)
+	 				defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb, winner)
 	$CanvasLayer.add_child(popup)
 	
 	if amount < 0: # heal
@@ -811,10 +810,10 @@ func update_all_gladiators(data: Dictionary):
 				#var stats = data[id]
 				if g.is_multiplayer_authority():
 					# Local node: update directly
-					g.update_gladiator(data[id])
+					g.update_gladiator(data[id], id)
 				else:
 					# Remote node: call via RPC on owner
-					g.rpc_id(g.get_multiplayer_authority(), "update_gladiator", data[id])
+					g.rpc_id(g.get_multiplayer_authority(), "update_gladiator", data[id], id)
 
 func update_gladiator_after_strategy(hit_chance_penalty, dodge_mod):
 	glad_weapon1_category_skill = glad_weapon1_category_skill*hit_chance_penalty
@@ -844,7 +843,7 @@ func update_gladiator_after_strategy(hit_chance_penalty, dodge_mod):
 	recalculated_hit_chance = 1
 
 @rpc("any_peer", "call_local")
-func update_gladiator(data: Dictionary):
+func update_gladiator(data: Dictionary, id):
 	combined_gladiator_bonuses = data.get("total_modifier_bonuses", {})
 	#print("combined_gladiator_bonuses: " + str(combined_gladiator_bonuses))
 	
@@ -947,7 +946,6 @@ func update_gladiator(data: Dictionary):
 	var endurance_weight = 1 - weight/(100+weight) # less endurance with more weight
 	var endurance_decay = endurance/75 + 1
 	endurance_sec = randf_range(2,3) + stance_endurance_mod*endurance*endurance_weight/endurance_decay
-	#print("Should live " + str(endurance_sec) + " seconds")
 	weapon1 = data["weapon1"][weapon1_name]
 	weapon2 = data["weapon2"][weapon2_name]
 	weapon1_durability = data["weapon1"][weapon1_name]["durability"]
@@ -1044,9 +1042,7 @@ func update_gladiator(data: Dictionary):
 	next_attack_weapon = 0
 
 	current_health = max_health
-	$HealthBar.max_value = max_health
-	$HealthBar.value = max_health
-	$HealthBar/HealthBarText.text = str(int(max_health))
+	#rpc("rpc_update_hp", id, current_health, max_health)
 
 
 

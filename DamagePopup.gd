@@ -7,8 +7,15 @@ var side
 var alternate = -1
 
 func show_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_success, spawn_point,
-				 defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb):
+				 defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb, winner = ""):
 	if randf() > 0.5: alternate = 1
+			
+	if winner == "WINNER":
+		customize_popup_font(Color.GREEN, 40, "WINNER", spawn_point, "up")
+		return
+	#if typeof(amount) != TYPE_FLOAT and amount == "WINNER":
+	#	customize_popup_font(Color.GREEN, 30, "WINNER", spawn_point, "up")
+	#	return
 			
 	var formatted : String		
 	if int(amount) == amount:
@@ -49,7 +56,7 @@ func show_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_suc
 			customize_popup_font("d2b600", 30, str(int(amount)), spawn_point, "up")
 
 
-func customize_popup_font(color: Color, size, text: String, spawn_point, _direction):
+func customize_popup_font(color: Color, size, text: String, spawn_point, _direction, winner = ""):
 	modulate.a = 0
 	direction = _direction
 	$Label.add_theme_color_override("font_color", color) 

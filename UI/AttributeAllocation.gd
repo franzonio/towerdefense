@@ -125,6 +125,8 @@ func _ready():
 		_on_confirm()#confirm_button.button_pressed == true
 	'''
 	
+	
+	
 func _process(delta: float):
 	
 	if Input.is_action_just_pressed("focus_chat"):# and not chat_input.has_focus():
@@ -164,12 +166,14 @@ func on_race_selected(race: String):
 	
 	print("Selected race: ", race)
 	GameState_.selected_race = race
-	$GridContainer.visible = true
-	$RemainingLabel.visible = true
-	$ConfirmButton.visible = true
-	$RaceSelectionTitle.visible = false
-	$VBoxContainer.visible = false
+	#$GridContainer.visible = true
+	#$RemainingLabel.visible = true
+	#$ConfirmButton.visible = true
+	#$RaceSelectionTitle.visible = false
+	#$VBoxContainer.visible = false
 	_update_ui()
+	
+	_on_confirm()
 
 func _on_colors_received(_id, colors):
 	print("Received colors from host: " + str(colors))
@@ -301,20 +305,20 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 	
 func _initialize_attributes():
 	attributes = {
-		"strength": 100.0,
+		"strength": 1.0,
 		"quickness": 1.0,
-		"crit_rating": 10.0,
-		"avoidance": 31.0,
-		"health": 550.0,
+		"crit_rating": 1.0,
+		"avoidance": 1.0,
+		"health": 1.0,
 		"resilience": 1.0,
-		"endurance": 1000.0,
-		"sword_mastery": 450.0,
-		"axe_mastery": 450.0,
-		"mace_mastery": 450.0,
-		"stabbing_mastery": 450.0,
-		"flagellation_mastery": 450.0,
-		"shield_mastery": 450.0,
-		"unarmed_mastery": 40.0,
+		"endurance": 1.0,
+		"sword_mastery": 1.0,
+		"axe_mastery": 1.0,
+		"mace_mastery": 1.0,
+		"stabbing_mastery": 1.0,
+		"flagellation_mastery": 1.0,
+		"shield_mastery": 1.0,
+		"unarmed_mastery": 1.0,
 	}
 	# Override with starting values if any
 	for attr in starting_values:
@@ -397,9 +401,10 @@ func _on_confirm():
 	#print("✅ Client connected with ID:", multiplayer.get_unique_id())
 	#print("❓ Is server:", multiplayer.is_server())
 	
-	if remaining_points > 0:
-		print("Distribute all points before continuing.")
-		return
+	#if remaining_points > 0:
+	#	print("Distribute all points before continuing.")
+	#	return
+	
 	# Store or emit
 	if multiplayer.is_server():
 		GameState_.client_send_ready_to_host(multiplayer.get_unique_id())
@@ -409,7 +414,7 @@ func _on_confirm():
 	#print(multiplayer.get_peers())
 	#players_ready_label.text = str(players_ready) + "/" + str(len(multiplayer.get_peers())+1) + " ready"
 	
-	var final_attributes = apply_race_modifiers(GameState_.selected_race).duplicate()
+	var final_attributes = attributes#apply_race_modifiers(GameState_.selected_race).duplicate()
 	
 	var color = player_colors[multiplayer.get_unique_id()]
 	var hex_color = color#color.to_html()
@@ -426,7 +431,7 @@ func _on_confirm():
 	var gladiator = {
 		"color": Color.WHITE,
 		"name": GameState_.selected_name,
-		"gold": 10000,
+		"gold": 10,
 		"exp": 0,
 		"streak": 0,
 		"level": "1",
@@ -463,13 +468,20 @@ func _on_confirm():
 			"slot1": {},
 			"slot2": {},
 			"slot3": {},
-			"slot4": {}
+			"slot4": {},
+			"slot5": {},
+			"slot6": {},
+			"slot7": {},
+			"slot8": {}
 		},
 		
 		"crafting_mats": {
-			"scroll_of_luck": 5000,
-			"scroll_of_injection": 5000
-		}
+			"scroll_of_luck": 1,
+			"scroll_of_injection": 1
+		},
+		"total_modifier_bonuses": {},
+		"age": "Young"
+		
 	}
 	
 	if multiplayer.is_server():
@@ -498,6 +510,7 @@ func apply_race_modifiers(race: String) -> Dictionary:
 	for attr in modifiers:
 		if modified_attributes.has(attr):
 			modified_attributes[attr] = modified_attributes[attr] * modifiers[attr]
+			
 
 	return modified_attributes
 

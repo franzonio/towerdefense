@@ -1,4 +1,4 @@
-[gd_scene load_steps=60 format=3 uid="uid://dutn6wxx1oapc"]
+[gd_scene load_steps=65 format=3 uid="uid://dutn6wxx1oapc"]
 
 [ext_resource type="Script" uid="uid://cpvmnjflyi4ln" path="res://UI/HUD.gd" id="1_yixhe"]
 [ext_resource type="Script" uid="uid://cd4mgamt3dion" path="res://UI/ExpButton.gd" id="3_4n7mi"]
@@ -32,93 +32,89 @@
 [ext_resource type="Texture2D" uid="uid://blkdqari80i7h" path="res://Assets/Aseprite/Attributes/shield_mastery.png" id="17_3lr6k"]
 [ext_resource type="Texture2D" uid="uid://istsw06i80ul" path="res://Assets/EquipmentPanel/back_slot.png" id="17_rc7pm"]
 [ext_resource type="Texture2D" uid="uid://c0o5wotjquk3c" path="res://Assets/EquipmentPanel/gloves_slot.png" id="18_h8urj"]
-[ext_resource type="Texture2D" uid="uid://cbluxokchfpdm" path="res://Assets/Equipment/vfx/sword_t4_vfx.png" id="33_exw07"]
-[ext_resource type="Texture2D" uid="uid://dd4252rjtf0og" path="res://Assets/Equipment/vfx/axe_t4_vfx.png" id="33_kylmn"]
-[ext_resource type="Texture2D" uid="uid://c28exxt62dp7j" path="res://Assets/Equipment/Sword/sword_t4_heavy_128x128.png" id="33_sqq4o"]
-[ext_resource type="Texture2D" uid="uid://bj72i73amuc4n" path="res://Assets/Equipment/Flagellation/flagellation_t4_heavy_128x128.png" id="35_kylmn"]
-[ext_resource type="Texture2D" uid="uid://qhwak2qw42sr" path="res://Assets/Equipment/Flagellation/flagellation_t4_light_128x128.png" id="36_ec1tb"]
+[ext_resource type="Texture2D" uid="uid://djkvo1q8lg3qp" path="res://Assets/Equipment/vfx/mace_t3_vfx.png" id="33_cjcxt"]
+[ext_resource type="Texture2D" uid="uid://c7d13628l7rct" path="res://Assets/Equipment/Sword/sword_t4_light_128x128.png" id="34_kylmn"]
+[ext_resource type="Texture2D" uid="uid://d36cf0gnh2djx" path="res://Assets/Equipment/Shield/shield_light_t4_128x128.png" id="35_kylmn"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_yixhe"]
-properties/0/path = NodePath("GridContainer/VBoxContainer/Player1/PlayerInfo/PlayerName:text")
+properties/0/path = NodePath(".:card_stock")
 properties/0/spawn = true
 properties/0/replication_mode = 2
-properties/1/path = NodePath("GridContainer/VBoxContainer/Player1/PlayerInfo/PlayerRace:text")
+properties/1/path = NodePath(".:round_now")
 properties/1/spawn = true
 properties/1/replication_mode = 2
-properties/2/path = NodePath("GridContainer/VBoxContainer/Player1/PlayerLife:text")
+properties/2/path = NodePath("VBoxContainer/Player1/TextureRect/PlayerInfo/PlayerName:text")
 properties/2/spawn = true
 properties/2/replication_mode = 2
-properties/3/path = NodePath("GridContainer/VBoxContainer/Player2/PlayerInfo/PlayerName:text")
+properties/3/path = NodePath("VBoxContainer/Player1/TextureRect/PlayerInfo/PlayerRace:text")
 properties/3/spawn = true
 properties/3/replication_mode = 2
-properties/4/path = NodePath("GridContainer/VBoxContainer/Player2/PlayerInfo/PlayerRace:text")
+properties/4/path = NodePath("VBoxContainer/Player1/TextureRect/PlayerLife:text")
 properties/4/spawn = true
 properties/4/replication_mode = 2
-properties/5/path = NodePath("GridContainer/VBoxContainer/Player2/PlayerLife:text")
+properties/5/path = NodePath("VBoxContainer/Player2/TextureRect/PlayerInfo/PlayerName:text")
 properties/5/spawn = true
 properties/5/replication_mode = 2
-properties/6/path = NodePath("GridContainer/VBoxContainer/Player3/PlayerInfo/PlayerName:text")
+properties/6/path = NodePath("VBoxContainer/Player2/TextureRect/PlayerInfo/PlayerRace:text")
 properties/6/spawn = true
 properties/6/replication_mode = 2
-properties/7/path = NodePath("GridContainer/VBoxContainer/Player3/PlayerInfo/PlayerRace:text")
+properties/7/path = NodePath("VBoxContainer/Player2/TextureRect/PlayerLife:text")
 properties/7/spawn = true
 properties/7/replication_mode = 2
-properties/8/path = NodePath("GridContainer/VBoxContainer/Player3/PlayerLife:text")
+properties/8/path = NodePath("VBoxContainer/Player3/TextureRect/PlayerInfo/PlayerName:text")
 properties/8/spawn = true
 properties/8/replication_mode = 2
-properties/9/path = NodePath("GridContainer/VBoxContainer/Player4/PlayerInfo/PlayerName:text")
+properties/9/path = NodePath("VBoxContainer/Player3/TextureRect/PlayerInfo/PlayerRace:text")
 properties/9/spawn = true
 properties/9/replication_mode = 2
-properties/10/path = NodePath("GridContainer/VBoxContainer/Player4/PlayerInfo/PlayerRace:text")
+properties/10/path = NodePath("VBoxContainer/Player3/TextureRect/PlayerLife:text")
 properties/10/spawn = true
 properties/10/replication_mode = 2
-properties/11/path = NodePath("GridContainer/VBoxContainer/Player4/PlayerLife:text")
+properties/11/path = NodePath("VBoxContainer/Player4/TextureRect/PlayerInfo/PlayerName:text")
 properties/11/spawn = true
 properties/11/replication_mode = 2
-properties/12/path = NodePath("GridContainer/VBoxContainer/Player5/PlayerInfo/PlayerName:text")
+properties/12/path = NodePath("VBoxContainer/Player4/TextureRect/PlayerInfo/PlayerRace:text")
 properties/12/spawn = true
 properties/12/replication_mode = 2
-properties/13/path = NodePath("GridContainer/VBoxContainer/Player5/PlayerInfo/PlayerRace:text")
+properties/13/path = NodePath("VBoxContainer/Player4/TextureRect/PlayerLife:text")
 properties/13/spawn = true
 properties/13/replication_mode = 2
-properties/14/path = NodePath("GridContainer/VBoxContainer/Player5/PlayerLife:text")
+properties/14/path = NodePath("VBoxContainer/Player5/TextureRect/PlayerInfo/PlayerName:text")
 properties/14/spawn = true
 properties/14/replication_mode = 2
-properties/15/path = NodePath("GridContainer/VBoxContainer/Player6/PlayerInfo/PlayerName:text")
+properties/15/path = NodePath("VBoxContainer/Player5/TextureRect/PlayerInfo/PlayerRace:text")
 properties/15/spawn = true
 properties/15/replication_mode = 2
-properties/16/path = NodePath("GridContainer/VBoxContainer/Player6/PlayerInfo/PlayerRace:text")
+properties/16/path = NodePath("VBoxContainer/Player5/TextureRect/PlayerLife:text")
 properties/16/spawn = true
 properties/16/replication_mode = 2
-properties/17/path = NodePath("GridContainer/VBoxContainer/Player6/PlayerLife:text")
+properties/17/path = NodePath("VBoxContainer/Player6/TextureRect/PlayerInfo/PlayerName:text")
 properties/17/spawn = true
 properties/17/replication_mode = 2
-properties/18/path = NodePath("GridContainer/VBoxContainer/Player7/PlayerInfo/PlayerName:text")
+properties/18/path = NodePath("VBoxContainer/Player6/TextureRect/PlayerInfo/PlayerRace:text")
 properties/18/spawn = true
 properties/18/replication_mode = 2
-properties/19/path = NodePath("GridContainer/VBoxContainer/Player7/PlayerInfo/PlayerRace:text")
+properties/19/path = NodePath("VBoxContainer/Player6/TextureRect/PlayerLife:text")
 properties/19/spawn = true
 properties/19/replication_mode = 2
-properties/20/path = NodePath("GridContainer/VBoxContainer/Player7/PlayerLife:text")
+properties/20/path = NodePath("VBoxContainer/Player7/TextureRect/PlayerInfo/PlayerName:text")
 properties/20/spawn = true
 properties/20/replication_mode = 2
-properties/21/path = NodePath("GridContainer/VBoxContainer/Player8/PlayerInfo/PlayerName:text")
+properties/21/path = NodePath("VBoxContainer/Player7/TextureRect/PlayerInfo/PlayerRace:text")
 properties/21/spawn = true
 properties/21/replication_mode = 2
-properties/22/path = NodePath("GridContainer/VBoxContainer/Player8/PlayerInfo/PlayerRace:text")
+properties/22/path = NodePath("VBoxContainer/Player7/TextureRect/PlayerLife:text")
 properties/22/spawn = true
 properties/22/replication_mode = 2
-properties/23/path = NodePath("GridContainer/VBoxContainer/Player8/PlayerLife:text")
+properties/23/path = NodePath("VBoxContainer/Player8/TextureRect/PlayerInfo/PlayerName:text")
 properties/23/spawn = true
 properties/23/replication_mode = 2
-properties/24/path = NodePath(".:card_stock")
+properties/24/path = NodePath("VBoxContainer/Player8/TextureRect/PlayerInfo/PlayerRace:text")
 properties/24/spawn = true
 properties/24/replication_mode = 2
-properties/25/path = NodePath(".:round_now")
+properties/25/path = NodePath("VBoxContainer/Player8/TextureRect/PlayerLife:text")
 properties/25/spawn = true
 properties/25/replication_mode = 2
-
-[sub_resource type="LabelSettings" id="LabelSettings_yixhe"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_ijstf"]
 font_size = 13
@@ -376,6 +372,1093 @@ tracks/17/keys = {
 "transitions": PackedFloat32Array(1),
 "update": 0,
 "values": [0.0052359877]
+}
+
+[sub_resource type="Animation" id="Animation_2aqtr"]
+resource_name = "axe_2h"
+length = 0.8
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../MainHand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.25, 0.3, 0.35000002, 0.45, 0.55),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(217, 66), Vector2(421, 222), Vector2(421, 222), Vector2(421, 226), Vector2(421, 228), Vector2(383, 159), Vector2(334, 184)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../MainHand:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.35000002, 0.45, 0.55),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [-1.3439035, 0.9302604913129778, 0.996583, 1.052433538952581, 0.04886922, 6.2831855]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../VfxMainHand:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.25, 0.3, 0.34807408, 0.3980741, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 0, 1, 2, 3, 4, 6]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../VfxMainHand:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(1.578125, 1.234375), Vector2(1.0089612, 2.897151)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../VfxMainHand:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(401, 173.00002), Vector2(395.00003, 143.00003)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../VfxMainHand:skew")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.17802358]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("../VfxMainHand:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [-0.6021386]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("../MainHand:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_eyk8g"]
+resource_name = "axe_mainhand"
+length = 0.8
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../MainHand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.25, 0.3, 0.35000002, 0.45, 0.55),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(258, 104), Vector2(421, 222), Vector2(421, 222), Vector2(421, 226), Vector2(421, 228), Vector2(383, 159), Vector2(334, 184)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../MainHand:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.35000002, 0.45, 0.55),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [-1.3439035, 0.9302604913129778, 0.996583, 1.052433538952581, 0.04886922, 6.2831855]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../VfxMainHand:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.25, 0.3, 0.34807408, 0.3980741, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 0, 1, 2, 3, 4, 6]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../VfxMainHand:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(1.578125, 1.234375), Vector2(0.8999403, 2.1551304)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../VfxMainHand:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(401, 173.00002), Vector2(367, 157.99998)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../VfxMainHand:skew")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("../VfxMainHand:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [-0.5009095]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("../MainHand:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_1gabh"]
+resource_name = "axe_offhand"
+length = 0.8
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../OffHand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.25, 0.3, 0.35000002, 0.45, 0.55),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(258, 4), Vector2(421, 122), Vector2(421, 122), Vector2(421, 126), Vector2(421, 128), Vector2(383, 59), Vector2(334, 84)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../OffHand:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.3, 0.35000002, 0.45, 0.55),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [-1.3439035, 0.9302604913129778, 0.996583, 1.052433538952581, 0.04886922, 6.2831855]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../VfxOffHand:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.25, 0.3, 0.34807408, 0.3980741, 0.45),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 0, 1, 2, 3, 4, 6]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../VfxOffHand:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(1.578125, 1.234375), Vector2(0.8999403, 2.1551304)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../VfxOffHand:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(401, 73), Vector2(367, 58)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../VfxOffHand:skew")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.0]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("../VfxOffHand:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.15),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [-0.5009095]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("../OffHand:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_kslx6"]
+resource_name = "block"
+length = 0.4
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../OffHand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.025, 0.275),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2(334, 84), Vector2(365, 76), Vector2(334, 84)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../OffHand:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.025, 0.2, 0.275),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [5.5676003, 5.6374135, 5.9777527, 6.2831855]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../OffHand:scale")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.025, 0.2, 0.275),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(0.97987795, 1.3179934), Vector2(0.97987795, 1.3179934), Vector2(0.97987795, 1.3179934), Vector2(1, 1)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../OffHand:skew")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.025, 0.2, 0.275),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0.36651915, 0.36651915, 0.23561946, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_3lr6k"]
+resource_name = "flagellation_mainhand"
+length = 0.8
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../MainHand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.0125, 0.15, 0.175, 0.2, 0.22500001, 0.25, 0.27499998, 0.3, 0.325, 0.35, 0.45, 0.475, 0.49999997, 0.55, 0.65),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(279, 120), Vector2(215, 104), Vector2(246.40088, 133.89874), Vector2(450, 232), Vector2(446.00003, 238), Vector2(410.00003, 222), Vector2(406, 225), Vector2(391.9999, 239), Vector2(368, 250), Vector2(347, 249), Vector2(328, 238), Vector2(347, 249), Vector2(368, 250), Vector2(391.9999, 239), Vector2(367.00003, 218), Vector2(334, 184)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../MainHand:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.0125, 0.15, 0.175, 0.2, 0.22500001, 0.25, 0.27499998, 0.3, 0.325, 0.35, 0.45, 0.475, 0.49999997, 0.55, 0.65),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [-1.0629056, -6.2831855, -2.628466, -6.0737457, 0.73652893, 1.3159783, -0.09599311, 1.5097098, 2.089159, 2.5778513, 3.0560715, 2.5778513, 2.089159, 1.5097098, 0.53232545, 6.2831855]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../VfxMainHand:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.175, 0.2, 0.22500001, 0.25, 0.275, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 0, 1, 2, 3, 4, 5]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../VfxMainHand:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.175),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(2.5905404, 1.4884391)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../VfxMainHand:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.175, 0.2, 0.225),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2(415.00003, 219), Vector2(396, 213), Vector2(384, 201)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../VfxMainHand:skew")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.175),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [-0.58294]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("../VfxMainHand:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.175, 0.2, 0.225, 0.25, 0.275),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0.09250245, 0.20594884, 0.40666172, 0.5550147, 0.7120943]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("../MainHand:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.0125, 0.15, 0.175, 0.2, 0.22500001, 0.25, 0.275),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(1, 1), Vector2(-1, 1), Vector2(2.6900508, -0.79493785), Vector2(2.296, -0.645), Vector2(2.296053, 0.64543074), Vector2(1, 1), Vector2(1, -1), Vector2(1, 1)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("../MainHand:skew")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.2, 0.22500001),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0.0, 0.0, 0.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_xqb12"]
+resource_name = "flagellation_offhand"
+length = 0.8
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../VfxOffHand:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.175, 0.2, 0.225, 0.25, 0.275, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 0, 1, 2, 3, 4, 5]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../VfxOffHand:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.175),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [Vector2(2.5905404, 1.4884391)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../VfxOffHand:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0.175, 0.2, 0.225),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2(415, 119), Vector2(396, 113), Vector2(384, 101)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../VfxOffHand:skew")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.175),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [-0.58294]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../VfxOffHand:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.175, 0.2, 0.225, 0.25, 0.275),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0.09250245, 0.20594884, 0.40666172, 0.5550147, 0.7120943]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../OffHand:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.0125, 0.15, 0.175, 0.2, 0.22500001, 0.25, 0.27499998, 0.3, 0.325, 0.35, 0.45, 0.475, 0.49999997, 0.55, 0.65),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(279, 20), Vector2(215, 4), Vector2(246.401, 33.899), Vector2(450, 132), Vector2(446, 138), Vector2(410, 122), Vector2(406, 125), Vector2(392, 139), Vector2(368, 150), Vector2(347, 149), Vector2(328, 138), Vector2(347, 149), Vector2(368, 150), Vector2(392, 139), Vector2(367, 118), Vector2(334, 84)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("../OffHand:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.0125, 0.15, 0.175, 0.2, 0.22500001, 0.25, 0.27499998, 0.3, 0.325, 0.35, 0.45, 0.475, 0.49999997, 0.55, 0.65),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [-1.0629056, -6.2831855, -2.628466, -6.0737457, 0.73652893, 1.3159783, -0.09599311, 1.5097098, 2.089159, 2.5778513, 3.0560715, 2.5778513, 2.089159, 1.5097098, 0.53232545, 6.2831855]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("../OffHand:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.0125, 0.15, 0.175, 0.2, 0.22500001, 0.25, 0.275),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(1, 1), Vector2(-1, 1), Vector2(2.6900508, -0.79493785), Vector2(2.296, -0.645), Vector2(2.296053, 0.64543074), Vector2(1, 1), Vector2(1, -1), Vector2(1, 1)]
+}
+tracks/8/type = "value"
+tracks/8/imported = false
+tracks/8/enabled = true
+tracks/8/path = NodePath("../OffHand:skew")
+tracks/8/interp = 1
+tracks/8/loop_wrap = true
+tracks/8/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.2, 0.22500001),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 1,
+"values": [0.0, 0.0, 0.0, 0.0]
+}
+
+[sub_resource type="Animation" id="Animation_kqeut"]
+resource_name = "mace_2h"
+length = 0.8
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../MainHand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.25, 0.37746584, 0.425, 0.52500004),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(204, 98), Vector2(421, 222), Vector2(421, 222), Vector2(404, 183), Vector2(383, 159), Vector2(334, 184)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../MainHand:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.37746584, 0.425, 0.52500004),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [-1.3439035, 0.9302604913129778, 0.31939524, 0.04886922, 6.2831855]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../VfxMainHand:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.175, 0.225, 0.25, 0.275, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 0, 1, 2, 3, 4, 5]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../VfxMainHand:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.225),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2(1.578125, 1.234375), Vector2(2.1058095, 2.2968569), Vector2(1.9432454, 2.085001)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../VfxMainHand:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.225),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2(401, 173.00002), Vector2(425, 208), Vector2(427.00003, 208)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../VfxMainHand:skew")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.15, 0.225),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [-0.41887903, -0.41887903]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("../VfxMainHand:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.15, 0.225),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0.017453292, 0.017453292]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("../MainHand:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.37746584),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(1, 1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_5yw8j"]
+resource_name = "mace_mainhand"
+length = 0.8
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../MainHand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.25, 0.37746584, 0.425, 0.52500004),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(204, 98), Vector2(421, 222), Vector2(421, 222), Vector2(404, 183), Vector2(383, 159), Vector2(334, 184)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../MainHand:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.37746584, 0.425, 0.52500004),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [-1.3439035, 0.9302604913129778, 0.31939524, 0.04886922, 6.2831855]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../VfxMainHand:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.175, 0.225, 0.25, 0.275, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 0, 1, 2, 3, 4, 5]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../VfxMainHand:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.225),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2(1.578125, 1.234375), Vector2(2.1058095, 2.2968569), Vector2(1.433628, 1.6580528)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../VfxMainHand:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.225),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2(401, 173.00002), Vector2(402.99994, 208.00003), Vector2(420.00003, 213.99997)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../VfxMainHand:skew")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.15, 0.225),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [-0.41887903, -0.41887903]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("../VfxMainHand:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.15, 0.225),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0.017453292, 0.017453292]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("../MainHand:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.37746584),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(1, 1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_6lk28"]
+resource_name = "mace_offhand"
+length = 0.8
+step = 0.025
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../VfxOffHand:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.175, 0.225, 0.25, 0.275, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 0, 1, 2, 3, 4, 5]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../VfxOffHand:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.225),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2(1.578125, 1.234375), Vector2(2.1058095, 2.2968569), Vector2(1.433628, 1.6580528)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../VfxOffHand:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.225),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 1,
+"values": [Vector2(401, 73), Vector2(403, 108), Vector2(420, 114)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../VfxOffHand:skew")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.15, 0.225),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [-0.41887903, -0.41887903]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../VfxOffHand:rotation")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.15, 0.225),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0.017453292, 0.017453292]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../OffHand:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.25, 0.37746584, 0.425, 0.52500004),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(204, -2), Vector2(421, 122), Vector2(421, 122), Vector2(404, 83), Vector2(383, 59), Vector2(334, 84)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("../OffHand:rotation")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.37746584, 0.425, 0.52500004),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [-1.3439035, 0.9302604913129778, 0.31939524, 0.04886922, 6.2831855]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("../OffHand:scale")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0, 0.37746584),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(1, 1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_cjcxt"]
+resource_name = "stabbing_mainhand"
+length = 0.8
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../MainHand:position")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.16995075, 0.32000002, 0.37, 0.42, 0.46997598, 0.57000005, 0.6, 0.65, 0.70000005, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(194, 173), Vector2(382, 178), Vector2(430, 178), Vector2(430, 178), Vector2(425, 181), Vector2(422, 177), Vector2(420, 178), Vector2(343, 176), Vector2(196, 161), Vector2(252, 182), Vector2(296, 189), Vector2(334, 184)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../MainHand:rotation")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.16995075, 0.32000002, 0.37, 0.42, 0.46997598, 0.57000005, 0.6, 0.65, 0.70000005, 0.75),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [1.3334316, 0.6736971, 0.87266463, 0.87266463, 0.8028514559173916, 0.8726646259971648, 0.84648466, 0.68416905, 0.84648466, 0.52185345, 0.35953784, 6.2831855]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../VfxMainHand:frame")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.17, 0.2, 0.57, 0.59, 0.61, 0.63, 0.65),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 0, 1, 6, 2, 3, 4, 5, 6]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../VfxMainHand:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.15, 0.17),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(2.2815022, 1.1131018), Vector2(2.2815022, 1.1131018)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../VfxMainHand:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.15, 0.17),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(335.02515, 180.00293), Vector2(335.02515, 180.00293)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../MainHand:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.16995075, 0.57000005, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(1, 1), Vector2(0.7254429, 2.1295044), Vector2(1, 1), Vector2(0.7254429, 2.1295044), Vector2(1, 1)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("../MainHand:skew")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.16995075, 0.57000005, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0.0, 0.7295476, 0.0, 0.7295476, 0.0]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("../VfxMainHand:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.0]
+}
+
+[sub_resource type="Animation" id="Animation_ikkuv"]
+resource_name = "stabbing_offhand"
+length = 0.8
+step = 0.05
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("../VfxOffHand:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.17, 0.2, 0.57, 0.59, 0.61, 0.63, 0.65),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [6, 0, 1, 6, 2, 3, 4, 5, 6]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("../OffHand:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.17, 0.3200493, 0.37004924, 0.42004925, 0.47002524, 0.57, 0.59999996, 0.6499999, 0.7, 0.74999994),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(194, 73), Vector2(382, 78), Vector2(430, 78), Vector2(430, 78), Vector2(425, 81), Vector2(422, 77), Vector2(420, 78), Vector2(343, 76), Vector2(196, 61), Vector2(252, 82), Vector2(296, 89), Vector2(334, 84)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("../OffHand:rotation")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.17, 0.3200493, 0.37004924, 0.42004925, 0.47002524, 0.57, 0.59999996, 0.6499999, 0.7, 0.74999994),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [1.3334316, 0.6736971, 0.87266463, 0.87266463, 0.8028514559173916, 0.8726646259971648, 0.84648466, 0.68416905, 0.84648466, 0.52185345, 0.35953784, 6.2831855]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("../OffHand:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.17, 0.57, 0.59999996),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [Vector2(1, 1), Vector2(0.7254429, 2.1295044), Vector2(1, 1), Vector2(0.7254429, 2.1295044), Vector2(1, 1)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("../OffHand:skew")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.15, 0.17, 0.57, 0.59999996),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"update": 1,
+"values": [0.0, 0.7295476, 0.0, 0.7295476, 0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("../VfxOffHand:scale")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0.15, 0.17),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(2.2815022, 1.1131018), Vector2(2.2815022, 1.1131018)]
+}
+tracks/6/type = "value"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("../VfxOffHand:position")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"times": PackedFloat32Array(0.15, 0.17),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Vector2(335.025, 80.003), Vector2(335.025, 80.003)]
+}
+tracks/7/type = "value"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("../VfxOffHand:rotation")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="Animation_3yavs"]
@@ -660,631 +1743,18 @@ tracks/1/keys = {
 "values": [6, 0, 1, 2, 3, 4, 5, 6]
 }
 
-[sub_resource type="Animation" id="Animation_cjcxt"]
-resource_name = "stabbing_mainhand"
-length = 0.8
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../MainHand:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.16995075, 0.32000002, 0.37, 0.42, 0.46997598, 0.57000005, 0.6, 0.65, 0.70000005, 0.75),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(194, 173), Vector2(382, 178), Vector2(430, 178), Vector2(430, 178), Vector2(425, 181), Vector2(422, 177), Vector2(420, 178), Vector2(343, 176), Vector2(196, 161), Vector2(252, 182), Vector2(296, 189), Vector2(334, 184)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../MainHand:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.16995075, 0.32000002, 0.37, 0.42, 0.46997598, 0.57000005, 0.6, 0.65, 0.70000005, 0.75),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [1.3334316, 0.6736971, 0.87266463, 0.87266463, 0.8028514559173916, 0.8726646259971648, 0.84648466, 0.68416905, 0.84648466, 0.52185345, 0.35953784, 6.2831855]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../VfxMainHand:frame")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.17, 0.2, 0.57, 0.59, 0.61, 0.63, 0.65),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [6, 0, 1, 6, 2, 3, 4, 5, 6]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("../VfxMainHand:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0.15, 0.17),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [Vector2(2.2815022, 1.1131018), Vector2(2.2815022, 1.1131018)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("../VfxMainHand:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0.15, 0.17),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [Vector2(335.02515, 180.00293), Vector2(335.02515, 180.00293)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("../MainHand:scale")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.16995075, 0.57000005, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(1, 1), Vector2(0.7254429, 2.1295044), Vector2(1, 1), Vector2(0.7254429, 2.1295044), Vector2(1, 1)]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("../MainHand:skew")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.16995075, 0.57000005, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [0.0, 0.7295476, 0.0, 0.7295476, 0.0]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("../VfxMainHand:rotation")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0.0]
-}
-
-[sub_resource type="Animation" id="Animation_ikkuv"]
-resource_name = "stabbing_offhand"
-length = 0.8
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../VfxOffHand:frame")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.17, 0.2, 0.57, 0.59, 0.61, 0.63, 0.65),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [6, 0, 1, 6, 2, 3, 4, 5, 6]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../OffHand:position")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.17, 0.3200493, 0.37004924, 0.42004925, 0.47002524, 0.57, 0.59999996, 0.6499999, 0.7, 0.74999994),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(194, 73), Vector2(382, 78), Vector2(430, 78), Vector2(430, 78), Vector2(425, 81), Vector2(422, 77), Vector2(420, 78), Vector2(343, 76), Vector2(196, 61), Vector2(252, 82), Vector2(296, 89), Vector2(334, 84)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../OffHand:rotation")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.17, 0.3200493, 0.37004924, 0.42004925, 0.47002524, 0.57, 0.59999996, 0.6499999, 0.7, 0.74999994),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [1.3334316, 0.6736971, 0.87266463, 0.87266463, 0.8028514559173916, 0.8726646259971648, 0.84648466, 0.68416905, 0.84648466, 0.52185345, 0.35953784, 6.2831855]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("../OffHand:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.17, 0.57, 0.59999996),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(1, 1), Vector2(0.7254429, 2.1295044), Vector2(1, 1), Vector2(0.7254429, 2.1295044), Vector2(1, 1)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("../OffHand:skew")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.17, 0.57, 0.59999996),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [0.0, 0.7295476, 0.0, 0.7295476, 0.0]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("../VfxOffHand:scale")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0.15, 0.17),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [Vector2(2.2815022, 1.1131018), Vector2(2.2815022, 1.1131018)]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("../VfxOffHand:position")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0.15, 0.17),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [Vector2(335.025, 80.003), Vector2(335.025, 80.003)]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("../VfxOffHand:rotation")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0.0]
-}
-
-[sub_resource type="Animation" id="Animation_eyk8g"]
-resource_name = "axe_mainhand"
-length = 0.8
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../MainHand:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.25, 0.3, 0.35000002, 0.45, 0.55),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(258, 104), Vector2(421, 222), Vector2(421, 222), Vector2(421, 226), Vector2(421, 228), Vector2(383, 159), Vector2(334, 184)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../MainHand:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.3, 0.35000002, 0.45, 0.55),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [-1.3439035, 0.9302604913129778, 0.996583, 1.052433538952581, 0.04886922, 6.2831855]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../VfxMainHand:frame")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.25, 0.3, 0.34807408, 0.3980741, 0.45),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [6, 0, 1, 2, 3, 4, 6]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("../VfxMainHand:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [Vector2(1.578125, 1.234375), Vector2(0.8999403, 2.1551304)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("../VfxMainHand:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [Vector2(401, 173.00002), Vector2(367, 157.99998)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("../VfxMainHand:skew")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0.15),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0.0]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("../VfxMainHand:rotation")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0.15),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [-0.5009095]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("../MainHand:scale")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_1gabh"]
-resource_name = "axe_offhand"
-length = 0.8
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../OffHand:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.25, 0.3, 0.35000002, 0.45, 0.55),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(258, 4), Vector2(421, 122), Vector2(421, 122), Vector2(421, 126), Vector2(421, 128), Vector2(383, 59), Vector2(334, 84)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../OffHand:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.3, 0.35000002, 0.45, 0.55),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [-1.3439035, 0.9302604913129778, 0.996583, 1.052433538952581, 0.04886922, 6.2831855]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../VfxOffHand:frame")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.25, 0.3, 0.34807408, 0.3980741, 0.45),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [6, 0, 1, 2, 3, 4, 6]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("../VfxOffHand:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [Vector2(1.578125, 1.234375), Vector2(0.8999403, 2.1551304)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("../VfxOffHand:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [Vector2(401, 73), Vector2(367, 58)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("../VfxOffHand:skew")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0.15),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0.0]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("../VfxOffHand:rotation")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0.15),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [-0.5009095]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("../OffHand:scale")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_2aqtr"]
-resource_name = "axe_2h"
-length = 0.8
-step = 0.05
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../MainHand:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.25, 0.3, 0.35000002, 0.45, 0.55),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(217, 66), Vector2(421, 222), Vector2(421, 222), Vector2(421, 226), Vector2(421, 228), Vector2(383, 159), Vector2(334, 184)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../MainHand:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.3, 0.35000002, 0.45, 0.55),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [-1.3439035, 0.9302604913129778, 0.996583, 1.052433538952581, 0.04886922, 6.2831855]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../VfxMainHand:frame")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.25, 0.3, 0.34807408, 0.3980741, 0.45),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [6, 0, 1, 2, 3, 4, 6]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("../VfxMainHand:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [Vector2(1.578125, 1.234375), Vector2(1.0089612, 2.897151)]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("../VfxMainHand:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.15),
-"transitions": PackedFloat32Array(1, 1),
-"update": 1,
-"values": [Vector2(401, 173.00002), Vector2(395.00003, 143.00003)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("../VfxMainHand:skew")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0.15),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0.17802358]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("../VfxMainHand:rotation")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0.15),
-"transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [-0.6021386]
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("../MainHand:scale")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0),
-"transitions": PackedFloat32Array(1),
-"update": 0,
-"values": [Vector2(1, 1)]
-}
-
-[sub_resource type="Animation" id="Animation_3lr6k"]
-resource_name = "flagellation_mainhand"
-length = 0.8
-step = 0.025
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../MainHand:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.15, 0.17500001, 0.22500001, 0.27499998, 0.3, 0.55, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(279, 120), Vector2(215, 104), Vector2(246.40088, 133.89874), Vector2(446.00003, 238), Vector2(410.00003, 222), Vector2(391.9999, 239), Vector2(368, 250), Vector2(334, 184), Vector2(334, 184)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../MainHand:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.15, 0.17500001, 0.22500001, 0.27499998, 0.3, 0.55, 0.7),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [-1.0629056, -6.2831855, -2.628466, 0.73652893, 1.3159783, 1.5097098, 2.089159, 6.2831855, 6.2831855]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../VfxMainHand:frame")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"update": 1,
-"values": []
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("../VfxMainHand:scale")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"update": 1,
-"values": []
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("../VfxMainHand:position")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"update": 1,
-"values": []
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("../VfxMainHand:skew")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"update": 1,
-"values": []
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("../VfxMainHand:rotation")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(),
-"transitions": PackedFloat32Array(),
-"update": 1,
-"values": []
-}
-tracks/7/type = "value"
-tracks/7/imported = false
-tracks/7/enabled = true
-tracks/7/path = NodePath("../MainHand:scale")
-tracks/7/interp = 1
-tracks/7/loop_wrap = true
-tracks/7/keys = {
-"times": PackedFloat32Array(0, 0.05, 0.15, 0.17500001, 0.22500001),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(1, 1), Vector2(-1, 1), Vector2(2.6900508, -0.79493785), Vector2(2.296053, 0.64543074), Vector2(1, 1)]
-}
-tracks/8/type = "value"
-tracks/8/imported = false
-tracks/8/enabled = true
-tracks/8/path = NodePath("../MainHand:skew")
-tracks/8/interp = 1
-tracks/8/loop_wrap = true
-tracks/8/keys = {
-"times": PackedFloat32Array(0, 0.15, 0.17500001, 0.22500001),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [0.0, 0.0, 0.0, 0.0]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_cjcxt"]
 _data = {
 &"RESET": SubResource("Animation_exw07"),
 &"axe_2h": SubResource("Animation_2aqtr"),
 &"axe_mainhand": SubResource("Animation_eyk8g"),
 &"axe_offhand": SubResource("Animation_1gabh"),
+&"block": SubResource("Animation_kslx6"),
 &"flagellation_mainhand": SubResource("Animation_3lr6k"),
+&"flagellation_offhand": SubResource("Animation_xqb12"),
+&"mace_2h": SubResource("Animation_kqeut"),
+&"mace_mainhand": SubResource("Animation_5yw8j"),
+&"mace_offhand": SubResource("Animation_6lk28"),
 &"stabbing_mainhand": SubResource("Animation_cjcxt"),
 &"stabbing_offhand": SubResource("Animation_ikkuv"),
 &"sword_mainhand": SubResource("Animation_3yavs"),
@@ -1292,6 +1762,42 @@ _data = {
 &"unarmed_mainhand": SubResource("Animation_kylmn"),
 &"unarmed_offhand": SubResource("Animation_ec1tb")
 }
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_exw07"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 4
+expand_margin_left = 1.0
+expand_margin_top = 1.0
+expand_margin_right = 1.0
+expand_margin_bottom = 1.0
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_cjcxt"]
+resource_local_to_scene = true
+bg_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+border_color = Color(0, 0, 0, 1)
+corner_radius_top_left = 3
+corner_radius_top_right = 3
+corner_radius_bottom_right = 3
+corner_radius_bottom_left = 3
+corner_detail = 4
+anti_aliasing = false
+
+[sub_resource type="LabelSettings" id="LabelSettings_kylmn"]
+font_size = 83
+font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+outline_size = 31
+outline_color = Color(0, 0, 0, 1)
+shadow_size = 0
 
 [sub_resource type="LabelSettings" id="LabelSettings_gppie"]
 outline_size = 6
@@ -1334,7 +1840,484 @@ layout_mode = 2
 size_flags_horizontal = 8
 text = "       🔹 0"
 
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+offset_left = 18.0
+offset_top = 52.0
+offset_right = 205.0
+offset_bottom = 456.0
+pivot_offset = Vector2(1.33, 0)
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Player1" type="HBoxContainer" parent="VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="Panel" parent="VBoxContainer/Player1"]
+self_modulate = Color(1, 1, 1, 0.5254902)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_gppie")
+
+[node name="PlayerInfo" type="VBoxContainer" parent="VBoxContainer/Player1/TextureRect"]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 91.0
+offset_bottom = 47.0
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="RichTextLabel" parent="VBoxContainer/Player1/TextureRect/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/outline_size = 6
+fit_content = true
+scroll_active = false
+scroll_following = true
+autowrap_mode = 0
+vertical_alignment = 1
+
+[node name="PlayerRace" type="Label" parent="VBoxContainer/Player1/TextureRect/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_ijstf")
+vertical_alignment = 1
+
+[node name="PlayerLife" type="Label" parent="VBoxContainer/Player1/TextureRect"]
+layout_mode = 0
+offset_left = 95.0
+offset_right = 182.0
+offset_bottom = 47.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+label_settings = SubResource("LabelSettings_4n7mi")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Inspect" type="Label" parent="VBoxContainer/Player1/TextureRect"]
+layout_mode = 0
+offset_left = 186.0
+offset_right = 187.0
+offset_bottom = 47.0
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player2" type="HBoxContainer" parent="VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+self_modulate = Color(1, 1, 1, 0.5254902)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="Panel" parent="VBoxContainer/Player2"]
+self_modulate = Color(1, 1, 1, 0.5254902)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_gppie")
+
+[node name="PlayerInfo" type="VBoxContainer" parent="VBoxContainer/Player2/TextureRect"]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 91.0
+offset_bottom = 47.0
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="RichTextLabel" parent="VBoxContainer/Player2/TextureRect/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/outline_size = 6
+autowrap_mode = 0
+vertical_alignment = 1
+visible_characters = 11
+
+[node name="PlayerRace" type="Label" parent="VBoxContainer/Player2/TextureRect/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_ijstf")
+vertical_alignment = 1
+
+[node name="PlayerLife" type="Label" parent="VBoxContainer/Player2/TextureRect"]
+layout_mode = 0
+offset_left = 95.0
+offset_right = 182.0
+offset_bottom = 47.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+label_settings = SubResource("LabelSettings_4n7mi")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Inspect" type="Label" parent="VBoxContainer/Player2/TextureRect"]
+layout_mode = 0
+offset_left = 186.0
+offset_right = 187.0
+offset_bottom = 47.0
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player3" type="HBoxContainer" parent="VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="Panel" parent="VBoxContainer/Player3"]
+self_modulate = Color(1, 1, 1, 0.5254902)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_gppie")
+
+[node name="PlayerInfo" type="VBoxContainer" parent="VBoxContainer/Player3/TextureRect"]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 91.0
+offset_bottom = 47.0
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="RichTextLabel" parent="VBoxContainer/Player3/TextureRect/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/outline_size = 6
+autowrap_mode = 0
+vertical_alignment = 1
+visible_characters = 11
+
+[node name="PlayerRace" type="Label" parent="VBoxContainer/Player3/TextureRect/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_ijstf")
+vertical_alignment = 1
+
+[node name="PlayerLife" type="Label" parent="VBoxContainer/Player3/TextureRect"]
+layout_mode = 0
+offset_left = 95.0
+offset_right = 182.0
+offset_bottom = 47.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+label_settings = SubResource("LabelSettings_4n7mi")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Inspect" type="Label" parent="VBoxContainer/Player3/TextureRect"]
+layout_mode = 0
+offset_left = 186.0
+offset_right = 187.0
+offset_bottom = 47.0
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player4" type="HBoxContainer" parent="VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="Panel" parent="VBoxContainer/Player4"]
+self_modulate = Color(1, 1, 1, 0.5254902)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_gppie")
+
+[node name="PlayerInfo" type="VBoxContainer" parent="VBoxContainer/Player4/TextureRect"]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 91.0
+offset_bottom = 47.0
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="RichTextLabel" parent="VBoxContainer/Player4/TextureRect/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/outline_size = 6
+autowrap_mode = 0
+vertical_alignment = 1
+visible_characters = 11
+
+[node name="PlayerRace" type="Label" parent="VBoxContainer/Player4/TextureRect/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_ijstf")
+vertical_alignment = 1
+
+[node name="PlayerLife" type="Label" parent="VBoxContainer/Player4/TextureRect"]
+layout_mode = 0
+offset_left = 95.0
+offset_right = 182.0
+offset_bottom = 47.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+label_settings = SubResource("LabelSettings_4n7mi")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Inspect" type="Label" parent="VBoxContainer/Player4/TextureRect"]
+layout_mode = 0
+offset_left = 186.0
+offset_right = 187.0
+offset_bottom = 47.0
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player5" type="HBoxContainer" parent="VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="Panel" parent="VBoxContainer/Player5"]
+self_modulate = Color(1, 1, 1, 0.5254902)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_gppie")
+
+[node name="PlayerInfo" type="VBoxContainer" parent="VBoxContainer/Player5/TextureRect"]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 91.0
+offset_bottom = 47.0
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="RichTextLabel" parent="VBoxContainer/Player5/TextureRect/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/outline_size = 6
+autowrap_mode = 0
+vertical_alignment = 1
+visible_characters = 11
+
+[node name="PlayerRace" type="Label" parent="VBoxContainer/Player5/TextureRect/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_ijstf")
+vertical_alignment = 1
+
+[node name="PlayerLife" type="Label" parent="VBoxContainer/Player5/TextureRect"]
+layout_mode = 0
+offset_left = 95.0
+offset_right = 182.0
+offset_bottom = 47.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+label_settings = SubResource("LabelSettings_4n7mi")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Inspect" type="Label" parent="VBoxContainer/Player5/TextureRect"]
+layout_mode = 0
+offset_left = 186.0
+offset_right = 187.0
+offset_bottom = 47.0
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player6" type="HBoxContainer" parent="VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="Panel" parent="VBoxContainer/Player6"]
+self_modulate = Color(1, 1, 1, 0.5254902)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_gppie")
+
+[node name="PlayerInfo" type="VBoxContainer" parent="VBoxContainer/Player6/TextureRect"]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 91.0
+offset_bottom = 47.0
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="RichTextLabel" parent="VBoxContainer/Player6/TextureRect/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/outline_size = 6
+autowrap_mode = 0
+vertical_alignment = 1
+visible_characters = 11
+
+[node name="PlayerRace" type="Label" parent="VBoxContainer/Player6/TextureRect/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_ijstf")
+vertical_alignment = 1
+
+[node name="PlayerLife" type="Label" parent="VBoxContainer/Player6/TextureRect"]
+layout_mode = 0
+offset_left = 95.0
+offset_right = 182.0
+offset_bottom = 47.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+label_settings = SubResource("LabelSettings_4n7mi")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Inspect" type="Label" parent="VBoxContainer/Player6/TextureRect"]
+layout_mode = 0
+offset_left = 186.0
+offset_right = 187.0
+offset_bottom = 47.0
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player7" type="HBoxContainer" parent="VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="Panel" parent="VBoxContainer/Player7"]
+self_modulate = Color(1, 1, 1, 0.5254902)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_gppie")
+
+[node name="PlayerInfo" type="VBoxContainer" parent="VBoxContainer/Player7/TextureRect"]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 91.0
+offset_bottom = 47.0
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="RichTextLabel" parent="VBoxContainer/Player7/TextureRect/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/outline_size = 6
+autowrap_mode = 0
+vertical_alignment = 1
+visible_characters = 11
+
+[node name="PlayerRace" type="Label" parent="VBoxContainer/Player7/TextureRect/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_ijstf")
+vertical_alignment = 1
+
+[node name="PlayerLife" type="Label" parent="VBoxContainer/Player7/TextureRect"]
+layout_mode = 0
+offset_left = 95.0
+offset_right = 182.0
+offset_bottom = 47.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+label_settings = SubResource("LabelSettings_4n7mi")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Inspect" type="Label" parent="VBoxContainer/Player7/TextureRect"]
+layout_mode = 0
+offset_left = 186.0
+offset_right = 187.0
+offset_bottom = 47.0
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Player8" type="HBoxContainer" parent="VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="TextureRect" type="Panel" parent="VBoxContainer/Player8"]
+self_modulate = Color(1, 1, 1, 0.5254902)
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("5_gppie")
+
+[node name="PlayerInfo" type="VBoxContainer" parent="VBoxContainer/Player8/TextureRect"]
+layout_mode = 0
+offset_left = 4.0
+offset_right = 91.0
+offset_bottom = 47.0
+size_flags_horizontal = 3
+
+[node name="PlayerName" type="RichTextLabel" parent="VBoxContainer/Player8/TextureRect/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_constants/outline_size = 6
+autowrap_mode = 0
+vertical_alignment = 1
+visible_characters = 11
+
+[node name="PlayerRace" type="Label" parent="VBoxContainer/Player8/TextureRect/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+label_settings = SubResource("LabelSettings_ijstf")
+vertical_alignment = 1
+
+[node name="PlayerLife" type="Label" parent="VBoxContainer/Player8/TextureRect"]
+layout_mode = 0
+offset_left = 95.0
+offset_right = 182.0
+offset_bottom = 47.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+label_settings = SubResource("LabelSettings_4n7mi")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Inspect" type="Label" parent="VBoxContainer/Player8/TextureRect"]
+layout_mode = 0
+offset_left = 186.0
+offset_right = 187.0
+offset_bottom = 47.0
+size_flags_vertical = 3
+tooltip_text = "Remaining health"
+mouse_filter = 1
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="GridContainer" type="GridContainer" parent="."]
+visible = false
 texture_filter = 1
 anchors_preset = 4
 anchor_top = 0.5
@@ -1344,323 +2327,6 @@ offset_top = -488.0
 offset_right = 205.0
 offset_bottom = -84.0
 grow_vertical = 2
-
-[node name="VBoxContainer" type="VBoxContainer" parent="GridContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="Player1" type="HBoxContainer" parent="GridContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="PlayerInfo" type="VBoxContainer" parent="GridContainer/VBoxContainer/Player1"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PlayerName" type="Label" parent="GridContainer/VBoxContainer/Player1/PlayerInfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-label_settings = SubResource("LabelSettings_yixhe")
-vertical_alignment = 1
-
-[node name="PlayerRace" type="Label" parent="GridContainer/VBoxContainer/Player1/PlayerInfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-label_settings = SubResource("LabelSettings_ijstf")
-vertical_alignment = 1
-
-[node name="PlayerLife" type="Label" parent="GridContainer/VBoxContainer/Player1"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
-label_settings = SubResource("LabelSettings_4n7mi")
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Inspect" type="Label" parent="GridContainer/VBoxContainer/Player1"]
-layout_mode = 2
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Player2" type="HBoxContainer" parent="GridContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="PlayerInfo" type="VBoxContainer" parent="GridContainer/VBoxContainer/Player2"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PlayerName" type="Label" parent="GridContainer/VBoxContainer/Player2/PlayerInfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-label_settings = SubResource("LabelSettings_yixhe")
-vertical_alignment = 1
-
-[node name="PlayerRace" type="Label" parent="GridContainer/VBoxContainer/Player2/PlayerInfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-label_settings = SubResource("LabelSettings_ijstf")
-vertical_alignment = 1
-
-[node name="PlayerLife" type="Label" parent="GridContainer/VBoxContainer/Player2"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Inspect" type="Label" parent="GridContainer/VBoxContainer/Player2"]
-layout_mode = 2
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Player3" type="HBoxContainer" parent="GridContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="PlayerInfo" type="VBoxContainer" parent="GridContainer/VBoxContainer/Player3"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PlayerName" type="Label" parent="GridContainer/VBoxContainer/Player3/PlayerInfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-label_settings = SubResource("LabelSettings_yixhe")
-vertical_alignment = 1
-
-[node name="PlayerRace" type="Label" parent="GridContainer/VBoxContainer/Player3/PlayerInfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-label_settings = SubResource("LabelSettings_ijstf")
-vertical_alignment = 1
-
-[node name="PlayerLife" type="Label" parent="GridContainer/VBoxContainer/Player3"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Inspect" type="Label" parent="GridContainer/VBoxContainer/Player3"]
-layout_mode = 2
-size_flags_vertical = 3
-mouse_filter = 1
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Player4" type="HBoxContainer" parent="GridContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="PlayerInfo" type="VBoxContainer" parent="GridContainer/VBoxContainer/Player4"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PlayerName" type="Label" parent="GridContainer/VBoxContainer/Player4/PlayerInfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-label_settings = SubResource("LabelSettings_yixhe")
-vertical_alignment = 1
-
-[node name="PlayerRace" type="Label" parent="GridContainer/VBoxContainer/Player4/PlayerInfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-label_settings = SubResource("LabelSettings_ijstf")
-vertical_alignment = 1
-
-[node name="PlayerLife" type="Label" parent="GridContainer/VBoxContainer/Player4"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Inspect" type="Label" parent="GridContainer/VBoxContainer/Player4"]
-layout_mode = 2
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Player5" type="HBoxContainer" parent="GridContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="PlayerInfo" type="VBoxContainer" parent="GridContainer/VBoxContainer/Player5"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PlayerName" type="Label" parent="GridContainer/VBoxContainer/Player5/PlayerInfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-label_settings = SubResource("LabelSettings_yixhe")
-vertical_alignment = 1
-
-[node name="PlayerRace" type="Label" parent="GridContainer/VBoxContainer/Player5/PlayerInfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-label_settings = SubResource("LabelSettings_ijstf")
-vertical_alignment = 1
-
-[node name="PlayerLife" type="Label" parent="GridContainer/VBoxContainer/Player5"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Inspect" type="Label" parent="GridContainer/VBoxContainer/Player5"]
-layout_mode = 2
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Player6" type="HBoxContainer" parent="GridContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="PlayerInfo" type="VBoxContainer" parent="GridContainer/VBoxContainer/Player6"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PlayerName" type="Label" parent="GridContainer/VBoxContainer/Player6/PlayerInfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-label_settings = SubResource("LabelSettings_yixhe")
-vertical_alignment = 1
-
-[node name="PlayerRace" type="Label" parent="GridContainer/VBoxContainer/Player6/PlayerInfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-label_settings = SubResource("LabelSettings_ijstf")
-vertical_alignment = 1
-
-[node name="PlayerLife" type="Label" parent="GridContainer/VBoxContainer/Player6"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Inspect" type="Label" parent="GridContainer/VBoxContainer/Player6"]
-layout_mode = 2
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Player7" type="HBoxContainer" parent="GridContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="PlayerInfo" type="VBoxContainer" parent="GridContainer/VBoxContainer/Player7"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PlayerName" type="Label" parent="GridContainer/VBoxContainer/Player7/PlayerInfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-label_settings = SubResource("LabelSettings_yixhe")
-vertical_alignment = 1
-
-[node name="PlayerRace" type="Label" parent="GridContainer/VBoxContainer/Player7/PlayerInfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-label_settings = SubResource("LabelSettings_ijstf")
-vertical_alignment = 1
-
-[node name="PlayerLife" type="Label" parent="GridContainer/VBoxContainer/Player7"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Inspect" type="Label" parent="GridContainer/VBoxContainer/Player7"]
-layout_mode = 2
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Player8" type="HBoxContainer" parent="GridContainer/VBoxContainer"]
-layout_mode = 2
-size_flags_vertical = 3
-
-[node name="PlayerInfo" type="VBoxContainer" parent="GridContainer/VBoxContainer/Player8"]
-layout_mode = 2
-size_flags_horizontal = 3
-
-[node name="PlayerName" type="Label" parent="GridContainer/VBoxContainer/Player8/PlayerInfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-label_settings = SubResource("LabelSettings_yixhe")
-vertical_alignment = 1
-
-[node name="PlayerRace" type="Label" parent="GridContainer/VBoxContainer/Player8/PlayerInfo"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-label_settings = SubResource("LabelSettings_ijstf")
-vertical_alignment = 1
-
-[node name="PlayerLife" type="Label" parent="GridContainer/VBoxContainer/Player8"]
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="Inspect" type="Label" parent="GridContainer/VBoxContainer/Player8"]
-layout_mode = 2
-size_flags_vertical = 3
-tooltip_text = "Remaining health"
-mouse_filter = 1
-horizontal_alignment = 1
-vertical_alignment = 1
 
 [node name="EquipmentButton" type="Button" parent="."]
 visible = false
@@ -1682,15 +2348,16 @@ text = "🤺"
 icon_alignment = 1
 
 [node name="ShopButton" type="Button" parent="."]
+modulate = Color(1, 1, 1, 0)
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -795.0
-offset_top = -75.0
-offset_right = -765.0
-offset_bottom = -44.0
+offset_left = -62.0
+offset_top = -1002.0
+offset_right = -32.0
+offset_bottom = -971.0
 grow_horizontal = 0
 grow_vertical = 0
 scale = Vector2(2, 2)
@@ -1995,7 +2662,6 @@ size_flags_horizontal = 3
 label_settings = SubResource("LabelSettings_f2wx0")
 
 [node name="AttributePanel" type="Panel" parent="."]
-visible = false
 self_modulate = Color(1, 1, 1, 0.8627451)
 texture_filter = 1
 anchors_preset = 6
@@ -2032,7 +2698,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 4
 tooltip_text = "Health"
 focus_mode = 0
-theme_override_colors/icon_normal_color = Color(0, 1, 0, 1)
+theme_override_colors/icon_normal_color = Color(1.1750357, 1.3322288, 0.19489072, 1)
 theme_override_colors/icon_focus_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0.39607844, 0, 1)
 theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
@@ -2063,7 +2729,7 @@ size_flags_horizontal = 12
 size_flags_vertical = 6
 tooltip_text = "Strength"
 focus_mode = 0
-theme_override_colors/icon_normal_color = Color(0, 1, 0, 1)
+theme_override_colors/icon_normal_color = Color(1.1750357, 1.3322288, 0.19489072, 1)
 theme_override_colors/icon_focus_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0.39607844, 0, 1)
 theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
@@ -2088,7 +2754,7 @@ size_flags_horizontal = 12
 size_flags_vertical = 6
 tooltip_text = "Endurance"
 focus_mode = 0
-theme_override_colors/icon_normal_color = Color(0, 1, 0, 1)
+theme_override_colors/icon_normal_color = Color(1.1750357, 1.3322288, 0.19489072, 1)
 theme_override_colors/icon_focus_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0.39607844, 0, 1)
 theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
@@ -2118,7 +2784,7 @@ size_flags_horizontal = 12
 size_flags_vertical = 6
 tooltip_text = "Criticality"
 focus_mode = 0
-theme_override_colors/icon_normal_color = Color(0, 1, 0, 1)
+theme_override_colors/icon_normal_color = Color(1.1750357, 1.3322288, 0.19489072, 1)
 theme_override_colors/icon_focus_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0.39607844, 0, 1)
 theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
@@ -2143,7 +2809,7 @@ size_flags_horizontal = 12
 size_flags_vertical = 6
 tooltip_text = "Avoidance"
 focus_mode = 0
-theme_override_colors/icon_normal_color = Color(0, 1, 0, 1)
+theme_override_colors/icon_normal_color = Color(1.1750357, 1.3322288, 0.19489072, 1)
 theme_override_colors/icon_focus_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0.39607844, 0, 1)
 theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
@@ -2173,7 +2839,7 @@ size_flags_horizontal = 12
 size_flags_vertical = 6
 tooltip_text = "Quickness"
 focus_mode = 0
-theme_override_colors/icon_normal_color = Color(0, 1, 0, 1)
+theme_override_colors/icon_normal_color = Color(1.1750357, 1.3322288, 0.19489072, 1)
 theme_override_colors/icon_focus_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0.39607844, 0, 1)
 theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
@@ -2198,7 +2864,7 @@ size_flags_horizontal = 12
 size_flags_vertical = 6
 tooltip_text = "Resilience"
 focus_mode = 0
-theme_override_colors/icon_normal_color = Color(0, 1, 0, 1)
+theme_override_colors/icon_normal_color = Color(1.1750357, 1.3322288, 0.19489072, 1)
 theme_override_colors/icon_focus_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0.39607844, 0, 1)
 theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
@@ -2263,7 +2929,7 @@ size_flags_horizontal = 12
 size_flags_vertical = 6
 tooltip_text = "Sword Mastery"
 focus_mode = 0
-theme_override_colors/icon_normal_color = Color(0, 1, 0, 1)
+theme_override_colors/icon_normal_color = Color(1.1750357, 1.3322288, 0.19489072, 1)
 theme_override_colors/icon_focus_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0.39607844, 0, 1)
 theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
@@ -2293,7 +2959,7 @@ size_flags_horizontal = 12
 size_flags_vertical = 6
 tooltip_text = "Axe Mastery"
 focus_mode = 0
-theme_override_colors/icon_normal_color = Color(0, 1, 0, 1)
+theme_override_colors/icon_normal_color = Color(1.1750357, 1.3322288, 0.19489072, 1)
 theme_override_colors/icon_focus_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0.39607844, 0, 1)
 theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
@@ -2318,7 +2984,7 @@ size_flags_horizontal = 12
 size_flags_vertical = 6
 tooltip_text = "Stabbing Mastery"
 focus_mode = 0
-theme_override_colors/icon_normal_color = Color(0, 1, 0, 1)
+theme_override_colors/icon_normal_color = Color(1.1750357, 1.3322288, 0.19489072, 1)
 theme_override_colors/icon_focus_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0.39607844, 0, 1)
 theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
@@ -2348,7 +3014,7 @@ size_flags_horizontal = 12
 size_flags_vertical = 6
 tooltip_text = "Mace Mastery"
 focus_mode = 0
-theme_override_colors/icon_normal_color = Color(0, 1, 0, 1)
+theme_override_colors/icon_normal_color = Color(1.1750357, 1.3322288, 0.19489072, 1)
 theme_override_colors/icon_focus_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0.39607844, 0, 1)
 theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
@@ -2373,7 +3039,7 @@ size_flags_horizontal = 12
 size_flags_vertical = 6
 tooltip_text = "Flagellation Mastery"
 focus_mode = 0
-theme_override_colors/icon_normal_color = Color(0, 1, 0, 1)
+theme_override_colors/icon_normal_color = Color(1.1750357, 1.3322288, 0.19489072, 1)
 theme_override_colors/icon_focus_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0.39607844, 0, 1)
 theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
@@ -2403,7 +3069,7 @@ size_flags_horizontal = 12
 size_flags_vertical = 6
 tooltip_text = "Shield Mastery"
 focus_mode = 0
-theme_override_colors/icon_normal_color = Color(0, 1, 0, 1)
+theme_override_colors/icon_normal_color = Color(1.1750357, 1.3322288, 0.19489072, 1)
 theme_override_colors/icon_focus_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_pressed_color = Color(0, 0.39607844, 0, 1)
 theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
@@ -2426,6 +3092,13 @@ visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 label_settings = SubResource("LabelSettings_f2wx0")
+
+[node name="Info" type="RichTextLabel" parent="AttributePanel"]
+layout_mode = 0
+offset_left = 8.0
+offset_top = 300.0
+offset_right = 43.0
+offset_bottom = 300.0
 
 [node name="PointsLeft" type="Label" parent="AttributePanel"]
 layout_mode = 1
@@ -2502,14 +3175,15 @@ theme = ExtResource("5_gppie")
 text = "Send"
 
 [node name="ExpButton" type="Button" parent="."]
+self_modulate = Color(1, 1, 1, 0)
 texture_filter = 1
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
-offset_left = -68.0
-offset_top = 30.0
-offset_right = -6.0
-offset_bottom = 64.0
+offset_left = -81.0
+offset_top = 182.0
+offset_right = -19.0
+offset_bottom = 216.0
 grow_horizontal = 0
 theme = ExtResource("5_gppie")
 text = "TRAIN
@@ -2663,12 +3337,13 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -397.0
+offset_left = -398.0
 offset_top = 34.0
-offset_right = -97.0
+offset_right = -98.0
 offset_bottom = 334.0
 grow_horizontal = 0
 grow_vertical = 2
+pivot_offset = Vector2(150, 150)
 theme = ExtResource("5_gppie")
 
 [node name="EquipmentPanelPicture" type="TextureRect" parent="EquipmentPanel1"]
@@ -2677,9 +3352,9 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 5.0
-offset_top = 5.0
+offset_top = 6.0
 offset_right = -6.0
-offset_bottom = -5.0
+offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 2
@@ -2690,9 +3365,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -40.0
-offset_top = 7.0
+offset_top = 25.0
 offset_right = 40.0
-offset_bottom = 34.0
+offset_bottom = 52.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8ecy4")
 
@@ -2882,7 +3557,7 @@ z_index = 12
 position = Vector2(401, 173.00002)
 rotation = 0.0052359877
 scale = Vector2(1.578125, 1.234375)
-texture = ExtResource("33_kylmn")
+texture = ExtResource("33_cjcxt")
 hframes = 7
 frame = 6
 
@@ -2891,7 +3566,7 @@ z_index = 12
 position = Vector2(401, 128)
 rotation = 0.06632252
 scale = Vector2(1.578125, 1.234375)
-texture = ExtResource("33_exw07")
+texture = ExtResource("33_cjcxt")
 hframes = 7
 frame = 6
 
@@ -2899,13 +3574,13 @@ frame = 6
 z_index = 12
 position = Vector2(334, 184)
 rotation = 6.2831855
-texture = ExtResource("35_kylmn")
+texture = ExtResource("34_kylmn")
 
 [node name="OffHand" type="Sprite2D" parent="EquipmentPanel1/Animations"]
 z_index = 12
 position = Vector2(334, 84)
 rotation = 6.2831855
-texture = ExtResource("36_ec1tb")
+texture = ExtResource("35_kylmn")
 
 [node name="MainHandAnimationPlayer" type="AnimationPlayer" parent="EquipmentPanel1/Animations"]
 root_node = NodePath(".")
@@ -2918,6 +3593,70 @@ root_node = NodePath(".")
 libraries = {
 &"": SubResource("AnimationLibrary_cjcxt")
 }
+
+[node name="HealthBar" type="ProgressBar" parent="EquipmentPanel1"]
+z_index = 8
+layout_mode = 0
+offset_left = 56.30249
+offset_top = 25.999878
+offset_right = 72.266174
+offset_bottom = 210.04285
+rotation = -1.5708
+theme_override_styles/background = SubResource("StyleBoxFlat_exw07")
+theme_override_styles/fill = SubResource("StyleBoxFlat_cjcxt")
+value = 60.0
+fill_mode = 2
+show_percentage = false
+
+[node name="HealthBarText" type="Label" parent="EquipmentPanel1/HealthBar"]
+layout_direction = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 8.018158
+offset_top = -38.005432
+offset_right = 388.0181
+offset_bottom = 45.994568
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 1.5708
+scale = Vector2(0.2, 0.2)
+label_settings = SubResource("LabelSettings_kylmn")
+horizontal_alignment = 1
+
+[node name="InspectLabel" type="RichTextLabel" parent="EquipmentPanel1"]
+z_index = 2
+layout_mode = 0
+offset_left = 56.0
+offset_top = 190.0
+offset_right = 210.0
+offset_bottom = 241.0
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/normal_font_size = 16
+text = "Physique: Legendary
+Agility: Legendary
+Weight: Overweight"
+fit_content = true
+scroll_active = false
+autowrap_mode = 0
+vertical_alignment = 1
+justification_flags = 0
+
+[node name="InspectContainer" type="PanelContainer" parent="EquipmentPanel1"]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -94.0
+offset_top = 190.0
+offset_right = 60.0
+offset_bottom = 241.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8ecy4")
 
 [node name="EquipmentPanel2" type="Panel" parent="."]
 visible = false
@@ -2933,6 +3672,7 @@ offset_right = -97.0
 offset_bottom = 334.0
 grow_horizontal = 0
 grow_vertical = 2
+pivot_offset = Vector2(150, 150)
 theme = ExtResource("5_gppie")
 
 [node name="EquipmentPanelPicture" type="TextureRect" parent="EquipmentPanel2"]
@@ -2941,9 +3681,9 @@ anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = 5.0
-offset_top = 5.0
+offset_top = 6.0
 offset_right = -6.0
-offset_bottom = -5.0
+offset_bottom = -4.0
 grow_horizontal = 2
 grow_vertical = 2
 expand_mode = 2
@@ -2954,9 +3694,9 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -40.0
-offset_top = 7.0
+offset_top = 25.0
 offset_right = 40.0
-offset_bottom = 34.0
+offset_bottom = 52.0
 grow_horizontal = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_8ecy4")
 
@@ -3142,22 +3882,20 @@ expand_mode = 4
 [node name="Animations" type="Node2D" parent="EquipmentPanel2"]
 
 [node name="VfxMainHand" type="Sprite2D" parent="EquipmentPanel2/Animations"]
-self_modulate = Color(1, 1, 1, 0.56078434)
 z_index = 12
 position = Vector2(401, 173.00002)
 rotation = 0.0052359877
 scale = Vector2(1.578125, 1.234375)
-texture = ExtResource("33_exw07")
+texture = ExtResource("33_cjcxt")
 hframes = 7
 frame = 6
 
 [node name="VfxOffHand" type="Sprite2D" parent="EquipmentPanel2/Animations"]
-self_modulate = Color(1, 1, 1, 0.56078434)
 z_index = 12
 position = Vector2(401, 128)
 rotation = 0.06632252
 scale = Vector2(1.578125, 1.234375)
-texture = ExtResource("33_exw07")
+texture = ExtResource("33_cjcxt")
 hframes = 7
 frame = 6
 
@@ -3165,13 +3903,13 @@ frame = 6
 z_index = 12
 position = Vector2(334, 184)
 rotation = 6.2831855
-texture = ExtResource("33_sqq4o")
+texture = ExtResource("34_kylmn")
 
 [node name="OffHand" type="Sprite2D" parent="EquipmentPanel2/Animations"]
 z_index = 12
 position = Vector2(334, 84)
 rotation = 6.2831855
-texture = ExtResource("33_sqq4o")
+texture = ExtResource("35_kylmn")
 
 [node name="MainHandAnimationPlayer" type="AnimationPlayer" parent="EquipmentPanel2/Animations"]
 root_node = NodePath(".")
@@ -3184,6 +3922,39 @@ root_node = NodePath(".")
 libraries = {
 &"": SubResource("AnimationLibrary_cjcxt")
 }
+
+[node name="HealthBar" type="ProgressBar" parent="EquipmentPanel2"]
+z_index = 8
+layout_mode = 0
+offset_left = 56.30249
+offset_top = 23.999878
+offset_right = 72.266174
+offset_bottom = 208.04285
+rotation = -1.5708
+theme_override_styles/background = SubResource("StyleBoxFlat_exw07")
+theme_override_styles/fill = SubResource("StyleBoxFlat_cjcxt")
+value = 60.0
+fill_mode = 2
+show_percentage = false
+
+[node name="HealthBarText" type="Label" parent="EquipmentPanel2/HealthBar"]
+layout_direction = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 8.018158
+offset_top = -38.005432
+offset_right = 388.0181
+offset_bottom = 45.994568
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 1.5708
+scale = Vector2(0.2, 0.2)
+label_settings = SubResource("LabelSettings_kylmn")
+horizontal_alignment = 1
 
 [node name="EscMenu" type="VBoxContainer" parent="."]
 z_index = 17
@@ -3239,6 +4010,26 @@ text = "✅ Yes"
 texture_filter = 1
 layout_mode = 2
 text = "❌ No"
+
+[node name="Label_Gold" type="RichTextLabel" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LabelBuyRoll" type="RichTextLabel" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label_Round" type="RichTextLabel" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LabelBuyExp" type="RichTextLabel" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Label_Experience" type="RichTextLabel" parent="."]
+offset_right = 40.0
+offset_bottom = 40.0
 
 [connection signal="pressed" from="EquipmentButton" to="." method="_on_equipment_button_pressed"]
 [connection signal="pressed" from="ShopButton" to="." method="_on_shop_button_pressed"]

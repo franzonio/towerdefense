@@ -27,7 +27,7 @@ func _ready():
 	add_theme_color_override("icon_hover_pressed_color", "ffffffb5")
 	add_theme_color_override("icon_pressed_color", "ffffffb5")
 	flat = true
-	pivot_offset = Vector2(128,128)
+	pivot_offset = size/2##Vector2(128,128)
 	
 	set_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
 	mouse_entered.connect(_on_mouse_entered)
@@ -55,11 +55,11 @@ func _ready():
 		name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		name_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		name_label.scroll_active = false
-		name_label.position.y = -70
+		name_label.position.y = -12
 		name_label.position.x = 30
 		name_label.size = Vector2(128,128)
-		name_label.add_theme_color_override("font_outline_color", Color.BLACK)
-		name_label.add_theme_constant_override("outline_size", 5)
+		name_label.add_theme_color_override("font_outline_color", Color("4b3d44"))
+		name_label.add_theme_constant_override("outline_size", 12)
 		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		cost_label = RichTextLabel.new()
@@ -71,11 +71,11 @@ func _ready():
 		cost_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		cost_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 		cost_label.scroll_active = false
-		cost_label.position.y = 158
+		cost_label.position.y = 120
 		cost_label.position.x = 30#100
 		cost_label.size = Vector2(128,128)
-		cost_label.add_theme_color_override("font_outline_color", Color.BLACK)
-		cost_label.add_theme_constant_override("outline_size", 5)
+		cost_label.add_theme_color_override("font_outline_color", Color("4d4539"))
+		cost_label.add_theme_constant_override("outline_size", 8)
 		cost_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		add_child(cost_label)
@@ -92,10 +92,31 @@ func _make_custom_tooltip(for_text):
 	if for_text == "": 
 		return
 		
+		# StyleBox for background
+	var panel := PanelContainer.new()
+	var sb := StyleBoxFlat.new()
+	
+	sb.bg_color = Color("4d4539")            # background color
+	sb.border_color = Color("#B00098")        # border color
+	sb.border_width_left = 2
+	sb.border_width_right = 2
+	sb.border_width_top = 2
+	sb.border_width_bottom = 2
+	sb.corner_radius_bottom_left = 6
+	sb.corner_radius_bottom_right = 6
+	sb.corner_radius_top_left = 6
+	sb.corner_radius_top_right = 6
+	sb.content_margin_left = 8
+	sb.content_margin_right = 8
+	sb.content_margin_top = 6
+	sb.content_margin_bottom = 6
+
+	panel.add_theme_stylebox_override("panel", sb)
+		
 	var label = RichTextLabel.new()
 	label.set_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
-	label.add_theme_font_size_override("normal_font_size", 20)
-	label.add_theme_font_size_override("bold_font_size", 20)
+	label.add_theme_font_size_override("normal_font_size", 24)
+	label.add_theme_font_size_override("bold_font_size", 24)
 	label.bbcode_text = for_text
 	label.bbcode_enabled = true
 	label.fit_content = true
@@ -103,9 +124,11 @@ func _make_custom_tooltip(for_text):
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.scroll_active = false
 	label.add_theme_color_override("font_outline_color", Color.BLACK)
-	label.add_theme_constant_override("outline_size", 5)
+	label.add_theme_constant_override("outline_size", 12)
 	
-	return label
+	panel.add_child(label)
+	
+	return panel
 
 func _on_update_gold_req_shop(_id, gold):
 	#var color = "#CD8900"
@@ -114,7 +137,7 @@ func _on_update_gold_req_shop(_id, gold):
 	if parent_name == "ShopGridContainer":
 		if gold < cost:
 			name_label.bbcode_text = "[color=%s]%s[/color]" % [name_color, label_display] 
-			cost_label.bbcode_text = "[color=%s]%d[/color]" 	% [req_nok_color, cost]
+			cost_label.bbcode_text = "[color=%s]$ %d[/color]" 	% [req_nok_color, cost]
 		else:
 			name_label.bbcode_text = "[color=%s]%s[/color]" % [name_color, label_display] 
 			cost_label.bbcode_text = "[color=%s]$ %d[/color]" 	% [gold_color, cost]
@@ -123,7 +146,7 @@ func _on_update_gold_req_shop(_id, gold):
 func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
 	all_gladiators = _all_gladiators
 	_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
-	tooltip_text = get_craft_tooltip(craft_name)
+	tooltip_text = "[color=%s]%s[/color]" % ["d2c9a5", get_craft_tooltip(craft_name)]
 
 func format_name(raw_name: String) -> String:
 	var parts = raw_name.split("_")            # → ["simple", "sword"]
@@ -177,17 +200,18 @@ func buy_card():
 		else:
 			GameState_.rpc_id(1, "buy_craft_card", id, craft_name, cost)
 
+		disabled = true
 		await get_tree().create_timer(0.15).timeout
 		#print(added)
 		if added:
 			tooltip_text = ""
-			print("💰Bought " + craft_name + " card")
+			#print("💰Bought " + craft_name + " card")
 			mouse_inside_button = false
 			disabled = true
 			var tween := get_tree().create_tween()
 			tween.tween_property(self, "modulate:a", 0, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 			TweenFX.fold_out(self, 0.2)
-			
+		else: disabled = false
 			
 			
 

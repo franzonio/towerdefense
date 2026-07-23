@@ -59,6 +59,15 @@ func _ready():
 	#print()
 	#if multiplayer.is_server():
 	#	_on_peer_connected(multiplayer.get_unique_id())  # Add self
+	using_steam = true
+	
+	steam_or_enet.visible = false
+	pre_join_or_host_menu.visible = true
+	host_container.visible = false
+	post_join_or_host_menu.visible = false
+	#NetworkManager_.list_lobbies()
+	#_update_steam_lobby_player_list()
+	#await get_tree().create_timer(1).timeout
 
 func _process(delta: float):
 	time += delta
@@ -67,9 +76,12 @@ func _process(delta: float):
 	#print("multiplayer.get_peers(): " + str(multiplayer.get_peers()))
 	if sec != prev_sec:
 		#print(time)
-		print("multiplayer.get_peers(): " + str(multiplayer.get_peers()))
-		if using_steam: _update_steam_lobby_player_list()
-		else: _update_player_list()
+		#print("multiplayer.get_peers(): " + str(multiplayer.get_peers()))
+		if using_steam: 
+			_update_steam_lobby_player_list()
+			NetworkManager_.list_lobbies()
+		else: 
+			_update_player_list()
 		
 		#if multiplayer.is_server(): print("server - players: " + str(players))
 		#if !multiplayer.is_server(): print("client - players: " + str(players))
@@ -81,8 +93,9 @@ func go_back():
 		
 		#Steam.closeP2PSessionWithUser(Steam.getLobbyOwner(lobby_id))
 	Steam.leaveLobby(lobby_id)
-	multiplayer.multiplayer_peer.close()
-	multiplayer.multiplayer_peer = null
+	if multiplayer.multiplayer_peer:
+		multiplayer.multiplayer_peer.close()
+		multiplayer.multiplayer_peer = null
 	
 	
 		#get_tree().set_multiplayer(null)
@@ -188,12 +201,11 @@ func _on_join_pressed():
 
 
 func _on_lobby_match_list(lobbies: Array): 
-	#print(lobbies)
-	
 	for lobby in $LobbyContainer/Lobbies/Lobbies.get_children():
 		lobby.queue_free()
 		
 	for lobby in lobbies:
+		
 		var lobby_name = Steam.getLobbyData(lobby, "name")
 		#var lobby_mode = Steam.getLobbyData(lobby, "mode")
 		

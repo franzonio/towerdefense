@@ -1,8 +1,11 @@
-[gd_resource type="Theme" load_steps=4 format=3 uid="uid://pw4o330eyt7c"]
+[gd_resource type="Theme" load_steps=5 format=3 uid="uid://pw4o330eyt7c"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5kwvm"]
 bg_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
 border_color = Color(0.29411766, 0.23921569, 0.26666668, 0.8352941)
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
 corner_detail = 1
 anti_aliasing = false
 
@@ -37,6 +40,21 @@ corner_radius_bottom_left = 2
 corner_detail = 1
 shadow_size = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dhyvq"]
+bg_color = Color(0.46666667, 0.45490196, 0.23137255, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+shadow_size = 6
+
 [resource]
 resource_local_to_scene = true
 Button/icons/icon = null
@@ -44,4 +62,11 @@ Button/styles/normal = SubResource("StyleBoxFlat_5kwvm")
 LineEdit/styles/normal = SubResource("StyleBoxFlat_us337")
 Panel/styles/panel = SubResource("StyleBoxFlat_244px")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_244px")
+PopupMenu/colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+PopupMenu/colors/font_disabled_color = Color(0.8235294, 0.7882353, 0.64705884, 0.8745098)
+PopupMenu/colors/font_hover_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+PopupMenu/colors/font_outline_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+PopupMenu/constants/outline_size = 8
+PopupMenu/font_sizes/font_size = 22
+PopupMenu/styles/panel = SubResource("StyleBoxFlat_dhyvq")
 PopupPanel/styles/panel = SubResource("StyleBoxFlat_244px")

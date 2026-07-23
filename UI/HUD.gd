@@ -1,5 +1,8 @@
 extends CanvasLayer
 
+var prev_life_dict = {}
+var life_dict = {}
+
 @onready var vfx_pngs = {
 	# Sword
 	"sword1": preload("res://Assets/Equipment/vfx/sword_t1_vfx.png"),
@@ -11,6 +14,22 @@ extends CanvasLayer
 	"stabbing2": preload("res://Assets/Equipment/vfx/stabbing_t2_vfx.png"),
 	"stabbing3": preload("res://Assets/Equipment/vfx/stabbing_t3_vfx.png"),
 	"stabbing4": preload("res://Assets/Equipment/vfx/stabbing_t4_vfx.png"),
+	
+	"mace1": preload("res://Assets/Equipment/vfx/mace_t1_vfx.png"),
+	"mace2": preload("res://Assets/Equipment/vfx/mace_t2_vfx.png"),
+	"mace3": preload("res://Assets/Equipment/vfx/mace_t3_vfx.png"),
+	"mace4": preload("res://Assets/Equipment/vfx/mace_t4_vfx.png"),
+	
+	"axe1": preload("res://Assets/Equipment/vfx/axe_t1_vfx.png"),
+	"axe2": preload("res://Assets/Equipment/vfx/axe_t2_vfx.png"),
+	"axe3": preload("res://Assets/Equipment/vfx/axe_t3_vfx.png"),
+	"axe4": preload("res://Assets/Equipment/vfx/axe_t4_vfx.png"),
+	
+	"flagellation1": preload("res://Assets/Equipment/vfx/flagellation_t1_vfx.png"),
+	"flagellation2": preload("res://Assets/Equipment/vfx/flagellation_t2_vfx.png"),
+	"flagellation3": preload("res://Assets/Equipment/vfx/flagellation_t3_vfx.png"),
+	"flagellation4": preload("res://Assets/Equipment/vfx/flagellation_t4_vfx.png"),
+	
 	
 	"shield1": null,
 	"shield2": null,
@@ -111,9 +130,14 @@ extends CanvasLayer
 @onready var inventory_popup := $InventoryPopup
 @onready var equipment_popup := $EquipmentPopup
 @onready var craft_bench_popup := $CraftbenchPopup
-@onready var label_round = $MarginContainer/HBoxContainer/Label_Round
-@onready var label_gold = $MarginContainer/HBoxContainer/Label_Gold
-@onready var label_xp = $MarginContainer/HBoxContainer/Label_Experience
+@onready var label_round = $Label_Round
+@onready var label_gold = $Label_Gold
+@onready var label_xp = $Label_Experience
+@onready var label_buy_roll = $LabelBuyRoll
+@onready var label_buy_exp = $LabelBuyExp
+
+var label_gold_position
+
 
 const MAX_MESSAGES = 50
 const MAX_LENGTH = 255
@@ -167,6 +191,7 @@ var name_and_chat_outline_thickness = 6
 @onready var exp_button = $ExpButton
 @onready var refresh_button = $RefreshButton
 
+var equipment_panel_inspect
 var equipment_panel
 var equipment_panel_picture
 var equipment_panel_name
@@ -177,6 +202,9 @@ var weapon1_slot
 var weapon2_slot
 var ring1_slot 
 var ring2_slot
+
+var prev_gold = 0
+#var prev_lvl = 1
 
 #@onready var equipment_panel = $EquipmentPanel1
 #@onready var equipment_panel_name = $EquipmentPanel1/Name
@@ -234,6 +262,7 @@ var ring2_slot
 @onready var shield_mastery_icon_panel = $AttributePanel/VBoxContainer/ShieldIcon
 
 @onready var points_left_label = $AttributePanel/PointsLeft
+@onready var points_info = $AttributePanel/Info
 
 @onready var attribute_icons = [health_icon_panel, strength_icon_panel, endurance_icon_panel, criticality_icon_panel, 
 				avoidance_icon_panel, quickness_icon_panel, resilience_icon_panel, sword_mastery_icon_panel, axe_mastery_icon_panel, 
@@ -452,8 +481,11 @@ var craft_active = ""
 @onready var amulet_of_royals = preload("res://ShopCards/EquipmentCards/Amulet/AmuletOfRoyals.tscn")
 @onready var amulet_of_the_emperor = preload("res://ShopCards/EquipmentCards/Amulet/AmuletOfTheEmperor.tscn")
 
+var is_rerolling := false
+
 var rename_panels_done = 0
-var points_left = 0
+var points_left = 150
+var points_amount = 1
 var prev_lvl: int = 1
 var current_lvl: int = 1
 
@@ -461,10 +493,14 @@ var wep1_broken = 0
 var wep2_broken = 0
 var wep_statuses = {}
 
+var healthbar_color = Color("77883b")
+var race_modifiers
+
 func _ready():
 	wep1_broken = 0
 	wep2_broken = 0
-	
+	race_modifiers = GameState_.RACE_MODIFIERS
+	label_gold_position = label_gold.position
 	
 	refresh_button["focus_mode"] = 0
 	scroll_of_injection["focus_mode"] = 0
@@ -479,7 +515,7 @@ func _ready():
 	#chat_input["focus_mode"] = 0
 	
 	
-	round_now = 0
+	round_now = 1
 	esc_menu.visible = false
 	confirm_disconnect.visible = false
 	#refresh_button.visible = false
@@ -517,7 +553,7 @@ func _ready():
 	send_button.pressed.connect(_on_send_pressed)
 	chat_input.text_submitted.connect(_on_send_pressed)
 
-	#populate_hud()  # Initial draw
+	
 	
 	inventory_popup.clear()
 	inventory_popup.add_item("Equip", 0)
@@ -534,7 +570,9 @@ func _ready():
 	craft_bench_popup.id_pressed.connect(_on_craft_bench_popup_pressed)
 
 	
-	shop_grid.visible = false
+	shop_grid.visible = true
+	refresh_button.visible = true
+	label_buy_roll.visible = true
 	#equipment_panel.visible = false
 	#attribute_panel.visible = false
 	
@@ -542,14 +580,17 @@ func _ready():
 	else: GameState_.rpc_id(1, "initialize_card_stock")
 	await get_tree().create_timer(1).timeout
 	all_cards = get_all_cards()
-
+	
 	if multiplayer.is_server():
 		GameState_.refresh_gladiator_data(multiplayer.get_unique_id())
 	else:
 		GameState_.rpc_id(1, "refresh_gladiator_data", multiplayer.get_unique_id())
 	
+	fix_icon_bonuses()
+	
 	await get_tree().create_timer(0.8).timeout
 	
+	populate_hud()  # Initial draw
 	roll_cards()
 	refresh_button.disabled = false
 	
@@ -565,22 +606,42 @@ func _ready():
 	int_keys.sort()  # Sorts in place
 	max_lvl = str(int_keys[-1])  # "10"
 
+func fix_icon_bonuses():
+	health_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+	strength_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+	endurance_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+	criticality_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+	avoidance_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+	quickness_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+	resilience_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+	axe_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+	sword_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+	stabbing_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+	flagellation_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+	mace_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+	shield_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
 	
 func _process(delta: float) -> void:
-	
 	prev_lvl = current_lvl
 	if all_gladiators:
 		current_lvl = int(all_gladiators[multiplayer.get_unique_id()].get("level", 1))
 	
 	if prev_lvl < current_lvl:
 		points_left += 5
+		attribute_panel.modulate = "ffffff"
+		TweenFX.spotlight(attribute_panel)
 		update_attribute_ui()
+		label_xp.scale = Vector2(1,1)
+		label_xp.modulate = "ffffff"
+		label_xp.pivot_offset = label_xp.size/2
+		TweenFX.spotlight(label_xp, 0.2, Color("03877d"))
+		TweenFX.pulsate(label_xp, 0.4, 1.1)
 	if points_left < 0:
 		points_left = 0
 	
 	time_passed += delta
 	#print("mouse position: " + str(get_viewport().get_mouse_position()))
-	if !intermission: label_round.text = "Day " + str(round_now) + " | " + str(int(time_passed))
+	if !intermission: label_round.bbcode_text = "[color=%s]Day  %s\n%s[/color]" % ["d2c9a5", str(round_now), str(int(time_passed))]
 	if intermission: 
 		concede_threshold_menu.disabled = false
 		stance_menu.disabled = false
@@ -824,7 +885,7 @@ func _input(event):
 		scroll_of_injection.button_pressed = false
 		scroll_of_injection.release_focus()
 	
-func _on_send_pressed(submitted_text = ""):
+func _on_send_pressed(_submitted_text = ""):
 	var msg = chat_input.text.strip_edges()
 	if msg.length() == 0 or msg.length() > MAX_LENGTH:
 		return
@@ -832,10 +893,10 @@ func _on_send_pressed(submitted_text = ""):
 	var sender_id = get_tree().get_multiplayer().get_unique_id()
 	var now = Time.get_datetime_dict_from_system()
 	var timestamp = "[%02d:%02d]" % [now.hour, now.minute]
-	var name = all_gladiators[multiplayer.get_unique_id()]["name"]
+	var _name = all_gladiators[multiplayer.get_unique_id()]["name"]
 
 	chat_input.clear()
-	rpc("broadcast_message", sender_id, name, timestamp, msg)
+	rpc("broadcast_message", sender_id, _name, timestamp, msg)
 
 
 func _on_log_received(message):
@@ -924,9 +985,69 @@ func update_equipment_ui():
 		var wep2_slots = get_node_or_null("_EquipmentPanel" + str(id) + "/PanelContainerBottom/BottomPanel/Weapon2Slot")#$EquipmentPanel1/PanelContainerBottom/BottomPanel/Weapon2Slot.visible = true
 		wep2_slots.visible = true
 		
+		equipment_panel_inspect = get_node("_EquipmentPanel" + str(id) + "/InspectLabel")
 		equipment_panel = get_node("_EquipmentPanel" + str(id))
 		equipment_panel_name = get_node("_EquipmentPanel" + str(id) + "/PanelContainer/Name")
 		equipment_panel_picture = get_node("_EquipmentPanel" + str(id) + "/EquipmentPanelPicture")
+		
+		equipment_panel_inspect.bbcode_enabled = true
+		var _text
+		
+		var strength = all_gladiators[id]["attributes"]["strength"]
+		var quickness = all_gladiators[id]["attributes"]["quickness"]
+		var crit_rating = all_gladiators[id]["attributes"]["crit_rating"]
+		var avoidance = all_gladiators[id]["attributes"]["avoidance"]
+		var health = all_gladiators[id]["attributes"]["health"]
+		#var resilience = all_gladiators[id]["attributes"]["resilience"]
+		var endurance = all_gladiators[id]["attributes"]["endurance"]
+		var sword_mastery = all_gladiators[id]["attributes"]["sword_mastery"]
+		var axe_mastery = all_gladiators[id]["attributes"]["axe_mastery"]
+		var mace_mastery = all_gladiators[id]["attributes"]["mace_mastery"]
+		var stabbing_mastery = all_gladiators[id]["attributes"]["stabbing_mastery"]
+		var flagellation_mastery = all_gladiators[id]["attributes"]["flagellation_mastery"]
+		var shield_mastery = all_gladiators[id]["attributes"]["shield_mastery"]
+		var unarmed_mastery = all_gladiators[id]["attributes"]["unarmed_mastery"]
+		
+		#var weapon1_name = all_gladiators[id]["weapon1"].keys()[0]
+		#var weapon2_name = all_gladiators[id]["weapon2"].keys()[0]
+		#var hands = all_gladiators[id]["weapon1"][weapon1_name]["hands"]
+		
+		var weight = all_gladiators[id]["weight"]
+		var physique = strength + health + endurance/2
+		var agility = [quickness, crit_rating/2, avoidance, sword_mastery/3, axe_mastery/3, mace_mastery/3, 
+						stabbing_mastery/3, flagellation_mastery/3, shield_mastery/3, unarmed_mastery/3].reduce(func(a, b): return a + b)
+		
+		var gladiator_physique_class
+		for physique_class in physique_limits.keys():
+			if physique <= physique_limits[physique_class]:
+				gladiator_physique_class = physique_class
+				break
+			else: gladiator_physique_class = "Legendary"
+		
+		var gladiator_agility_class
+		for agility_class in agility_limits.keys():
+			if agility <= agility_limits[agility_class]:
+				gladiator_agility_class = agility_class
+				break
+			else: gladiator_agility_class = "Legendary"
+		
+		var gladiator_weight_class
+		for weight_class in weight_limits.keys():
+			if weight <= weight_limits[weight_class]:
+				gladiator_weight_class = weight_class
+				break
+			else: gladiator_weight_class = "Massive"
+		
+		var inspect_text = ""
+		#if hands == 2: inspect_text += format_name(weapon1_name)
+		#else: inspect_text += format_name(weapon1_name) + "  |  " + format_name(weapon2_name)
+		var age = all_gladiators[id]["age"]
+		inspect_text += "[color=%s]%s[/color]\n" % ["d2c9a5", age]
+		inspect_text += "[color=%s]Physique:[/color] [color=%s] %s [/color]\n" % ["cd8900", "d2c9a5", gladiator_physique_class]
+		inspect_text += "[color=%s]Agility:[/color] [color=%s] %s [/color] \n" % ["d2b600", "d2c9a5", gladiator_agility_class]
+		inspect_text += "[color=%s]Weight:[/color] [color=%s] %s [/color]" % ["847875", "d2c9a5", gladiator_weight_class]
+		equipment_panel_inspect.bbcode_text = inspect_text
+		
 		
 		var race = all_gladiators[id].get("race", "???")
 		if race == "Troll":
@@ -947,7 +1068,7 @@ func update_equipment_ui():
 		var hex_color = color#color.to_html()
 		var formatted = "[color=%s]%s[/color]" % [hex_color, all_gladiators[id]["name"]]
 		equipment_panel_name.bbcode_enabled = true
-		equipment_panel_name.text = formatted
+		equipment_panel_name.bbcode_text = formatted
 		equipment_panel_name["theme_override_constants/outline_size"] = name_and_chat_outline_thickness
 		
 		equipment_panel.visible = true
@@ -975,6 +1096,16 @@ func update_equipment_ui():
 		var wep1_vfx_effect
 		var wep2_vfx_effect
 		
+		if wep2_category == "shield": pass
+			#offhand.position = Vector2(329.0, 78)
+			#offhand.rotation = 340.5
+			#offhand.skew = 21
+		else: pass
+			#offhand.position = Vector2(334, 84)
+			#offhand.rotation = 360
+			#offhand.skew = 0
+		
+		
 		if wep1_category == "unarmed":
 			wep1_vfx_effect = wep1_category
 		else:
@@ -985,11 +1116,26 @@ func update_equipment_ui():
 		else:
 			wep2_vfx_effect = wep2_category + str(wep2_tier)
 		
+		var _slot = get_node("_EquipmentPanel" + str(id) + "/PanelContainerBottom/BottomPanel/Weapon1Slot")
+		var wep1_slot
+		if _slot.get_child_count() > 0:
+			wep1_slot = _slot.get_child(0) 
+			wep1_slot.modulate = "ffffff"
+		else:
+			wep1_slot = null
 		
+		_slot = get_node("_EquipmentPanel" + str(id) + "/PanelContainerBottom/BottomPanel/Weapon2Slot")
+		var wep2_slot
+		if _slot.get_child_count() > 0:
+			wep2_slot = _slot.get_child(0) 
+			wep2_slot.modulate = "ffffff"
+		else:
+			wep2_slot = null
 		
 		if wep1_vfx_effect.contains("?"):
 			vfx_mainhand.texture = null
 		elif wep_statuses[id][0] == 1:
+			wep1_slot.modulate = "#d2004f"
 			vfx_mainhand.texture = vfx_pngs["unarmed"]
 		else:
 			if vfx_pngs.has(wep1_vfx_effect):
@@ -998,12 +1144,14 @@ func update_equipment_ui():
 				vfx_mainhand.texture = null
 				
 		if wep1_hands == 2 and wep_statuses[id][1] == 1:
+			#wep1_slot.modulate = "#d2004f" # THIS CAUSED CRASH WHEN NULL
 			vfx_mainhand.texture = vfx_pngs["unarmed"]
 			vfx_offhand.texture = vfx_pngs["unarmed"]
 		else:
 			if wep2_vfx_effect.contains("?"):
 				vfx_offhand.texture = null
 			elif wep_statuses[id][1] == 1:
+				#wep2_slot.modulate = "#d2004f" # THIS CAUSED CRASH WHEN NULL
 				vfx_offhand.texture = vfx_pngs["unarmed"]
 			else:
 				if vfx_pngs.has(wep2_vfx_effect):
@@ -1183,6 +1331,8 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data
 		rename_equipment_panels(all_gladiators)
 		for id in all_gladiators.keys():
 			wep_statuses[id] = [0, 0]
+			prev_life_dict[id] = 999999
+			life_dict[id] = 999999
 		rename_panels_done = 1
 	update_equipment_ui()
 	if peer_id == multiplayer.get_unique_id():
@@ -1281,10 +1431,12 @@ func update_attribute_ui():
 	attribute_panel.visible = true
 
 	if points_left > 0:
+		points_info.visible = true
 		points_left_label.visible = true
 		for icon in attribute_icons:
 			icon.disabled = false
 	else:
+		points_info.visible = false
 		points_left_label.visible = false
 		for icon in attribute_icons:
 			icon.disabled = true	
@@ -1448,7 +1600,7 @@ func _on_inventory_popup_pressed(id: int):
 
 func _on_craft_bench_popup_pressed(id: int):
 	match id:
-		0: 1
+		0: pass
 			
 	
 
@@ -1493,17 +1645,22 @@ func _on_inventory_item_pressed(item_name: String, slot_name: String):
 func clear_shop_grid():
 	
 	var tweens = []
-	TweenFX.fade_out(shop_grid, 0.1)
+	#TweenFX.fade_out(shop_grid, 0.3)
 	for child in shop_grid.get_children():
 		
 		# Skip cards that are already faded out (invisible)
 		if child.modulate.a <= 0.05:
+			print(child.modulate.a)
 			child.queue_free()
 			continue
 
 		var tween := get_tree().create_tween()
 		tween.tween_property(child, "modulate:a", 0.0, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-		tween.tween_callback(func(): child.queue_free())
+		
+		if child:
+			var node_ref := child
+			tween.tween_callback(func(): if node_ref: node_ref.queue_free())
+
 		tweens.append(tween)
 
 	if tweens.size() > 0:
@@ -1514,49 +1671,55 @@ func clear_shop_grid():
 
 func roll_cards():
 	shop_grid.modulate.a = 1
-	#shop_grid.visible = true
-	#if multiplayer.is_server(): return
-	#print("\n" + str(multiplayer.get_unique_id()) + "🃏reroll_cards: " + str(card_stock))
-	
 	all_cards = get_all_cards()
-			
 	var weighted_random_cards = weighted_random_selection(all_cards, 5)
-	var i = 1
-	#TweenFX.flip(shop_grid, 0.1)
+	#var i = 1
+	
+	#print(shop_grid.get_children().size())
+	#print(shop_grid.get_children())
 	for card in weighted_random_cards:
 		var card_instance = card.instantiate()
 		card_instance.set_multiplayer_authority(multiplayer.get_unique_id())
 		card_instance.modulate.a = 0
-		#card_instance.scale = Vector2(0.8, 0.8)
-		#card_instance.unique_id = str(card_instance)
 		card_instance["focus_mode"] = 0
 		shop_grid.add_child(card_instance)
 		
-		#TweenFX.fade_in(card_instance, 0.4)
 		var tween := get_tree().create_tween()
 		tween.set_parallel(true)
-		tween.tween_property(card_instance, "modulate:a", 1.0, 0.4)#.set_delay(i * 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
-		tween.tween_property(card_instance, "scale", Vector2.ONE, 0.1)#.set_delay(i * 0.1).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)		
-		i += 1
+		tween.tween_property(card_instance, "modulate:a", 1.0, 0.4)
+		tween.tween_property(card_instance, "scale", Vector2.ONE, 0.1)
+		
 		await get_tree().create_timer(0.05).timeout
 
 func _on_reroll_cards_new_round_signal(active_players: Array):
-	#if !multiplayer.is_server():
-	#print("Received active players from host: " + str(active_players))
+	if is_rerolling:
+		print("blocked dual rerolls")
+		return
+	
 	await get_tree().process_frame 
+	
 	for player in active_players:
 		if multiplayer.get_unique_id() == player:
+			#is_rerolling = true
 			refresh_button.disabled = true
 			await get_tree().create_timer(1).timeout
 			reroll_cards()
 			refresh_button.disabled = false
+			#is_rerolling = false
 			
 func reroll_cards():
-	#if multiplayer.is_server(): return
+	if is_rerolling:
+		print("blocked dual rerolls")
+		return
+		
+	is_rerolling = true
 	refresh_button.disabled = true
+	
 	await clear_shop_grid()
 	await roll_cards()
+	
 	refresh_button.disabled = false
+	is_rerolling = false
 	
 func weighted_random_selection(_all_cards: Array, count: int = 5):
 	var selected := []
@@ -1598,6 +1761,16 @@ func _on_refresh_button_pressed():
 	#update_inventory_ui(multiplayer.get_unique_id())
 	if is_refreshing:
 		return
+		
+	if gold < 2:
+		return
+		
+	if multiplayer.is_server():
+		GameState_.buy_reroll(multiplayer.get_unique_id())
+	else:
+		GameState_.rpc_id(1, "buy_reroll", multiplayer.get_unique_id())
+		
+	refresh_button.pivot_offset = refresh_button.size/2
 	TweenFX.spin(refresh_button, 0.5)
 	is_refreshing = true
 	refresh_button.disabled = true
@@ -1609,17 +1782,23 @@ func _on_refresh_button_pressed():
 
 func _on_equipment_button_pressed():
 	equipment_pressed = !equipment_pressed
-	if equipment_pressed: 1
+	if equipment_pressed: pass
 		#equipment_panel.visible = true
 		#attribute_panel.visible = true
-	else: 1
+	else: pass
 		#equipment_panel.visible = false
 		#attribute_panel.visible = false
 
 func _on_shop_button_pressed():
 	shop_pressed = !shop_pressed
-	if shop_pressed: shop_grid.visible = true
-	else: shop_grid.visible = false
+	if shop_pressed: 
+		shop_grid.visible = true
+		refresh_button.visible = true
+		label_buy_roll.visible = true
+	else: 
+		shop_grid.visible = false
+		refresh_button.visible = false
+		label_buy_roll.visible = false
 	#else: countdown_label.visible = true
 	#pass # Replace with function body.
 
@@ -1634,12 +1813,19 @@ func _on_card_stock_changed(new_all_cards_stock: Dictionary):
 func _on_countdown_updated(time_left: int):
 	if time_left > 0: intermission = true
 	if intermission: 
-		label_round.text = "Day " + str(round_now)
+		label_round.bbcode_text = "[color=%s]Day  %s\n - [/color]" % ["d2c9a5", str(round_now)]
 		if reroll_start_of_intermission:
 			round_now += 1
 			reroll_start_of_intermission = 0
 		#update_countdown_labels(time_left)
-		if countdown_label: countdown_label.text = "⏳ %d" % time_left
+		if countdown_label: 
+			countdown_label.text = "%d" % time_left
+			if time_left <= 3:
+				countdown_label.pivot_offset = countdown_label.size/2
+				countdown_label.scale = Vector2(1,1)
+				countdown_label.modulate = "ffffff"
+				TweenFX.pulsate(countdown_label, 0.5)
+				TweenFX.spotlight(countdown_label, 0.5)
 		
 		if time_left == 0:
 			reroll_start_of_intermission = 1
@@ -1661,11 +1847,12 @@ func get_visual_slot(peer_id: int) -> int:
 
 func _on_life_changed(peer_id: int, new_life: int):
 	var container_name = "Player%d" % get_visual_slot(peer_id)
-	var container = $GridContainer/VBoxContainer.get_node_or_null(container_name)
+	var container = $VBoxContainer.get_node_or_null(container_name)
 	if container == null:
 		return
+	container.modulate = "ffffff"
 
-	life_label = container.get_node("PlayerLife")
+	life_label = container.get_node("TextureRect/PlayerLife")
 	life_label.text = "❤️ %d" % new_life
 	
 func populate_hud():
@@ -1679,90 +1866,103 @@ func populate_hud():
 		var peer_id = peer_ids[i]
 		#if peer_id == 1: continue
 		var gladiator_data = all_gladiators[peer_id]
-		var container_name = "Player%d" % (i + 1)
-
-		var player_container = $GridContainer/VBoxContainer.get_node_or_null(container_name)
+		var container_name = "Player%d/TextureRect" % (i + 1)
+		var player = "Player%d" % (i + 1)
+		
+		var player_container = $VBoxContainer.get_node_or_null(container_name)
 		if player_container == null:
 			push_warning("Missing container: %s" % container_name)
 			continue
+		$VBoxContainer.get_node_or_null(player).modulate = "ffffff"
 
 		name_label = player_container.get_node("PlayerInfo/PlayerName")
 		race_label = player_container.get_node("PlayerInfo/PlayerRace")
 		life_label = player_container.get_node("PlayerLife")
-		inspect_label = player_container.get_node("Inspect")
+		#inspect_label = player_container.get_node("Inspect")
 		#print(str(peer_id) + " gladiator_data[level]: " + all_gladiators[peer_id]["level"])
 		
-		name_label.text = str(gladiator_data.get("name", "Unknown"))
+		var color = gladiator_data.get("color", Color.WHITE)
+		var _name = gladiator_data.get("name", "Unknown")
+		
+		
+		
+		name_label.bbcode_enabled = true
+		name_label.bbcode_text = "[color=%s]%s[/color]" % [color, _name]
+		#name_label.text = str(gladiator_data.get("name", "Unknown"))
+		
 		race_label.text = str(gladiator_data.get("race", "???")) + "       Lvl " + all_gladiators[peer_id]["level"]
-		life_label.text = "❤️ %d" % int(gladiator_data.get("player_life", 0))
-		inspect_label.text = "🔎"
+		
+		prev_life_dict[peer_id] = life_dict[peer_id]
+		life_dict[peer_id] = int(gladiator_data.get("player_life", 0))
+		
+		var texture_rect = $VBoxContainer.get_node_or_null(player+"/TextureRect")
+		texture_rect.scale = Vector2(1, 1)
+		texture_rect.modulate = "ffffff"
+		texture_rect.pivot_offset = texture_rect.size/2
+		if life_dict[peer_id] < prev_life_dict[peer_id]:
+			TweenFX.critical_hit(texture_rect)
+			TweenFX.shake(texture_rect, 0.6, 3)
+			#TweenFX.blink(texture_rect)
+			#TweenFX.spotlight(texture_rect, 1.5)
+		
+		var life = int(gladiator_data.get("player_life", 0))
+		life_label.text = "❤️ %d" % life
+		#inspect_label.text = ""
 		
 		
-		var strength = all_gladiators[peer_id]["attributes"]["strength"]
-		var quickness = all_gladiators[peer_id]["attributes"]["quickness"]
-		var crit_rating = all_gladiators[peer_id]["attributes"]["crit_rating"]
-		var avoidance = all_gladiators[peer_id]["attributes"]["avoidance"]
-		var health = all_gladiators[peer_id]["attributes"]["health"]
-		var resilience = all_gladiators[peer_id]["attributes"]["resilience"]
-		var endurance = all_gladiators[peer_id]["attributes"]["endurance"]
-		var sword_mastery = all_gladiators[peer_id]["attributes"]["sword_mastery"]
-		var axe_mastery = all_gladiators[peer_id]["attributes"]["axe_mastery"]
-		var mace_mastery = all_gladiators[peer_id]["attributes"]["mace_mastery"]
-		var stabbing_mastery = all_gladiators[peer_id]["attributes"]["stabbing_mastery"]
-		var flagellation_mastery = all_gladiators[peer_id]["attributes"]["flagellation_mastery"]
-		var shield_mastery = all_gladiators[peer_id]["attributes"]["shield_mastery"]
-		var unarmed_mastery = all_gladiators[peer_id]["attributes"]["unarmed_mastery"]
-		
-		var weapon1_name = all_gladiators[peer_id]["weapon1"].keys()[0]
-		var weapon2_name = all_gladiators[peer_id]["weapon2"].keys()[0]
-		var hands = all_gladiators[peer_id]["weapon1"][weapon1_name]["hands"]
-		
-		var weight = all_gladiators[peer_id]["weight"]
-		var physique = strength + health + endurance/2
-		var agility = [quickness, crit_rating/2, avoidance, sword_mastery/3, axe_mastery/3, mace_mastery/3, 
-						stabbing_mastery/3, flagellation_mastery/3, shield_mastery/3, unarmed_mastery/3].reduce(func(a, b): return a + b)
-		
-		var gladiator_physique_class
-		for physique_class in physique_limits.keys():
-			if physique <= physique_limits[physique_class]:
-				gladiator_physique_class = physique_class
-				break
-			else: physique_class = "Legendary"
-		
-		var gladiator_agility_class
-		for agility_class in agility_limits.keys():
-			if agility <= agility_limits[agility_class]:
-				gladiator_agility_class = agility_class
-				break
-			else: gladiator_agility_class = "Legendary"
-		
-		var gladiator_weight_class
-		for weight_class in weight_limits.keys():
-			if weight <= weight_limits[weight_class]:
-				gladiator_weight_class = weight_class
-				break
-			else: gladiator_weight_class = "Massive"
-		
-		var inspect_text = ""
-		if hands == 2: inspect_text += format_name(weapon1_name)
-		else: inspect_text += format_name(weapon1_name) + "  |  " + format_name(weapon2_name)
-		inspect_text +=  "\nPhysique: %s \nAgility: %s \nWeight: %s" % [gladiator_physique_class, gladiator_agility_class, gladiator_weight_class]
-
-		inspect_label.tooltip_text = inspect_text
-		inspect_label.set_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
 		
 func update_gold(amount: int):
-	label_gold.text = "💰" + str(amount)
+	prev_gold = gold
+	gold = amount
+	
+	if prev_gold == gold: return
+	
+	label_gold.bbcode_text = "[color=%s]$ %s[/color]" % ["d2b600", str(amount)]
+	label_gold.pivot_offset = label_gold.size/2
+	label_gold.scale = Vector2(1,1)
+	label_gold.modulate = "ffffff"
+	label_gold.position = label_gold_position
+	
+	if prev_gold > gold:
+		TweenFX.punch_out(label_gold, 0.2, 0.95)
+		TweenFX.spotlight(label_gold, 0.2, Color("#d2004f"))
+	if prev_gold < gold:
+		TweenFX.hop(label_gold)
+		TweenFX.spotlight(label_gold, 0.3)
+		#print("gained gold")
+		
+	label_buy_roll.bbcode_enabled = true
+	label_buy_exp.bbcode_enabled = true
+	if gold < 2:
+		label_buy_roll.bbcode_text = "[color=%s]$ 2[/color]" % ["79444a"]
+	else:
+		label_buy_roll.bbcode_text = "[color=%s]$ 2[/color]" % ["d2b600"]
+		
+	if gold < 5:
+		label_buy_exp.bbcode_text = "[color=%s]$ 5[/color]" % ["79444a"]
+	else:
+		label_buy_exp.bbcode_text = "[color=%s]$ 5[/color]" % ["d2b600"]
 
 func update_experience(amount: int):
-	if all_gladiators[multiplayer.get_unique_id()]["level"] == max_lvl:
-		label_xp.text = "       🔹" + "-"
+	var _lvl = all_gladiators[multiplayer.get_unique_id()]["level"]
+	
+	if _lvl == max_lvl:
+		label_xp.bbcode_text = "[color=%s]Lv. %s[/color]" % ["d2c9a5", _lvl]
+		label_buy_exp.visible = false
+		exp_button.visible = false
 	else: 
-		label_xp.text = "       🔹" + str(amount) + "/" + str(exp_for_level[str(int(all_gladiators[multiplayer.get_unique_id()]["level"])+1)]) + " Lv." + all_gladiators[multiplayer.get_unique_id()]["level"]
+		var exp_to_lvl_up = str(exp_for_level[str(int(all_gladiators[multiplayer.get_unique_id()]["level"])+1)]) 
+		label_xp.bbcode_text = "[color=%s]Lv. %s  %s/%s[/color]" % ["d2c9a5", _lvl, str(amount), exp_to_lvl_up]
+	
 
 func _on_exp_button_button_up():
 	var amount = 4
 	var cost = 5
+	exp_button.pivot_offset = exp_button.size/2
+	exp_button.scale = Vector2(1, 1)
+	exp_button.modulate = "ffffff"
+	if gold > cost:
+		TweenFX.spotlight(exp_button, 0.3)
 	if multiplayer.is_server():
 		GameState_.grant_exp_for_peer(multiplayer.get_unique_id(), amount, cost)
 	else:
@@ -1874,8 +2074,8 @@ func pretty_print_dict(data: Dictionary, indent: int = 0) -> String:
 	return out
 
 
-func rename_equipment_panels(all_gladiators: Dictionary) -> void:
-	var ids := all_gladiators.keys()
+func rename_equipment_panels(_all_gladiators: Dictionary) -> void:
+	var ids := _all_gladiators.keys()
 	ids.sort()  # optional but keeps order stable
 
 	var count := ids.size()
@@ -1890,137 +2090,170 @@ func rename_equipment_panels(all_gladiators: Dictionary) -> void:
 		else:
 			push_warning("Node '%s' not found in scene" % old_name)
 
-
-
+func get_amount():
+	var amount
+	if Input.is_key_pressed(KEY_SHIFT) and points_left >= 5: amount = 5
+	elif Input.is_key_pressed(KEY_CTRL) and points_left >= 10: amount = 10
+	else: amount = 1
+	return amount
 
 func _on_health_icon_button_up() -> void:
+	var amount = get_amount()
 	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), 1, "health", 0, false)
-		points_left -= 1
+		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "health", 0, false)
+		points_left -= amount
 	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), 1, "health", false)
-		points_left -= 1
+		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "health", false)
+		points_left -= amount
 	update_attribute_ui()
 
 func _on_strength_icon_button_up() -> void:
+	var amount = get_amount()
 	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), 1, "strength", 0, false)
-		points_left -= 1
+		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "strength", 0, false)
+		points_left -= amount
 	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), 1, "strength", false)
-		points_left -= 1
+		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "strength", false)
+		points_left -= amount
 	update_attribute_ui()
 
 func _on_endurance_icon_button_up() -> void:
+	var amount = get_amount()
 	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), 1, "endurance", 0, false)
-		points_left -= 1
+		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "endurance", 0, false)
+		points_left -= amount
 	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), 1, "endurance", false)
-		points_left -= 1
+		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "endurance", false)
+		points_left -= amount
 	update_attribute_ui()
 
 func _on_criticality_icon_button_up() -> void:
+	var amount = get_amount()
 	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), 1, "crit_rating", 0, false)
-		points_left -= 1
+		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "crit_rating", 0, false)
+		points_left -= amount
 	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), 1, "crit_rating", false)
-		points_left -= 1
+		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "crit_rating", false)
+		points_left -= amount
 	update_attribute_ui()
 
 func _on_avoidance_icon_button_up() -> void:
+	var amount = get_amount()
 	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), 1, "avoidance", 0, false)
-		points_left -= 1
+		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "avoidance", 0, false)
+		points_left -= amount
 	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), 1, "avoidance", false)
-		points_left -= 1
+		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "avoidance", false)
+		points_left -= amount
 	update_attribute_ui()
 
 func _on_quickness_icon_button_up() -> void:
+	var amount = get_amount()
 	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), 1, "quickness", 0, false)
-		points_left -= 1
+		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "quickness", 0, false)
+		points_left -= amount
 	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), 1, "quickness", false)
-		points_left -= 1
+		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "quickness", false)
+		points_left -= amount
 	update_attribute_ui()
 
 func _on_resilience_icon_button_up() -> void:
+	var amount = get_amount()
 	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), 1, "resilience", 0, false)
-		points_left -= 1
+		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "resilience", 0, false)
+		points_left -= amount
 	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), 1, "resilience", false)
-		points_left -= 1
+		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "resilience", false)
+		points_left -= amount
 	update_attribute_ui()
 
 func _on_sword_icon_button_up() -> void:
+	var amount = get_amount()
 	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), 1, "sword_mastery", 0, false)
-		points_left -= 1
+		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "sword_mastery", 0, false)
+		points_left -= amount
 	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), 1, "sword_mastery", false)
-		points_left -= 1
+		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "sword_mastery", false)
+		points_left -= amount
 	update_attribute_ui()
 
 func _on_axe_icon_button_up() -> void:
+	var amount = get_amount()
 	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), 1, "axe_mastery", 0, false)
-		points_left -= 1
+		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "axe_mastery", 0, false)
+		points_left -= amount
 	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), 1, "axe_mastery", false)
-		points_left -= 1
+		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "axe_mastery", false)
+		points_left -= amount
 	update_attribute_ui()
 
 func _on_stabbing_icon_button_up() -> void:
+	var amount = get_amount()
 	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), 1, "stabbing_mastery", 0, false)
-		points_left -= 1
+		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "stabbing_mastery", 0, false)
+		points_left -= amount
 	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), 1, "stabbing_mastery", false)
-		points_left -= 1
+		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "stabbing_mastery", false)
+		points_left -= amount
 	update_attribute_ui()
 
 func _on_mace_icon_button_up() -> void:
+	var amount = get_amount()
 	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), 1, "mace_mastery", 0, false)
-		points_left -= 1
+		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "mace_mastery", 0, false)
+		points_left -= amount
 	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), 1, "mace_mastery", false)
-		points_left -= 1
+		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "mace_mastery", false)
+		points_left -= amount
 	update_attribute_ui()
 
 func _on_flagellation_icon_button_up() -> void:
+	var amount = get_amount()
 	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), 1, "flagellation_mastery", 0, false)
-		points_left -= 1
+		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "flagellation_mastery", 0, false)
+		points_left -= amount
 	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), 1, "flagellation_mastery", false)
-		points_left -= 1
+		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "flagellation_mastery", false)
+		points_left -= amount
 	update_attribute_ui()
 
 func _on_shield_icon_button_up() -> void:
+	var amount = get_amount()
 	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), 1, "shield_mastery", 0, false)
-		points_left -= 1
+		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "shield_mastery", 0, false)
+		points_left -= amount
 	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), 1, "shield_mastery", false)
-		points_left -= 1
+		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "shield_mastery", false)
+		points_left -= amount
 	update_attribute_ui()
 
 #@rpc("any_peer", "call_local")
 func play_animation(id, animation, _weapon, hand):
 	var _hand
+	var tier = _weapon.get("tier", -1)
+	#var category  = _weapon.get("category", "???")
 	if hand == "mainhand": 
 		_hand = "MainHand"
 	elif hand == "offhand":
 		_hand = "OffHand"
 	
 	var animation_player = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/" + _hand + "AnimationPlayer")
+	#var offhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/OffHand")
+	var vfx = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/Vfx" + _hand)
+	vfx.modulate = "ffffff"
+	
+
 	
 	if animation_player.has_animation(animation):
+		if tier == 1:
+			vfx.modulate = "ffffffb2"
+		elif tier == 2:
+			vfx.modulate = "ffffffcc"
+		elif tier == 3:
+			vfx.modulate = "ffffffe6"
+		elif tier == 4:
+			vfx.modulate = "ffffff"
+			
 		animation_player.play(animation)
 	
 func wep_broken(id, _wep1_broken, _wep2_broken):
@@ -2056,27 +2289,52 @@ func block_animation(id, hand):
 	var offhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/OffHand")
 	mainhand["modulate"] = "ffffff"
 	
+	var animation_player = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/OffHandAnimationPlayer")
+	
+	if animation_player.has_animation("block"):
+		animation_player.play("block")
+	
 	if hand == "MainHand":
 		TweenFX.spotlight(mainhand, 0.3, "d2c9a5")
-		TweenFX.blink(mainhand, 0.1, 1)
+		#TweenFX.blink(mainhand, 0.1, 1)
 	elif hand == "OffHand":
 		TweenFX.spotlight(offhand, 0.3, "d2c9a5")
-		TweenFX.blink(offhand, 0.1, 1)
+		#TweenFX.blink(offhand, 0.1, 1)
 
 
 func hit_animation(id):
-	var equipment_panel_picture = get_node("_EquipmentPanel" + str(id) + "/EquipmentPanelPicture")
-	equipment_panel_picture["modulate"] = "ffffff"
-	TweenFX.spotlight(equipment_panel_picture, 0.2, "d2c9a5")
+	var _equipment_panel_picture = get_node("_EquipmentPanel" + str(id) + "/EquipmentPanelPicture")
+	_equipment_panel_picture["modulate"] = "ffffff"
+	TweenFX.spotlight(_equipment_panel_picture, 0.2, "d2c9a5")
 	
 	
 func crit_animation(id):
-	var equipment_panel_picture = get_node("_EquipmentPanel" + str(id) + "/EquipmentPanelPicture")
-	equipment_panel_picture["modulate"] = "ffffff"
-	TweenFX.spotlight(equipment_panel_picture, 0.2, "79444a")
+	var _equipment_panel_picture = get_node("_EquipmentPanel" + str(id) + "/EquipmentPanelPicture")
+	_equipment_panel_picture["modulate"] = "ffffff"
+	TweenFX.spotlight(_equipment_panel_picture, 0.2, "79444a")
 	
 	
 func dodge_animation(id):
-	var equipment_panel_picture = get_node("_EquipmentPanel" + str(id) + "/EquipmentPanelPicture")
+	var _equipment_panel_picture = get_node("_EquipmentPanel" + str(id) + "/EquipmentPanelPicture")
 	
 	
+func update_hp(id, current_health, max_health):
+	if current_health < 0.6 * max_health and current_health >= 0.3 * max_health:
+		healthbar_color = Color("b3a555")
+	elif current_health < 0.3 * max_health:
+		healthbar_color = Color("78222c")
+	else: 
+		healthbar_color = Color("77883b")
+	
+	var health_bar = get_node("_EquipmentPanel" + str(id) + "/HealthBar")
+	var health_bar_text = get_node("_EquipmentPanel" + str(id) + "/HealthBar/HealthBarText")
+	health_bar.max_value = max_health
+	health_bar.value = current_health
+	health_bar_text.text = str(int(current_health))
+	
+	var old_sb = health_bar.get_theme_stylebox("fill")
+
+	if old_sb:
+		var new_sb = old_sb.duplicate()   # ← deep copy
+		new_sb.bg_color = healthbar_color
+		health_bar.add_theme_stylebox_override("fill", new_sb)

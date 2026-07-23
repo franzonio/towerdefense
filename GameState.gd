@@ -40,7 +40,7 @@ signal broadcast_players_ready_signal(players_ready: int)
 signal killed_by_server_signal(id: int)
 signal reroll_cards_new_round_signal(active_players)
 
-signal update_equipment_card_signal(id, item_dict_to_craft, slot, item)
+signal update_equipment_card_signal(id, item_dict_to_craft, slot, item, all_gladiators)
 signal add_item_to_inventory_signal(id, item_dict, slot_name)
 signal remove_item_from_inventory_signal(id, item_dict, slot_name)
 signal add_item_to_equipment_signal(peer_id, item_dict, category)
@@ -62,8 +62,133 @@ var players_ready_list = []
 var players_ready = 0
 var active_players = []
 
-var total_modifier_bonuses
-var prev_total_modifier_bonuses
+var total_modifier_bonuses = {}
+var prev_total_modifier_bonuses = {}
+
+var age_limits = {
+	"Troll": {"Adult": 8, "Aged": 16, "Old": 22},
+	"Orc": {"Adult": 8, "Aged": 16, "Old": 22},
+	"Elf": {"Adult": 12, "Aged": 24, "Old": 32},
+	"Human": {"Adult": 10, "Aged": 18, "Old": 26}}
+
+var age_modifiers = {
+		"Troll": {
+			age_limits["Troll"]["Adult"]: {
+				"strength": 1.2,
+				"quickness": 0.9,
+				"crit_rating": 1.0,
+				"avoidance": 1.0,
+				"health": 1.15,
+				"resilience": 1.05,
+				"endurance": 1.1,
+			},
+			age_limits["Troll"]["Aged"]: {
+				"strength": 0.9,
+				"quickness": 0.9,
+				"crit_rating": 0.9,
+				"avoidance": 0.9,
+				"health": 0.9,
+				"resilience": 0.9,
+				"endurance": 0.9,
+			},
+			age_limits["Troll"]["Old"]: {
+				"strength": 0.9,
+				"quickness": 0.9,
+				"crit_rating": 0.9,
+				"avoidance": 0.9,
+				"health": 0.9,
+				"resilience": 0.9,
+				"endurance": 0.9,
+			},
+		},
+		"Orc": {
+			age_limits["Orc"]["Adult"]: {
+				"strength": 1.1,
+				"quickness": 1.1,
+				"crit_rating": 1.2,
+				"avoidance": 1.05,
+				"health": 1.10,
+				"resilience": 1.10,
+				"endurance": 1.05,
+			},
+			age_limits["Orc"]["Aged"]: {
+				"strength": 0.95,
+				"quickness": 0.9,
+				"crit_rating": 0.95,
+				"avoidance": 0.9,
+				"health": 0.95,
+				"resilience": 0.95,
+				"endurance": 0.9,
+			},
+			age_limits["Orc"]["Old"]: {
+				"strength": 0.9,
+				"quickness": 0.9,
+				"crit_rating": 0.9,
+				"avoidance": 0.9,
+				"health": 0.9,
+				"resilience": 0.9,
+				"endurance": 0.9,
+			},
+		},
+		"Human": {
+			age_limits["Human"]["Adult"]: {
+				"strength": 1.05,
+				"quickness": 1.15,
+				"crit_rating": 1.1,
+				"avoidance": 1.1,
+				"health": 1.05,
+				"resilience": 1.10,
+				"endurance": 1.15,
+			},
+			age_limits["Human"]["Aged"]: {
+				"strength": 0.95,
+				"quickness": 0.9,
+				"crit_rating": 0.95,
+				"avoidance": 0.9,
+				"health": 0.95,
+				"resilience": 0.95,
+				"endurance": 0.95,
+			},
+			age_limits["Human"]["Old"]: {
+				"strength": 0.9,
+				"quickness": 0.9,
+				"crit_rating": 0.9,
+				"avoidance": 0.9,
+				"health": 0.9,
+				"resilience": 0.9,
+				"endurance": 0.9,
+			},
+		},
+		"Elf": {
+			age_limits["Elf"]["Adult"]: {
+				"strength": 1.05,
+				"quickness": 1.2,
+				"crit_rating": 1.1,
+				"avoidance": 1.2,
+				"health": 1.05,
+				"resilience": 1.10,
+				"endurance": 1.15,
+			},
+			age_limits["Elf"]["Aged"]: {
+				"strength": 0.95,
+				"quickness": 0.95,
+				"crit_rating": 0.95,
+				"avoidance": 0.95,
+				"health": 0.95,
+				"resilience": 0.95,
+				"endurance": 0.95,
+			},
+			age_limits["Elf"]["Old"]: {
+				"strength": 0.9,
+				"quickness": 0.9,
+				"crit_rating": 0.9,
+				"avoidance": 0.9,
+				"health": 0.9,
+				"resilience": 0.9,
+				"endurance": 0.9,
+			},
+		},
+	}
 
 const RACE_MODIFIERS = {
 	"Orc": {
@@ -135,6 +260,7 @@ const RACE_MODIFIERS = {
 
 
 func _ready():
+	
 	#print("🆔 Peer:", multiplayer.get_unique_id(), " Is server:", multiplayer.is_server())
 	await get_tree().process_frame
 	equipment_script = load("res://Equipment.gd")
@@ -186,7 +312,7 @@ func create_card_pool():
 
 @rpc("any_peer", "call_local")
 func update_all_equipment_cards(id):
-	#print("update_all_equipment_cards")
+	#print(all_gladiators)
 	for slot_name in all_gladiators[id]["inventory"].keys():
 		var slot_data = all_gladiators[id]["inventory"][slot_name]
 		if slot_data.size() > 0:
@@ -222,9 +348,11 @@ func grant_exp_for_peer(id: int, amount: int, cost: int):
 		all_gladiators[id]["level"] = current_level
 		all_gladiators[id]["exp"] = current_exp
 		rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
+		rpc_id(id, "send_gladiator_data_to_peer_card", id, all_gladiators[id], all_gladiators)
+		#rpc_id(id, "update_equipment_card", )
 		rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 		update_all_equipment_cards(id)
-	else: add_to_peer_log(id, "Not enough gold!")
+	else: return#add_to_peer_log(id, "Not enough gold!")
 
 @rpc("any_peer", "call_local")
 func grant_gold_for_peer(id: int, base_amount: int, opponent_id: int, winner: bool):
@@ -235,25 +363,35 @@ func grant_gold_for_peer(id: int, base_amount: int, opponent_id: int, winner: bo
 	var opponent_name = "[color=%s]%s[/color]" % [opponent_color, all_gladiators[opponent_id]["name"]]
 
 	var win_streak_quotes = [
-	peer_name + " is hailed—streak commands glory!",
+	#peer_name + " is hailed—streak commands glory!",
 	#peer_name + " is cheered—victories stir the crowd",
 	#peer_name + " is revered—unbroken reign ignites awe",
-	peer_name + " is exalted—triumphs sway the emperor!",
-	peer_name + " is immortalized—streak crowns a legend!"]
+	#peer_name + " is exalted—triumphs sway the emperor!",
+	#peer_name + " is immortalized—streak crowns a legend!",
+	peer_name + " is on a killing spree!",
+	peer_name + " is unstoppable!",
+	peer_name + " is a Legend!"]
 	
 	var loss_streak_quotes = [
-	peer_name + " endures—the crowd spares a coin...",
-	peer_name + " perseveres—pity swells in the stands...",
+	#peer_name + " endures—the crowd spares a coin...",
+	#peer_name + " perseveres—pity swells in the stands...",
 	#peer_name + " rises—defeat feeds the people’s compassion",
-	peer_name + " struggles—the emperor’s hand turns generous...",
-	peer_name + " endures legend’s trial—gold fuels the return..."]
+	#peer_name + " struggles—the emperor’s hand turns generous...",
+	#peer_name + " endures legend’s trial—gold fuels the return..."
+	peer_name + " falls behind...",
+	peer_name + " endures...",
+	peer_name + " suffers...",
+	peer_name + " bleeds..."]
 
 	var break_streak_quotes = [
-	peer_name + " strikes—" + opponent_name + "'s streak falls!",
+	#peer_name + " strikes—" + opponent_name + "'s streak falls!",
 	#peer_name + " topples " + opponent_name + "—cheers shake the arena",
-	peer_name + " ends " + opponent_name + "'s reign—the emperor rises to applaud!",
+	#peer_name + " ends " + opponent_name + "'s reign—the emperor rises to applaud!",
 	#peer_name + " shatters " + opponent_name + "'s destiny—gold rains from the stands",
-	peer_name + " breaks " + opponent_name + "'s legend—the empire rewards the impossible!"]
+	#peer_name + " breaks " + opponent_name + "'s legend—the empire rewards the impossible!"]
+	peer_name + " stops " + opponent_name + "'s killing spree!",
+	peer_name + " breaks " + opponent_name + "'s dominance!",
+	peer_name + " butchers " + opponent_name + "'s Legend!"]
 
 	# --- Tunable parameters ---
 	var WIN_STREAK_STEP := 3          # Wins per +1 gold
@@ -418,23 +556,17 @@ func get_equipment_by_name(id, item_name: String):
 @rpc("any_peer", "call_local")
 func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 	prev_total_modifier_bonuses = total_modifier_bonuses
-	#print("Unqeuip equipment not implemented yet")
-	# 1. Remove from all_gladiators[peer_id][equipment_button_parent_name]
-	# 2. Add to 
-	var item_dict = all_gladiators[peer_id][category] #get_equipment_by_name(peer_id, equipment)
-	#var type = item_dict[equipment]["type"] # to be implemented
+	var item_dict = all_gladiators[peer_id][category] 
+	#get_equipment_by_name(peer_id, equipment)
 	var hands = item_dict[equipment].get("hands", -1)
 	var item = equipment_button_parent_name.replace("Slot", "").to_lower()
 	var modifier_attributes = item_dict[equipment]["modifiers"].get("attributes", {})
 	var modifier_bonuses = item_dict[equipment]["modifiers"].get("bonuses", {})
 	var weight = item_dict[equipment].get("weight", 0)
-	#var unequip_success = 0
-	
 	
 	for slot_name in all_gladiators[peer_id]["inventory"].keys():
 		if all_gladiators[peer_id]["inventory"][slot_name] == {}:
 			all_gladiators[peer_id]["inventory"][slot_name] = item_dict
-			#unequip_success = 1
 			
 			if hands == 2:
 				all_gladiators[peer_id]["weapon1"] = get_equipment_by_name(peer_id, "unarmed")
@@ -443,11 +575,9 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 			else: all_gladiators[peer_id][item] = {}
 			
 			remove_attribute_bonuses(peer_id)
-			# Remove item modifier attributes from items
 			if modifier_attributes != {}:
 				for attribute in modifier_attributes:
-					#var key = "increased_" + attribute
-					all_gladiators[peer_id]["attributes"][attribute] -= modifier_attributes[attribute]#/(1+float(prev_total_modifier_bonuses.get(key, 0))/100)
+					all_gladiators[peer_id]["attributes"][attribute] -= modifier_attributes[attribute]
 			
 			# TODO Remove item modifier bonuses
 			#if modifier_bonuses != {}: 1 
@@ -456,28 +586,26 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 			
 			add_attribute_bonuses(peer_id)
 			
-			#print("x prev " + str(float(prev_total_modifier_bonuses.get("increased_health", 0))))
-			#attribute_bonuses(peer_id)
-			print(all_gladiators[peer_id]["attributes"]["endurance"])
-			
-			# Remove weight of item
 			if weight: all_gladiators[peer_id]["weight"] -= weight
 			
-			#print(all_gladiators[peer_id])
 			rpc_id(peer_id, "add_item_to_inventory", peer_id, item_dict, slot_name)
 			rpc_id(peer_id, "remove_item_from_equipment", peer_id, item_dict, category)
-			rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id]["inventory"][slot_name], slot_name, equipment)
+			
+			rpc_id(peer_id, "send_gladiator_data_to_peer_card", peer_id, all_gladiators[peer_id], all_gladiators)
+			#rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id]["inventory"][slot_name], slot_name, equipment)
 			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
+			
 			update_all_equipment_cards(peer_id)
 			return
 	
-	add_to_peer_log(peer_id, "[INFO] ❌No inventory space!")
+	add_to_peer_log(peer_id, "[INFO] No inventory space!")
 
-	
+
 
 @rpc("any_peer", "call_local")
 func equip_item(peer_id, equipment, selected_slot):
-	var item_dict = all_gladiators[peer_id]["inventory"][selected_slot] #get_equipment_by_name(peer_id, equipment)
+	var item_dict = all_gladiators[peer_id]["inventory"][selected_slot] 
+	#get_equipment_by_name(peer_id, equipment)
 	var type = item_dict[equipment]["type"]
 	var category = item_dict[equipment]["category"]
 	var str_req = item_dict[equipment].get("str_req", 0) 
@@ -509,62 +637,82 @@ func equip_item(peer_id, equipment, selected_slot):
 					all_gladiators[peer_id]["weapon2"] = item_dict
 					equip_success = 1
 					category = "weapon2"
-				else: add_to_peer_log(peer_id, "[INFO] ❌Cannot equip more weapons!")
+				else: 
+					add_to_peer_log(peer_id, "[INFO] Cannot equip more weapons!")
+					return
 					
 			elif category == "shield":
 				if all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed": 
 					all_gladiators[peer_id]["weapon2"] = item_dict
 					category = "weapon2"
 					equip_success = 1
-				else: add_to_peer_log(peer_id, "[INFO] ❌Can only wear shield in off-hand!")
+				else: 
+					add_to_peer_log(peer_id, "[INFO] Can only wear shield in off-hand!")
+					return
 					
 			elif category == "head":
 				if all_gladiators[peer_id]["head"] == {}: 
 					all_gladiators[peer_id]["head"] = item_dict
 					equip_success = 1
-				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing a helmet")
+				else: 
+					add_to_peer_log(peer_id, "[INFO] Already wearing a helmet")
+					return
 				
 			elif category == "chest":
 				if all_gladiators[peer_id]["chest"] == {}: 
 					all_gladiators[peer_id]["chest"] = item_dict
 					equip_success = 1
-				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing a chest")
+				else: 
+					add_to_peer_log(peer_id, "[INFO] Already wearing a chest")
+					return
 				
 			elif category == "shoulders":
 				if all_gladiators[peer_id]["shoulders"] == {}: 
 					all_gladiators[peer_id]["shoulders"] = item_dict
 					equip_success = 1
-				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing shoulders")
+				else: 
+					add_to_peer_log(peer_id, "[INFO] Already wearing shoulders")
+					return
 				
 			elif category == "belt":
 				if all_gladiators[peer_id]["belt"] == {}: 
 					all_gladiators[peer_id]["belt"] = item_dict
 					equip_success = 1
-				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing belt")
+				else: 
+					add_to_peer_log(peer_id, "[INFO] Already wearing belt")
+					return
 				
 			elif category == "boots":
 				if all_gladiators[peer_id]["boots"] == {}: 
 					all_gladiators[peer_id]["boots"] = item_dict
 					equip_success = 1
-				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing boots")
+				else: 
+					add_to_peer_log(peer_id, "[INFO] Already wearing boots")
+					return
 				
 			elif category == "gloves":
 				if all_gladiators[peer_id]["gloves"] == {}: 
 					all_gladiators[peer_id]["gloves"] = item_dict
 					equip_success = 1
-				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing gloves")
+				else: 
+					add_to_peer_log(peer_id, "[INFO] Already wearing gloves")
+					return
 				
 			elif category == "legs":
 				if all_gladiators[peer_id]["legs"] == {}: 
 					all_gladiators[peer_id]["legs"] = item_dict
 					equip_success = 1
-				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing legs")
+				else: 
+					add_to_peer_log(peer_id, "[INFO] Already wearing legs")
+					return
 				
 			elif category == "amulet":
 				if all_gladiators[peer_id]["amulet"] == {}: 
 					all_gladiators[peer_id]["amulet"] = item_dict
 					equip_success = 1
-				else: add_to_peer_log(peer_id, "[INFO] ❌Already wearing amulet")
+				else: 
+					add_to_peer_log(peer_id, "[INFO] Already wearing amulet")
+					return
 				
 			elif category == "ring": 
 				if all_gladiators[peer_id]["ring1"] == {}: 
@@ -575,20 +723,21 @@ func equip_item(peer_id, equipment, selected_slot):
 					all_gladiators[peer_id]["ring2"] = item_dict
 					category = "ring2"
 					equip_success = 1
-				else: add_to_peer_log(peer_id, "[INFO] ❌Cannot equip more rings!")
+				else: 
+					add_to_peer_log(peer_id, "[INFO] Cannot equip more rings!")
+					return
 				
-			else: add_to_peer_log(peer_id, "[INFO] ❌Invalid item type! Please report this as a bug.")
+			else: 
+				add_to_peer_log(peer_id, "[INFO] Invalid item type! Please report this as a bug.")
+				return
 
 			#for slot_name in all_gladiators[peer_id]["inventory"].keys():
 				#var item = all_gladiators[peer_id]["inventory"][slot_name]
 
 			if equip_success:# and typeof(item) == TYPE_DICTIONARY and item.has(equipment):
 				all_gladiators[peer_id]["inventory"][selected_slot] = {}  # Clear slot
-				#print("Removing " + selected_slot + " from inventory")
 				rpc_id(peer_id, "remove_item_from_inventory", peer_id, item_dict, selected_slot)
 				rpc_id(peer_id, "add_item_to_equipment", peer_id, item_dict, category)
-				#rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id][category], category, equipment)
-				#update_all_equipment_cards(peer_id)
 				
 			prev_total_modifier_bonuses = all_gladiators[peer_id].get("total_modifier_bonuses", {})
 			total_modifier_bonuses = collect_gladiator_bonuses(peer_id)
@@ -598,14 +747,9 @@ func equip_item(peer_id, equipment, selected_slot):
 			# Apply item modifier attributes from items
 			if modifier_attributes != {}:
 				for attribute in modifier_attributes:
-					#var key = "increased_" + attribute
 					all_gladiators[peer_id]["attributes"][attribute] += modifier_attributes[attribute]#*(1+float(total_modifier_bonuses.get(key, 0))/100)
 					
 			add_attribute_bonuses(peer_id)
-					#print((1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_health", 0))))
-					
-			
-
 			
 			# TODO Apply item modifier bonuses
 			#if modifier_bonuses != {}: 1 
@@ -613,41 +757,61 @@ func equip_item(peer_id, equipment, selected_slot):
 			#print(all_gladiators[peer_id]["attributes"]["endurance"])
 			#print(all_gladiators[peer_id])
 			
-			# Add weight of item
 			if weight: all_gladiators[peer_id]["weight"] += weight
 				
-			#print(all_gladiators[peer_id])
+			rpc_id(peer_id, "send_gladiator_data_to_peer_card", peer_id, all_gladiators[peer_id], all_gladiators)
 			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
 			#rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id][category], category, equipment)
 			
 			update_all_equipment_cards(peer_id)
-		else: add_to_peer_log(peer_id, "[INFO] ❌Need " + str(str_req) + " strength to equip item, you have " + str(int(all_gladiators[peer_id]["attributes"]["strength"])) + "!")
-	else: add_to_peer_log(peer_id, "[INFO] ❌Item requires level " + str(lvl_req) + " to equip, you are level " + str(all_gladiators[peer_id]["level"]))
+		else: add_to_peer_log(peer_id, "[INFO] Need " + str(str_req) + " strength to equip item, you have " + str(int(all_gladiators[peer_id]["attributes"]["strength"])) + "!")
+	else: add_to_peer_log(peer_id, "[INFO] Item requires level " + str(lvl_req) + " to equip, you are level " + str(all_gladiators[peer_id]["level"]))
 
+
+func get_age_stage(_race: String, _round: int) -> String:
+	var limits = age_limits[_race]
+
+	for stage in limits.keys():
+		if limits[stage] == _round:
+			return stage
+
+	return ""  # no match
+
+
+func add_age_modifiers(current_round):
+	var all_ids = all_gladiators.keys()
+
+	#print("round: " + str(current_round))
+
+	for id in all_ids:
+		
+
+		var race = all_gladiators[id]["race"]
+		var attributes = all_gladiators[id]["attributes"]
+
+		# Check if this race has age modifiers for this round
+		if age_modifiers.has(race) and age_modifiers[race].has(current_round):
+			var age = get_age_stage(race, current_round)
+			all_gladiators[id]["age"] = age
+			
+			remove_attribute_bonuses(id)
+			var modifiers = age_modifiers[race][current_round]
+
+			# Apply each modifier to the gladiator's attributes
+			for attr in attributes.keys():
+				if modifiers.has(attr):
+					attributes[attr] *= modifiers[attr]
+
+			all_gladiators[id]["attributes"] = attributes.duplicate()
+			add_attribute_bonuses(id)
 
 func remove_attribute_bonuses(peer_id):
-	#all_gladiators[peer_id]["attributes"]["strength"] = all_gladiators[peer_id]["attributes"].get("strength", 0)/(1+float(prev_total_modifier_bonuses.get("increased_strength", 0))/100)
-	#all_gladiators[peer_id]["attributes"]["quickness"] = all_gladiators[peer_id]["attributes"].get("quickness", 0)/(1+float(prev_total_modifier_bonuses.get("increased_quickness", 0))/100)
-	#all_gladiators[peer_id]["attributes"]["crit_rating"] = all_gladiators[peer_id]["attributes"].get("crit_rating", 0)/(1+float(prev_total_modifier_bonuses.get("increased_crit_rating", 0))/100)
-	#all_gladiators[peer_id]["attributes"]["avoidance"] = all_gladiators[peer_id]["attributes"].get("avoidance", 0)/(1+float(prev_total_modifier_bonuses.get("increased_avoidance", 0))/100)
-	#all_gladiators[peer_id]["attributes"]["health"] = all_gladiators[peer_id]["attributes"].get("health", 0)/(1+float(prev_total_modifier_bonuses.get("increased_health", 0))/100)
-	#all_gladiators[peer_id]["attributes"]["resilience"] = all_gladiators[peer_id]["attributes"].get("resilience", 0)/(1+float(prev_total_modifier_bonuses.get("increased_resilience", 0))/100)
-	#all_gladiators[peer_id]["attributes"]["endurance"] = all_gladiators[peer_id]["attributes"].get("endurance", 0)/(1+float(prev_total_modifier_bonuses.get("increased_endurance", 0))/100)
-	
 	var all_attributes = all_gladiators[peer_id]["attributes"].keys()
 	for attr in all_attributes:
 		var increased_string = "increased_" + attr
 		all_gladiators[peer_id]["attributes"][attr] = all_gladiators[peer_id]["attributes"].get(attr, 0)/(1+float(prev_total_modifier_bonuses.get(increased_string, 0))/100)
 
 func add_attribute_bonuses(peer_id):
-	#all_gladiators[peer_id]["attributes"]["strength"] = all_gladiators[peer_id]["attributes"].get("strength", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_strength", 0))/100)
-	#all_gladiators[peer_id]["attributes"]["quickness"] = all_gladiators[peer_id]["attributes"].get("quickness", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_quickness", 0))/100)
-	#all_gladiators[peer_id]["attributes"]["crit_rating"] = all_gladiators[peer_id]["attributes"].get("crit_rating", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_crit_rating", 0))/100)
-	#all_gladiators[peer_id]["attributes"]["avoidance"] = all_gladiators[peer_id]["attributes"].get("avoidance", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_avoidance", 0))/100)
-	#all_gladiators[peer_id]["attributes"]["health"] = all_gladiators[peer_id]["attributes"].get("health", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_health", 0))/100)
-	#all_gladiators[peer_id]["attributes"]["resilience"] = all_gladiators[peer_id]["attributes"].get("resilience", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_resilience", 0))/100)
-	#all_gladiators[peer_id]["attributes"]["endurance"] = all_gladiators[peer_id]["attributes"].get("endurance", 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get("increased_endurance", 0))/100)
-	
 	var all_attributes = all_gladiators[peer_id]["attributes"].keys()
 	for attr in all_attributes:
 		var increased_string = "increased_" + attr
@@ -687,7 +851,7 @@ func collect_gladiator_bonuses(id):
 				var bonuses = item["modifiers"]["bonuses"]
 				for bonus_key in bonuses.keys():
 					var value = bonuses[bonus_key]
-					print(value)
+					#print(value)
 					#var numeric_value = float(value) if typeof(value) in [TYPE_STRING, TYPE_INT, TYPE_FLOAT] and String(value).is_valid_float() else 0
 					
 					if bonus_key == "blood_rage":
@@ -754,7 +918,7 @@ func notify_card_buy_result(id: int, success: bool, _gladiator_data) -> void:
 func update_equipment_card(id, item_dict_to_craft, slot, item):
 	#print("update_equipment_card")
 	#print(item)
-	emit_signal("update_equipment_card_signal", id, item_dict_to_craft, slot, item)
+	emit_signal("update_equipment_card_signal", id, item_dict_to_craft, slot, item, all_gladiators)
 	
 @rpc("any_peer", "call_local")
 func add_item_to_inventory(id, item_dict, slot_name):
@@ -801,8 +965,8 @@ func buy_equipment_card(id: int, equipment: String, cost: int, ):
 					rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 					rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 					return
-			add_to_peer_log(id, "[INFO] ❌No inventory space!")
-		else: add_to_peer_log(id, "[INFO] ❌Not enough gold!")
+			add_to_peer_log(id, "[INFO] No inventory space!")
+		else: return#add_to_peer_log(id, "[INFO] Not enough gold!")
 	else: 
 		add_to_peer_log(id, "No " + equipment + " cards left in stock!")
 		
@@ -854,7 +1018,7 @@ func sell_from_equipment(peer_id: int, equipment: String, equipment_button_paren
 @rpc("any_peer", "call_local")
 func sell_from_inventory(id: int, equipment: String, selected_slot): 
 	if all_gladiators[id]["inventory"][selected_slot] == {}:
-		add_to_peer_log(id, "[INFO] ❌Item not found in inventory!")
+		add_to_peer_log(id, "[INFO] Item not found in inventory!")
 		return
 	
 	var item_dict = get_equipment_by_name(id, equipment)
@@ -898,9 +1062,21 @@ func buy_craft_card(id, craft_name, cost):
 			rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 			rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
-		else: add_to_peer_log(id, "[INFO] ❌Not enough gold!")
+		else: return#add_to_peer_log(id, "[INFO] Not enough gold!")
 	else: 
-		add_to_peer_log(id, "[INFO] ❌No " + craft_name + " cards left in stock!")
+		add_to_peer_log(id, "[INFO] No " + craft_name + " cards left in stock!")
+	
+@rpc("any_peer", "call_local")
+func buy_reroll(id):
+	var cost = 2
+	
+	if all_gladiators[id]["gold"] >= cost:
+		all_gladiators[id]["gold"] -= cost
+		rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
+		rpc_id(id, "send_gladiator_data_to_peer_card", id, all_gladiators[id], all_gladiators)
+		rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+	else:
+		return#add_to_peer_log(id, "[INFO] Not enough gold!")
 	
 @rpc("any_peer", "call_local")
 func buy_attribute_card(id: int, amount: int, attribute: String, cost: int, modify_stock = true):
@@ -922,13 +1098,15 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int, modi
 				if modify_stock: 
 					adjust_card_stock(attribute, "remove")
 				success = true
+				
 				rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
 				rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
+				rpc_id(id, "send_gladiator_data_to_peer_card", id, all_gladiators[id], all_gladiators)
 				rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 				update_all_equipment_cards(id)
-		else: add_to_peer_log(id, "[INFO] ❌Not enough gold!")
+		else: return#add_to_peer_log(id, "[INFO] Not enough gold!")
 	else: 
-		add_to_peer_log(id, "[INFO] ❌No " + attribute + " cards left in stock!")
+		add_to_peer_log(id, "[INFO] No " + attribute + " cards left in stock!")
 		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
 		
 		
@@ -1096,7 +1274,7 @@ func use_craft_mat_on_item(id, craft_mat, item, slot):
 				item_dict_to_craft[item]["modifiers"]["attributes"][random_attribute.keys()[0]] = random_attribute[random_attribute.keys()[0]]
 			
 		else:
-			add_to_peer_log(id, "[INFO] ❌Item is full on modifiers!")
+			add_to_peer_log(id, "[INFO] Item is full on modifiers!")
 			return
 		
 	# == TOME OF LIBERTY ==
@@ -1132,6 +1310,7 @@ func use_craft_mat_on_item(id, craft_mat, item, slot):
 	all_gladiators[id]["inventory"][slot] = item_dict_to_craft.duplicate(true)
 	
 	#rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+	#rpc_id(id, "send_gladiator_data_to_peer_card", id, all_gladiators[id], all_gladiators)
 	rpc_id(id, "update_equipment_card", id, all_gladiators[id]["inventory"][slot], slot, item)
 	rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 	

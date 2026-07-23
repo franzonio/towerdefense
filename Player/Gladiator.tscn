@@ -1,4 +1,4 @@
-[gd_scene load_steps=48 format=3 uid="uid://bh10l06wi8flh"]
+[gd_scene load_steps=45 format=3 uid="uid://bh10l06wi8flh"]
 
 [ext_resource type="Script" uid="uid://wndbyt2f56xv" path="res://Player/Gladiator.gd" id="1_l0fom"]
 [ext_resource type="Texture2D" uid="uid://dvkftuu6pmsh6" path="res://Assets/PlayerAssets/Free RGW Sprites/RPG Maker/RPG Maker MZ (48x48)/sv_actors/Character_005_Battler.png" id="2_neicb"]
@@ -331,107 +331,75 @@ properties/0/replication_mode = 2
 properties/1/path = NodePath(".:current_animation")
 properties/1/spawn = true
 properties/1/replication_mode = 2
-properties/2/path = NodePath("HealthBar:value")
+properties/2/path = NodePath("DamagePopup:text")
 properties/2/spawn = true
 properties/2/replication_mode = 2
-properties/3/path = NodePath("HealthBar/HealthBarText:text")
+properties/3/path = NodePath(".:last_attack_time")
 properties/3/spawn = true
 properties/3/replication_mode = 2
-properties/4/path = NodePath("DamagePopup:text")
+properties/4/path = NodePath(".:prev_animation")
 properties/4/spawn = true
 properties/4/replication_mode = 2
-properties/5/path = NodePath(".:last_attack_time")
+properties/5/path = NodePath(".:next_attack_critical")
 properties/5/spawn = true
 properties/5/replication_mode = 2
-properties/6/path = NodePath(".:prev_animation")
+properties/6/path = NodePath(".:next_taken_hit_critical")
 properties/6/spawn = true
 properties/6/replication_mode = 2
-properties/7/path = NodePath(".:next_attack_critical")
+properties/7/path = NodePath(".:opponent_peer_id")
 properties/7/spawn = true
 properties/7/replication_mode = 2
-properties/8/path = NodePath(".:next_taken_hit_critical")
+properties/8/path = NodePath(".:gladiator_name")
 properties/8/spawn = true
 properties/8/replication_mode = 2
-properties/9/path = NodePath(".:opponent_peer_id")
+properties/9/path = NodePath(".:in_combat")
 properties/9/spawn = true
 properties/9/replication_mode = 2
-properties/10/path = NodePath(".:gladiator_name")
-properties/10/spawn = true
+properties/10/path = NodePath("Sprite:animation")
+properties/10/spawn = false
 properties/10/replication_mode = 2
-properties/11/path = NodePath(".:in_combat")
+properties/11/path = NodePath(".:current_health")
 properties/11/spawn = true
 properties/11/replication_mode = 2
-properties/12/path = NodePath("Sprite:animation")
-properties/12/spawn = false
+properties/12/path = NodePath(".:concede_threshold")
+properties/12/spawn = true
 properties/12/replication_mode = 2
-properties/13/path = NodePath(".:current_health")
+properties/13/path = NodePath(".:max_health")
 properties/13/spawn = true
 properties/13/replication_mode = 2
-properties/14/path = NodePath("HealthBar:max_value")
+properties/14/path = NodePath(".:weapon1_durability")
 properties/14/spawn = true
 properties/14/replication_mode = 2
-properties/15/path = NodePath(".:concede_threshold")
+properties/15/path = NodePath(".:weapon2_durability")
 properties/15/spawn = true
 properties/15/replication_mode = 2
-properties/16/path = NodePath(".:max_health")
+properties/16/path = NodePath(".:weapon1_can_parry")
 properties/16/spawn = true
 properties/16/replication_mode = 2
-properties/17/path = NodePath(".:weapon1_durability")
+properties/17/path = NodePath(".:weapon2_can_parry")
 properties/17/spawn = true
 properties/17/replication_mode = 2
-properties/18/path = NodePath(".:weapon2_durability")
+properties/18/path = NodePath(".:parry_chance")
 properties/18/spawn = true
 properties/18/replication_mode = 2
-properties/19/path = NodePath(".:weapon1_can_parry")
+properties/19/path = NodePath(".:block_chance")
 properties/19/spawn = true
 properties/19/replication_mode = 2
-properties/20/path = NodePath(".:weapon2_can_parry")
+properties/20/path = NodePath(".:shield_absorb")
 properties/20/spawn = true
 properties/20/replication_mode = 2
-properties/21/path = NodePath(".:parry_chance")
+properties/21/path = NodePath(".:weapon2_can_block")
 properties/21/spawn = true
 properties/21/replication_mode = 2
-properties/22/path = NodePath(".:block_chance")
+properties/22/path = NodePath(".:dead")
 properties/22/spawn = true
 properties/22/replication_mode = 2
-properties/23/path = NodePath(".:shield_absorb")
+properties/23/path = NodePath(".:absorb_after_resilience")
 properties/23/spawn = true
 properties/23/replication_mode = 2
-properties/24/path = NodePath(".:weapon2_can_block")
+properties/24/path = NodePath("CharacterAnimationPlayer:current_animation")
 properties/24/spawn = true
 properties/24/replication_mode = 2
-properties/25/path = NodePath(".:dead")
-properties/25/spawn = true
-properties/25/replication_mode = 2
-properties/26/path = NodePath(".:absorb_after_resilience")
-properties/26/spawn = true
-properties/26/replication_mode = 2
-properties/27/path = NodePath("CharacterAnimationPlayer:current_animation")
-properties/27/spawn = true
-properties/27/replication_mode = 2
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_l0fom"]
-bg_color = Color(0, 0, 0, 0.443137)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0, 0, 0, 1)
-border_blend = true
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_oqlk4"]
-bg_color = Color(0, 0.690196, 0.0980392, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="LabelSettings" id="LabelSettings_oqlk4"]
-font_size = 40
-outline_size = 4
-outline_color = Color(0, 0, 0, 1)
-shadow_size = 0
 
 [sub_resource type="Animation" id="Animation_1oxpr"]
 resource_name = "attackLeftSwingFront"
@@ -682,32 +650,8 @@ shape = SubResource("CapsuleShape2D_upc8x")
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_oqlk4")
 
-[node name="HealthBar" type="ProgressBar" parent="."]
-z_index = 8
-offset_left = 39.499996
-offset_top = -6.499998
-offset_right = 47.846695
-offset_bottom = 66.735535
-rotation = -1.5708
-theme_override_styles/background = SubResource("StyleBoxFlat_l0fom")
-theme_override_styles/fill = SubResource("StyleBoxFlat_oqlk4")
-value = 100.0
-fill_mode = 2
-show_percentage = false
-
-[node name="HealthBarText" type="Label" parent="HealthBar"]
-layout_direction = 2
-layout_mode = 1
-offset_left = 16.999977
-offset_top = 6.500062
-offset_right = 315.00027
-offset_bottom = 61.50016
-rotation = 1.5708
-scale = Vector2(0.2, 0.2)
-label_settings = SubResource("LabelSettings_oqlk4")
-horizontal_alignment = 1
-
 [node name="Label" type="Label" parent="."]
+visible = false
 offset_right = 40.0
 offset_bottom = 23.0
 
