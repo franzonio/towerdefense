@@ -40,7 +40,7 @@ var life_dict = {}
 }
 
 @onready var wep_pngs = {
-
+	# Mace
 	"wooden_hammer": preload("res://Assets/Equipment/Mace/mace_t1_light_128x128.png"), 
 	"steel_hammer": preload("res://Assets/Equipment/Mace/mace_t2_light_128x128.png"), 
 	"verdant_mallet": preload("res://Assets/Equipment/Mace/mace_t3_light_128x128.png"), 
@@ -54,7 +54,7 @@ var life_dict = {}
 	"draconic_skullbasher": preload("res://Assets/Equipment/Mace/mace_t3_2h_128x128.png"), 
 	"demonic_skullbasher": preload("res://Assets/Equipment/Mace/mace_t4_2h_128x128.png"), 
 
-
+	# Axe
 	"wooden_hatchet": preload("res://Assets/Equipment/Axe/axe_t1_light_128x128.png"), 
 	"steel_hatchet": preload("res://Assets/Equipment/Axe/axe_t2_light_128x128.png"), 
 	"verdant_splitter": preload("res://Assets/Equipment/Axe/axe_t3_light_128x128.png"), 
@@ -68,7 +68,7 @@ var life_dict = {}
 	"draconic_executioner": preload("res://Assets/Equipment/Axe/axe_2h_t3_heavy_128x128.png"), 
 	"demonic_executioner": preload("res://Assets/Equipment/Axe/axe_2h_t4_heavy_128x128.png"), 
 
-
+	# Stabbing
 	"wooden_dagger": preload("res://Assets/Equipment/Stabbing/stabbing_t1_light_128x128.png"), 
 	"steel_dagger": preload("res://Assets/Equipment/Stabbing/stabbing_t2_light_128x128.png"), 
 	"verdant_shard": preload("res://Assets/Equipment/Stabbing/stabbing_t3_light_128x128.png"), 
@@ -82,7 +82,7 @@ var life_dict = {}
 	"draconic_trident": preload("res://Assets/Equipment/Stabbing/stabbing_t3_2h_128x128.png"), 
 	"demonic_trident": preload("res://Assets/Equipment/Stabbing/stabbing_t4_2h_128x128.png"), 
 
-
+	# Flagellation
 	"wooden_whip": preload("res://Assets/Equipment/Flagellation/flagellation_t1_light_128x128.png"), 
 	"steel_whip": preload("res://Assets/Equipment/Flagellation/flagellation_t2_light_128x128.png"), 
 	"verdant_knout": preload("res://Assets/Equipment/Flagellation/flagellation_t3_light_128x128.png"), 
@@ -96,7 +96,7 @@ var life_dict = {}
 	"draconic_disemboweler": preload("res://Assets/Equipment/Flagellation/flagellation_t3_2h_128x128.png"), 
 	"demonic_torturer": preload("res://Assets/Equipment/Flagellation/flagellation_t4_2h_128x128.png"), 
 
-
+	# Sword
 	"wooden_sword": preload("res://Assets/Equipment/Sword/sword_t1_light_128x128.png"), 
 	"steel_sword": preload("res://Assets/Equipment/Sword/sword_t2_light_128x128.png"), 
 	"verdant_slicer": preload("res://Assets/Equipment/Sword/sword_t3_light_128x128.png"), 
@@ -110,7 +110,7 @@ var life_dict = {}
 	"draconic_edge": preload("res://Assets/Equipment/Sword/sword_t3_2h_128x128.png"), 
 	"demonic_edge": preload("res://Assets/Equipment/Sword/sword_t4_2h_128x128.png"), 
 
-
+	# Shield
 	"wooden_guard": preload("res://Assets/Equipment/Shield/shield_light_t1_128x128.png"), 
 	"steel_guard": preload("res://Assets/Equipment/Shield/shield_light_t2_128x128.png"), 
 	"verdant_aegis": preload("res://Assets/Equipment/Shield/shield_light_t3_128x128.png"), 
@@ -293,7 +293,7 @@ signal stance_changed(value: int)
 signal attack_changed(value: int)
 var craft_active = ""
 
-
+### ATTRIBUTES ###
 @onready var strength_card = preload("res://ShopCards/AttributeCards/StrengthCard.tscn")
 @onready var health_card = preload("res://ShopCards/AttributeCards/HealthCard.tscn")
 @onready var avoidance_card = preload("res://ShopCards/AttributeCards/AvoidanceCard.tscn")
@@ -308,11 +308,11 @@ var craft_active = ""
 @onready var stabbing_mastery_card = preload("res://ShopCards/AttributeCards/StabbingMasteryCard.tscn")
 @onready var flagellation_mastery_card = preload("res://ShopCards/AttributeCards/FlagellationMasteryCard.tscn")
 
-
+### CRAFTING ###
 @onready var scroll_of_luck_card = preload("res://ShopCards/CraftCards/ScrollOfLuckCard.tscn")
 @onready var scroll_of_injection_card = preload("res://ShopCards/CraftCards/ScrollOfInjectionCard.tscn")
 
-
+### AXE ###
 @onready var wooden_hatchet_card = preload("res://ShopCards/EquipmentCards/Axe/1h/WoodenHatchet.tscn")
 @onready var steel_hatchet_card = preload("res://ShopCards/EquipmentCards/Axe/1h/SteelHatchet.tscn")
 @onready var verdant_splitter_card = preload("res://ShopCards/EquipmentCards/Axe/1h/VerdantSplitter.tscn")
@@ -328,7 +328,7 @@ var craft_active = ""
 @onready var draconic_executioner_card = preload("res://ShopCards/EquipmentCards/Axe/2h/DraconicExecutioner.tscn")
 @onready var demonic_executioner_card = preload("res://ShopCards/EquipmentCards/Axe/2h/DemonicExecutioner.tscn")
 
-
+### FLAGELLATION ###
 @onready var wooden_whip_card = preload("res://ShopCards/EquipmentCards/Flagellation/1h/WoodenWhip.tscn")
 @onready var steel_whip_card = preload("res://ShopCards/EquipmentCards/Flagellation/1h/SteelWhip.tscn")
 @onready var verdant_knout_card = preload("res://ShopCards/EquipmentCards/Flagellation/1h/VerdantKnout.tscn")
@@ -344,7 +344,7 @@ var craft_active = ""
 @onready var draconic_disemboweler_card = preload("res://ShopCards/EquipmentCards/Flagellation/2h/DraconicDisemboweler.tscn")
 @onready var demonic_torturer_card = preload("res://ShopCards/EquipmentCards/Flagellation/2h/DemonicTorturer.tscn")
 
-
+### MACE ###
 @onready var wooden_hammer_card = preload("res://ShopCards/EquipmentCards/Mace/1h/WoodenHammer.tscn")
 @onready var steel_hammer_card = preload("res://ShopCards/EquipmentCards/Mace/1h/SteelHammer.tscn")
 @onready var verdant_mallet_card = preload("res://ShopCards/EquipmentCards/Mace/1h/VerdantMallet.tscn")
@@ -360,7 +360,7 @@ var craft_active = ""
 @onready var draconic_skullbasher_card = preload("res://ShopCards/EquipmentCards/Mace/2h/DraconicSkullbasher.tscn")
 @onready var demonic_skullbasher_card = preload("res://ShopCards/EquipmentCards/Mace/2h/DemonicSkullbasher.tscn")
 
-
+### STABBING ###
 @onready var wooden_dagger_card = preload("res://ShopCards/EquipmentCards/Stabbing/1h/WoodenDagger.tscn")
 @onready var steel_dagger_card = preload("res://ShopCards/EquipmentCards/Stabbing/1h/SteelDagger.tscn")
 @onready var verdant_shard_card = preload("res://ShopCards/EquipmentCards/Stabbing/1h/VerdantShard.tscn")
@@ -376,7 +376,7 @@ var craft_active = ""
 @onready var draconic_trident_card = preload("res://ShopCards/EquipmentCards/Stabbing/2h/DraconicTrident.tscn")
 @onready var demonic_trident_card = preload("res://ShopCards/EquipmentCards/Stabbing/2h/DemonicTrident.tscn")
 
-
+### SWORD ###
 @onready var wooden_sword_card = preload("res://ShopCards/EquipmentCards/Sword/1h/WoodenSword.tscn")
 @onready var steel_sword_card = preload("res://ShopCards/EquipmentCards/Sword/1h/SteelSword.tscn")
 @onready var verdant_slicer_card = preload("res://ShopCards/EquipmentCards/Sword/1h/VerdantSlicer.tscn")
@@ -392,7 +392,7 @@ var craft_active = ""
 @onready var draconic_edge_card = preload("res://ShopCards/EquipmentCards/Sword/2h/DraconicEdge.tscn")
 @onready var demonic_edge_card = preload("res://ShopCards/EquipmentCards/Sword/2h/DemonicEdge.tscn")
 
-
+### SHIELD ###
 @onready var wooden_guard_card = preload("res://ShopCards/EquipmentCards/Shield/Light/WoodenGuard.tscn")
 @onready var steel_guard_card = preload("res://ShopCards/EquipmentCards/Shield/Light/SteelGuard.tscn")
 @onready var verdant_aegis_card = preload("res://ShopCards/EquipmentCards/Shield/Light/VerdantAegis.tscn")
@@ -402,7 +402,7 @@ var craft_active = ""
 @onready var emberized_bulwark_card = preload("res://ShopCards/EquipmentCards/Shield/Heavy/EmberizedBulwark.tscn")
 @onready var crimson_bulwark_card = preload("res://ShopCards/EquipmentCards/Shield/Heavy/CrimsonBulwark.tscn")
 
-
+### BELT ###
 @onready var leather_belt_card = preload("res://ShopCards/EquipmentCards/Belt/Light/LeatherBelt.tscn")
 @onready var tailored_belt_card = preload("res://ShopCards/EquipmentCards/Belt/Light/TailoredBelt.tscn")
 @onready var strap_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Belt/Light/StrapOfElvenSilk.tscn")
@@ -412,7 +412,7 @@ var craft_active = ""
 @onready var girdle_of_kings_card = preload("res://ShopCards/EquipmentCards/Belt/Heavy/GirdleOfKings.tscn")
 @onready var bloodsteel_girdle_card = preload("res://ShopCards/EquipmentCards/Belt/Heavy/BloodsteelGirdle.tscn")
 
-
+### BOOTS ###
 @onready var leather_boots_card = preload("res://ShopCards/EquipmentCards/Boots/Light/LeatherBoots.tscn")
 @onready var tailored_boots_card = preload("res://ShopCards/EquipmentCards/Boots/Light/TailoredBoots.tscn")
 @onready var treads_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Boots/Light/TreadsOfElvenSilk.tscn")
@@ -422,7 +422,7 @@ var craft_active = ""
 @onready var sabatons_of_kings_card = preload("res://ShopCards/EquipmentCards/Boots/Heavy/SabatonsOfKings.tscn")
 @onready var bloodsteel_sabatons_card = preload("res://ShopCards/EquipmentCards/Boots/Heavy/BloodsteelSabatons.tscn")
 
-
+### CHEST ###
 @onready var leather_vest_card = preload("res://ShopCards/EquipmentCards/Chest/Light/LeatherVest.tscn")
 @onready var tailored_vest_card = preload("res://ShopCards/EquipmentCards/Chest/Light/TailoredVest.tscn")
 @onready var garb_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Chest/Light/GarbOfElvenSilk.tscn")
@@ -432,7 +432,7 @@ var craft_active = ""
 @onready var carapace_of_kings_card = preload("res://ShopCards/EquipmentCards/Chest/Heavy/CarapaceOfKings.tscn")
 @onready var bloodsteel_carapace_card = preload("res://ShopCards/EquipmentCards/Chest/Heavy/BloodsteelCarapace.tscn")
 
-
+### GLOVES ###
 @onready var leather_gloves_card = preload("res://ShopCards/EquipmentCards/Gloves/Light/LeatherGloves.tscn")
 @onready var tailored_gloves_card = preload("res://ShopCards/EquipmentCards/Gloves/Light/TailoredGloves.tscn")
 @onready var hands_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Gloves/Light/HandsOfElvenSilk.tscn")
@@ -442,7 +442,7 @@ var craft_active = ""
 @onready var grips_of_kings_card = preload("res://ShopCards/EquipmentCards/Gloves/Heavy/GripsOfKings.tscn")
 @onready var bloodsteel_grips_card = preload("res://ShopCards/EquipmentCards/Gloves/Heavy/BloodsteelGrips.tscn")
 
-
+### HEAD ###
 @onready var leather_cap_card = preload("res://ShopCards/EquipmentCards/Head/Light/LeatherCap.tscn")
 @onready var tailored_cap_card = preload("res://ShopCards/EquipmentCards/Head/Light/TailoredCap.tscn")
 @onready var hat_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Head/Light/HatOfElvenSilk.tscn")
@@ -452,7 +452,7 @@ var craft_active = ""
 @onready var barbute_of_kings_card = preload("res://ShopCards/EquipmentCards/Head/Heavy/BarbuteOfKings.tscn")
 @onready var bloodsteel_barbute_card = preload("res://ShopCards/EquipmentCards/Head/Heavy/BarbuteOfKings.tscn")
 
-
+### LEGS ###
 @onready var leather_pantaloons_card = preload("res://ShopCards/EquipmentCards/Legs/Light/LeatherPantaloons.tscn")
 @onready var tailored_pantaloons_card = preload("res://ShopCards/EquipmentCards/Legs/Light/TailoredPantaloons.tscn")
 @onready var legwraps_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Legs/Light/LegwrapsOfElvenSilk.tscn")
@@ -462,7 +462,7 @@ var craft_active = ""
 @onready var legguards_of_kings_card = preload("res://ShopCards/EquipmentCards/Legs/Heavy/LegguardsOfKings.tscn")
 @onready var bloodsteel_legguards_card = preload("res://ShopCards/EquipmentCards/Legs/Heavy/BloodsteelLegguards.tscn")
 
-
+### SHOULDERS ###
 @onready var leather_shoulders_card = preload("res://ShopCards/EquipmentCards/Shoulders/Light/LeatherShoulders.tscn")
 @onready var tailored_shoulders_card = preload("res://ShopCards/EquipmentCards/Shoulders/Light/TailoredShoulders.tscn")
 @onready var mantle_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Shoulders/Light/MantleOfElvenSilk.tscn")
@@ -472,13 +472,13 @@ var craft_active = ""
 @onready var pauldrons_of_kings_card = preload("res://ShopCards/EquipmentCards/Shoulders/Heavy/PauldronsOfKings.tscn")
 @onready var bloodsteel_pauldrons_card = preload("res://ShopCards/EquipmentCards/Shoulders/Heavy/BloodsteelPauldrons.tscn")
 
-
+### RING ###
 @onready var ring_of_stone_card = preload("res://ShopCards/EquipmentCards/Ring/RingOfStone.tscn")
 @onready var ring_of_noble_tears = preload("res://ShopCards/EquipmentCards/Ring/RingOfNobleTears.tscn")
 @onready var ring_of_royals = preload("res://ShopCards/EquipmentCards/Ring/RingOfRoyals.tscn")
 @onready var ring_of_the_emperor = preload("res://ShopCards/EquipmentCards/Ring/RingOfTheEmperor.tscn")
 
-
+### AMULET ###
 @onready var amulet_of_stone_card = preload("res://ShopCards/EquipmentCards/Amulet/AmuletOfStone.tscn")
 @onready var amulet_of_noble_tears = preload("res://ShopCards/EquipmentCards/Amulet/AmuletOfNobleTears.tscn")
 @onready var amulet_of_royals = preload("res://ShopCards/EquipmentCards/Amulet/AmuletOfRoyals.tscn")
@@ -923,7 +923,7 @@ func _on_log_received(message):
 
 	chat_log.add_child(label)
 
-
+	# Remove old messages
 	if chat_log.get_child_count() > MAX_MESSAGES:
 		chat_log.get_child(0).queue_free()
 
@@ -974,14 +974,14 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 
 func update_equipment_ui():
 
-
+	# here we need to update EquipmentPanelX with all peers equipment
 	var all_ids = all_gladiators.keys()
 	var all_item_slots = ["weapon1", "weapon2", "head", "shoulders", "chest", "belt", 
 		"gloves", "boots", "legs", "amulet", "ring1", "ring2"]
 
 	var card_scene_map: = {}
 	for card in all_cards:
-		card_scene_map[card[1]] = card[0]
+		card_scene_map[card[1]] = card[0] # card[1] is name, card[0] is scene
 
 
 
@@ -1099,15 +1099,6 @@ func update_equipment_ui():
 
 		var wep1_vfx_effect
 		var wep2_vfx_effect
-
-		if wep2_category == "shield": pass
-
-
-
-		else: pass
-
-
-
 
 
 		if wep1_category == "unarmed":
@@ -1473,7 +1464,7 @@ func _on_equipment_pressed(parent_name: String):
 func update_inventory_ui(glad_id: int):
 	var gladiator_inventory = all_gladiators[glad_id]["inventory"]
 
-
+	print("ASDASD")
 
 	for child in inventory_grid.get_children():
 		child.queue_free()
@@ -1655,7 +1646,7 @@ func clear_shop_grid():
 
 	for child in shop_grid.get_children():
 
-
+		# Skip cards that are already faded out (invisible)
 		if child.modulate.a <= 0.05:
 			print(child.modulate.a)
 			child.queue_free()
@@ -1734,7 +1725,7 @@ func weighted_random_selection(_all_cards: Array, count: int = 5):
 	var pool: = []
 
 
-
+	# Step 1: Build a pool based on weights
 	for pair in _all_cards:
 		var item = pair[0]
 		var item_name = pair[1]
@@ -1744,14 +1735,14 @@ func weighted_random_selection(_all_cards: Array, count: int = 5):
 
 
 		if item_dict != {}:
-
+			# Only add cards that are below player level + 1
 			if item_dict[item_name]["level"] > int(all_gladiators[multiplayer.get_unique_id()]["level"]) + 1:
 				continue
 
 		for i in stock:
-			pool.append(item)
+			pool.append(item) # Add item 'stock' times
 
-
+	# Step 2: Randomly pick items from the pool
 	for i in count:
 		if pool.is_empty():
 			break
@@ -1837,7 +1828,7 @@ func _on_countdown_updated(time_left: int):
 
 		if time_left == 0:
 			reroll_start_of_intermission = 1
-
+			#intermission = false
 			time_passed = 0
 			await get_tree().create_timer(1.0).timeout
 			countdown_label.text = ""
@@ -1851,7 +1842,7 @@ func get_visual_slot(peer_id: int) -> int:
 	var index = peer_ids.find(peer_id)
 	if index == -1:
 		return 1
-	return index + 1
+	return index + 1 # HUD containers are named Player1–8
 
 func _on_life_changed(peer_id: int, new_life: int):
 	var container_name = "Player%d" % get_visual_slot(peer_id)
@@ -2089,7 +2080,7 @@ func rename_equipment_panels(_all_gladiators: Dictionary) -> void :
 	var count: = ids.size()
 	var max_panels: = 8
 
-
+	# Loop only through the number of gladiators
 	for i in range(min(count, max_panels)):
 		var old_name: = "EquipmentPanel" + str(i + 1)
 		if has_node(old_name):

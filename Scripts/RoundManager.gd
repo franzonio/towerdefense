@@ -61,7 +61,7 @@ func generate_round_robin_rounds():
 	var active_ids = player_ids.duplicate()
 	rounds = []
 
-	if active_ids.size() % 2 != 0: active_ids.append(null)
+	if active_ids.size() % 2 != 0: active_ids.append(null) # Add a 'bye' player
 
 	var n = active_ids.size()
 	var half = n / 2.0
@@ -72,10 +72,10 @@ func generate_round_robin_rounds():
 			var p1 = active_ids[i]
 			var p2 = active_ids[n - 1 - i]
 			if p1 != null and p2 != null: round_pairs.append([p1, p2])
-			elif p1 != null: round_pairs.append([p1, null])
-			elif p2 != null: round_pairs.append([p2, null])
+			elif p1 != null: round_pairs.append([p1, null]) # p1 gets a free win
+			elif p2 != null: round_pairs.append([p2, null]) # p2 gets a free win
 
-
+		# Rotate
 		active_ids = [active_ids[0]] + [active_ids[-1]] + active_ids.slice(1, -1)
 		rounds.append(round_pairs)
 
@@ -86,7 +86,7 @@ func regenerate_null_pairs(_current_round: Array) -> Array:
 	var unmatched_peers: = []
 	var used_peers: = {}
 
-
+	# Collect valid pairs and extract single players from nulls
 	for pair in _current_round:
 		if pair.size() != 2:
 			continue
@@ -102,7 +102,7 @@ func regenerate_null_pairs(_current_round: Array) -> Array:
 			if p2 != null:
 				unmatched_peers.append(p2)
 
-
+	# Shuffle unmatched and re-pair
 	unmatched_peers.shuffle()
 	while unmatched_peers.size() >= 2:
 		var p1 = unmatched_peers.pop_back()
@@ -111,7 +111,7 @@ func regenerate_null_pairs(_current_round: Array) -> Array:
 		used_peers[p1] = true
 		used_peers[p2] = true
 
-
+	# Add single leftover if one remains
 	if unmatched_peers.size() == 1:
 		valid_pairs.append([null, unmatched_peers[0]])
 
@@ -136,18 +136,18 @@ func start_next_round():
 
 
 	if active_players.size() <= 1:
-		print("🏆 Game over or only one player left.")
+		print("Game over or only one player left.")
 		return
 
 
 	if rounds.is_empty():
-		print("🧩 Generating round-robin schedule...")
+		print("Generating round-robin schedule...")
 		rounds = generate_round_robin_rounds()
 		current_round_index = 0
 
 
 	if current_round_index >= rounds.size():
-		print("🔁 All rounds completed, regenerating...")
+		print("All rounds completed, regenerating...")
 		rounds = generate_round_robin_rounds()
 		current_round_index = 0
 
@@ -159,9 +159,8 @@ func start_next_round():
 
 	duel_results.clear()
 
-
+	# Spawn duels or assign auto-wins
 	total_duels = current_round.size()
-
 
 	var spawn_index = 0
 	for pair in current_round:
@@ -172,12 +171,12 @@ func start_next_round():
 			spawn_duel_between(p1, p2, spawn_index)
 			spawn_index += 1
 		elif p1 != null:
-
+			#print("%s gets a free win this round (bye)." % p1)
 			spawn_duel_between(p1, p2, spawn_index)
 			spawn_index += 1
 			register_duel_result(p1, -1)
 		elif p2 != null:
-
+			#print("%s gets a free win this round (bye)." % p2)
 			spawn_duel_between(p1, p2, spawn_index)
 			spawn_index += 1
 			register_duel_result(p2, -1)
@@ -187,7 +186,7 @@ func start_next_round():
 
 	if global_round_counter >= 2: GameState_.reroll_cards_new_round(active_players)
 
-
+	# INTERMISSION PHASE
 	if intermission_timer == null:
 		intermission_timer = get_parent().get_node("HUD/IntermissionTimer")
 

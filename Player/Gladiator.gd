@@ -111,7 +111,7 @@ var recalculated_hit_chance = 0
 
 
 
-
+# === Damage calculations ===
 @export var attack_speed: float
 @export var time_since_last_attack: float
 @export var crit_chance: Array
@@ -194,11 +194,9 @@ func _ready():
 	if direction.x < 0:
 		face_towards = "left"
 		sprite.play("idle_left")
-		flip_animations(true)
 	else:
 		face_towards = "right"
 		sprite.play("idle_right")
-		flip_animations(false)
 
 	sprite.play("idle_right")
 
@@ -293,51 +291,9 @@ func _physics_process(delta):
 			sprite.play(current_animation)
 
 
-func flip_animations(flip):
-
-
-
-
-
-
-
-
-
-
-
-	if flip == false: 1
-
-
-
-
-	else: 1
-
-
-
-
-
-
 func _on_send_gladiator_data_to_peer_signal(_peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
 	all_gladiators = _all_gladiators
 
-
-
-@rpc("any_peer", "call_local")
-func update_item_textures():
-
-	var id = owner_id
-
-
-
-	var weapon1 = all_gladiators[id].get("weapon1", {})
-	var weapon2 = all_gladiators[id].get("weapon2", {})
-
-
-
-
-
-
-	$".".visible = true
 
 func _on_concede_threshold_changed(value: float):
 	concede_threshold = value
@@ -819,12 +775,12 @@ func update_gladiator_after_strategy(hit_chance_penalty, dodge_mod):
 	glad_weapon1_category_skill = glad_weapon1_category_skill * hit_chance_penalty
 	glad_weapon2_category_skill = glad_weapon2_category_skill * hit_chance_penalty
 
-	var hit_base_per_lvl = - (1.6 - float(int(level)) / 12)
-	var hit_skill_weight_1 = (glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0)))
-	var hit_skill_weight_2 = (glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0)))
-	var hit_curve_smoothness = 6 + float(int(level)) / 4
-	var wep1_difficulty = 1
-	var wep2_difficulty = 1
+	var hit_base_per_lvl = - (1.6 - float(int(level)) / 12) # Less penalty for too low weapon mastery in low levels
+	var hit_skill_weight_1 = (glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0))) # Reduce hit chance with weight
+	var hit_skill_weight_2 = (glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0))) # Reduce hit chance with weight
+	var hit_curve_smoothness = 6 + float(int(level)) / 4 # In low level, hit curve is more smooth (exponential part)
+	var wep1_difficulty = 1 # vary around 1 -> higher makes it easier to handle
+	var wep2_difficulty = 1 # vary around 1 -> higher makes it easier to handle
 
 	if weapon2_can_block:
 		hit_chance = [wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness)), 
@@ -984,12 +940,12 @@ func update_gladiator(data: Dictionary, id):
 	glad_weapon1_category_skill = data["attributes"][weapon1_category + "_mastery"]
 	glad_weapon2_category_skill = data["attributes"][weapon2_category + "_mastery"]
 
-	var hit_base_per_lvl = - (1.6 - float(level) / 12)
-	var hit_skill_weight_1 = (glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0)))
-	var hit_skill_weight_2 = (glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0)))
-	var hit_curve_smoothness = 6 + float(level) / 4
-	var wep1_difficulty = 1
-	var wep2_difficulty = 1
+	var hit_base_per_lvl = - (1.6 - float(level) / 12) # Less penalty for too low weapon mastery in low levels
+	var hit_skill_weight_1 = (glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0))) # Reduce hit chance with weight
+	var hit_skill_weight_2 = (glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0))) # Reduce hit chance with weight
+	var hit_curve_smoothness = 6 + float(level) / 4 # In low level, hit curve is more smooth (exponential part)
+	var wep1_difficulty = 1 # vary around 1 -> higher makes it easier to handle
+	var wep2_difficulty = 1 # vary around 1 -> higher makes it easier to handle
 
 
 	if weapon2_can_block:
@@ -1014,7 +970,7 @@ func update_gladiator(data: Dictionary, id):
 		hit_chance = [attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness))), 
 			attack_type_hit_mod * (wep2_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_2 ** hit_curve_smoothness)))]
 
-
+# === Damage calculations ===
 	if weapon_hands_to_carry == 1:
 		var as_wep_base = 1 / (weapon1_speed + weapon2_speed)
 		var as_exp_p1 = - (0.01 + (weapon1_speed + weapon2_speed) / 250)
@@ -1036,7 +992,7 @@ func update_gladiator(data: Dictionary, id):
 
 
 
-	if weapon1_durability == 1:
+	if weapon1_durability == 1:		# THIS MEANS EQUIPPING NO WEP IN SLOT
 		crit_chance[0] = no_wep_crit_chance
 		crit_multi[0] = no_wep_crit_multi
 		hit_chance[0] = no_wep_hit_chance

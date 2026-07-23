@@ -21,10 +21,10 @@ func _ready():
 
 
 func list_lobbies():
-
+	#Steam.addRequestLobbyListDistanceFilter(Steam.LOBBY_DISTANCE_FILTER_WORLDWIDE)
 	Steam.addRequestLobbyListStringFilter("region", "global", Steam.LOBBY_COMPARISON_EQUAL)
 	Steam.requestLobbyList()
-
+	#Steam.addRequestLobbyListStringFilter("region", "eu", Steam.LOBBY_COMPARISON_EQUAL)
 
 
 
@@ -58,10 +58,10 @@ func _on_lobby_joined(lobby_id: int, _permissions: int, _locked: bool, _response
 	_lobby_id = lobby_id
 
 	if Steam.getLobbyOwner(lobby_id) == Steam.getSteamID():
-
+		# if hosting we can ignore this
 		return
 
-
+	# if we're joining
 	var peer: = SteamMultiplayerPeer.new()
 	peer.debug_level = SteamMultiplayerPeer.DEBUG_LEVEL_PEER
 	peer.connect_to_lobby(lobby_id)
