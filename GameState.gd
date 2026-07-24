@@ -355,7 +355,7 @@ func grant_exp_for_peer(id: int, amount: int, cost: int):
 	else: return#add_to_peer_log(id, "Not enough gold!")
 
 @rpc("any_peer", "call_local")
-func grant_gold_for_peer(id: int, base_amount: int, opponent_id: int, winner: bool):
+func grant_gold_for_peer(id: int, opponent_id: int, winner: bool):
 	var peer_color = all_gladiators[id]["color"]#.to_html()
 	var opponent_color = all_gladiators[opponent_id]["color"]#.to_html()
 	
@@ -414,6 +414,7 @@ func grant_gold_for_peer(id: int, base_amount: int, opponent_id: int, winner: bo
 	var streak_break_bonus = 0
 	var income_bonus = 0
 	var win_bonus = 0
+	var base_amount = 3
 	
 	# 1. Streak bonus
 	if peer_streak > 0: # win-streak
@@ -1435,7 +1436,10 @@ func get_scroll_of_injection_bonus_roll(id, item, slot):
 			
 func get_possible_bonuses_for_item(item_dict):
 	var item = item_dict.keys()[0]
-	var item_level = item_dict[item]["level"]
+	
+	var tier = item_dict[item]["tier"]
+	var item_level = tier #item_dict[item]["level"]
+	
 	var type = item_dict[item]["type"]
 	var category = item_dict[item]["category"]
 	var hands = item_dict[item].get("hands", -1)

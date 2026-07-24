@@ -305,20 +305,20 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 
 func _initialize_attributes():
 	attributes = {
-		"strength": 100, 
-		"quickness": 100, 
-		"crit_rating": 100, 
-		"avoidance": 100, 
-		"health": 100, 
-		"resilience": 100, 
-		"endurance": 100, 
-		"sword_mastery": 100, 
-		"axe_mastery": 100, 
-		"mace_mastery": 100, 
-		"stabbing_mastery": 100, 
-		"flagellation_mastery": 100, 
-		"shield_mastery": 100, 
-		"unarmed_mastery": 100, 
+		"strength": 1.0, 
+		"quickness": 1.0, 
+		"crit_rating": 1.0, 
+		"avoidance": 1.0, 
+		"health": 1.0, 
+		"resilience": 1.0, 
+		"endurance": 1.0, 
+		"sword_mastery": 1.0, 
+		"axe_mastery": 1.0, 
+		"mace_mastery": 1.0, 
+		"stabbing_mastery": 1.0, 
+		"flagellation_mastery": 1.0, 
+		"shield_mastery": 1.0, 
+		"unarmed_mastery": 1.0, 
 	}
 
 	for attr in starting_values:
@@ -431,7 +431,7 @@ func _on_confirm():
 	var gladiator = {
 		"color": Color("d2c9ff"), 
 		"name": GameState_.selected_name, 
-		"gold": 100000, 
+		"gold": 10, 
 		"exp": 0, 
 		"streak": 0, 
 		"level": "1", 
@@ -476,8 +476,8 @@ func _on_confirm():
 		}, 
 
 		"crafting_mats": {
-			"scroll_of_luck": 10000, 
-			"scroll_of_injection": 10000
+			"scroll_of_luck": 1, 
+			"scroll_of_injection": 1
 		}, 
 		"total_modifier_bonuses": {}, 
 		"age": "Young"

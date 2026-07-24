@@ -279,19 +279,21 @@ func _on_duel_finished(winner_id: int, loser_id: int):
 	await get_tree().process_frame
 
 	if duel_results.has(winner_id): return
-	if winner_id == -1 or loser_id == -1: return
+	
+	# add case for no opponent
+	# loser_id == -1 means that you didn't face an opponent
+	# you still want to get your gold and exp if this happens
+	# if loss streak -> continue your loss streak
+	# if win streak -> continue your win streak
+	
+	if winner_id == -1 or loser_id == -1: return  
 
 	duel_results[winner_id] = true
 	duel_results[loser_id] = false
 
 
-
-	var base_gold = 3
-
-
-
-	GameState_.grant_gold_for_peer(winner_id, base_gold, loser_id, true)
-	GameState_.grant_gold_for_peer(loser_id, base_gold, winner_id, false)
+	GameState_.grant_gold_for_peer(winner_id, loser_id, true)
+	GameState_.grant_gold_for_peer(loser_id, winner_id, false)
 
 	GameState_.modify_streak(winner_id, true)
 	GameState_.modify_streak(loser_id, false)

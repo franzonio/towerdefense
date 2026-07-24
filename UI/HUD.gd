@@ -1828,7 +1828,7 @@ func _on_countdown_updated(time_left: int):
 
 		if time_left == 0:
 			reroll_start_of_intermission = 1
-			#intermission = false
+			intermission = false
 			time_passed = 0
 			await get_tree().create_timer(1.0).timeout
 			countdown_label.text = ""
