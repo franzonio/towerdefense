@@ -279,18 +279,18 @@ func create_card_pool():
 	
 	attr_cards_stock = {
 		"strength": 100,
-		"quickness": 50,
-		"crit_rating": 50,
-		"avoidance": 50,
+		"quickness": 100,
+		"crit_rating": 100,
+		"avoidance": 100,
 		"health": 100,
-		"resilience": 50,
+		"resilience": 1,
 		"endurance": 100,
-		"sword_mastery": 100,
-		"axe_mastery": 100,
-		"mace_mastery": 100,
-		"stabbing_mastery": 100,
-		"flagellation_mastery": 100,
-		"shield_mastery": 100
+		"sword_mastery": 50,
+		"axe_mastery": 50,
+		"mace_mastery": 50,
+		"stabbing_mastery": 50,
+		"flagellation_mastery": 50,
+		"shield_mastery": 50
 	}
 	var _all_cards_stock = {}  # Create a fresh dictionary
 
@@ -356,10 +356,69 @@ func grant_exp_for_peer(id: int, amount: int, cost: int):
 
 @rpc("any_peer", "call_local")
 func grant_gold_for_peer(id: int, opponent_id: int, winner: bool):
-	var peer_color = all_gladiators[id]["color"]#.to_html()
+	# --- Tunable parameters ---
+	var WIN_STREAK_STEP := 3          # Wins per +1 gold
+	var WIN_STREAK_CAP := 3           # Max gold from win streak
+	var LOSS_STREAK_STEP := 2         # Losses per +1 gold
+	var LOSS_STREAK_CAP := 4          # Max gold from loss streak
+	
+	var STREAK_BREAK_BONUS_SAME := 1  # You both had win streaks
+	var STREAK_BREAK_BONUS_UPSET := 3 # You had loss streak, opponent had win streak
+	
+	# Gold thresholds and corresponding bonuses
+	var INCOME_GOLD_THRESHOLDS := [10, 20, 30, 40, 50]
+	var INCOME_GOLD_BONUSES :=    [1,   2,  3,  4,  5]
+	
+	var peer_color = all_gladiators[id]["color"]
+	var peer_name = "[color=%s]%s[/color]" % [peer_color, all_gladiators[id]["name"]]
+
+	var peer_streak = all_gladiators[id]["streak"]
+	var peer_gold = all_gladiators[id]["gold"]
+
+	var total_bonus = 0
+	var streak_bonus = 0
+	var income_bonus = 0
+	var win_bonus = 1  # You still "win" the round
+	var base_amount = 3
+	
+	if opponent_id == -1:
+		# No opponent → no streak break logic, no opponent name
+		win_bonus = 1  # You still "win" the round
+
+		# Streak bonus (same as normal)
+		if peer_streak > 0:
+			streak_bonus += min(peer_streak / WIN_STREAK_STEP, WIN_STREAK_CAP)
+		elif peer_streak < 0:
+			streak_bonus += min(abs(peer_streak) / LOSS_STREAK_STEP, LOSS_STREAK_CAP)
+
+		# Income bonus (same as normal)
+		for i in range(INCOME_GOLD_THRESHOLDS.size()):
+			if peer_gold >= INCOME_GOLD_THRESHOLDS[i] and (i == INCOME_GOLD_THRESHOLDS.size() - 1 or peer_gold < INCOME_GOLD_THRESHOLDS[i+1]):
+				income_bonus += INCOME_GOLD_BONUSES[i]
+				break
+
+		var gold_from_gear = all_gladiators[id].get("total_modifier_bonuses", {}).get("to_gold_income", 0)
+
+		total_bonus = base_amount + win_bonus + income_bonus + streak_bonus + gold_from_gear
+
+		all_gladiators[id]["income_last_round"] = {
+			"base": base_amount, "win": win_bonus, "income": income_bonus,
+			"streak": streak_bonus, "streak_break": 0, "gear": gold_from_gear
+		}
+
+		all_gladiators[id]["gold"] += int(total_bonus)
+		rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
+		rpc("send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+
+		var free_win_text = peer_name + " gets walkover win!"
+
+		add_to_log(id, free_win_text)
+
+		return
+	
+	
 	var opponent_color = all_gladiators[opponent_id]["color"]#.to_html()
 	
-	var peer_name = "[color=%s]%s[/color]" % [peer_color, all_gladiators[id]["name"]]
 	var opponent_name = "[color=%s]%s[/color]" % [opponent_color, all_gladiators[opponent_id]["name"]]
 
 	var win_streak_quotes = [
@@ -392,29 +451,9 @@ func grant_gold_for_peer(id: int, opponent_id: int, winner: bool):
 	peer_name + " stops " + opponent_name + "'s killing spree!",
 	peer_name + " breaks " + opponent_name + "'s dominance!",
 	peer_name + " butchers " + opponent_name + "'s Legend!"]
-
-	# --- Tunable parameters ---
-	var WIN_STREAK_STEP := 3          # Wins per +1 gold
-	var WIN_STREAK_CAP := 3           # Max gold from win streak
-	var LOSS_STREAK_STEP := 2         # Losses per +1 gold
-	var LOSS_STREAK_CAP := 4          # Max gold from loss streak
-	
-	var STREAK_BREAK_BONUS_SAME := 1  # You both had win streaks
-	var STREAK_BREAK_BONUS_UPSET := 3 # You had loss streak, opponent had win streak
-	
-	# Gold thresholds and corresponding bonuses
-	var INCOME_GOLD_THRESHOLDS := [10, 20, 30, 40, 50]
-	var INCOME_GOLD_BONUSES :=    [1,   2,  3,  4,  5]
 	
 	# --- Logic ---
-	var peer_streak = all_gladiators[id]["streak"]
-	var peer_gold = all_gladiators[id]["gold"]
-	var total_bonus = 0
-	var streak_bonus = 0
 	var streak_break_bonus = 0
-	var income_bonus = 0
-	var win_bonus = 0
-	var base_amount = 3
 	
 	# 1. Streak bonus
 	if peer_streak > 0: # win-streak
@@ -1470,8 +1509,8 @@ func get_possible_bonuses_for_item(item_dict):
 			}
 		elif hands == 2:
 			possible_bonuses = {
-				"added_dmg": str(2*randi_range(1, item_dict[item]["min_dmg"]/2)) + "-" + 
-							str(2*randi_range(item_dict[item]["min_dmg"]/2, item_dict[item]["max_dmg"]/2)),
+				"added_dmg": str(randi_range(1, item_dict[item]["min_dmg"]/2)) + "-" + 
+							str(randi_range(item_dict[item]["min_dmg"]/2, item_dict[item]["max_dmg"]/2)),
 				"increased_dmg": str(2*randi_range(2*item_level, 10*item_level)),
 				"added_hit_chance": str(randi_range(1, 2*item_level)),
 				"local_increased_attack_speed": str(2*randi_range(item_level, 3*item_level)),

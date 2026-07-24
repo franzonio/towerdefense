@@ -70,13 +70,14 @@ func get_income_tooltip(income_details):
 	var gold_gear = income_details.get("gear", 0)
 	var total = base + win + income + streak + streak_break + gold_gear
 	
-	var income_text =  "[color=%s]Total:[/color] [color=%s]%s[/color]
+	var income_text =  "[color=%s]Previous round[/color]
+[color=%s]Total:[/color] [color=%s]%s[/color]
 [color=%s]Base:[/color] [color=%s]%s[/color]
 [color=%s]Win:[/color] [color=%s]%s[/color]
 [color=%s]Income:[/color] [color=%s]%s[/color]
 [color=%s]Streak:[/color] [color=%s]%s[/color]
 [color=%s]Buzzkiller:[/color] [color=%s]%s[/color]
-[color=%s]Gear bonus:[/color] [color=%s]%s[/color]" % [gold, gold, total, white, gold, base, white, gold, win, white, gold, income, 
+[color=%s]Gear bonus:[/color] [color=%s]%s[/color]" % [white, gold, gold, total, white, gold, base, white, gold, win, white, gold, income, 
 														white, gold, streak, white, gold, streak_break, white, gold, gold_gear]
 	return income_text
 

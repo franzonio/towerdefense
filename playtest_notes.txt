@@ -1,0 +1,24 @@
+Bugs
+	Gear unequip/equip kalkyl buggar
+		- lyckas inte reproducera...
+	
+Features
+		Vid ojämnt antal, möta en ghost eller fortsätta sin loss/winstreak
+			Något sätt att pivotera sin build - respec tokens i shoppen!
+			Tutorial
+	Skriva tier och om tung/lätt version i item tooltip
+		Uppgradera tier genom att sätta ihop 3 av lägre tier (borde bara kräva att lägga in light/heavy i equipment dicts
+		Vid miss, ge inte motståndaren en crit, utan skippa ditt egna slag
+		Vid race selection ha info om rasbonusar
+	Fixa swing animations vid hög attack speed
+	Panel för hit chance etc
+		Catch-up mechanic med free rerolls?
+	
+Balance
+	0 Tid för rundor
+	0 Lås equip/strat under fighten
+	Gear stats down tune vid craft (life on hit, hit chance, dmg, absorb ...)
+	Slår lite för fort?
+	För långa games
+	Tydligare påverkan av vikt
+	Durability är alldeles för svagt end game vs offensive scaling. Kanske resilience reducerar skadan vapnet tar?

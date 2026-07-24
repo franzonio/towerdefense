@@ -122,10 +122,10 @@ var life_dict = {}
 }
 
 @onready var esc_menu = $EscMenu
-@onready var resume_button = $EscMenu / Resume
-@onready var options_button = $EscMenu / Options
-@onready var disconnect_button = $EscMenu / Disconnect
-@onready var confirm_disconnect = $EscMenu / ConfirmDisconnect
+@onready var resume_button = $EscMenu/Resume
+@onready var options_button = $EscMenu/Options
+@onready var disconnect_button = $EscMenu/Disconnect
+@onready var confirm_disconnect = $EscMenu/ConfirmDisconnect
 
 @onready var inventory_popup: = $InventoryPopup
 @onready var equipment_popup: = $EquipmentPopup
@@ -142,10 +142,10 @@ var label_gold_position
 const MAX_MESSAGES = 50
 const MAX_LENGTH = 255
 
-@onready var chat_log = $Panel / ChatScroll / ChatLog
-@onready var chat_input = $HBoxContainer / ChatInput
-@onready var send_button = $HBoxContainer / SendButton
-@onready var chat_scroll = $Panel / ChatScroll
+@onready var chat_log = $Panel/ChatScroll/ChatLog
+@onready var chat_input = $HBoxContainer/ChatInput
+@onready var send_button = $HBoxContainer/SendButton
+@onready var chat_scroll = $Panel/ChatScroll
 
 @export var round_now = 0
 @export var time_passed: float = 0.0
@@ -184,12 +184,12 @@ var name_and_chat_outline_thickness = 6
 var is_shop_locked: = false
 
 @onready var shop_grid = $ShopGridContainer
-@onready var inventory_grid = $Inventory / InventoryGridContainer
+@onready var inventory_grid = $Inventory/InventoryGridContainer
 @onready var countdown_label = $IntermissionTimerLabel
 @onready var shop = $Shop
-@onready var concede_threshold_menu = $ConcedePanel / ConcedeThresholdMenu
-@onready var stance_menu = $StancePanel / StanceMenu
-@onready var attack_menu = $AttackPanel / AttackMenu
+@onready var concede_threshold_menu = $ConcedePanel/ConcedeThresholdMenu
+@onready var stance_menu = $StancePanel/StanceMenu
+@onready var attack_menu = $AttackPanel/AttackMenu
 @onready var exp_button = $ExpButton
 @onready var refresh_button = $RefreshButton
 @onready var lock_button = $LockShop
@@ -235,44 +235,44 @@ var prev_gold = 0
 @onready var troll_picture = preload("res://Assets/EquipmentPanel/troll.png")
 
 @onready var attribute_panel = $AttributePanel
-@onready var health_panel = $AttributePanel / VBoxContainer / Health
-@onready var strength_panel = $AttributePanel / VBoxContainer / Strength
-@onready var endurance_panel = $AttributePanel / VBoxContainer / Endurance
-@onready var criticality_panel = $AttributePanel / VBoxContainer / Criticality
-@onready var avoidance_panel = $AttributePanel / VBoxContainer / Avoidance
-@onready var quickness_panel = $AttributePanel / VBoxContainer / Quickness
-@onready var resilience_panel = $AttributePanel / VBoxContainer / Resilience
-@onready var sword_mastery_panel = $AttributePanel / VBoxContainer / SwordMastery
-@onready var axe_mastery_panel = $AttributePanel / VBoxContainer / AxeMastery
-@onready var stabbing_mastery_panel = $AttributePanel / VBoxContainer / StabbingMastery
-@onready var mace_mastery_panel = $AttributePanel / VBoxContainer / MaceMastery
-@onready var flagellation_mastery_panel = $AttributePanel / VBoxContainer / FlagellationMastery
-@onready var shield_mastery_panel = $AttributePanel / VBoxContainer / ShieldMastery
-@onready var unarmed_mastery_panel = $AttributePanel / VBoxContainer / UnarmedMastery
+@onready var health_panel = $AttributePanel/VBoxContainer/Health
+@onready var strength_panel = $AttributePanel/VBoxContainer/Strength
+@onready var endurance_panel = $AttributePanel/VBoxContainer/Endurance
+@onready var criticality_panel = $AttributePanel/VBoxContainer/Criticality
+@onready var avoidance_panel = $AttributePanel/VBoxContainer/Avoidance
+@onready var quickness_panel = $AttributePanel/VBoxContainer/Quickness
+@onready var resilience_panel = $AttributePanel/VBoxContainer/Resilience
+@onready var sword_mastery_panel = $AttributePanel/VBoxContainer/SwordMastery
+@onready var axe_mastery_panel = $AttributePanel/VBoxContainer/AxeMastery
+@onready var stabbing_mastery_panel = $AttributePanel/VBoxContainer/StabbingMastery
+@onready var mace_mastery_panel = $AttributePanel/VBoxContainer/MaceMastery
+@onready var flagellation_mastery_panel = $AttributePanel/VBoxContainer/FlagellationMastery
+@onready var shield_mastery_panel = $AttributePanel/VBoxContainer/ShieldMastery
+@onready var unarmed_mastery_panel = $AttributePanel/VBoxContainer/UnarmedMastery
 
-@onready var health_icon_panel = $AttributePanel / VBoxContainer / HealthIcon
-@onready var strength_icon_panel = $AttributePanel / VBoxContainer / StrengthIcon
-@onready var endurance_icon_panel = $AttributePanel / VBoxContainer / EnduranceIcon
-@onready var criticality_icon_panel = $AttributePanel / VBoxContainer / CriticalityIcon
-@onready var avoidance_icon_panel = $AttributePanel / VBoxContainer / AvoidanceIcon
-@onready var quickness_icon_panel = $AttributePanel / VBoxContainer / QuicknessIcon
-@onready var resilience_icon_panel = $AttributePanel / VBoxContainer / ResilienceIcon
-@onready var sword_mastery_icon_panel = $AttributePanel / VBoxContainer / SwordIcon
-@onready var axe_mastery_icon_panel = $AttributePanel / VBoxContainer / AxeIcon
-@onready var stabbing_mastery_icon_panel = $AttributePanel / VBoxContainer / StabbingIcon
-@onready var mace_mastery_icon_panel = $AttributePanel / VBoxContainer / MaceIcon
-@onready var flagellation_mastery_icon_panel = $AttributePanel / VBoxContainer / FlagellationIcon
-@onready var shield_mastery_icon_panel = $AttributePanel / VBoxContainer / ShieldIcon
+@onready var health_icon_panel = $AttributePanel/VBoxContainer/HealthIcon
+@onready var strength_icon_panel = $AttributePanel/VBoxContainer/StrengthIcon
+@onready var endurance_icon_panel = $AttributePanel/VBoxContainer/EnduranceIcon
+@onready var criticality_icon_panel = $AttributePanel/VBoxContainer/CriticalityIcon
+@onready var avoidance_icon_panel = $AttributePanel/VBoxContainer/AvoidanceIcon
+@onready var quickness_icon_panel = $AttributePanel/VBoxContainer/QuicknessIcon
+@onready var resilience_icon_panel = $AttributePanel/VBoxContainer/ResilienceIcon
+@onready var sword_mastery_icon_panel = $AttributePanel/VBoxContainer/SwordIcon
+@onready var axe_mastery_icon_panel = $AttributePanel/VBoxContainer/AxeIcon
+@onready var stabbing_mastery_icon_panel = $AttributePanel/VBoxContainer/StabbingIcon
+@onready var mace_mastery_icon_panel = $AttributePanel/VBoxContainer/MaceIcon
+@onready var flagellation_mastery_icon_panel = $AttributePanel/VBoxContainer/FlagellationIcon
+@onready var shield_mastery_icon_panel = $AttributePanel/VBoxContainer/ShieldIcon
 
-@onready var points_left_label = $AttributePanel / PointsLeft
-@onready var points_info = $AttributePanel / Info
+@onready var points_left_label = $AttributePanel/PointsLeft
+@onready var points_info = $AttributePanel/Info
 
 @onready var attribute_icons = [health_icon_panel, strength_icon_panel, endurance_icon_panel, criticality_icon_panel, 
 	avoidance_icon_panel, quickness_icon_panel, resilience_icon_panel, sword_mastery_icon_panel, axe_mastery_icon_panel, 
 	stabbing_mastery_icon_panel, mace_mastery_icon_panel, flagellation_mastery_icon_panel, shield_mastery_icon_panel]
 
-@onready var scroll_of_luck = $CraftingContainer / CraftingMats / ScrollOfLuck
-@onready var scroll_of_injection = $CraftingContainer / CraftingMats / ScrollOfInjection
+@onready var scroll_of_luck = $CraftingContainer/CraftingMats/ScrollOfLuck
+@onready var scroll_of_injection = $CraftingContainer/CraftingMats/ScrollOfInjection
 
 @onready var crafting_container = $CraftingContainer
 @onready var shop_button = $ShopButton
@@ -1064,7 +1064,11 @@ func update_equipment_ui():
 			equipment_panel_picture.texture = elf_picture
 
 
-
+		var mainhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/MainHand")
+		var offhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/OffHand")
+		var vfx_mainhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/VfxMainHand")
+		var vfx_offhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/VfxOffHand")
+		var animation_parent = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations")
 
 
 
@@ -1078,14 +1082,28 @@ func update_equipment_ui():
 		equipment_panel.visible = true
 		var get_spawn_point = all_gladiators[id].get("spawn_point", Vector2(0, 0))
 		var side = find_spawn_side(get_spawn_point)
+		
 		if get_spawn_point != Vector2(0, 0):
 			equipment_panel.position = all_gladiators[id]["spawn_point"]
+			
+		if id == multiplayer.get_unique_id():
+			if side == "left": 
+				attribute_panel.position = equipment_panel.position - Vector2(180, 0)
+			elif side == "right": 
+				attribute_panel.position = equipment_panel.position + Vector2(302, 0)
 
-		var mainhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/MainHand")
-		var offhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/OffHand")
-		var vfx_mainhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/VfxMainHand")
-		var vfx_offhand = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations/VfxOffHand")
-		var animation_parent = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations")
+		if side == "left":
+			animation_parent.scale.x = 1
+			print("left equip pos: " + str(equipment_panel.position))
+			print("left anim pos: " + str(animation_parent.position))
+		elif side == "right":
+			animation_parent.position = equipment_panel.position - Vector2(400, 400)
+			animation_parent.scale.x = -1
+			  # THIS NEEDS TO FOLLOW equipment_panel.position. Doesn't work if more than 2 players
+			print("right equip pos: " + str(equipment_panel.position))
+			print("right anim pos: " + str(animation_parent.position))
+
+		print("\n")
 
 
 		var wep1_name = all_gladiators[id].get("weapon1", "???").keys()[0]
@@ -1173,17 +1191,6 @@ func update_equipment_ui():
 			else:
 				offhand.texture = null
 
-
-
-		if id == multiplayer.get_unique_id():
-			if side == "left": attribute_panel.position = equipment_panel.position - Vector2(180, 0)
-			elif side == "right": attribute_panel.position = equipment_panel.position + Vector2(300, 0)
-
-		if side == "left":
-			animation_parent.scale.x = 1
-		elif side == "right":
-			animation_parent.scale.x = -1
-			animation_parent.position = Vector2(300, 0)
 
 		for slot in all_item_slots:
 			var item_slot
@@ -1273,7 +1280,7 @@ func _on_add_item_to_inventory(id, item_dict, slot_name):
 		card_instance.button_down.connect(_on_inventory_item_pressed.bind(item_name, slot_name))
 		card_instance.set_multiplayer_authority(multiplayer.get_unique_id())
 		card_instance["focus_mode"] = 0
-		$Inventory / InventoryGridContainer.find_child(slot_name, true, false).add_child(card_instance)
+		$Inventory/InventoryGridContainer.find_child(slot_name, true, false).add_child(card_instance)
 	else:
 		print("⚠️ No matching scene for item:", item_name)
 
@@ -1320,7 +1327,7 @@ func find_item_slot(category, hands, id):
 
 func _on_remove_item_from_inventory(id, _item_dict, slot_name):
 	if multiplayer.get_unique_id() != id: return
-	$Inventory / InventoryGridContainer.find_child(slot_name, true, false).get_child(0).queue_free()
+	$Inventory/InventoryGridContainer.find_child(slot_name, true, false).get_child(0).queue_free()
 
 func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
 	all_gladiators = _all_gladiators
@@ -2253,6 +2260,7 @@ func play_animation(id, animation, _weapon, hand):
 		elif tier == 4:
 			vfx.modulate = "ffffff"
 
+		animation_player.stop()
 		animation_player.play(animation)
 
 func wep_broken(id, _wep1_broken, _wep2_broken):

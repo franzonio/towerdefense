@@ -125,7 +125,7 @@ func _on_start_game_pressed():
 	GameState_.assign_peer_colors(players)
 	await get_tree().create_timer(1).timeout
 	race_selection.rpc()
-	#await get_tree().create_timer(1).timeout
+	await get_tree().create_timer(1).timeout
 	race_selection()
 
 @rpc("authority")

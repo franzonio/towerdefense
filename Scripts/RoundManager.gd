@@ -217,7 +217,7 @@ func _on_gladiator_attribute_changed(new_all_gladiators: Dictionary):
 func spawn_duel_between(peer1, peer2, index: int):
 	var spawn_point_left = GameState_.spawn_points["left"][index]
 	var spawn_point_right = GameState_.spawn_points["right"][index]
-
+	print(GameState_.spawn_points)
 	var meeting_point = GameState_.meeting_points[index % 4].global_position
 	var glad1
 	var glad2
@@ -270,11 +270,79 @@ func spawn_duel_between(peer1, peer2, index: int):
 		})
 
 
+	if glad1: glad1.died.connect( func(): _on_duel_finished(peer2, peer1))
+	if glad2: glad2.died.connect( func(): _on_duel_finished(peer1, peer2))
+	
+	
+func _on_duel_finished(winner_id: int, loser_id: int):
+	await get_tree().process_frame
+	if duel_results.has(winner_id): 
+		return
 
+	# --- CASE 1: No opponent ---
+	if loser_id == -1:
+		duel_results[winner_id] = true
 
-	glad1.died.connect( func(): _on_duel_finished(peer2, peer1))
-	glad2.died.connect( func(): _on_duel_finished(peer1, peer2))
+		# Winner gets gold & exp as if they won
+		GameState_.grant_gold_for_peer(winner_id, -1, true)
+		GameState_.modify_streak(winner_id, true)
+		GameState_.grant_exp_for_peer(winner_id, 4, 0)
 
+		return
+
+	# --- CASE 2: Normal duel ---
+	if winner_id == -1:
+		return  # Should not happen, but keep guard
+
+	duel_results[winner_id] = true
+	duel_results[loser_id] = false
+
+	GameState_.grant_gold_for_peer(winner_id, loser_id, true)
+	GameState_.grant_gold_for_peer(loser_id, winner_id, false)
+	GameState_.modify_streak(winner_id, true)
+	GameState_.modify_streak(loser_id, false)
+	GameState_.grant_exp_for_peer(winner_id, 4, 0)
+	GameState_.grant_exp_for_peer(loser_id, 4, 0)
+
+	var ids_to_eliminate = []
+	if multiplayer.is_server():
+		if loser_id != -1:
+			
+			for id in player_ids:
+
+				if id != null:
+					if GameState_.all_gladiators[id]["player_life"] <= 0:
+						ids_to_eliminate.append(id)
+
+			for id in ids_to_eliminate:
+				var _name = GameState_.all_gladiators[id]["name"]
+				var color = GameState_.all_gladiators[id]["color"]
+				var formatted = "[color=%s]%s[/color]" % [color, _name]
+				GameState_.add_to_log(get_multiplayer_authority(), "❌" + formatted + " is eliminated!❌")
+
+				player_ids.erase(id)
+				remove_eliminated_from_rounds(id)
+
+		if duel_results.size() >= len(player_ids) / 2.0:
+			await get_tree().create_timer(4.0).timeout
+			despawn_all_gladiators()
+			duel_results.clear()
+			total_duels = 0
+			await get_tree().create_timer(4.0).timeout
+
+			if player_ids.size() >= 2:
+				start_next_round()
+			if player_ids.size() == 1:
+				var _name = GameState_.all_gladiators[player_ids[0]]["name"]
+				var color = GameState_.all_gladiators[player_ids[0]]["color"]
+				var formatted = "[color=%s]%s[/color]" % [color, _name]
+
+				if multiplayer.is_server():
+					GameState_.add_to_log(multiplayer.get_unique_id(), "⭐ " + formatted + " WON THE GAME! ⭐")
+				else:
+					GameState_.rpc("add_to_log", multiplayer.get_unique_id(), "⭐ " + formatted + " WON THE GAME! ⭐")
+	
+'''
 func _on_duel_finished(winner_id: int, loser_id: int):
 	await get_tree().process_frame
 
@@ -291,7 +359,6 @@ func _on_duel_finished(winner_id: int, loser_id: int):
 	duel_results[winner_id] = true
 	duel_results[loser_id] = false
 
-
 	GameState_.grant_gold_for_peer(winner_id, loser_id, true)
 	GameState_.grant_gold_for_peer(loser_id, winner_id, false)
 
@@ -304,15 +371,12 @@ func _on_duel_finished(winner_id: int, loser_id: int):
 	var ids_to_eliminate = []
 	if multiplayer.is_server():
 		if loser_id != -1:
-
-
-
+			
 			for id in player_ids:
 
 				if id != null:
 					if GameState_.all_gladiators[id]["player_life"] <= 0:
 						ids_to_eliminate.append(id)
-
 
 			for id in ids_to_eliminate:
 				var _name = GameState_.all_gladiators[id]["name"]
@@ -323,19 +387,9 @@ func _on_duel_finished(winner_id: int, loser_id: int):
 				player_ids.erase(id)
 				remove_eliminated_from_rounds(id)
 
-
-
-
-
-
-
 		if duel_results.size() >= len(player_ids) / 2.0:
-
-
 			await get_tree().create_timer(4.0).timeout
-
 			despawn_all_gladiators()
-
 			duel_results.clear()
 			total_duels = 0
 			await get_tree().create_timer(4.0).timeout
@@ -347,12 +401,11 @@ func _on_duel_finished(winner_id: int, loser_id: int):
 				var color = GameState_.all_gladiators[player_ids[0]]["color"]
 				var formatted = "[color=%s]%s[/color]" % [color, _name]
 
-
-
 				if multiplayer.is_server():
 					GameState_.add_to_log(multiplayer.get_unique_id(), "⭐ " + formatted + " WON THE GAME! ⭐")
 				else:
 					GameState_.rpc("add_to_log", multiplayer.get_unique_id(), "⭐ " + formatted + " WON THE GAME! ⭐")
+'''
 
 func remove_eliminated_from_rounds(eliminated_id: int):
 	for _round in rounds:
