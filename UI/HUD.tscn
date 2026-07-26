@@ -1,4 +1,4 @@
-[gd_scene load_steps=78 format=3 uid="uid://dutn6wxx1oapc"]
+[gd_scene load_steps=81 format=3 uid="uid://dutn6wxx1oapc"]
 
 [ext_resource type="Script" uid="uid://cpvmnjflyi4ln" path="res://UI/HUD.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://cd5rsplet8de7" path="res://Assets/CardAssets/CraftCardAssets/scroll_of_luck.png" id="2"]
@@ -211,6 +211,33 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1gabh"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xqb12"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+corner_radius_top_left = 1
+corner_radius_top_right = 1
+corner_radius_bottom_right = 1
+corner_radius_bottom_left = 1
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3lr6k"]
+bg_color = Color(0.6901961, 0, 0.59607846, 1)
+border_width_left = 4
+border_width_top = 4
+border_width_right = 4
+border_width_bottom = 4
+border_color = Color(0.6901961, 0, 0.59607846, 1)
+border_blend = true
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 1
 
 [sub_resource type="LabelSettings" id="LabelSettings_pgems"]
 font_size = 22
@@ -1908,6 +1935,10 @@ outline_size = 31
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5yw8j"]
+content_margin_left = 3.0
+content_margin_right = 3.0
+
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1")
 
@@ -2583,9 +2614,10 @@ texture_filter = 1
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = SubResource("Theme_i6ua2")
 theme_override_font_sizes/font_size = 11
 theme_override_icons/icon = ExtResource("2")
+theme_override_styles/normal = SubResource("StyleBoxFlat_xqb12")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_3lr6k")
 toggle_mode = true
 autowrap_mode = 2
 autowrap_trim_flags = 0
@@ -2611,9 +2643,10 @@ texture_filter = 1
 custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 3
-theme = SubResource("Theme_i6ua2")
 theme_override_font_sizes/font_size = 11
 theme_override_icons/icon = ExtResource("3")
+theme_override_styles/normal = SubResource("StyleBoxFlat_xqb12")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_3lr6k")
 toggle_mode = true
 autowrap_mode = 2
 autowrap_trim_flags = 0
@@ -3398,10 +3431,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -238.0
-offset_top = -286.0
-offset_right = -90.0
-offset_bottom = -221.0
+offset_left = -367.0
+offset_top = -242.0
+offset_right = -219.0
+offset_bottom = -177.0
 grow_horizontal = 0
 grow_vertical = 0
 theme = SubResource("Theme_i6ua2")
@@ -3453,10 +3486,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -238.0
-offset_top = -148.0
-offset_right = -90.0
-offset_bottom = -83.0
+offset_left = -367.0
+offset_top = -104.0
+offset_right = -219.0
+offset_bottom = -39.0
 grow_horizontal = 0
 grow_vertical = 0
 theme = SubResource("Theme_i6ua2")
@@ -3506,10 +3539,10 @@ anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -238.0
-offset_top = -217.0
-offset_right = -90.0
-offset_bottom = -152.0
+offset_left = -367.0
+offset_top = -173.0
+offset_right = -219.0
+offset_bottom = -108.0
 grow_horizontal = 0
 grow_vertical = 0
 theme = SubResource("Theme_i6ua2")
@@ -4565,6 +4598,288 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.4745098, 0.26666668, 0.2901961, 1)
 theme_override_constants/outline_size = 6
 text = " No "
+
+[node name="Stats" type="Panel" parent="."]
+self_modulate = Color(1, 1, 1, 0.8627451)
+texture_filter = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -215.0
+offset_top = 298.0
+offset_right = -7.0
+offset_bottom = 533.0
+grow_horizontal = 0
+grow_vertical = 2
+theme = SubResource("Theme_i6ua2")
+
+[node name="GridContainer" type="GridContainer" parent="Stats"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 5.0
+offset_top = 4.0
+offset_right = -5.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 2
+
+[node name="AttackSpeed" type="RichTextLabel" parent="Stats/GridContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "Hits/s"
+fit_content = true
+scroll_active = false
+
+[node name="AttackSpeedValue" type="RichTextLabel" parent="Stats/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "23.2"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 2
+
+[node name="Hit" type="RichTextLabel" parent="Stats/GridContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "Hit %"
+fit_content = true
+scroll_active = false
+
+[node name="HitValue" type="RichTextLabel" parent="Stats/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "230.5  |  310.5"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 2
+
+[node name="Crit" type="RichTextLabel" parent="Stats/GridContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "Crit %"
+fit_content = true
+scroll_active = false
+
+[node name="CritValue" type="RichTextLabel" parent="Stats/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "49.7  |  31.5"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 2
+
+[node name="Multi" type="RichTextLabel" parent="Stats/GridContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "Multi"
+fit_content = true
+scroll_active = false
+
+[node name="MultiValue" type="RichTextLabel" parent="Stats/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "× 5.2  |  31.5"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 2
+
+[node name="Parry" type="RichTextLabel" parent="Stats/GridContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "Parry %"
+fit_content = true
+scroll_active = false
+
+[node name="ParryValue" type="RichTextLabel" parent="Stats/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "41.0  |  31.5"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 2
+
+[node name="Dodge" type="RichTextLabel" parent="Stats/GridContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "Dodge %"
+fit_content = true
+scroll_active = false
+
+[node name="DodgeValue" type="RichTextLabel" parent="Stats/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "88.8"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 2
+
+[node name="Block" type="RichTextLabel" parent="Stats/GridContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "Block %"
+fit_content = true
+scroll_active = false
+
+[node name="BlockValue" type="RichTextLabel" parent="Stats/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "47.5"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 2
+
+[node name="Absorb" type="RichTextLabel" parent="Stats/GridContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "Absorb"
+fit_content = true
+scroll_active = false
+
+[node name="AbsorbValue" type="RichTextLabel" parent="Stats/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "17"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 2
+
+[node name="Weight" type="RichTextLabel" parent="Stats/GridContainer"]
+custom_minimum_size = Vector2(80, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "Weight"
+fit_content = true
+scroll_active = false
+
+[node name="WeightValue" type="RichTextLabel" parent="Stats/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 8
+theme_override_constants/table_h_separation = 3
+theme_override_font_sizes/normal_font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5yw8j")
+text = "17"
+fit_content = true
+scroll_active = false
+horizontal_alignment = 2
 
 [connection signal="pressed" from="EquipmentButton" to="." method="_on_equipment_button_pressed"]
 [connection signal="pressed" from="ShopButton" to="." method="_on_shop_button_pressed"]

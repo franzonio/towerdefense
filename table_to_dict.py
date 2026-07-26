@@ -1,6 +1,7 @@
 import pandas as pd
 import re
 import os
+import subprocess
 
 def update_category(csv_path, gd_content, keys_to_update, category_label):
     """
@@ -57,8 +58,14 @@ def update_category(csv_path, gd_content, keys_to_update, category_label):
         for key in keys_to_update:
             if key in df.columns and not pd.isna(row[key]):
                 val = row[key]
-                # Format: remove .0 for integers, keep floats for others
-                val_str = str(int(val)) if val == int(val) else str(val)
+                
+                try:
+                    num = float(val)
+                    # Format integers without .0
+                    val_str = str(int(num)) if num.is_integer() else str(num)
+                except (ValueError, TypeError):
+                    # Non-numeric → wrap in quotes
+                    val_str = f'"{val}"'
                 
                 # Replace only existing keys to maintain file structure integrity
                 key_pattern = rf'("{key}"\s*:\s*)[^,}} \n\t]+'
@@ -84,20 +91,20 @@ def main():
 
     # 1. Update Weapons
     weapon_keys = [
-        'tier', 'type', 'min_dmg', 'max_dmg', 'weight', 'speed', 'crit_chance', 
+        'tier', 'class', 'min_dmg', 'max_dmg', 'weight', 'speed', 'crit_chance', 
         'crit_multi', 'durability', 'str_req', 'skill_req', 'price', 'stock', 'level'
     ]
     content, unused_w = update_category('weapon_base_stats.csv', content, weapon_keys, "Weapons")
 
     # 2. Update Shields
     shield_keys = [
-        'tier', 'type', 'absorb', 'weight', 'durability', 'str_req', 'skill_req', 'price', 'stock', 'level'
+        'tier', 'class', 'absorb', 'weight', 'durability', 'str_req', 'skill_req', 'price', 'stock', 'level'
     ]
     content, unused_s = update_category('shield_base_stats.csv', content, shield_keys, "Shields")
 
     # 3. Update Armor
     armor_keys = [
-        'tier', 'type', 'absorb', 'weight', 'str_req', 'price', 'stock', 'level'
+        'tier', 'class', 'absorb', 'weight', 'str_req', 'price', 'stock', 'level'
     ]
     content, unused_a = update_category('armor_base_stats.csv', content, armor_keys, "Armor")
 
@@ -113,6 +120,26 @@ def main():
             print(f"\n[MISSING] Items in {label} CSV but not found in GDScript:")
             for itm in items:
                 print(f" - {itm}")
+
+    
+
+    choice = input("Show diff between Equipment_updated.gd and Equipment.gd? (y/n): ").strip().lower()
+
+    if choice == "y":
+        try:
+            result = subprocess.run(
+                ["git", "--no-pager", "diff", "--color", "Equipment_updated.gd", "Equipment.gd"],
+                capture_output=True,
+                text=True,
+                check=False
+            )
+            print("\n=== GIT DIFF ===\n")
+            print(result.stdout if result.stdout else "(No differences)")
+        except Exception as e:
+            print(f"Error running git diff: {e}")
+    else:
+        print("Diff skipped.")
+
 
 if __name__ == "__main__":
     main()

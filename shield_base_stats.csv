@@ -1,9 +1,9 @@
-,tier,absorb,weight,durability,str_req,skill_req,tot,price,stock,level
-Wooden Guard,1,9,4,20,45,35,80,2,16,1
-Battleworn Wall,1,7,10,39,65,25,90,2,16,1
-Steel Guard,2,16,5,30,60,50,110,4,12,4
-Iron Wall,2,13,14,51,80,35,115,4,12,4
-Verdant Aegis,3,21,5,47,70,70,140,6,8,7
-Emberized Bulwark,3,16,16,84,95,45,140,6,8,7
-Diamond Aegis,4,29,6,69,80,85,165,8,4,10
-Crimson Bulwark,4,19,18,126,115,55,170,8,4,10
+,tier,class,absorb,weight,durability,str_req,skill_req,tot,price,stock,level
+Wooden Guard,1,Light,9,4,20,45,35,80,2,16,1
+Battleworn Wall,1,Heavy,7,10,39,65,25,90,2,16,1
+Steel Guard,2,Light,16,5,30,60,50,110,4,12,4
+Iron Wall,2,Heavy,13,14,51,80,35,115,4,12,4
+Verdant Aegis,3,Light,21,5,47,70,70,140,6,8,7
+Emberized Bulwark,3,Heavy,16,16,84,95,45,140,6,8,7
+Diamond Aegis,4,Light,29,6,69,80,85,165,8,4,10
+Crimson Bulwark,4,Heavy,19,18,126,115,55,170,8,4,10

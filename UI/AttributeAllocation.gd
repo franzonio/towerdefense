@@ -305,20 +305,20 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 
 func _initialize_attributes():
 	attributes = {
-		"strength": 1.0, 
-		"quickness": 1.0, 
-		"crit_rating": 1.0, 
-		"avoidance": 1.0, 
+		"strength": 0.0, 
+		"quickness": 0.0, 
+		"crit_rating": 0.0, 
+		"avoidance": 0.0, 
 		"health": 1.0, 
-		"resilience": 1.0, 
-		"endurance": 1.0, 
-		"sword_mastery": 1.0, 
-		"axe_mastery": 1.0, 
-		"mace_mastery": 1.0, 
-		"stabbing_mastery": 1.0, 
-		"flagellation_mastery": 1.0, 
-		"shield_mastery": 1.0, 
-		"unarmed_mastery": 1.0, 
+		"resilience": 0.0, 
+		"endurance": 0.0, 
+		"sword_mastery": 0.0, 
+		"axe_mastery": 0.0, 
+		"mace_mastery": 0.0, 
+		"stabbing_mastery": 0.0, 
+		"flagellation_mastery": 0.0, 
+		"shield_mastery": 0.0, 
+		"unarmed_mastery": 0.0, 
 	}
 
 	for attr in starting_values:
@@ -431,7 +431,7 @@ func _on_confirm():
 	var gladiator = {
 		"color": Color("d2c9ff"), 
 		"name": GameState_.selected_name, 
-		"gold": 10, 
+		"gold": 10000, 
 		"exp": 0, 
 		"streak": 0, 
 		"level": "1", 

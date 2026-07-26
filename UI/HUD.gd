@@ -2,6 +2,7 @@ extends CanvasLayer
 
 var prev_life_dict = {}
 var life_dict = {}
+var seconds_to_live
 
 @onready var vfx_pngs = {
 
@@ -213,19 +214,15 @@ var prev_gold = 0
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+@onready var stat_hit = $Stats/GridContainer/HitValue
+@onready var stat_attack_speed = $Stats/GridContainer/AttackSpeedValue
+@onready var stat_crit = $Stats/GridContainer/CritValue
+@onready var stat_multi = $Stats/GridContainer/MultiValue
+@onready var stat_absorb = $Stats/GridContainer/AbsorbValue
+@onready var stat_dodge = $Stats/GridContainer/DodgeValue
+@onready var stat_parry = $Stats/GridContainer/ParryValue
+@onready var stat_block = $Stats/GridContainer/BlockValue
+@onready var stat_weight = $Stats/GridContainer/WeightValue
 
 
 
@@ -487,7 +484,7 @@ var craft_active = ""
 var is_rerolling: = false
 
 var rename_panels_done = 0
-var points_left = 150
+var points_left = 15000
 var points_amount = 1
 var prev_lvl: int = 1
 var current_lvl: int = 1
@@ -553,6 +550,7 @@ func _ready():
 	mace_mastery_icon_panel.add_theme_stylebox_override("disabled", mace_mastery_icon_panel.get_theme_stylebox("normal"))
 	flagellation_mastery_icon_panel.add_theme_stylebox_override("disabled", flagellation_mastery_icon_panel.get_theme_stylebox("normal"))
 	shield_mastery_icon_panel.add_theme_stylebox_override("disabled", shield_mastery_icon_panel.get_theme_stylebox("normal"))
+	
 
 	send_button.pressed.connect(_on_send_pressed)
 	chat_input.text_submitted.connect(_on_send_pressed)
@@ -1094,16 +1092,15 @@ func update_equipment_ui():
 
 		if side == "left":
 			animation_parent.scale.x = 1
-			print("left equip pos: " + str(equipment_panel.position))
-			print("left anim pos: " + str(animation_parent.position))
+			#print("left equip pos: " + str(equipment_panel.position))
+			#print("left anim pos: " + str(animation_parent.position))
 		elif side == "right":
 			animation_parent.position = equipment_panel.position - Vector2(400, 400)
 			animation_parent.scale.x = -1
 			  # THIS NEEDS TO FOLLOW equipment_panel.position. Doesn't work if more than 2 players
-			print("right equip pos: " + str(equipment_panel.position))
-			print("right anim pos: " + str(animation_parent.position))
+			#print("right equip pos: " + str(equipment_panel.position))
+			#print("right anim pos: " + str(animation_parent.position))
 
-		print("\n")
 
 
 		var wep1_name = all_gladiators[id].get("weapon1", "???").keys()[0]
@@ -1358,6 +1355,7 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data
 		update_attack_ui()
 		update_gold(all_gladiators[peer_id]["gold"])
 		update_experience(all_gladiators[peer_id]["exp"])
+		update_gladiator_stats(peer_id)
 		label_gold.get_income_details(all_gladiators[peer_id].get("income_last_round", {}))
 	populate_hud()
 
@@ -1471,7 +1469,6 @@ func _on_equipment_pressed(parent_name: String):
 func update_inventory_ui(glad_id: int):
 	var gladiator_inventory = all_gladiators[glad_id]["inventory"]
 
-	print("ASDASD")
 
 	for child in inventory_grid.get_children():
 		child.queue_free()
@@ -1655,7 +1652,6 @@ func clear_shop_grid():
 
 		# Skip cards that are already faded out (invisible)
 		if child.modulate.a <= 0.05:
-			print(child.modulate.a)
 			child.queue_free()
 			continue
 
@@ -1835,7 +1831,7 @@ func _on_countdown_updated(time_left: int):
 
 		if time_left == 0:
 			reroll_start_of_intermission = 1
-			intermission = false
+			#intermission = false
 			time_passed = 0
 			await get_tree().create_timer(1.0).timeout
 			countdown_label.text = ""
@@ -1962,6 +1958,10 @@ func update_experience(amount: int):
 
 
 func _on_exp_button_button_up():
+	var _lvl = all_gladiators[multiplayer.get_unique_id()]["level"]
+	if _lvl == max_lvl: 
+		return
+		
 	var amount = 4
 	var cost = 5
 	exp_button.pivot_offset = exp_button.size / 2
@@ -2361,3 +2361,252 @@ func _on_lock_shop_pressed() -> void :
 
 	if is_shop_locked == true: shop_grid.modulate = "ffffffce"
 	else: shop_grid.modulate = "ffffff"
+	
+	
+	
+func update_gladiator_stats(id):
+	var combined_gladiator_bonuses = all_gladiators.get("total_modifier_bonuses", {})
+
+
+	#var recalculated_hit_chance = 0
+
+	var chest_absorb = 0
+	var head_absorb = 0
+	var shoulders_absorb = 0
+	var belt_absorb = 0
+	var legs_absorb = 0
+	var boots_absorb = 0
+	var gloves_absorb = 0
+
+	if all_gladiators[id].has("chest") and all_gladiators[id]["chest"].size() > 0:
+		var chest_name = all_gladiators[id]["chest"].keys()[0]
+		chest_absorb = all_gladiators[id]["chest"][chest_name].get("absorb", 0)
+	if all_gladiators[id].has("shoulders") and all_gladiators[id]["shoulders"].size() > 0:
+		var shoulders_name = all_gladiators[id]["shoulders"].keys()[0]
+		shoulders_absorb = all_gladiators[id]["shoulders"][shoulders_name].get("absorb", 0)
+	if all_gladiators[id].has("head") and all_gladiators[id]["head"].size() > 0:
+		var head_name = all_gladiators[id]["head"].keys()[0]
+		head_absorb = all_gladiators[id]["head"][head_name].get("absorb", 0)
+
+	if all_gladiators[id].has("belt") and all_gladiators[id]["belt"].size() > 0:
+		var belt_name = all_gladiators[id]["belt"].keys()[0]
+		belt_absorb = all_gladiators[id]["belt"][belt_name].get("absorb", 0)
+	if all_gladiators[id].has("legs") and all_gladiators[id]["legs"].size() > 0:
+		var legs_name = all_gladiators[id]["legs"].keys()[0]
+		legs_absorb = all_gladiators[id]["legs"][legs_name].get("absorb", 0)
+	if all_gladiators[id].has("boots") and all_gladiators[id]["boots"].size() > 0:
+		var boots_name = all_gladiators[id]["boots"].keys()[0]
+		boots_absorb = all_gladiators[id]["boots"][boots_name].get("absorb", 0)
+	if all_gladiators[id].has("gloves") and all_gladiators[id]["gloves"].size() > 0:
+		var gloves_name = all_gladiators[id]["gloves"].keys()[0]
+		gloves_absorb = all_gladiators[id]["gloves"][gloves_name].get("absorb", 0)
+
+
+	var stance = all_gladiators[id]["stance"]
+	var attack_type = all_gladiators[id]["attack_type"]
+
+	var strength = all_gladiators[id]["attributes"]["strength"]
+	var quickness = all_gladiators[id]["attributes"]["quickness"]
+	var crit_rating = all_gladiators[id]["attributes"]["crit_rating"]
+	var avoidance = all_gladiators[id]["attributes"]["avoidance"]
+	var max_health = all_gladiators[id]["attributes"]["health"]
+	var resilience = all_gladiators[id]["attributes"]["resilience"]
+	var endurance = all_gladiators[id]["attributes"]["endurance"]
+	var sword_mastery = all_gladiators[id]["attributes"]["sword_mastery"]
+	var axe_mastery = all_gladiators[id]["attributes"]["axe_mastery"]
+	var stabbing_mastery = all_gladiators[id]["attributes"]["stabbing_mastery"]
+	var mace_mastery = all_gladiators[id]["attributes"]["mace_mastery"]
+	var flagellation_mastery = all_gladiators[id]["attributes"]["flagellation_mastery"]
+
+	var stance_dodge_mod = 1
+	var stance_parry_block_mod = 1
+	var stance_attack_speed_mod = 1
+	var stance_crit_chance_mod = 1
+	var stance_crit_multi_mod = 1
+	var stance_endurance_mod = 1
+	var attack_type_hit_mod = 1
+	var attack_type_str_mod = 1
+
+	if stance == "defensive":
+		stance_dodge_mod = 1.15
+		stance_parry_block_mod = 1.15
+		stance_attack_speed_mod = 1.1
+		stance_crit_chance_mod = 0.9
+		stance_crit_multi_mod = 0.9
+
+	elif stance == "offensive":
+		stance_dodge_mod = 0.9
+		stance_parry_block_mod = 0.9
+		stance_attack_speed_mod = 0.9
+		stance_crit_chance_mod = 1.1
+		stance_crit_multi_mod = 1.1
+	elif stance == "jester":
+		stance_endurance_mod = 0.9
+
+	if attack_type == "light":
+		attack_type_hit_mod = 1.1
+		attack_type_str_mod = 0.7
+	elif attack_type == "heavy":
+		attack_type_hit_mod = 0.9
+		attack_type_str_mod = 1.3
+
+
+	var level = all_gladiators[id]["level"]
+	var weapon1_name = all_gladiators[id]["weapon1"].keys()[0]
+	var weapon2_name = all_gladiators[id]["weapon2"].keys()[0]
+
+	var weapon1_skill_req = all_gladiators[id]["weapon1"][weapon1_name]["skill_req"]
+	var weapon1_str_req = all_gladiators[id]["weapon1"][weapon1_name]["str_req"]
+	var weapon1_speed = all_gladiators[id]["weapon1"][weapon1_name]["speed"]
+	var weapon1_range = all_gladiators[id]["weapon1"][weapon1_name]["range"]
+	var weapon1_crit_chance = 1 + all_gladiators[id]["weapon1"][weapon1_name]["crit_chance"]
+	var weapon1_crit_multi = all_gladiators[id]["weapon1"][weapon1_name]["crit_multi"]
+
+	var weapon2_skill_req = all_gladiators[id]["weapon2"][weapon2_name]["skill_req"]
+	var weapon2_str_req = all_gladiators[id]["weapon2"][weapon2_name]["str_req"]
+	var weapon2_speed = all_gladiators[id]["weapon2"][weapon2_name]["speed"]
+	var weapon2_range = all_gladiators[id]["weapon2"][weapon2_name]["range"]
+	var weapon2_crit_chance = 1 + all_gladiators[id]["weapon2"][weapon2_name]["crit_chance"]
+	var weapon2_crit_multi = all_gladiators[id]["weapon2"][weapon2_name]["crit_multi"]
+
+	var armor_absorb = 1.0
+	var concede_threshold = all_gladiators[id]["concede"]
+
+
+
+	var race = all_gladiators[id]["race"].to_lower()
+	var gladiator_name = all_gladiators[id].name
+
+
+	var weight = all_gladiators[id]["weight"] - strength / 40
+	var endurance_weight = 1 - weight / (100 + weight)
+	var endurance_decay = endurance / 75 + 1
+	var endurance_sec = randf_range(2, 3) + stance_endurance_mod * endurance * endurance_weight / endurance_decay
+	var weapon1 = all_gladiators[id]["weapon1"][weapon1_name]
+	var weapon2 = all_gladiators[id]["weapon2"][weapon2_name]
+	var weapon1_durability = all_gladiators[id]["weapon1"][weapon1_name]["durability"]
+	var weapon2_durability = all_gladiators[id]["weapon2"][weapon2_name]["durability"]
+
+	var life_on_block = combined_gladiator_bonuses.get("life_on_block", 0)
+
+	var shield_absorb = all_gladiators[id]["weapon2"][weapon2_name].get("absorb", -1)
+	var weapon1_can_parry = all_gladiators[id]["weapon1"][weapon1_name]["parry"]
+	var weapon2_can_parry = all_gladiators[id]["weapon2"][weapon2_name]["parry"]
+	var weapon2_can_block = all_gladiators[id]["weapon2"][weapon2_name]["block"]
+	var weapon_hands_to_carry = all_gladiators[id]["weapon1"][weapon1_name]["hands"]
+
+
+	var weapon1_category = all_gladiators[id]["weapon1"][weapon1_name].get("category", "")
+	var weapon2_category = all_gladiators[id]["weapon2"][weapon2_name].get("category", "")
+	var glad_weapon1_category_skill = all_gladiators[id]["attributes"][weapon1_category + "_mastery"]
+	var glad_weapon2_category_skill = all_gladiators[id]["attributes"][weapon2_category + "_mastery"]
+
+	var hit_base_per_lvl = - 1.1
+	var hit_skill_weight_1 = (glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0))) # Reduce hit chance with weight
+	var hit_skill_weight_2 = (glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0))) # Reduce hit chance with weight
+	var hit_curve_smoothness = 6 + float(level) / 4 # In low level, hit curve is more smooth (exponential part)
+	var wep1_difficulty = 1 # vary around 1 -> higher makes it easier to handle
+	var wep2_difficulty = 1 # vary around 1 -> higher makes it easier to handle
+
+	var block_chance
+	var crit_multi
+	var crit_chance
+	var hit_chance
+	var attack_speed
+	var parry_chance
+	
+
+	if weapon2_can_block:
+		#block_chance = stance_parry_block_mod * (0.8 - exp(-0.4 * (2 * glad_weapon2_category_skill / weapon2_skill_req - 1.0))) + combined_gladiator_bonuses.get("increased_block_chance", 0) / 100.0
+		var block_skill_weight1 = (0.7*glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0)))
+		block_chance = stance_parry_block_mod * (wep1_difficulty + 1.1/(hit_base_per_lvl - (block_skill_weight1 ** hit_curve_smoothness)))
+
+		crit_multi = [stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400))), 
+			stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400)))]
+
+		crit_chance = [(weapon1_crit_chance - 1) + stance_crit_chance_mod * ((weapon1_crit_chance ** 4) * crit_rating / (((weapon1_crit_chance ** 4) * crit_rating) + 400)), 
+			(weapon1_crit_chance - 1) + stance_crit_chance_mod * ((weapon1_crit_chance ** 4) * crit_rating / (((weapon1_crit_chance ** 4) * crit_rating) + 400))]
+
+		hit_chance = [attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness))), 
+			attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness)))]
+	else:
+		block_chance = 0
+		crit_multi = [stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400))), 
+			stance_crit_multi_mod * ((weapon2_crit_multi + (((1 + weapon2_crit_multi) ** weapon2_crit_multi) * crit_rating) / (weapon2_crit_multi * crit_rating + 400)))]
+
+		crit_chance = [(weapon1_crit_chance - 1) + stance_crit_chance_mod * ((weapon1_crit_chance ** 4) * crit_rating / (((weapon1_crit_chance ** 4) * crit_rating) + 400)), 
+			(weapon2_crit_chance - 1) + stance_crit_chance_mod * ((weapon2_crit_chance ** 4) * crit_rating / (((weapon2_crit_chance ** 4) * crit_rating) + 400))]
+
+		hit_chance = [attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness))), 
+			attack_type_hit_mod * (wep2_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_2 ** hit_curve_smoothness)))]
+
+# === Damage calculations ===
+	if weapon_hands_to_carry == 1:
+		var K = (1 + combined_gladiator_bonuses.get("global_increased_attack_speed", 0) / 100.0) \
+		* stance_attack_speed_mod
+
+		attack_speed = 1 / (K * (
+				5
+				+ weapon1_speed
+				+ weapon2_speed
+				- 5.0 / (1.0 + (0.7 * quickness / ((100.0 + 3.0 * weight) / (weapon1_speed + weapon2_speed))) ** 2)))
+
+		var parry_skill_weight1 = (0.55*glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0)))
+		var parry_skill_weight2 = (0.55*glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0)))
+		parry_chance = [stance_parry_block_mod * (wep1_difficulty + 1.1/(hit_base_per_lvl - (parry_skill_weight1 ** hit_curve_smoothness))), 
+						stance_parry_block_mod * (wep2_difficulty + 1.1/(hit_base_per_lvl - (parry_skill_weight2 ** hit_curve_smoothness)))]
+
+	else:
+		var K = (1 + combined_gladiator_bonuses.get("global_increased_attack_speed", 0) / 100.0) \
+		* stance_attack_speed_mod
+
+		attack_speed = 1 / (K * (
+				5
+				+ weapon1_speed
+				- 5.0 / (1.0 + (0.7 * quickness / ((100.0 + 3.0 * weight) / (weapon1_speed))) ** 2)))
+
+		var parry_skill_weight1 = (0.55*glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0)))
+		parry_chance = [stance_parry_block_mod * (wep1_difficulty + 1.1/(hit_base_per_lvl - (parry_skill_weight1 ** hit_curve_smoothness))), 
+						stance_parry_block_mod * (wep2_difficulty + 1.1/(hit_base_per_lvl - (parry_skill_weight1 ** hit_curve_smoothness)))]
+						
+
+	var combined_avg_absorb = (head_absorb + shoulders_absorb + chest_absorb + belt_absorb + legs_absorb + boots_absorb + gloves_absorb)
+	var absorb_after_resilience = combined_avg_absorb
+	var dodge_chance = stance_dodge_mod * ((2 * avoidance / ((1.1 + 0.05 * weight) ** 1.5)) / 200) / ((2 * avoidance / (1.1 + 0.05 * weight) / 200) + 1)
+	seconds_to_live = endurance / 3.0
+
+	update_glad_stats(attack_speed, hit_chance, dodge_chance, parry_chance, block_chance, absorb_after_resilience, crit_chance, crit_multi, seconds_to_live, weight, weapon_hands_to_carry)
+	
+func update_glad_stats(attack_speed, hit, dodge, parry, block, absorb, crit_chance, crit_multi, seconds, weight, weapon_hands_to_carry): 
+	
+	if block > 0 or weapon_hands_to_carry == 2:
+		stat_attack_speed.bbcode_text = "%s" % snapped(1/attack_speed, 0.001)
+		stat_hit.bbcode_text = "%s" % [snapped(clamp(0.0, 100.0, 100*hit[0]), 0.1)]
+		stat_dodge.bbcode_text = "%s" % snapped(clamp(0.0, 100.0, 100*dodge), 0.1)
+		stat_parry.bbcode_text = "%s" % [snapped(clamp(0.0, 100.0, 100*parry[0]), 0.1)]
+		stat_block.bbcode_text = "-"# % snapped(100*block, 0.1)
+		stat_absorb.bbcode_text = "%s" % int(round(absorb))
+		stat_crit.bbcode_text = "%s" % [snapped(clamp(0.0, 100.0, 100*crit_chance[0]), 0.1)]
+		stat_multi.bbcode_text = "×  %s" % [snapped(crit_multi[0], 0.01)]
+		stat_weight.bbcode_text = "%s" % int(round(weight))
+		
+	elif weapon_hands_to_carry == 1 and block == 0:
+		stat_attack_speed.bbcode_text = "%s" % snapped(1/attack_speed, 0.001)
+		stat_hit.bbcode_text = "%s  |  %s" % [snapped(clamp(0.0, 100.0, 100*hit[0]), 0.1), snapped(clamp(0.0, 100.0, 100*hit[1]), 0.1)]
+		stat_dodge.bbcode_text = "%s" % snapped(clamp(0.0, 100.0, 100*dodge), 0.1)
+		stat_parry.bbcode_text = "%s  |  %s" % [snapped(clamp(0.0, 100.0, 100*parry[0]), 0.1), snapped(clamp(0.0, 100.0, 100*parry[1]), 0.1)]
+		stat_block.bbcode_text = "-"# % snapped(100*block, 0.1)
+		stat_absorb.bbcode_text = "%s" % int(round(absorb))
+		stat_crit.bbcode_text = "%s  |  %s" % [snapped(clamp(0.0, 100.0, 100*crit_chance[0]), 0.1), snapped(clamp(0.0, 100.0, 100*crit_chance[1]), 0.1)]
+		stat_multi.bbcode_text = "× %s  |  %s" % [snapped(crit_multi[0], 0.1), snapped(crit_multi[1], 0.01)]
+		stat_weight.bbcode_text = "%s" % int(round(weight))
+
+	if block > 0 and weapon_hands_to_carry == 1:
+		stat_block.bbcode_text = "%s" % snapped(clamp(0.0, 100.0, 100*block), 0.1)
+	
+	
+	
+	
+	
+	
+	

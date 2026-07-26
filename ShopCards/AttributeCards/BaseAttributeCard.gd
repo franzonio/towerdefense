@@ -1,4 +1,3 @@
-
 extends Button
 
 @export var attribute_name: String = ""

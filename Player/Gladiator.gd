@@ -135,7 +135,7 @@ var spawn_point
 @export var dodge_chance = (avoidance / 200.0) / ((avoidance / 200.0) + 1)
 @export var seconds_to_live = endurance / 3.0
 
-
+var stance_attack_speed_mod
 var all_gladiators
 var target_position: Vector2 = Vector2.ZERO
 
@@ -347,11 +347,6 @@ func check_for_attack(delta: float):
 
 
 
-
-
-
-
-
 				var dodge_modify = 1
 				var jester_penalty = 1
 				if all_gladiators[opponent_peer_id]["stance"] == "jester":
@@ -362,7 +357,8 @@ func check_for_attack(delta: float):
 					dodge_modify = 0.6
 				if recalculated_hit_chance == 0 and (jester_penalty or dodge_modify):
 					update_gladiator_after_strategy(jester_penalty, dodge_modify)
-
+					
+	
 				var weapon
 				var _hit_chance
 				var _crit_chance
@@ -388,18 +384,11 @@ func check_for_attack(delta: float):
 					parry_chance[1] = 0
 
 				if weapon_hands_to_carry == 1:
-					var as_wep_base = 1 / (weapon1_speed + weapon2_speed)
-					var as_exp_p1 = - (0.01 + (weapon1_speed + weapon2_speed) / 250.0)
-					var as_exp_p2 = (weapon1_speed + weapon2_speed) * quickness ** (1 - weight / 250.0)
-					attack_speed = as_wep_base * exp(as_exp_p1 * as_exp_p2) / (1 + combined_gladiator_bonuses.get("increased_attack_speed", 0) / 100.0)
-
+					attack_speed = get_attack_speed(weapon_hands_to_carry)
+					
 				else:
-					var as_wep_base = 1 / weapon1_speed
-					var as_exp_p1 = - (0.01 + weapon1_speed / 250.0)
-					var as_exp_p2 = weapon1_speed * quickness ** (1 - weight / 250.0)
-					attack_speed = as_wep_base * exp(as_exp_p1 * as_exp_p2) / (1 + combined_gladiator_bonuses.get("increased_attack_speed", 0) / 100.0)
-
-
+					attack_speed = get_attack_speed(weapon_hands_to_carry)
+					
 				if next_attack_weapon == 0:
 					weapon = weapon1
 					if weapon1_durability > 0:
@@ -775,7 +764,7 @@ func update_gladiator_after_strategy(hit_chance_penalty, dodge_mod):
 	glad_weapon1_category_skill = glad_weapon1_category_skill * hit_chance_penalty
 	glad_weapon2_category_skill = glad_weapon2_category_skill * hit_chance_penalty
 
-	var hit_base_per_lvl = - (1.6 - float(int(level)) / 12) # Less penalty for too low weapon mastery in low levels
+	var hit_base_per_lvl = - 1.1 # Less penalty for too low weapon mastery in low levels
 	var hit_skill_weight_1 = (glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0))) # Reduce hit chance with weight
 	var hit_skill_weight_2 = (glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0))) # Reduce hit chance with weight
 	var hit_curve_smoothness = 6 + float(int(level)) / 4 # In low level, hit curve is more smooth (exponential part)
@@ -855,7 +844,7 @@ func update_gladiator(data: Dictionary, id):
 
 	var stance_dodge_mod = 1
 	var stance_parry_block_mod = 1
-	var stance_attack_speed_mod = 1
+	stance_attack_speed_mod = 1
 	var stance_crit_chance_mod = 1
 	var stance_crit_multi_mod = 1
 	var stance_endurance_mod = 1
@@ -865,14 +854,14 @@ func update_gladiator(data: Dictionary, id):
 	if stance == "defensive":
 		stance_dodge_mod = 1.15
 		stance_parry_block_mod = 1.15
-		stance_attack_speed_mod = 0.9
+		stance_attack_speed_mod = 1.1
 		stance_crit_chance_mod = 0.9
 		stance_crit_multi_mod = 0.9
 
 	elif stance == "offensive":
 		stance_dodge_mod = 0.9
 		stance_parry_block_mod = 0.9
-		stance_attack_speed_mod = 1.1
+		stance_attack_speed_mod = 0.9
 		stance_crit_chance_mod = 1.1
 		stance_crit_multi_mod = 1.1
 	elif stance == "jester":
@@ -940,7 +929,7 @@ func update_gladiator(data: Dictionary, id):
 	glad_weapon1_category_skill = data["attributes"][weapon1_category + "_mastery"]
 	glad_weapon2_category_skill = data["attributes"][weapon2_category + "_mastery"]
 
-	var hit_base_per_lvl = - (1.6 - float(level) / 12) # Less penalty for too low weapon mastery in low levels
+	var hit_base_per_lvl = - 1.1
 	var hit_skill_weight_1 = (glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0))) # Reduce hit chance with weight
 	var hit_skill_weight_2 = (glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0))) # Reduce hit chance with weight
 	var hit_curve_smoothness = 6 + float(level) / 4 # In low level, hit curve is more smooth (exponential part)
@@ -949,8 +938,9 @@ func update_gladiator(data: Dictionary, id):
 
 
 	if weapon2_can_block:
-		block_chance = stance_parry_block_mod * (0.8 - exp(-0.4 * (2 * glad_weapon2_category_skill / weapon2_skill_req - 1.0))) + combined_gladiator_bonuses.get("increased_block_chance", 0) / 100.0
-
+		var block_skill_weight1 = (0.7*glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0)))
+		block_chance = stance_parry_block_mod * (wep1_difficulty + 1.1/(hit_base_per_lvl - (block_skill_weight1 ** hit_curve_smoothness)))
+	
 		crit_multi = [stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400))), 
 			stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400)))]
 
@@ -972,24 +962,19 @@ func update_gladiator(data: Dictionary, id):
 
 # === Damage calculations ===
 	if weapon_hands_to_carry == 1:
-		var as_wep_base = 1 / (weapon1_speed + weapon2_speed)
-		var as_exp_p1 = - (0.01 + (weapon1_speed + weapon2_speed) / 250)
-		var as_exp_p2 = (weapon1_speed + weapon2_speed) * quickness ** (1 - weight / 250)
-		attack_speed = as_wep_base * exp(as_exp_p1 * as_exp_p2) / (1 + combined_gladiator_bonuses.get("global_increased_attack_speed", 0) / 100.0)
+		attack_speed = get_attack_speed(weapon_hands_to_carry)
 
-		var ratio1 = glad_weapon1_category_skill / weapon1_skill_req
-		var ratio2 = glad_weapon2_category_skill / weapon2_skill_req
-		parry_chance = [stance_parry_block_mod * (0.8 - exp(-0.4 * (2 * ratio1 - 1.0))), stance_parry_block_mod * (0.8 - exp(-0.4 * (2 * ratio2 - 1.0)))]
+		var parry_skill_weight1 = (0.55*glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0)))
+		var parry_skill_weight2 = (0.55*glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0)))
+		parry_chance = [stance_parry_block_mod * (wep1_difficulty + 1.1/(hit_base_per_lvl - (parry_skill_weight1 ** hit_curve_smoothness))), 
+						stance_parry_block_mod * (wep2_difficulty + 1.1/(hit_base_per_lvl - (parry_skill_weight2 ** hit_curve_smoothness)))]
 
 	else:
-		var as_wep_base = 1 / weapon1_speed
-		var as_exp_p1 = - (0.01 + weapon1_speed / 250)
-		var as_exp_p2 = weapon1_speed * quickness ** (1 - weight / 250)
-		attack_speed = as_wep_base * exp(as_exp_p1 * as_exp_p2) / (1 + combined_gladiator_bonuses.get("global_increased_attack_speed", 0) / 100.0)
+		attack_speed = get_attack_speed(weapon_hands_to_carry)
 
-		var ratio1 = glad_weapon1_category_skill / weapon1_skill_req
-		parry_chance = [stance_parry_block_mod * (0.8 - exp(-0.4 * (2 * ratio1 - 1.0))) / 2, stance_parry_block_mod * (0.8 - exp(-0.4 * (2 * ratio1 - 1.0))) / 2]
-
+		var parry_skill_weight1 = (0.55*glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0)))
+		parry_chance = [stance_parry_block_mod * (wep1_difficulty + 1.1/(hit_base_per_lvl - (parry_skill_weight1 ** hit_curve_smoothness))), 
+						stance_parry_block_mod * (wep2_difficulty + 1.1/(hit_base_per_lvl - (parry_skill_weight1 ** hit_curve_smoothness)))]
 
 
 	if weapon1_durability == 1:		# THIS MEANS EQUIPPING NO WEP IN SLOT
@@ -1018,8 +1003,18 @@ func update_gladiator(data: Dictionary, id):
 
 	current_health = max_health
 
-
-
+	'''
+	print("=======NEW======== " + str(id))
+	print("s/hits: " + str(attack_speed) + "\n")
+	print("hit: " + str(hit_chance[0]) + "\n")
+	print("crit: " + str(crit_chance[0]) + "\n")
+	print("multi: " + str(crit_multi[0]) + "\n")
+	print("parry: " + str(parry_chance[0]) + "\n")
+	print("dodge: " + str(dodge_chance) + "\n")
+	print("block: " + str(block_chance) + "\n")
+	print("absorb: " + str(absorb_after_resilience) + "\n")
+	print("weight: " + str(weight) + "\n")
+	'''
 
 func collect_gladiator_bonuses(gladiator: Dictionary) -> Dictionary:
 	var merged: = {}
@@ -1060,3 +1055,22 @@ func collect_gladiator_bonuses(gladiator: Dictionary) -> Dictionary:
 						merged[bonus_key] = numeric_value
 
 	return merged
+
+func get_attack_speed(hands):
+	var _attack_speed
+	var K = (1 + combined_gladiator_bonuses.get("global_increased_attack_speed", 0) / 100.0) \
+		* stance_attack_speed_mod
+		
+	if hands == 1:
+		_attack_speed = 1 / (K * (
+		5
+		+ weapon1_speed
+		+ weapon2_speed
+		- 5.0 / (1.0 + (0.7 * quickness / ((100.0 + 3.0 * weight) / (weapon1_speed + weapon2_speed))) ** 2)))
+	else:
+		_attack_speed = 1 / (K * (
+		5
+		+ weapon1_speed
+		- 5.0 / (1.0 + (0.7 * quickness / ((100.0 + 3.0 * weight) / (weapon1_speed))) ** 2)))
+	
+	return _attack_speed

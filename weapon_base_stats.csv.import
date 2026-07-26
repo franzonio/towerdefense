@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://0i4kxq433cuc"
+
+[deps]
+
+files=["res://weapon_base_stats.tier.translation", "res://weapon_base_stats.class.translation", "res://weapon_base_stats.min.translation", "res://weapon_base_stats.max.translation", "res://weapon_base_stats.weight.translation", "res://weapon_base_stats.speed.translation", "res://weapon_base_stats.crit.translation", "res://weapon_base_stats.crit.translation", "res://weapon_base_stats.durability.translation", "res://weapon_base_stats.str.translation", "res://weapon_base_stats.skill.translation", "res://weapon_base_stats.price.translation", "res://weapon_base_stats.stock.translation", "res://weapon_base_stats.level.translation", "res://weapon_base_stats.tot.translation", "res://weapon_base_stats.avg dps.translation"]
+
+source_file="res://weapon_base_stats.csv"
+dest_files=["res://weapon_base_stats.tier.translation", "res://weapon_base_stats.class.translation", "res://weapon_base_stats.min.translation", "res://weapon_base_stats.max.translation", "res://weapon_base_stats.weight.translation", "res://weapon_base_stats.speed.translation", "res://weapon_base_stats.crit.translation", "res://weapon_base_stats.crit.translation", "res://weapon_base_stats.durability.translation", "res://weapon_base_stats.str.translation", "res://weapon_base_stats.skill.translation", "res://weapon_base_stats.price.translation", "res://weapon_base_stats.stock.translation", "res://weapon_base_stats.level.translation", "res://weapon_base_stats.tot.translation", "res://weapon_base_stats.avg dps.translation"]
+
+[params]
+
+compress=true
+delimiter=0

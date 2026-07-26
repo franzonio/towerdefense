@@ -24,11 +24,10 @@ var name_color: = "ab9b8e"
 var base_text_color: = "ab9b8e"
 var base_value_color: = "#EBE6D3"
 var req_ok_color: = "#EBE6D3"
-var req_nok_color: = "#774349"
+var req_nok_color: = "#d2004f"
 var mod_color: = "#00877E"
-
-
-
+var light_class_color = "8caba1"
+var heavy_class_color = "#847875"
 
 
 var tier
@@ -270,14 +269,6 @@ func _on_equipment_card_updated(id, updated_item_dict, slot, item, _all_gladiato
 		return
 
 
-
-
-
-
-
-
-
-
 	if "slot" in slot:
 		if parent_name != slot: return
 		tooltip_text = ""
@@ -422,6 +413,8 @@ func get_item_tooltip(item_data: Dictionary, _all_gladiators, __item_dict):
 
 	var display_name = format_name(equipment_name)
 
+	var tier = item_data.get("tier", -1)
+	var _class = item_data.get("class", -1)
 	var level = item_data.get("level", -1)
 	var hands = item_data.get("hands", -1)
 	var hand_text = "One-Handed" if hands == 1 else "Two-Handed"
@@ -451,17 +444,28 @@ func get_item_tooltip(item_data: Dictionary, _all_gladiators, __item_dict):
 	var category = item_data.get("category", "None")
 	var type = item_data.get("type", "None")
 	var absorb = item_data.get("absorb", -1)
+	
 
 	name_color = set_text_color(tier)
 
 	var tooltip = "[color=%s]%s[/color]\n" % [name_color, display_name]
 
+
+
 	if category == "shield":
-		tooltip += "[color=%s]%s[/color]\n\n" % [base_text_color, category.capitalize()]
+		tooltip += "[color=%s]%s[/color]\n" % [base_text_color, category.capitalize()]
 	elif hands != -1:
-		tooltip += "[color=%s]%s %s[/color]\n\n" % [base_text_color, hand_text, category.capitalize()]
+		tooltip += "[color=%s]%s %s[/color]\n" % [base_text_color, hand_text, category.capitalize()]
 	elif hands == -1:
-		tooltip += "[color=%s]%s[/color]\n\n" % [base_text_color, category.capitalize()]
+		tooltip += "[color=%s]%s[/color]\n" % [base_text_color, category.capitalize()]
+
+	if _class != "Both":
+		if _class == "Heavy":
+			tooltip += "[color=%s]Tier %s[/color]  [color=%s]|[/color]  [color=%s]%s [/color]\n\n" % [tier_colors[tier-1], tier, base_text_color, heavy_class_color, _class]
+		elif _class == "Light":
+			tooltip += "[color=%s]Tier %s[/color]  [color=%s]|[/color]  [color=%s]%s [/color]\n\n" % [tier_colors[tier-1], tier, base_text_color, light_class_color, _class]
+	else:
+		tooltip += "[color=%s]Tier %s[/color]\n\n" % [tier_colors[tier-1], tier]
 
 	if min_dmg != -1 and category != "shield":
 		if min_dmg == orig_min_dmg:

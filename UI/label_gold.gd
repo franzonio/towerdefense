@@ -61,7 +61,6 @@ func _make_custom_tooltip(for_text):
 	return panel
 	
 func get_income_tooltip(income_details):
-	print(income_details)
 	var base = income_details.get("base", 0)
 	var win = income_details.get("win", 0)
 	var income = income_details.get("income", 0)
