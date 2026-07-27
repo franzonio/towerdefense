@@ -41,7 +41,7 @@ var time_passed = 0
 @export var speed: float = 250.0
 
 
-
+var skip_next_attack = false
 
 @export var race: String = ""
 @export var level: String
@@ -342,10 +342,7 @@ func check_for_attack(delta: float):
 			current_attack_target = opponent
 			attack_charge_time += delta
 
-
 			if attack_charge_time >= attack_speed and opponent.current_health > opponent.max_health * opponent.concede_threshold and !opponent.dead:
-
-
 
 				var dodge_modify = 1
 				var jester_penalty = 1
@@ -358,7 +355,6 @@ func check_for_attack(delta: float):
 				if recalculated_hit_chance == 0 and (jester_penalty or dodge_modify):
 					update_gladiator_after_strategy(jester_penalty, dodge_modify)
 					
-	
 				var weapon
 				var _hit_chance
 				var _crit_chance
@@ -389,6 +385,11 @@ func check_for_attack(delta: float):
 				else:
 					attack_speed = get_attack_speed(weapon_hands_to_carry)
 					
+				if skip_next_attack: 
+					attack_charge_time = 0.0
+					skip_next_attack = false
+					return
+					
 				if next_attack_weapon == 0:
 					weapon = weapon1
 					if weapon1_durability > 0:
@@ -399,6 +400,7 @@ func check_for_attack(delta: float):
 						_hit_chance = no_wep_hit_chance
 						_crit_chance = no_wep_crit_chance
 						_crit_multi = no_wep_crit_multi
+						attack_speed = no_wep_attack_speed
 					prev_attack_weapon = next_attack_weapon
 					next_attack_weapon = 1
 
@@ -418,7 +420,8 @@ func check_for_attack(delta: float):
 					prev_attack_weapon = next_attack_weapon
 					next_attack_weapon = 0
 
-
+				
+					
 				deal_attack(self, opponent, weapon, _hit_chance, _crit_chance, _crit_multi)
 
 				var wep_category = weapon["category"]
@@ -445,9 +448,6 @@ func check_for_attack(delta: float):
 		attack_charge_time = 0.0
 
 func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_chance, _crit_multi):
-
-
-
 
 	_hit_chance += combined_gladiator_bonuses.get("added_hit_chance", 0) / 100.0
 	_crit_chance = _crit_chance * (1 + combined_gladiator_bonuses.get("global_increased_crit_chance", 0) / 100.0)
@@ -482,6 +482,10 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 
 	if randf() > _hit_chance:
 		hit_success = 0
+		skip_next_attack = true
+	else: 
+		skip_next_attack = false
+		
 
 	var roll_wep_dmg = randf_range(wep_min_dmg, wep_max_dmg)
 	if hit_success and randf() < _crit_chance or attacker.next_attack_critical:
@@ -610,10 +614,13 @@ func rpc_update_hp(id, hp, max_hp):
 func receive_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_success, defender_weapon1_broken, 
 			defender_weapon2_broken, wep1_new_durability, wep2_new_durability, block_success, shield_absorb):
 	await get_tree().create_timer(0.15).timeout
-	if !hit_success or dodge_success: next_attack_critical = true
+	if dodge_success: #!hit_success or dodge_success: 
+		next_attack_critical = true
+		
 	if block_success and life_on_block != 0:
 		rpc("show_damage_popup", - life_on_block, -2, 1, 0, 0, 0, 0, 0, 0, 0)
 		current_health += life_on_block
+		
 	weapon1_durability = wep1_new_durability
 	weapon2_durability = wep2_new_durability
 	current_health -= amount
@@ -765,8 +772,8 @@ func update_gladiator_after_strategy(hit_chance_penalty, dodge_mod):
 	glad_weapon2_category_skill = glad_weapon2_category_skill * hit_chance_penalty
 
 	var hit_base_per_lvl = - 1.1 # Less penalty for too low weapon mastery in low levels
-	var hit_skill_weight_1 = (glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0))) # Reduce hit chance with weight
-	var hit_skill_weight_2 = (glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0))) # Reduce hit chance with weight
+	var hit_skill_weight_1 = (glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 150.0))) # Reduce hit chance with weight
+	var hit_skill_weight_2 = (glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 150.0))) # Reduce hit chance with weight
 	var hit_curve_smoothness = 6 + float(int(level)) / 4 # In low level, hit curve is more smooth (exponential part)
 	var wep1_difficulty = 1 # vary around 1 -> higher makes it easier to handle
 	var wep2_difficulty = 1 # vary around 1 -> higher makes it easier to handle
@@ -910,6 +917,8 @@ func update_gladiator(data: Dictionary, id):
 	var endurance_weight = 1 - weight / (100 + weight)
 	var endurance_decay = endurance / 75 + 1
 	endurance_sec = randf_range(2, 3) + stance_endurance_mod * endurance * endurance_weight / endurance_decay
+	#get_node("/root/Main/HUD").set_endurance(id, endurance_sec)
+	
 	weapon1 = data["weapon1"][weapon1_name]
 	weapon2 = data["weapon2"][weapon2_name]
 	weapon1_durability = data["weapon1"][weapon1_name]["durability"]
@@ -930,8 +939,8 @@ func update_gladiator(data: Dictionary, id):
 	glad_weapon2_category_skill = data["attributes"][weapon2_category + "_mastery"]
 
 	var hit_base_per_lvl = - 1.1
-	var hit_skill_weight_1 = (glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0))) # Reduce hit chance with weight
-	var hit_skill_weight_2 = (glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0))) # Reduce hit chance with weight
+	var hit_skill_weight_1 = (glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 150.0))) # Reduce hit chance with weight
+	var hit_skill_weight_2 = (glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 150.0))) # Reduce hit chance with weight
 	var hit_curve_smoothness = 6 + float(level) / 4 # In low level, hit curve is more smooth (exponential part)
 	var wep1_difficulty = 1 # vary around 1 -> higher makes it easier to handle
 	var wep2_difficulty = 1 # vary around 1 -> higher makes it easier to handle
@@ -943,9 +952,11 @@ func update_gladiator(data: Dictionary, id):
 	
 		crit_multi = [stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400))), 
 			stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400)))]
-
-		crit_chance = [(weapon1_crit_chance - 1) + stance_crit_chance_mod * ((weapon1_crit_chance ** 4) * crit_rating / (((weapon1_crit_chance ** 4) * crit_rating) + 400)), 
-			(weapon1_crit_chance - 1) + stance_crit_chance_mod * ((weapon1_crit_chance ** 4) * crit_rating / (((weapon1_crit_chance ** 4) * crit_rating) + 400))]
+		
+		
+		var W1 = weight / ( 400 + weight)
+		crit_chance = [weapon1_crit_chance - 1 - W1 + stance_crit_chance_mod * (((weapon1_crit_chance-W1) ** 4) * crit_rating / ((((weapon1_crit_chance-W1) ** 4) * crit_rating) + 300+6*weight)), 
+					   weapon1_crit_chance - 1 - W1 + stance_crit_chance_mod * (((weapon1_crit_chance-W1) ** 4) * crit_rating / ((((weapon1_crit_chance-W1) ** 4) * crit_rating) + 300+6*weight))]
 
 		hit_chance = [attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness))), 
 			attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness)))]
@@ -954,13 +965,27 @@ func update_gladiator(data: Dictionary, id):
 		crit_multi = [stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400))), 
 			stance_crit_multi_mod * ((weapon2_crit_multi + (((1 + weapon2_crit_multi) ** weapon2_crit_multi) * crit_rating) / (weapon2_crit_multi * crit_rating + 400)))]
 
-		crit_chance = [(weapon1_crit_chance - 1) + stance_crit_chance_mod * ((weapon1_crit_chance ** 4) * crit_rating / (((weapon1_crit_chance ** 4) * crit_rating) + 400)), 
-			(weapon2_crit_chance - 1) + stance_crit_chance_mod * ((weapon2_crit_chance ** 4) * crit_rating / (((weapon2_crit_chance ** 4) * crit_rating) + 400))]
+		var W1 = weight / ( 400 + weight)
+		var W2 = weight / ( 400 + weight)
+		crit_chance = [weapon1_crit_chance - 1 - W1 + stance_crit_chance_mod * (((weapon1_crit_chance-W1) ** 4) * crit_rating / ((((weapon1_crit_chance-W1) ** 4) * crit_rating) + 300+6*weight)), 
+					   weapon2_crit_chance - 1 - W2 + stance_crit_chance_mod * (((weapon2_crit_chance-W2) ** 4) * crit_rating / ((((weapon2_crit_chance-W2) ** 4) * crit_rating) + 300+6*weight))]
 
 		hit_chance = [attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness))), 
 			attack_type_hit_mod * (wep2_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_2 ** hit_curve_smoothness)))]
 
-# === Damage calculations ===
+
+	if weapon1_durability == 1:		# THIS MEANS EQUIPPING NO WEP IN SLOT
+		crit_chance[0] = no_wep_crit_chance
+		crit_multi[0] = no_wep_crit_multi
+		hit_chance[0] = no_wep_hit_chance
+		weapon1_speed = no_wep_attack_speed
+	if weapon2_durability == 1:
+		crit_chance[1] = no_wep_crit_chance
+		crit_multi[1] = no_wep_crit_multi
+		hit_chance[1] = no_wep_hit_chance
+		weapon2_speed = no_wep_attack_speed
+
+	# === Damage calculations ===
 	if weapon_hands_to_carry == 1:
 		attack_speed = get_attack_speed(weapon_hands_to_carry)
 
@@ -976,16 +1001,6 @@ func update_gladiator(data: Dictionary, id):
 		parry_chance = [stance_parry_block_mod * (wep1_difficulty + 1.1/(hit_base_per_lvl - (parry_skill_weight1 ** hit_curve_smoothness))), 
 						stance_parry_block_mod * (wep2_difficulty + 1.1/(hit_base_per_lvl - (parry_skill_weight1 ** hit_curve_smoothness)))]
 
-
-	if weapon1_durability == 1:		# THIS MEANS EQUIPPING NO WEP IN SLOT
-		crit_chance[0] = no_wep_crit_chance
-		crit_multi[0] = no_wep_crit_multi
-		hit_chance[0] = no_wep_hit_chance
-	if weapon2_durability == 1:
-		crit_chance[1] = no_wep_crit_chance
-		crit_multi[1] = no_wep_crit_multi
-		hit_chance[1] = no_wep_hit_chance
-
 	move_speed = 500
 	current_health = max_health
 
@@ -998,7 +1013,7 @@ func update_gladiator(data: Dictionary, id):
 
 	time_since_last_attack = 0.0
 	next_attack_critical = false
-	next_taken_hit_critical = false
+	#next_taken_hit_critical = false
 	next_attack_weapon = 0
 
 	current_health = max_health
@@ -1066,11 +1081,13 @@ func get_attack_speed(hands):
 		5
 		+ weapon1_speed
 		+ weapon2_speed
+		- weight / (400.0 + weight)
 		- 5.0 / (1.0 + (0.7 * quickness / ((100.0 + 3.0 * weight) / (weapon1_speed + weapon2_speed))) ** 2)))
 	else:
 		_attack_speed = 1 / (K * (
 		5
 		+ weapon1_speed
+		- weight / (400.0 + weight)
 		- 5.0 / (1.0 + (0.7 * quickness / ((100.0 + 3.0 * weight) / (weapon1_speed))) ** 2)))
 	
 	return _attack_speed

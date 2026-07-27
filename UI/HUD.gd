@@ -2,7 +2,8 @@ extends CanvasLayer
 
 var prev_life_dict = {}
 var life_dict = {}
-var seconds_to_live
+var new_endurance_sec = 9999
+var endurance_sec = 9999
 
 @onready var vfx_pngs = {
 
@@ -195,6 +196,8 @@ var is_shop_locked: = false
 @onready var refresh_button = $RefreshButton
 @onready var lock_button = $LockShop
 
+var my_endurance_bar
+var endurance_bar
 var equipment_panel_inspect
 var equipment_panel
 var equipment_panel_picture
@@ -223,7 +226,6 @@ var prev_gold = 0
 @onready var stat_parry = $Stats/GridContainer/ParryValue
 @onready var stat_block = $Stats/GridContainer/BlockValue
 @onready var stat_weight = $Stats/GridContainer/WeightValue
-
 
 
 @onready var elf_picture = preload("res://Assets/EquipmentPanel/elf2.png")
@@ -483,6 +485,7 @@ var craft_active = ""
 
 var is_rerolling: = false
 
+#var time_to_live = 9999
 var rename_panels_done = 0
 var points_left = 15000
 var points_amount = 1
@@ -642,6 +645,16 @@ func _process(delta: float) -> void :
 		points_left = 0
 
 	time_passed += delta
+	
+	#endurance_bar.value = 5#endurance_sec - time_passed
+	
+	if rename_panels_done: 
+		if intermission == false: 
+			#print("end: " + str(endurance_sec))
+			my_endurance_bar.value = float(new_endurance_sec) - float(time_passed)
+			#print(all_gladiators[multiplayer.get_unique_id()]["name"] + ": " + str(endurance_bar.value))
+		else: 
+			my_endurance_bar.value = float(new_endurance_sec)
 
 	if !intermission: label_round.bbcode_text = "[color=%s]Day  %s\n%s[/color]" % ["d2c9a5", str(round_now), str(int(time_passed))]
 	if intermission:
@@ -991,7 +1004,9 @@ func update_equipment_ui():
 		equipment_panel = get_node("_EquipmentPanel" + str(id))
 		equipment_panel_name = get_node("_EquipmentPanel" + str(id) + "/PanelContainer/Name")
 		equipment_panel_picture = get_node("_EquipmentPanel" + str(id) + "/EquipmentPanelPicture")
-
+		endurance_bar = get_node("_EquipmentPanel" + str(id) + "/EnduranceBar")
+		if multiplayer.get_unique_id() == id:
+			my_endurance_bar = endurance_bar
 		equipment_panel_inspect.bbcode_enabled = true
 		var _text
 
@@ -1085,21 +1100,19 @@ func update_equipment_ui():
 			equipment_panel.position = all_gladiators[id]["spawn_point"]
 			
 		if id == multiplayer.get_unique_id():
+			endurance_bar.visible = true
 			if side == "left": 
 				attribute_panel.position = equipment_panel.position - Vector2(180, 0)
 			elif side == "right": 
 				attribute_panel.position = equipment_panel.position + Vector2(302, 0)
+		else:
+			endurance_bar.visible = false
 
 		if side == "left":
 			animation_parent.scale.x = 1
-			#print("left equip pos: " + str(equipment_panel.position))
-			#print("left anim pos: " + str(animation_parent.position))
 		elif side == "right":
 			animation_parent.position = equipment_panel.position - Vector2(400, 400)
 			animation_parent.scale.x = -1
-			  # THIS NEEDS TO FOLLOW equipment_panel.position. Doesn't work if more than 2 players
-			#print("right equip pos: " + str(equipment_panel.position))
-			#print("right anim pos: " + str(animation_parent.position))
 
 
 
@@ -1828,13 +1841,16 @@ func _on_countdown_updated(time_left: int):
 				countdown_label.modulate = "ffffff"
 				TweenFX.pulsate(countdown_label, 0.5)
 				TweenFX.spotlight(countdown_label, 0.5)
+			
 
+		
 		if time_left == 0:
 			reroll_start_of_intermission = 1
 			#intermission = false
 			time_passed = 0
-			await get_tree().create_timer(1.0).timeout
 			countdown_label.text = ""
+			#await get_tree().create_timer(1.0).timeout
+			
 
 
 
@@ -2481,7 +2497,7 @@ func update_gladiator_stats(id):
 	var weight = all_gladiators[id]["weight"] - strength / 40
 	var endurance_weight = 1 - weight / (100 + weight)
 	var endurance_decay = endurance / 75 + 1
-	var endurance_sec = randf_range(2, 3) + stance_endurance_mod * endurance * endurance_weight / endurance_decay
+	endurance_sec = 2 + stance_endurance_mod * endurance * endurance_weight / endurance_decay
 	var weapon1 = all_gladiators[id]["weapon1"][weapon1_name]
 	var weapon2 = all_gladiators[id]["weapon2"][weapon2_name]
 	var weapon1_durability = all_gladiators[id]["weapon1"][weapon1_name]["durability"]
@@ -2502,8 +2518,8 @@ func update_gladiator_stats(id):
 	var glad_weapon2_category_skill = all_gladiators[id]["attributes"][weapon2_category + "_mastery"]
 
 	var hit_base_per_lvl = - 1.1
-	var hit_skill_weight_1 = (glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0))) # Reduce hit chance with weight
-	var hit_skill_weight_2 = (glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0))) # Reduce hit chance with weight
+	var hit_skill_weight_1 = (glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 150.0))) # Reduce hit chance with weight
+	var hit_skill_weight_2 = (glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 150.0))) # Reduce hit chance with weight
 	var hit_curve_smoothness = 6 + float(level) / 4 # In low level, hit curve is more smooth (exponential part)
 	var wep1_difficulty = 1 # vary around 1 -> higher makes it easier to handle
 	var wep2_difficulty = 1 # vary around 1 -> higher makes it easier to handle
@@ -2524,8 +2540,10 @@ func update_gladiator_stats(id):
 		crit_multi = [stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400))), 
 			stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400)))]
 
-		crit_chance = [(weapon1_crit_chance - 1) + stance_crit_chance_mod * ((weapon1_crit_chance ** 4) * crit_rating / (((weapon1_crit_chance ** 4) * crit_rating) + 400)), 
-			(weapon1_crit_chance - 1) + stance_crit_chance_mod * ((weapon1_crit_chance ** 4) * crit_rating / (((weapon1_crit_chance ** 4) * crit_rating) + 400))]
+		var W1 = weight / ( 400 + weight)
+		crit_chance = [weapon1_crit_chance - 1 - W1 + stance_crit_chance_mod * (((weapon1_crit_chance-W1) ** 4) * crit_rating / ((((weapon1_crit_chance-W1) ** 4) * crit_rating) + 300+6*weight)), 
+					   weapon1_crit_chance - 1 - W1 + stance_crit_chance_mod * (((weapon1_crit_chance-W1) ** 4) * crit_rating / ((((weapon1_crit_chance-W1) ** 4) * crit_rating) + 300+6*weight))]
+
 
 		hit_chance = [attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness))), 
 			attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness)))]
@@ -2534,11 +2552,25 @@ func update_gladiator_stats(id):
 		crit_multi = [stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400))), 
 			stance_crit_multi_mod * ((weapon2_crit_multi + (((1 + weapon2_crit_multi) ** weapon2_crit_multi) * crit_rating) / (weapon2_crit_multi * crit_rating + 400)))]
 
-		crit_chance = [(weapon1_crit_chance - 1) + stance_crit_chance_mod * ((weapon1_crit_chance ** 4) * crit_rating / (((weapon1_crit_chance ** 4) * crit_rating) + 400)), 
-			(weapon2_crit_chance - 1) + stance_crit_chance_mod * ((weapon2_crit_chance ** 4) * crit_rating / (((weapon2_crit_chance ** 4) * crit_rating) + 400))]
+		var W1 = weight / ( 400 + weight)
+		var W2 = weight / ( 400 + weight)
+		
+		crit_chance = [weapon1_crit_chance - 1 - W1 + stance_crit_chance_mod * (((weapon1_crit_chance-W1) ** 4) * crit_rating / ((((weapon1_crit_chance-W1) ** 4) * crit_rating) + 300+6*weight)), 
+					   weapon2_crit_chance - 1 - W2 + stance_crit_chance_mod * (((weapon2_crit_chance-W2) ** 4) * crit_rating / ((((weapon2_crit_chance-W2) ** 4) * crit_rating) + 300+6*weight))]
 
 		hit_chance = [attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness))), 
 			attack_type_hit_mod * (wep2_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_2 ** hit_curve_smoothness)))]
+
+	if weapon1_name == "unarmed":
+		crit_chance[0] = 0.10
+		crit_multi[0] = 1.1
+		hit_chance[0] = 0.7
+		weapon1_speed = 0.25
+	if weapon2_name == "unarmed":
+		crit_chance[1] = 0.10
+		crit_multi[1] = 1.1
+		hit_chance[1] = 0.7
+		weapon2_speed = 0.25
 
 # === Damage calculations ===
 	if weapon_hands_to_carry == 1:
@@ -2549,6 +2581,7 @@ func update_gladiator_stats(id):
 				5
 				+ weapon1_speed
 				+ weapon2_speed
+				- weight / (400.0 + weight)
 				- 5.0 / (1.0 + (0.7 * quickness / ((100.0 + 3.0 * weight) / (weapon1_speed + weapon2_speed))) ** 2)))
 
 		var parry_skill_weight1 = (0.55*glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0)))
@@ -2563,6 +2596,7 @@ func update_gladiator_stats(id):
 		attack_speed = 1 / (K * (
 				5
 				+ weapon1_speed
+				- weight / (400.0 + weight)
 				- 5.0 / (1.0 + (0.7 * quickness / ((100.0 + 3.0 * weight) / (weapon1_speed))) ** 2)))
 
 		var parry_skill_weight1 = (0.55*glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 400.0)))
@@ -2573,11 +2607,17 @@ func update_gladiator_stats(id):
 	var combined_avg_absorb = (head_absorb + shoulders_absorb + chest_absorb + belt_absorb + legs_absorb + boots_absorb + gloves_absorb)
 	var absorb_after_resilience = combined_avg_absorb
 	var dodge_chance = stance_dodge_mod * ((2 * avoidance / ((1.1 + 0.05 * weight) ** 1.5)) / 200) / ((2 * avoidance / (1.1 + 0.05 * weight) / 200) + 1)
-	seconds_to_live = endurance / 3.0
+	#seconds_to_live = endurance / 3.0
 
-	update_glad_stats(attack_speed, hit_chance, dodge_chance, parry_chance, block_chance, absorb_after_resilience, crit_chance, crit_multi, seconds_to_live, weight, weapon_hands_to_carry)
+
+
+	update_glad_stats(attack_speed, hit_chance, dodge_chance, parry_chance, block_chance, absorb_after_resilience, crit_chance, crit_multi, endurance_sec, weight, weapon_hands_to_carry, weapon1_name, weapon2_name)
 	
-func update_glad_stats(attack_speed, hit, dodge, parry, block, absorb, crit_chance, crit_multi, seconds, weight, weapon_hands_to_carry): 
+func update_glad_stats(attack_speed, hit, dodge, parry, block, absorb, crit_chance, crit_multi, _seconds, weight, weapon_hands_to_carry, weapon1_name, weapon2_name): 
+	
+	if my_endurance_bar and intermission:
+		new_endurance_sec = _seconds
+		my_endurance_bar.max_value = new_endurance_sec
 	
 	if block > 0 or weapon_hands_to_carry == 2:
 		stat_attack_speed.bbcode_text = "%s" % snapped(1/attack_speed, 0.001)
@@ -2604,9 +2644,5 @@ func update_glad_stats(attack_speed, hit, dodge, parry, block, absorb, crit_chan
 	if block > 0 and weapon_hands_to_carry == 1:
 		stat_block.bbcode_text = "%s" % snapped(clamp(0.0, 100.0, 100*block), 0.1)
 	
-	
-	
-	
-	
-	
+
 	
