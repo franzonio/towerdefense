@@ -14,7 +14,7 @@ theme = ExtResource("1_uvpp8")
 theme_override_icons/icon = ExtResource("2_uvpp8")
 expand_icon = true
 script = ExtResource("3_uvpp8")
-attribute_name = "respec_token"
+attribute_name = "respec_token1"
 amount = 50
 cost = 15
 

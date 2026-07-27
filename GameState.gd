@@ -54,6 +54,7 @@ signal refresh_inventory_ui_signal(id, inventory_dict)
 var craft_cards_stock
 var attr_cards_stock
 var all_cards_stock
+var respec_cards_stock
 
 var exp_for_level = {"1": 0, "2": 10, "3": 12, "4": 14, "5": 18, "6": 22, "7": 26, "8": 30, "9": 34, "10": 36}
 
@@ -293,7 +294,10 @@ func create_card_pool():
 		"mace_mastery": 50,
 		"stabbing_mastery": 50,
 		"flagellation_mastery": 50,
-		"shield_mastery": 50,
+		"shield_mastery": 50
+	}
+	
+	respec_cards_stock = {
 		"respec_token1": 1000
 	}
 	var _all_cards_stock = {}  # Create a fresh dictionary
@@ -303,6 +307,9 @@ func create_card_pool():
 		
 	for key in attr_cards_stock.keys():
 		_all_cards_stock[key] = attr_cards_stock[key]
+		
+	for key in respec_cards_stock.keys():
+		_all_cards_stock[key] = respec_cards_stock[key]
 
 	# Now add stock values from equipment_data
 	for category in equipment_data.keys():
@@ -633,8 +640,6 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 				for attribute in modifier_attributes:
 					all_gladiators[peer_id]["attributes"][attribute] -= modifier_attributes[attribute]
 			
-			# TODO Remove item modifier bonuses
-			#if modifier_bonuses != {}: 1 
 			total_modifier_bonuses = collect_gladiator_bonuses(peer_id)
 			all_gladiators[peer_id]["total_modifier_bonuses"] = total_modifier_bonuses
 			
@@ -648,7 +653,6 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 			all_gladiators[peer_id]["inventory"] = check_for_item_upgrades(peer_id, all_gladiators[peer_id]["inventory"])
 			
 			rpc_id(peer_id, "send_gladiator_data_to_peer_card", peer_id, all_gladiators[peer_id], all_gladiators)
-			#rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id]["inventory"][slot_name], slot_name, equipment)
 			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
 			
 			update_all_equipment_cards(peer_id)
@@ -1237,7 +1241,25 @@ func buy_reroll(id):
 	
 @rpc("any_peer", "call_local")
 func buy_respec_token_card(id: int, amount: int, attribute: String, cost: int, modify_stock = true, parent_name = ""):
-	pass
+	var success := false
+	if all_cards_stock[attribute] >= 1:
+		if all_gladiators[id]["gold"] >= cost:
+			
+			if modify_stock: 
+				adjust_card_stock(attribute, "remove")
+			success = true
+			all_gladiators[id]["respec_points"] += amount
+			rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id], parent_name)
+			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
+			
+	else: 
+		add_to_peer_log(id, "[INFO] No " + attribute + " cards left in stock!")
+		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id], parent_name)
+	
+@rpc("any_peer", "call_local")
+func request_points(id, amount):
+	all_gladiators[id]["points"] += amount
+	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 	
 @rpc("any_peer", "call_local")
 func buy_attribute_card(id: int, amount: int, attribute: String, cost: int, modify_stock = true, parent_name = ""):
@@ -1251,7 +1273,13 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int, modi
 			if all_gladiators.has(id):
 				var key = "increased_" + attribute
 				var amount_after_bonuses = float(amount)*RACE_MODIFIERS[race][attribute]*(1+float(total_modifier_bonuses.get(key, 0))/100)
-				#print("amount_after_bonuses: " + str(amount_after_bonuses))
+				
+				if amount_after_bonuses < 0:
+					if (all_gladiators[id]["attributes"][attribute] + amount_after_bonuses) <= 1:
+						print("Negative value after regret, ignoring")
+						return
+					
+					
 				all_gladiators[id]["attributes"][attribute] += amount_after_bonuses
 				all_gladiators[id]["gold"] -= cost
 				emit_signal("gladiator_attribute_changed", all_gladiators)
@@ -1259,6 +1287,12 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int, modi
 				if modify_stock: 
 					adjust_card_stock(attribute, "remove")
 				success = true
+				
+				if amount < 0:
+					all_gladiators[id]["respec_points"] += amount
+					all_gladiators[id]["points"] -= amount
+				else:
+					all_gladiators[id]["points"] -= amount
 				
 				rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
 				rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id], parent_name)

@@ -484,8 +484,9 @@ func _on_confirm():
 			"scroll_of_injection": 1000
 		}, 
 		"total_modifier_bonuses": {}, 
-		"age": "Young"
-
+		"age": "Young",
+		"respec_points": 10,
+		"points": 150
 	}
 
 	if multiplayer.is_server():

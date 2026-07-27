@@ -232,4 +232,4 @@ func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data, _parent_n
 				disabled = false
 
 func get_attribute_tooltip(_attribute_name):
-	pass
+	return ""

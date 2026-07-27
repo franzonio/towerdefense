@@ -2970,6 +2970,7 @@ theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 theme_override_constants/h_separation = 4
 disabled = true
+button_mask = 3
 icon = ExtResource("4")
 flat = true
 expand_icon = true
@@ -3001,6 +3002,7 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
+button_mask = 3
 icon = ExtResource("6")
 flat = true
 expand_icon = true
@@ -3027,6 +3029,7 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
+button_mask = 3
 icon = ExtResource("7")
 flat = true
 expand_icon = true
@@ -3058,6 +3061,7 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
+button_mask = 3
 icon = ExtResource("8")
 flat = true
 expand_icon = true
@@ -3084,6 +3088,7 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
+button_mask = 3
 icon = ExtResource("9")
 flat = true
 expand_icon = true
@@ -3115,6 +3120,7 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
+button_mask = 3
 icon = ExtResource("10")
 flat = true
 expand_icon = true
@@ -3141,6 +3147,7 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
+button_mask = 3
 icon = ExtResource("11")
 flat = true
 expand_icon = true
@@ -3207,6 +3214,7 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
+button_mask = 3
 icon = ExtResource("12")
 flat = true
 expand_icon = true
@@ -3238,6 +3246,7 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
+button_mask = 3
 icon = ExtResource("13")
 flat = true
 expand_icon = true
@@ -3264,6 +3273,7 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
+button_mask = 3
 icon = ExtResource("14")
 flat = true
 expand_icon = true
@@ -3295,6 +3305,7 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
+button_mask = 3
 icon = ExtResource("15")
 flat = true
 expand_icon = true
@@ -3321,6 +3332,7 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
+button_mask = 3
 icon = ExtResource("16")
 flat = true
 expand_icon = true
@@ -3352,6 +3364,7 @@ theme_override_colors/icon_hover_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_hover_pressed_color = Color(0, 0.6784314, 0, 1)
 theme_override_colors/icon_disabled_color = Color(1, 1, 1, 1)
 disabled = true
+button_mask = 3
 icon = ExtResource("17")
 flat = true
 expand_icon = true
@@ -3371,20 +3384,38 @@ size_flags_horizontal = 3
 label_settings = SubResource("LabelSettings_yxlso")
 
 [node name="PointsLeft" type="Label" parent="AttributePanel"]
+z_index = 13
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -33.5
+offset_left = -85.5
 offset_top = -16.0
-offset_right = 33.5
-offset_bottom = -1.0
+offset_right = -18.5
+offset_bottom = 5.0
 grow_horizontal = 2
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
 theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 20
-text = "Points left: 5"
+text = "Points: 5"
+
+[node name="RespecPointsLeft" type="Label" parent="AttributePanel"]
+z_index = 13
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 15.5
+offset_top = -16.0
+offset_right = 112.5
+offset_bottom = 5.0
+grow_horizontal = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.54901963, 0.67058825, 0.6313726, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+text = "Regret: 5"
 
 [node name="Info" type="Label" parent="AttributePanel"]
 layout_mode = 1
@@ -3689,7 +3720,7 @@ offset_right = 238.0
 offset_bottom = 8.0
 theme_override_styles/background = SubResource("StyleBoxFlat_5yw8j")
 theme_override_styles/fill = SubResource("StyleBoxFlat_6lk28")
-value = 50.0
+value = 100.0
 show_percentage = false
 
 [node name="PanelContainer" type="PanelContainer" parent="EquipmentPanel1"]
@@ -4664,18 +4695,31 @@ horizontal_alignment = 2
 [connection signal="toggled" from="CraftingContainer/CraftingMats/ScrollOfLuck" to="." method="_on_scroll_of_luck_toggled"]
 [connection signal="toggled" from="CraftingContainer/CraftingMats/ScrollOfInjection" to="." method="_on_scroll_of_injection_toggled"]
 [connection signal="button_up" from="AttributePanel/VBoxContainer/HealthIcon" to="." method="_on_health_icon_button_up"]
+[connection signal="gui_input" from="AttributePanel/VBoxContainer/HealthIcon" to="." method="_on_health_icon_gui_input"]
 [connection signal="button_up" from="AttributePanel/VBoxContainer/StrengthIcon" to="." method="_on_strength_icon_button_up"]
+[connection signal="gui_input" from="AttributePanel/VBoxContainer/StrengthIcon" to="." method="_on_strength_icon_gui_input"]
 [connection signal="button_up" from="AttributePanel/VBoxContainer/EnduranceIcon" to="." method="_on_endurance_icon_button_up"]
+[connection signal="gui_input" from="AttributePanel/VBoxContainer/EnduranceIcon" to="." method="_on_endurance_icon_gui_input"]
 [connection signal="button_up" from="AttributePanel/VBoxContainer/CriticalityIcon" to="." method="_on_criticality_icon_button_up"]
+[connection signal="gui_input" from="AttributePanel/VBoxContainer/CriticalityIcon" to="." method="_on_criticality_icon_gui_input"]
 [connection signal="button_up" from="AttributePanel/VBoxContainer/AvoidanceIcon" to="." method="_on_avoidance_icon_button_up"]
+[connection signal="gui_input" from="AttributePanel/VBoxContainer/AvoidanceIcon" to="." method="_on_avoidance_icon_gui_input"]
 [connection signal="button_up" from="AttributePanel/VBoxContainer/QuicknessIcon" to="." method="_on_quickness_icon_button_up"]
+[connection signal="gui_input" from="AttributePanel/VBoxContainer/QuicknessIcon" to="." method="_on_quickness_icon_gui_input"]
 [connection signal="button_up" from="AttributePanel/VBoxContainer/ResilienceIcon" to="." method="_on_resilience_icon_button_up"]
+[connection signal="gui_input" from="AttributePanel/VBoxContainer/ResilienceIcon" to="." method="_on_resilience_icon_gui_input"]
 [connection signal="button_up" from="AttributePanel/VBoxContainer/SwordIcon" to="." method="_on_sword_icon_button_up"]
+[connection signal="gui_input" from="AttributePanel/VBoxContainer/SwordIcon" to="." method="_on_sword_icon_gui_input"]
 [connection signal="button_up" from="AttributePanel/VBoxContainer/AxeIcon" to="." method="_on_axe_icon_button_up"]
+[connection signal="gui_input" from="AttributePanel/VBoxContainer/AxeIcon" to="." method="_on_axe_icon_gui_input"]
 [connection signal="button_up" from="AttributePanel/VBoxContainer/StabbingIcon" to="." method="_on_stabbing_icon_button_up"]
+[connection signal="gui_input" from="AttributePanel/VBoxContainer/StabbingIcon" to="." method="_on_stabbing_icon_gui_input"]
 [connection signal="button_up" from="AttributePanel/VBoxContainer/MaceIcon" to="." method="_on_mace_icon_button_up"]
+[connection signal="gui_input" from="AttributePanel/VBoxContainer/MaceIcon" to="." method="_on_mace_icon_gui_input"]
 [connection signal="button_up" from="AttributePanel/VBoxContainer/FlagellationIcon" to="." method="_on_flagellation_icon_button_up"]
+[connection signal="gui_input" from="AttributePanel/VBoxContainer/FlagellationIcon" to="." method="_on_flagellation_icon_gui_input"]
 [connection signal="button_up" from="AttributePanel/VBoxContainer/ShieldIcon" to="." method="_on_shield_icon_button_up"]
+[connection signal="gui_input" from="AttributePanel/VBoxContainer/ShieldIcon" to="." method="_on_shield_icon_gui_input"]
 [connection signal="button_up" from="ExpButton" to="." method="_on_exp_button_button_up"]
 [connection signal="pressed" from="EscMenu/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="EscMenu/Options" to="." method="_on_options_pressed"]
