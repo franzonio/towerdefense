@@ -2,29 +2,34 @@ Bugs
 	Gear unequip/equip kalkyl buggar
 		- lyckas inte reproducera...
 	Välja om ras i race selection ger error
+		^ disablat knapparna efter man valt
+	Generellt errors efter leave game
+	Income ska komma efter rundan, inte när ens fight är över
 	
 Features
-		Vid ojämnt antal, möta en ghost eller fortsätta sin loss/winstreak
-			Något sätt att pivotera sin build - respec tokens i shoppen!
-			Tutorial
-		Uppgradera tier genom att sätta ihop 3 av lägre tier (borde bara kräva att lägga in light/heavy i equipment dicts
-		Vid miss, ge inte motståndaren en crit, utan skippa ditt egna slag
-		Vid race selection ha info om rasbonusar
-	Fixa swing animations vid hög attack speed
-	Panel för hit chance etc
-		Catch-up mechanic med free rerolls?
-	Visual bar för endurance
+		+ Vid ojämnt antal, möta en ghost eller fortsätta sin loss/winstreak
+			2 Något sätt att pivotera sin build - respec tokens i shoppen!
+			4 Tutorial
+		1 Uppgradera tier genom att sätta ihop 3 av lägre tier (borde bara kräva att lägga in light/heavy i equipment dicts
+		+ Vid miss, ge inte motståndaren en crit, utan dubblera tiden tills ditt nästa slag
+		3 Vid race selection ha info om rasbonusar
+	+ Panel för hit chance etc
+		Catch-up mechanic -> free rerolls?
+	+ Visual bar för endurance
 			Looping "skinande" tweens på typ guld/exp/hp för med juice?
+	toggling info panel om stats i equipment panel
 	
 Balance
 	0 Tid för rundor
-	0 Lås equip/strat under fighten
 	Gear stats down tune vid craft (life on hit, hit chance, dmg, absorb ...)
-	Slår lite för fort?
-	För långa games
+		^ tuneat attack speed, parry, block
+		^ nerfat base crit chance på items
+	0 För långa games -> reducera max hp 
 	Tydligare påverkan av vikt
+		^ Fler stats påverkas nu av vikt
+		^ Nu ser man även i stat panel vad som påverkas av vikt när man tar av/på items som väger mkt
 	Durability är alldeles för svagt end game vs offensive scaling. Kanske resilience/reinforcement reducerar skadan vapnet tar?
-	
+
 	
 	
 Tankar

@@ -157,7 +157,11 @@ func _on_peer_disconnected(id: int):
 	multiplayer.disconnect_peer(id)
 
 func on_race_selected(race: String):
-
+	$VBoxContainer/Human.disabled = true
+	$VBoxContainer/Elf.disabled = true
+	$VBoxContainer/Orc.disabled = true
+	$VBoxContainer/Troll.disabled = true
+	
 	var color = player_colors[multiplayer.get_unique_id()]
 	var hex_color = color
 	var formatted = "[color=%s]%s[/color]" % [hex_color, GameState_.selected_name]
@@ -476,8 +480,8 @@ func _on_confirm():
 		}, 
 
 		"crafting_mats": {
-			"scroll_of_luck": 1, 
-			"scroll_of_injection": 1
+			"scroll_of_luck": 1000, 
+			"scroll_of_injection": 1000
 		}, 
 		"total_modifier_bonuses": {}, 
 		"age": "Young"

@@ -1,4 +1,4 @@
-[gd_scene load_steps=84 format=3 uid="uid://dutn6wxx1oapc"]
+[gd_scene load_steps=85 format=3 uid="uid://dutn6wxx1oapc"]
 
 [ext_resource type="Script" uid="uid://cpvmnjflyi4ln" path="res://UI/HUD.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://cd5rsplet8de7" path="res://Assets/CardAssets/CraftCardAssets/scroll_of_luck.png" id="2"]
@@ -211,6 +211,9 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1gabh"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kqeut"]
 bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xqb12"]
@@ -2604,6 +2607,36 @@ offset_right = 1439.0
 offset_bottom = 227.0
 pivot_offset = Vector2(480, 112.5)
 columns = 5
+
+[node name="shop1" type="PanelContainer" parent="ShopGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_kqeut")
+
+[node name="shop2" type="PanelContainer" parent="ShopGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_kqeut")
+
+[node name="shop3" type="PanelContainer" parent="ShopGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_kqeut")
+
+[node name="shop4" type="PanelContainer" parent="ShopGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_kqeut")
+
+[node name="shop5" type="PanelContainer" parent="ShopGridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_kqeut")
 
 [node name="Shop" type="HBoxContainer" parent="."]
 visible = false

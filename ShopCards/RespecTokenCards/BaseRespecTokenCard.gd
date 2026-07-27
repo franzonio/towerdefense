@@ -88,18 +88,8 @@ func _ready():
 
 		add_child(cost_label)
 		add_child(name_label)
-
-
-
-
-
-
 		if all_gladiators != null:
 			_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
-
-
-
-
 
 func _make_custom_tooltip(for_text):
 	if modulate.a == 0:
@@ -205,10 +195,11 @@ func buy_card():
 		added = false
 		var id: = multiplayer.get_unique_id()
 
-		if multiplayer.is_server():
-			GameState_.buy_attribute_card(id, amount, attribute_name, cost, true, parent_name)
-		else:
-			GameState_.rpc_id(1, "buy_attribute_card", id, amount, attribute_name, cost, true, parent_name)
+		if attribute_name.contains("respec"):
+			if multiplayer.is_server():
+				GameState_.buy_respec_token_card(id, amount, attribute_name, cost, true, parent_name)
+			else:
+				GameState_.rpc_id(1, "buy_respec_token_card", id, amount, attribute_name, cost, true, parent_name)
 
 		disabled = true
 		#await get_tree().create_timer(0.15).timeout
@@ -241,14 +232,4 @@ func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data, _parent_n
 				disabled = false
 
 func get_attribute_tooltip(_attribute_name):
-	var attribute_text = ""
-	var race = all_gladiators[multiplayer.get_unique_id()]["race"]
-	var race_mod = race_modifiers[race][_attribute_name]
-
-
-	if race_mod == 1: attribute_text = "[color=%s]%s mod: [/color][color=%s]%s[/color]" % [normal_text_color, race, no_bonus_color, race_mod]
-	elif race_mod > 1: attribute_text = "[color=%s]%s mod: [/color][color=%s]%s[/color]" % [normal_text_color, race, pos_bonus_color, race_mod]
-	elif race_mod < 1: attribute_text = "[color=%s]%s mod: [/color][color=%s]%s[/color]" % [normal_text_color, race, neg_bonus_color, race_mod]
-
-
-	return attribute_text
+	pass

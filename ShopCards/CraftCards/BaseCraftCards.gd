@@ -44,7 +44,7 @@ func _ready():
 		GameState_.rpc_id(1, "refresh_gladiator_data_card", multiplayer.get_unique_id())
 
 	parent_name = get_parent().name
-	if parent_name == "ShopGridContainer":
+	if parent_name.contains("shop"):
 		label_display = format_name(craft_name)
 		name_label = RichTextLabel.new()
 		name_label.add_theme_font_size_override("normal_font_size", 22)
@@ -134,7 +134,7 @@ func _on_update_gold_req_shop(_id, gold):
 
 	var gold_color = "#d2b600"
 
-	if parent_name == "ShopGridContainer":
+	if parent_name and parent_name.contains("shop"):
 		if gold < cost:
 			name_label.bbcode_text = "[color=%s]%s[/color]" % [name_color, label_display]
 			cost_label.bbcode_text = "[color=%s]$ %d[/color]" % [req_nok_color, cost]
@@ -178,7 +178,7 @@ func _on_mouse_exited():
 func _on_button_up():
 	var _parent_name = get_parent().name
 
-	if _parent_name == "ShopGridContainer":
+	if _parent_name.contains("shop"):
 		if is_multiplayer_authority(): buy_card()
 	if _parent_name == "InventoryGridContainer":
 		if is_multiplayer_authority(): handle_inventory()
@@ -196,13 +196,14 @@ func buy_card():
 		var id: = multiplayer.get_unique_id()
 
 		if multiplayer.is_server():
-			GameState_.buy_craft_card(id, craft_name, cost)
+			GameState_.buy_craft_card(id, craft_name, cost, parent_name)
 		else:
-			GameState_.rpc_id(1, "buy_craft_card", id, craft_name, cost)
+			GameState_.rpc_id(1, "buy_craft_card", id, craft_name, cost, parent_name)
 
 		disabled = true
-		await get_tree().create_timer(0.15).timeout
+		#await get_tree().create_timer(0.15).timeout
 
+		'''
 		if added:
 			tooltip_text = ""
 
@@ -212,12 +213,22 @@ func buy_card():
 			tween.tween_property(self, "modulate:a", 0, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 			TweenFX.fold_out(self, 0.2)
 		else: disabled = false
+		'''
 
 
-
-func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data):
+func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data, _parent_name):
 	if peer_id == multiplayer.get_unique_id():
-		added = success
+		if parent_name == _parent_name:
+			if success:
+				tooltip_text = ""
+				mouse_inside_button = false
+				disabled = true
+				var tween: = get_tree().create_tween()
+				tween.tween_property(self, "modulate:a", 0, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+				TweenFX.fold_out(self, 0.2)
+			else: 
+				disabled = false
+
 
 func get_craft_tooltip(_craft_name):
 	var craft_text = ""

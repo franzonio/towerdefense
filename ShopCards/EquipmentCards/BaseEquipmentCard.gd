@@ -104,7 +104,7 @@ func _ready():
 
 
 	parent_name = get_parent().name
-	if parent_name == "ShopGridContainer":
+	if parent_name.contains("shop"):#== "ShopGridContainer":
 		label_display = format_name(equipment_name)
 		name_label = RichTextLabel.new()
 		name_label.add_theme_font_size_override("normal_font_size", 22)
@@ -234,7 +234,7 @@ func _on_update_gold_req_shop(_id, gold):
 
 
 	if item_dict:
-		if parent_name == "ShopGridContainer" and item_dict.has(equipment_name):
+		if parent_name and parent_name.contains("shop") and item_dict.has(equipment_name):
 			var item_type = item_dict[equipment_name]["type"]
 			var color = Color.WHITE.to_html(false)
 
@@ -242,7 +242,7 @@ func _on_update_gold_req_shop(_id, gold):
 
 			var gold_color = "#d2b600"
 
-			if parent_name == "ShopGridContainer":
+			if parent_name.contains("shop"):
 				if gold < cost:
 					name_label.bbcode_text = "[color=%s]%s[/color]" % [color, label_display]
 					cost_label.bbcode_text = "[color=%s]$ %d[/color]" % [req_nok_color, cost]
@@ -331,7 +331,7 @@ func _on_mouse_entered():
 	pivot_offset = size / 2
 	mouse_inside_button = true
 	emit_signal("mouse_inside_equipment_card_signal", mouse_inside_button)
-	if parent_name == "ShopGridContainer":
+	if parent_name.contains("shop"):
 		var tween: = get_tree().create_tween()
 		tween.tween_property(self, "scale", Vector2(1.1, 1.1), 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 
@@ -341,14 +341,14 @@ func _on_mouse_entered():
 func _on_mouse_exited():
 	mouse_inside_button = false
 	emit_signal("mouse_inside_equipment_card_signal", mouse_inside_button)
-	if parent_name == "ShopGridContainer":
+	if parent_name.contains("shop"):
 		var tween: = get_tree().create_tween()
 		tween.tween_property(self, "scale", Vector2.ONE, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 
 func _on_button_up():
 	emit_signal("button_parent", parent_name)
 
-	if parent_name == "ShopGridContainer":
+	if parent_name.contains("shop"):
 		if is_multiplayer_authority(): buy_equipment()
 	if parent_name == "InventoryGridContainer":
 		if is_multiplayer_authority(): handle_inventory()
@@ -366,13 +366,13 @@ func buy_equipment():
 		var id: = multiplayer.get_unique_id()
 
 		if multiplayer.is_server():
-			GameState_.buy_equipment_card(id, equipment_name, cost)
+			GameState_.buy_equipment_card(id, equipment_name, cost, parent_name)
 		else:
-			GameState_.rpc_id(1, "buy_equipment_card", id, equipment_name, cost)
+			GameState_.rpc_id(1, "buy_equipment_card", id, equipment_name, cost, parent_name)
 
 		disabled = true
-		await get_tree().create_timer(0.15).timeout
-
+		#await get_tree().create_timer(0.15).timeout
+		'''
 		if added:
 			tooltip_text = ""
 
@@ -381,11 +381,23 @@ func buy_equipment():
 			var tween: = get_tree().create_tween()
 			tween.tween_property(self, "modulate:a", 0, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 			TweenFX.fold_out(self, 0.2)
-		else: disabled = false
+		else: 
+			disabled = false
+		'''
 
-func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data):
+func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data, _parent_name):
 	if peer_id == multiplayer.get_unique_id():
-		added = success
+		if parent_name == _parent_name:
+			if success:
+				tooltip_text = ""
+				mouse_inside_button = false
+				disabled = true
+				var tween: = get_tree().create_tween()
+				tween.tween_property(self, "modulate:a", 0, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
+				TweenFX.fold_out(self, 0.2)
+			else: 
+				disabled = false
+				
 
 
 func get_item_tooltip(item_data: Dictionary, _all_gladiators, __item_dict):

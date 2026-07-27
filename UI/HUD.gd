@@ -276,9 +276,9 @@ var prev_gold = 0
 @onready var crafting_container = $CraftingContainer
 @onready var shop_button = $ShopButton
 
-var physique_limits = {"Low": 70, "Good": 140, "Excellent": 210, "Outstanding": 280, "Legendary": 350}
-var agility_limits = {"Low": 60, "Good": 120, "Excellent": 180, "Outstanding": 240, "Legendary": 300}
-var weight_limits = {"Weightless": 10, "Lightweight": 18, "Midweight": 28, "Heavyweight": 36, "Massive": 48}
+var physique_limits = {"Low": 70, "Good": 140, "Excellent": 220, "Outstanding": 310, "Legendary": 410}
+var agility_limits = {"Low": 60, "Good": 120, "Excellent": 190, "Outstanding": 270, "Legendary": 360}
+var weight_limits = {"Weightless": 20, "Lightweight": 28, "Midweight": 38, "Heavyweight": 50, "Massive": 64}
 
 var exp_for_level = {"1": 0, "2": 10, "3": 12, "4": 14, "5": 18, "6": 22, "7": 26, "8": 30, "9": 34, "10": 36}
 var max_lvl
@@ -306,6 +306,7 @@ var craft_active = ""
 @onready var mace_mastery_card = preload("res://ShopCards/AttributeCards/MaceMasteryCard.tscn")
 @onready var stabbing_mastery_card = preload("res://ShopCards/AttributeCards/StabbingMasteryCard.tscn")
 @onready var flagellation_mastery_card = preload("res://ShopCards/AttributeCards/FlagellationMasteryCard.tscn")
+@onready var respec_token1_card = preload("res://ShopCards/RespecTokenCards/RespecToken1.tscn")
 
 ### CRAFTING ###
 @onready var scroll_of_luck_card = preload("res://ShopCards/CraftCards/ScrollOfLuckCard.tscn")
@@ -539,6 +540,8 @@ func _ready():
 	GameState_.connect("remove_item_from_inventory_signal", Callable(self, "_on_remove_item_from_inventory"))
 	GameState_.connect("add_item_to_equipment_signal", Callable(self, "_on_add_item_to_equipment"))
 	GameState_.connect("remove_item_from_equipment_signal", Callable(self, "_on_remove_item_from_equipment"))
+	
+	GameState_.connect("refresh_inventory_ui_signal", Callable(self, "_on_refresh_inventory_ui"))
 
 	health_icon_panel.add_theme_stylebox_override("disabled", health_icon_panel.get_theme_stylebox("normal"))
 	strength_icon_panel.add_theme_stylebox_override("disabled", strength_icon_panel.get_theme_stylebox("normal"))
@@ -632,7 +635,7 @@ func _process(delta: float) -> void :
 		current_lvl = int(all_gladiators[multiplayer.get_unique_id()].get("level", 1))
 
 	if prev_lvl < current_lvl:
-		points_left += 5
+		points_left += 10
 		attribute_panel.modulate = "ffffff"
 		TweenFX.spotlight(attribute_panel)
 		update_attribute_ui()
@@ -710,7 +713,8 @@ func get_all_cards():
 		[shield_mastery_card, "shield_mastery", card_stock["shield_mastery"]], 
 		[stabbing_mastery_card, "stabbing_mastery", card_stock["stabbing_mastery"]], 
 		[flagellation_mastery_card, "flagellation_mastery", card_stock["flagellation_mastery"]], 
-		[mace_mastery_card, "mace_mastery", card_stock["mace_mastery"]], 
+		[mace_mastery_card, "mace_mastery", card_stock["mace_mastery"]],
+		[respec_token1_card, "respec_token1", card_stock["respec_token1"]],
 
 
 		[leather_vest_card, "leather_vest", card_stock["leather_vest"]], 
@@ -1334,6 +1338,33 @@ func find_item_slot(category, hands, id):
 			item_slot = get_node_or_null("_EquipmentPanel" + str(id) + "/PanelContainerLeft/LeftPanel").find_child(category.capitalize() + "Slot", true, false)
 
 	return item_slot
+		
+
+func _on_refresh_inventory_ui(id, inventory_dict):
+	if multiplayer.get_unique_id() != id:
+		return
+
+	var grid = $Inventory/InventoryGridContainer
+
+	# Clear all UI slots
+	for slot in grid.get_children():
+		for child in slot.get_children():
+			child.queue_free()
+
+	# Rebuild UI from authoritative inventory
+	for slot_name in inventory_dict.keys():
+		var slot_node = grid.find_child(slot_name, true, false)
+
+		if inventory_dict[slot_name].is_empty():
+			continue
+
+		var item_name = inventory_dict[slot_name].keys()[0]
+		var item_data = inventory_dict[slot_name][item_name]
+
+		_on_add_item_to_inventory(id, inventory_dict[slot_name], slot_name)
+		#var icon = preload("res://path/to/item_icons/%s.png" % item_name).instantiate()
+		#slot_node.add_child(icon)
+		
 
 func _on_remove_item_from_inventory(id, _item_dict, slot_name):
 	if multiplayer.get_unique_id() != id: return
@@ -1662,20 +1693,20 @@ func clear_shop_grid():
 	var tweens = []
 
 	for child in shop_grid.get_children():
+		for c in child.get_children():
+			# Skip cards that are already faded out (invisible)
+			if c.modulate.a <= 0.05:
+				c.queue_free()
+				continue
 
-		# Skip cards that are already faded out (invisible)
-		if child.modulate.a <= 0.05:
-			child.queue_free()
-			continue
+			var tween: = get_tree().create_tween()
+			tween.tween_property(c, "modulate:a", 0.0, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
 
-		var tween: = get_tree().create_tween()
-		tween.tween_property(child, "modulate:a", 0.0, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
+			if c:
+				var node_ref: = c
+				tween.tween_callback( func(): if node_ref: node_ref.queue_free())
 
-		if child:
-			var node_ref: = child
-			tween.tween_callback( func(): if node_ref: node_ref.queue_free())
-
-		tweens.append(tween)
+			tweens.append(tween)
 
 	if tweens.size() > 0:
 		await tweens[-1].finished
@@ -1688,13 +1719,15 @@ func roll_cards():
 	all_cards = get_all_cards()
 	var weighted_random_cards = weighted_random_selection(all_cards, 5)
 
-
+	var i = 0
+	var shop_grid_children = shop_grid.get_children()
+	
 	for card in weighted_random_cards:
 		var card_instance = card.instantiate()
 		card_instance.set_multiplayer_authority(multiplayer.get_unique_id())
 		card_instance.modulate.a = 0
 		card_instance["focus_mode"] = 0
-		shop_grid.add_child(card_instance)
+		shop_grid_children[i].add_child(card_instance)
 
 		var tween: = get_tree().create_tween()
 		tween.set_parallel(true)
@@ -1702,6 +1735,7 @@ func roll_cards():
 		tween.tween_property(card_instance, "scale", Vector2.ONE, 0.1)
 
 		await get_tree().create_timer(0.05).timeout
+		i += 1
 
 func _on_reroll_cards_new_round_signal(active_players: Array):
 	if is_rerolling:
@@ -2372,8 +2406,10 @@ func _on_lock_shop_pressed() -> void :
 	refresh_button.disabled = is_shop_locked
 
 	var cards = shop_grid.get_children()
+	#var i = 0
 	for card in cards:
-		card.disabled = is_shop_locked
+		card.get_children()[0].disabled = is_shop_locked
+		#i += 1
 
 	if is_shop_locked == true: shop_grid.modulate = "ffffffce"
 	else: shop_grid.modulate = "ffffff"

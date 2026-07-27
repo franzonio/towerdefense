@@ -5,6 +5,7 @@ var equipment_script# = load("res://Equipment.gd")
 var equipment_instance
 var equipment_data
 
+var buy_ready = true
 
 #@onready var synchronizer := $MultiplayerSynchronizer
 var all_duels_done := true
@@ -31,7 +32,7 @@ signal countdown_updated(time_left: int)
 signal card_stock_changed(new_all_cards_stock: Dictionary)
 #signal card_stock_initialize(new_attr_cards_stock: Dictionary)
 signal send_gladiator_data_to_peer_signal(peer_id: int, gladiator_data: Dictionary, all_gladiators)
-signal card_buy_result(peer_id: int, success: bool)
+signal card_buy_result(peer_id: int, success: bool, _parent)
 signal broadcast_log_signal(message: String)
 signal send_player_colors_to_peer_signal(id: int, colors: Dictionary)
 signal send_equipment_dict_to_peer_signal(id: int, dict: Dictionary)
@@ -47,6 +48,8 @@ signal add_item_to_equipment_signal(peer_id, item_dict, category)
 signal remove_item_from_equipment_signal(peer_id, item_dict, category)
 
 signal signal_update_gold_req_in_shop_for_peer(id, gold)
+
+signal refresh_inventory_ui_signal(id, inventory_dict)
 
 var craft_cards_stock
 var attr_cards_stock
@@ -290,7 +293,8 @@ func create_card_pool():
 		"mace_mastery": 50,
 		"stabbing_mastery": 50,
 		"flagellation_mastery": 50,
-		"shield_mastery": 50
+		"shield_mastery": 50,
+		"respec_token1": 1000
 	}
 	var _all_cards_stock = {}  # Create a fresh dictionary
 
@@ -608,7 +612,6 @@ func get_equipment_by_name(id, item_name: String):
 func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 	prev_total_modifier_bonuses = total_modifier_bonuses
 	var item_dict = all_gladiators[peer_id][category] 
-	#get_equipment_by_name(peer_id, equipment)
 	var hands = item_dict[equipment].get("hands", -1)
 	var item = equipment_button_parent_name.replace("Slot", "").to_lower()
 	var modifier_attributes = item_dict[equipment]["modifiers"].get("attributes", {})
@@ -642,6 +645,8 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 			rpc_id(peer_id, "add_item_to_inventory", peer_id, item_dict, slot_name)
 			rpc_id(peer_id, "remove_item_from_equipment", peer_id, item_dict, category)
 			
+			all_gladiators[peer_id]["inventory"] = check_for_item_upgrades(peer_id, all_gladiators[peer_id]["inventory"])
+			
 			rpc_id(peer_id, "send_gladiator_data_to_peer_card", peer_id, all_gladiators[peer_id], all_gladiators)
 			#rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id]["inventory"][slot_name], slot_name, equipment)
 			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators[peer_id], all_gladiators)
@@ -650,6 +655,101 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 			return
 	
 	add_to_peer_log(peer_id, "[INFO] No inventory space!")
+
+func check_for_item_upgrades(id: int, slots: Dictionary) -> Dictionary:
+	var inventory = all_gladiators[id]["inventory"]
+	var visual_updates := []   # queue of visual changes
+
+	while true:
+		var upgrade_found := false
+		var counts := {}
+		var slot_map := {}
+
+		# --- 1. Count items and track their slots ---
+		for slot in inventory.keys():
+			if inventory[slot].is_empty():
+				continue
+
+			var item_name = inventory[slot].keys()[0]
+			var item = inventory[slot][item_name]
+
+			counts[item_name] = counts.get(item_name, 0) + 1
+			slot_map[item_name] = slot_map.get(item_name, [])
+			slot_map[item_name].append(slot)
+
+		# --- 2. Find items that appear 3 times ---
+		for item_name in counts.keys():
+			if counts[item_name] < 3:
+				continue
+
+			var sample_slot = slot_map[item_name][0]
+			var item = inventory[sample_slot][item_name]
+
+			var category = item["category"]
+			var class_type = item["class"]
+			var tier = item["tier"]
+
+			# --- 3. Find next tier in equipment_data ---
+			var next_item_name := ""
+			for eq_name in equipment_data[category].keys():
+				var eq = equipment_data[category][eq_name]
+				if eq["class"] == class_type and eq["tier"] == tier + 1:
+					next_item_name = eq_name
+					break
+
+			if next_item_name == "":
+				continue  # no upgrade exists
+
+			# --- 4. Remove the three items ---
+			var remove_slots = slot_map[item_name].slice(0, 3)
+			for s in remove_slots:
+				inventory[s].clear()
+				all_gladiators[id]["inventory"][s].clear()
+
+				# queue visual update
+				visual_updates.append({
+					"type": "remove",
+					"slot": s
+				})
+
+			# --- 5. Place upgraded item in first empty slot ---
+			var upgraded_item = equipment_data[category][next_item_name].duplicate(true)
+
+			for slot in inventory.keys():
+				if inventory[slot].is_empty():
+					upgraded_item["inventory_slot"] = slot
+
+					# IMPORTANT: embed item_name → item_dict
+					inventory[slot][next_item_name] = upgraded_item
+					all_gladiators[id]["inventory"][slot] = inventory[slot]
+
+					# queue visual update with correct structure
+					visual_updates.append({
+						"type": "add",
+						"slot": slot,
+						"item_name": next_item_name,
+						"item": upgraded_item
+					})
+
+					upgrade_found = true
+					break
+
+			break  # break out of item_name loop
+
+		if upgrade_found:
+			continue  # restart while-loop with fresh counts
+
+		break  # no upgrades found → exit loop
+
+	# --- 6. Apply visual updates AFTER all upgrades are done ---
+	rpc_id(id, "refresh_inventory_ui", id, inventory)
+	return inventory
+
+
+@rpc("any_peer", "call_local")
+func refresh_inventory_ui(id, inventory_dict):
+	emit_signal("refresh_inventory_ui_signal", id, inventory_dict)
+	buy_ready = true
 
 
 
@@ -961,8 +1061,8 @@ func refresh_gladiator_data(id: int) -> void:
 	rpc("send_gladiator_data_to_peer", id, all_gladiators.get(id, {}), all_gladiators)
 
 @rpc("authority", "call_local")
-func notify_card_buy_result(id: int, success: bool, _gladiator_data) -> void:
-	emit_signal("card_buy_result", id, success, _gladiator_data)
+func notify_card_buy_result(id: int, success: bool, _gladiator_data, _parent) -> void:
+	emit_signal("card_buy_result", id, success, _gladiator_data, _parent)
 
 
 @rpc("any_peer", "call_local")
@@ -996,7 +1096,10 @@ signal remove_item_from_equipment_signal(peer_id, item_dict, category)
 '''
 
 @rpc("any_peer", "call_local")
-func buy_equipment_card(id: int, equipment: String, cost: int, ): 
+func buy_equipment_card(id: int, equipment: String, cost: int, parent_name = ""): 
+	#if buy_ready == false:
+	#	return
+	buy_ready = false
 	var success := false
 	if all_cards_stock[equipment] >= 1:
 		if all_gladiators[id]["gold"] >= cost:
@@ -1013,7 +1116,10 @@ func buy_equipment_card(id: int, equipment: String, cost: int, ):
 					success = true
 					rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
 					rpc_id(id, "add_item_to_inventory", id, item_dict, slot_name)
-					rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
+					
+					all_gladiators[id]["inventory"] = check_for_item_upgrades(id, all_gladiators[id]["inventory"])
+					
+					rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id], parent_name)
 					rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 					return
 			add_to_peer_log(id, "[INFO] No inventory space!")
@@ -1021,7 +1127,7 @@ func buy_equipment_card(id: int, equipment: String, cost: int, ):
 	else: 
 		add_to_peer_log(id, "No " + equipment + " cards left in stock!")
 		
-		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
+		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id], parent_name)
 		rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 
 @rpc("any_peer", "call_local")
@@ -1102,7 +1208,7 @@ func sell_from_inventory(id: int, equipment: String, selected_slot):
 	
 	
 @rpc("any_peer", "call_local")
-func buy_craft_card(id, craft_name, cost):
+func buy_craft_card(id, craft_name, cost, parent_name = ""):
 	var success := false
 	if all_cards_stock[craft_name] >= 1:
 		if all_gladiators[id]["gold"] >= cost:
@@ -1110,7 +1216,7 @@ func buy_craft_card(id, craft_name, cost):
 			all_gladiators[id]["gold"] -= cost
 			adjust_card_stock(craft_name, "remove")
 			success = true
-			rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
+			rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id], parent_name)
 			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 			rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
 		else: return#add_to_peer_log(id, "[INFO] Not enough gold!")
@@ -1130,7 +1236,11 @@ func buy_reroll(id):
 		return#add_to_peer_log(id, "[INFO] Not enough gold!")
 	
 @rpc("any_peer", "call_local")
-func buy_attribute_card(id: int, amount: int, attribute: String, cost: int, modify_stock = true):
+func buy_respec_token_card(id: int, amount: int, attribute: String, cost: int, modify_stock = true, parent_name = ""):
+	pass
+	
+@rpc("any_peer", "call_local")
+func buy_attribute_card(id: int, amount: int, attribute: String, cost: int, modify_stock = true, parent_name = ""):
 	var success := false
 	if all_cards_stock[attribute] >= 1:
 		if all_gladiators[id]["gold"] >= cost:
@@ -1151,14 +1261,14 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int, modi
 				success = true
 				
 				rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
-				rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
+				rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id], parent_name)
 				rpc_id(id, "send_gladiator_data_to_peer_card", id, all_gladiators[id], all_gladiators)
 				rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 				update_all_equipment_cards(id)
 		else: return#add_to_peer_log(id, "[INFO] Not enough gold!")
 	else: 
 		add_to_peer_log(id, "[INFO] No " + attribute + " cards left in stock!")
-		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id])
+		rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id], parent_name)
 		
 		
 		
