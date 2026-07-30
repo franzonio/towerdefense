@@ -1,4 +1,4 @@
-[gd_scene load_steps=85 format=3 uid="uid://dutn6wxx1oapc"]
+[gd_scene load_steps=91 format=3 uid="uid://dutn6wxx1oapc"]
 
 [ext_resource type="Script" uid="uid://cpvmnjflyi4ln" path="res://UI/HUD.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://cd5rsplet8de7" path="res://Assets/CardAssets/CraftCardAssets/scroll_of_luck.png" id="2"]
@@ -20,6 +20,7 @@
 [ext_resource type="Texture2D" uid="uid://blkdqari80i7h" path="res://Assets/Aseprite/Attributes/shield_mastery.png" id="17"]
 [ext_resource type="Script" uid="uid://cd4mgamt3dion" path="res://UI/ExpButton.gd" id="18"]
 [ext_resource type="Script" uid="uid://dhwaceb7vkh5y" path="res://UI/concede_threshold_menu.gd" id="19"]
+[ext_resource type="Script" uid="uid://bxxp3lymrnwgh" path="res://UI/help.gd" id="19_1gabh"]
 [ext_resource type="Script" uid="uid://b2w22od5bjwq" path="res://UI/attack_menu.gd" id="20"]
 [ext_resource type="Script" uid="uid://b2pugqbkvithw" path="res://UI/stance_menu.gd" id="21"]
 [ext_resource type="Texture2D" uid="uid://e4glytfe8804" path="res://Assets/EquipmentPanel/necklace_slot.png" id="22"]
@@ -257,7 +258,7 @@ outline_size = 5
 outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2aqtr"]
-bg_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.54509807)
 border_width_left = 2
 border_width_top = 2
 border_width_right = 2
@@ -1967,9 +1968,75 @@ outline_size = 31
 outline_color = Color(0, 0, 0, 1)
 shadow_size = 0
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hpyei"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.7411765)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3exg3"]
+bg_color = Color(0.7019608, 0.64705884, 0.33333334, 0.7058824)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qmtv0"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.7411765)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 1
+
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5yw8j"]
 content_margin_left = 3.0
 content_margin_right = 3.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kslx6"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.92941177)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_mmeu4"]
+bg_color = Color(0.29411766, 0.23921569, 0.26666668, 0.7607843)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+expand_margin_bottom = 2.0
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1")
@@ -3400,7 +3467,7 @@ theme_override_constants/outline_size = 6
 theme_override_font_sizes/font_size = 20
 text = "Points: 5"
 
-[node name="RespecPointsLeft" type="Label" parent="AttributePanel"]
+[node name="RegretPointsLeft" type="Label" parent="AttributePanel"]
 z_index = 13
 layout_mode = 1
 anchors_preset = 5
@@ -3434,6 +3501,34 @@ theme_override_constants/outline_size = 4
 theme_override_font_sizes/font_size = 14
 text = "SHIFT  +5
 CTRL  +10"
+
+[node name="Help" type="Button" parent="AttributePanel"]
+z_index = 8
+texture_filter = 1
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 0
+offset_left = 155.0
+offset_top = 135.0
+offset_right = 187.0
+offset_bottom = 167.0
+pivot_offset = Vector2(16, 16)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+theme_override_constants/outline_size = 9
+theme_override_constants/icon_max_width = 0
+theme_override_constants/align_to_largest_stylebox = 0
+theme_override_constants/line_spacing = 0
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxFlat_kylmn")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_ikkuv")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_eyk8g")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_1gabh")
+toggle_mode = true
+text = "?"
+icon_alignment = 1
+script = ExtResource("19_1gabh")
 
 [node name="Panel" type="Panel" parent="."]
 self_modulate = Color(1, 1, 1, 0.5254902)
@@ -4351,8 +4446,11 @@ texture_filter = 1
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_constants/outline_size = 6
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_hpyei")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3exg3")
 text = "Resume"
 
 [node name="Options" type="Button" parent="EscMenu"]
@@ -4360,8 +4458,11 @@ texture_filter = 1
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_constants/outline_size = 6
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_qmtv0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3exg3")
 text = "Options
 "
 
@@ -4370,8 +4471,11 @@ texture_filter = 1
 custom_minimum_size = Vector2(50, 50)
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_constants/outline_size = 6
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 30
+theme_override_styles/normal = SubResource("StyleBoxFlat_qmtv0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3exg3")
 text = "Disconnect"
 
 [node name="ConfirmDisconnect" type="VBoxContainer" parent="EscMenu"]
@@ -4381,28 +4485,42 @@ layout_mode = 2
 texture_filter = 1
 layout_mode = 2
 theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_constants/outline_size = 6
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
 theme_override_font_sizes/font_size = 20
 text = "Are you sure you want to disconnect?"
 horizontal_alignment = 1
 
 [node name="ConfirmDisconnectContainer" type="HBoxContainer" parent="EscMenu/ConfirmDisconnect"]
+custom_minimum_size = Vector2(80, 40)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
 
 [node name="Yes" type="Button" parent="EscMenu/ConfirmDisconnect/ConfirmDisconnectContainer"]
 texture_filter = 1
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
-theme_override_constants/outline_size = 6
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 21
+theme_override_styles/normal = SubResource("StyleBoxFlat_qmtv0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3exg3")
 text = "Yes"
 
 [node name="No" type="Button" parent="EscMenu/ConfirmDisconnect/ConfirmDisconnectContainer"]
 texture_filter = 1
+custom_minimum_size = Vector2(32, 32)
 layout_mode = 2
+size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.4745098, 0.26666668, 0.2901961, 1)
-theme_override_constants/outline_size = 6
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 21
+theme_override_styles/normal = SubResource("StyleBoxFlat_qmtv0")
+theme_override_styles/hover = SubResource("StyleBoxFlat_3exg3")
 text = " No "
 
 [node name="Stats" type="Panel" parent="."]
@@ -4687,6 +4805,240 @@ fit_content = true
 scroll_active = false
 horizontal_alignment = 2
 
+[node name="AttributePanelHelp" type="Panel" parent="."]
+visible = false
+self_modulate = Color(1, 1, 1, 0.8627451)
+texture_filter = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -1416.0
+offset_top = -536.0
+offset_right = -494.0
+offset_bottom = -211.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_kslx6")
+
+[node name="VBoxContainer" type="GridContainer" parent="AttributePanelHelp"]
+clip_contents = true
+layout_mode = 0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 894.0
+offset_bottom = 313.0
+columns = 4
+
+[node name="HealthIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("4")
+expand_mode = 2
+
+[node name="Health" type="Label" parent="AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "How much health your gladiator 
+has when starting a duel"
+label_settings = SubResource("LabelSettings_yxlso")
+vertical_alignment = 1
+
+[node name="StrengthIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("6")
+expand_mode = 2
+
+[node name="Strength" type="Label" parent="AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Strength impacts how heavy items your gladiator 
+can wield, how hard you hit and counters weight"
+label_settings = SubResource("LabelSettings_yxlso")
+vertical_alignment = 1
+
+[node name="EnduranceIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("7")
+expand_mode = 2
+
+[node name="Endurance" type="Label" parent="AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Endurance determines how long your gladiator 
+can fight before collapsing from fatigue"
+label_settings = SubResource("LabelSettings_yxlso")
+vertical_alignment = 1
+
+[node name="CriticalityIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("8")
+expand_mode = 2
+
+[node name="Criticality" type="Label" parent="AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Criticality determines the likelihood 
+and magnitude of critical hits"
+label_settings = SubResource("LabelSettings_yxlso")
+vertical_alignment = 1
+
+[node name="AvoidanceIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("9")
+expand_mode = 2
+
+[node name="Avoidance" type="Label" parent="AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Avoidance determines the likelihood 
+of dodging an incoming attack"
+label_settings = SubResource("LabelSettings_yxlso")
+vertical_alignment = 1
+
+[node name="QuicknessIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("10")
+expand_mode = 2
+
+[node name="Quickness" type="Label" parent="AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Quickness determines how 
+fast your gladiator attacks"
+label_settings = SubResource("LabelSettings_yxlso")
+vertical_alignment = 1
+
+[node name="ResilienceIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("11")
+expand_mode = 2
+
+[node name="Resilience" type="Label" parent="AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Resilience determined effectiveness 
+of absorb and durability of equipped items"
+label_settings = SubResource("LabelSettings_yxlso")
+vertical_alignment = 1
+
+[node name="SwordMastery" type="Label" parent="AttributePanelHelp"]
+layout_mode = 0
+offset_left = 555.0
+offset_top = 245.0
+offset_right = 834.0
+offset_bottom = 314.0
+size_flags_horizontal = 3
+text = "Masteries determine how well 
+your gladiator can handle a weapon 
+in relation to its requirement."
+label_settings = SubResource("LabelSettings_yxlso")
+vertical_alignment = 1
+
+[node name="VBoxContainer2" type="GridContainer" parent="AttributePanelHelp"]
+clip_contents = true
+layout_mode = 0
+offset_left = 444.0
+offset_top = 245.0
+offset_right = 548.0
+offset_bottom = 313.0
+columns = 3
+
+[node name="SwordIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("12")
+expand_mode = 2
+
+[node name="AxeIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("13")
+expand_mode = 2
+
+[node name="StabbingIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("14")
+expand_mode = 2
+
+[node name="MaceIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("15")
+expand_mode = 2
+
+[node name="FlagellationIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("16")
+expand_mode = 2
+
+[node name="ShieldIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("17")
+expand_mode = 2
+
+[node name="CancelHelp" type="Button" parent="AttributePanelHelp"]
+z_index = 8
+texture_filter = 1
+layout_mode = 0
+offset_left = 907.0
+offset_top = -5.0
+offset_right = 927.0
+offset_bottom = 15.0
+pivot_offset = Vector2(16, 16)
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+theme_override_constants/outline_size = 6
+theme_override_constants/icon_max_width = 0
+theme_override_constants/line_spacing = 0
+theme_override_font_sizes/font_size = 17
+theme_override_styles/normal = SubResource("StyleBoxFlat_mmeu4")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_mmeu4")
+theme_override_styles/hover_pressed = SubResource("StyleBoxFlat_mmeu4")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_1gabh")
+toggle_mode = true
+text = "x"
+autowrap_trim_flags = 192
+icon_alignment = 1
+
 [connection signal="pressed" from="EquipmentButton" to="." method="_on_equipment_button_pressed"]
 [connection signal="pressed" from="ShopButton" to="." method="_on_shop_button_pressed"]
 [connection signal="toggled" from="ShopButton" to="." method="_on_shop_button_toggled"]
@@ -4720,9 +5072,11 @@ horizontal_alignment = 2
 [connection signal="gui_input" from="AttributePanel/VBoxContainer/FlagellationIcon" to="." method="_on_flagellation_icon_gui_input"]
 [connection signal="button_up" from="AttributePanel/VBoxContainer/ShieldIcon" to="." method="_on_shield_icon_button_up"]
 [connection signal="gui_input" from="AttributePanel/VBoxContainer/ShieldIcon" to="." method="_on_shield_icon_gui_input"]
+[connection signal="toggled" from="AttributePanel/Help" to="." method="_on_help_toggled"]
 [connection signal="button_up" from="ExpButton" to="." method="_on_exp_button_button_up"]
 [connection signal="pressed" from="EscMenu/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="EscMenu/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="EscMenu/Disconnect" to="." method="_on_disconnect_pressed"]
 [connection signal="button_up" from="EscMenu/ConfirmDisconnect/ConfirmDisconnectContainer/Yes" to="." method="_on_yes_button_up"]
 [connection signal="button_up" from="EscMenu/ConfirmDisconnect/ConfirmDisconnectContainer/No" to="." method="_on_no_button_up"]
+[connection signal="pressed" from="AttributePanelHelp/CancelHelp" to="." method="_on_cancel_help_pressed"]

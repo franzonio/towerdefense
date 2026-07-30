@@ -54,7 +54,7 @@ signal refresh_inventory_ui_signal(id, inventory_dict)
 var craft_cards_stock
 var attr_cards_stock
 var all_cards_stock
-var respec_cards_stock
+var regret_cards_stock
 
 var exp_for_level = {"1": 0, "2": 10, "3": 12, "4": 14, "5": 18, "6": 22, "7": 26, "8": 30, "9": 34, "10": 36}
 
@@ -197,11 +197,11 @@ var age_modifiers = {
 const RACE_MODIFIERS = {
 	"Orc": {
 		"strength": 1.25,
-		"quickness": 0.7,
-		"crit_rating": 1.2,
-		"avoidance": 0.6,
+		"quickness": 0.8,
+		"crit_rating": 1.1,
+		"avoidance": 0.7,
 		"health": 1.25,
-		"resilience": 1.35,
+		"resilience": 1.0,
 		"endurance": 0.9,
 		"sword_mastery": 1.0,
 		"axe_mastery": 1.1,
@@ -212,16 +212,16 @@ const RACE_MODIFIERS = {
 		"unarmed_mastery": 1.0
 	},
 	"Elf": {
-		"strength": 0.7,
+		"strength": 0.8,
 		"quickness": 1.4,
 		"crit_rating": 1.2,
 		"avoidance": 1.55,
-		"health": 0.8,
-		"resilience": 0.7,
+		"health": 0.9,
+		"resilience": 1.0,
 		"endurance": 1.35,
-		"sword_mastery": 1.15,
-		"axe_mastery": 1.0,
-		"mace_mastery": 1.0,
+		"sword_mastery": 1.25,
+		"axe_mastery": 1.1,
+		"mace_mastery": 1.05,
 		"stabbing_mastery": 1.3,
 		"flagellation_mastery": 1.1,
 		"shield_mastery": 1.2,
@@ -233,23 +233,23 @@ const RACE_MODIFIERS = {
 		"crit_rating": 1.0,
 		"avoidance": 1.1,
 		"health": 1.1,
-		"resilience": 1.1,
+		"resilience": 1.0,
 		"endurance": 1.2,
 		"sword_mastery": 1.1,
 		"axe_mastery": 1.1,
 		"mace_mastery": 1.1,
 		"stabbing_mastery": 1.1,
 		"flagellation_mastery": 1.1,
-		"shield_mastery": 1.1,
+		"shield_mastery": 1.0,
 		"unarmed_mastery": 1.0
 	},
 	"Troll": {
 		"strength": 1.5,
 		"quickness": 0.6,
-		"crit_rating": 1.0,
+		"crit_rating": 0.9,
 		"avoidance": 0.5,
 		"health": 1.5,
-		"resilience": 1.4,
+		"resilience": 1.0,
 		"endurance": 0.8,
 		"sword_mastery": 0.7,
 		"axe_mastery": 0.8,
@@ -297,8 +297,8 @@ func create_card_pool():
 		"shield_mastery": 50
 	}
 	
-	respec_cards_stock = {
-		"respec_token1": 1000
+	regret_cards_stock = {
+		"regret_token1": 25
 	}
 	var _all_cards_stock = {}  # Create a fresh dictionary
 
@@ -308,8 +308,8 @@ func create_card_pool():
 	for key in attr_cards_stock.keys():
 		_all_cards_stock[key] = attr_cards_stock[key]
 		
-	for key in respec_cards_stock.keys():
-		_all_cards_stock[key] = respec_cards_stock[key]
+	for key in regret_cards_stock.keys():
+		_all_cards_stock[key] = regret_cards_stock[key]
 
 	# Now add stock values from equipment_data
 	for category in equipment_data.keys():
@@ -501,7 +501,8 @@ func grant_gold_for_peer(id: int, opponent_id: int, winner: bool):
 			income_bonus += INCOME_GOLD_BONUSES[i]
 			break
 	
-	if winner: win_bonus += 1
+	if winner: win_bonus = 1
+	else: win_bonus = 0
 	
 	
 	
@@ -1240,7 +1241,7 @@ func buy_reroll(id):
 		return#add_to_peer_log(id, "[INFO] Not enough gold!")
 	
 @rpc("any_peer", "call_local")
-func buy_respec_token_card(id: int, amount: int, attribute: String, cost: int, modify_stock = true, parent_name = ""):
+func buy_regret_token_card(id: int, amount: int, attribute: String, cost: int, modify_stock = true, parent_name = ""):
 	var success := false
 	if all_cards_stock[attribute] >= 1:
 		if all_gladiators[id]["gold"] >= cost:
@@ -1248,7 +1249,7 @@ func buy_respec_token_card(id: int, amount: int, attribute: String, cost: int, m
 			if modify_stock: 
 				adjust_card_stock(attribute, "remove")
 			success = true
-			all_gladiators[id]["respec_points"] += amount
+			all_gladiators[id]["regret_points"] += amount
 			rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id], parent_name)
 			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
 			
@@ -1289,7 +1290,7 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int, modi
 				success = true
 				
 				if amount < 0:
-					all_gladiators[id]["respec_points"] += amount
+					all_gladiators[id]["regret_points"] += amount
 					all_gladiators[id]["points"] -= amount
 				else:
 					all_gladiators[id]["points"] -= amount

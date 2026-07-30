@@ -264,7 +264,7 @@ var prev_gold = 0
 @onready var shield_mastery_icon_panel = $AttributePanel/VBoxContainer/ShieldIcon
 
 @onready var points_left_label = $AttributePanel/PointsLeft
-@onready var respec_points_label = $AttributePanel/RespecPointsLeft
+@onready var regret_points_label = $AttributePanel/RegretPointsLeft
 @onready var points_info = $AttributePanel/Info
 
 @onready var attribute_icons = [health_icon_panel, strength_icon_panel, endurance_icon_panel, criticality_icon_panel, 
@@ -307,7 +307,9 @@ var craft_active = ""
 @onready var mace_mastery_card = preload("res://ShopCards/AttributeCards/MaceMasteryCard.tscn")
 @onready var stabbing_mastery_card = preload("res://ShopCards/AttributeCards/StabbingMasteryCard.tscn")
 @onready var flagellation_mastery_card = preload("res://ShopCards/AttributeCards/FlagellationMasteryCard.tscn")
-@onready var respec_token1_card = preload("res://ShopCards/RespecTokenCards/RespecToken1.tscn")
+
+### TOKENS ###
+@onready var regret_token1_card = preload("res://ShopCards/RegretTokenCards/RegretToken1.tscn")
 
 ### CRAFTING ###
 @onready var scroll_of_luck_card = preload("res://ShopCards/CraftCards/ScrollOfLuckCard.tscn")
@@ -490,7 +492,7 @@ var is_rerolling: = false
 #var time_to_live = 9999
 var rename_panels_done = 0
 var points_left = 0
-var respec_points_left = 0
+var regret_points_left = 0
 var points_amount = 1
 var prev_lvl: int = 1
 var current_lvl: int = 1
@@ -519,6 +521,7 @@ func _ready():
 	concede_threshold_menu["focus_mode"] = 0
 	stance_menu["focus_mode"] = 0
 	attack_menu["focus_mode"] = 0
+	$AttributePanel/Help["focus_mode"] = 0
 
 
 
@@ -717,7 +720,7 @@ func get_all_cards():
 		[stabbing_mastery_card, "stabbing_mastery", card_stock["stabbing_mastery"]], 
 		[flagellation_mastery_card, "flagellation_mastery", card_stock["flagellation_mastery"]], 
 		[mace_mastery_card, "mace_mastery", card_stock["mace_mastery"]],
-		[respec_token1_card, "respec_token1", card_stock["respec_token1"]],
+		[regret_token1_card, "regret_token1", card_stock["regret_token1"]],
 
 
 		[leather_vest_card, "leather_vest", card_stock["leather_vest"]], 
@@ -1480,7 +1483,7 @@ func update_attribute_ui():
 	points_left = all_gladiators[multiplayer.get_unique_id()]["points"]
 	points_left_label.text = "Points: " + str(points_left)
 	
-	respec_points_left = all_gladiators[multiplayer.get_unique_id()]["respec_points"]
+	regret_points_left = all_gladiators[multiplayer.get_unique_id()]["regret_points"]
 	
 	health_icon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	strength_icon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -1496,14 +1499,14 @@ func update_attribute_ui():
 	mace_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	shield_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	
-	#print(respec_points_left)
-	respec_points_label.text = "Regret: " + str(respec_points_left)
+	#print(regret_points_left)
+	regret_points_label.text = "Regret: " + str(regret_points_left)
 	attribute_panel.visible = true
 
-	if respec_points_left > 0:
-		respec_points_label.visible = true
+	if regret_points_left > 0:
+		regret_points_label.visible = true
 	else:
-		respec_points_label.visible = false
+		regret_points_label.visible = false
 
 	if points_left > 0:
 		points_info.visible = true
@@ -1779,8 +1782,8 @@ func _on_reroll_cards_new_round_signal(active_players: Array):
 		if multiplayer.get_unique_id() == player:
 
 			refresh_button.disabled = true
-			await get_tree().create_timer(1).timeout
 			reroll_cards()
+			#await get_tree().create_timer(1).timeout
 			refresh_button.disabled = false
 
 
@@ -1872,10 +1875,12 @@ func _on_shop_button_pressed():
 		shop_grid.visible = true
 		refresh_button.visible = true
 		label_buy_roll.visible = true
+		lock_button.visible = true
 	else:
 		shop_grid.visible = false
 		refresh_button.visible = false
 		label_buy_roll.visible = false
+		lock_button.visible = false
 
 
 
@@ -2187,8 +2192,8 @@ func get_amount(left_click, right_click):
 		else: amount = 1
 		
 	if right_click == true:
-		if Input.is_key_pressed(KEY_SHIFT) and respec_points_left >= 5: amount = -5
-		elif Input.is_key_pressed(KEY_CTRL) and respec_points_left >= 10: amount = -10
+		if Input.is_key_pressed(KEY_SHIFT) and regret_points_left >= 5: amount = -5
+		elif Input.is_key_pressed(KEY_CTRL) and regret_points_left >= 10: amount = -10
 		else: amount = -1
 
 	return amount
@@ -2213,7 +2218,7 @@ func _on_health_icon_gui_input(event: InputEvent) -> void:
 				right_click = true
 			
 		var amount = get_amount(left_click, right_click)
-		if right_click and (abs(respec_points_left) < abs(amount)):
+		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 		
 		health_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -2241,7 +2246,7 @@ func _on_strength_icon_gui_input(event: InputEvent) -> void:
 				right_click = true
 				
 		var amount = get_amount(left_click, right_click)
-		if right_click and (abs(respec_points_left) < abs(amount)):
+		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
 		strength_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -2271,7 +2276,7 @@ func _on_endurance_icon_gui_input(event: InputEvent) -> void:
 				right_click = true
 				
 		var amount = get_amount(left_click, right_click)
-		if right_click and (abs(respec_points_left) < abs(amount)):
+		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
 		endurance_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -2301,7 +2306,7 @@ func _on_criticality_icon_gui_input(event: InputEvent) -> void:
 				right_click = true
 				
 		var amount = get_amount(left_click, right_click)
-		if right_click and (abs(respec_points_left) < abs(amount)):
+		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
 		criticality_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -2331,7 +2336,7 @@ func _on_avoidance_icon_gui_input(event: InputEvent) -> void:
 				right_click = true
 				
 		var amount = get_amount(left_click, right_click)
-		if right_click and (abs(respec_points_left) < abs(amount)):
+		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 		
 		avoidance_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -2361,7 +2366,7 @@ func _on_quickness_icon_gui_input(event: InputEvent) -> void:
 				right_click = true
 				
 		var amount = get_amount(left_click, right_click)
-		if right_click and (abs(respec_points_left) < abs(amount)):
+		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
 		quickness_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -2391,7 +2396,7 @@ func _on_resilience_icon_gui_input(event: InputEvent) -> void:
 				right_click = true
 				
 		var amount = get_amount(left_click, right_click)
-		if right_click and (abs(respec_points_left) < abs(amount)):
+		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
 		resilience_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -2421,7 +2426,7 @@ func _on_sword_icon_gui_input(event: InputEvent) -> void:
 				right_click = true
 				
 		var amount = get_amount(left_click, right_click)
-		if right_click and (abs(respec_points_left) < abs(amount)):
+		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
 		sword_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -2451,7 +2456,7 @@ func _on_axe_icon_gui_input(event: InputEvent) -> void:
 				right_click = true
 				
 		var amount = get_amount(left_click, right_click)
-		if right_click and (abs(respec_points_left) < abs(amount)):
+		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
 		axe_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -2481,7 +2486,7 @@ func _on_stabbing_icon_gui_input(event: InputEvent) -> void:
 				right_click = true
 				
 		var amount = get_amount(left_click, right_click)
-		if right_click and (abs(respec_points_left) < abs(amount)):
+		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
 		stabbing_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -2511,7 +2516,7 @@ func _on_mace_icon_gui_input(event: InputEvent) -> void:
 				right_click = true
 				
 		var amount = get_amount(left_click, right_click)
-		if right_click and (abs(respec_points_left) < abs(amount)):
+		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
 		mace_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -2541,7 +2546,7 @@ func _on_flagellation_icon_gui_input(event: InputEvent) -> void:
 				right_click = true
 				
 		var amount = get_amount(left_click, right_click)
-		if right_click and (abs(respec_points_left) < abs(amount)):
+		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 		
 		flagellation_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -2571,7 +2576,7 @@ func _on_shield_icon_gui_input(event: InputEvent) -> void:
 				right_click = true
 				
 		var amount = get_amount(left_click, right_click)
-		if right_click and (abs(respec_points_left) < abs(amount)):
+		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
 		shield_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
@@ -3111,4 +3116,11 @@ func update_glad_stats(attack_speed, hit, dodge, parry, block, absorb, crit_chan
 		stat_block.bbcode_text = "%s" % snapped(clamp(0.0, 100.0, 100*block), 0.1)
 	
 
-	
+
+
+func _on_help_toggled(_toggled_on: bool) -> void:
+	$AttributePanelHelp.visible = !$AttributePanelHelp.visible
+
+
+func _on_cancel_help_pressed() -> void:
+	$AttributePanelHelp.visible = false

@@ -1,9 +1,175 @@
-[gd_scene load_steps=3 format=3 uid="uid://kfhwn4lpml61"]
+[gd_scene load_steps=40 format=3 uid="uid://kfhwn4lpml61"]
 
 [ext_resource type="Script" uid="uid://v412lfmukh41" path="res://UI/MainMenu.gd" id="1"]
+[ext_resource type="Script" uid="uid://bssi0t884b3hj" path="res://UI/tutorial.gd" id="2_b37jj"]
+[ext_resource type="Texture2D" uid="uid://bg48fcrh4pw6c" path="res://Assets/Tutorial/health_endurance.png" id="3_y6s48"]
+[ext_resource type="Texture2D" uid="uid://di0vlbdjk0255" path="res://Assets/Aseprite/Attributes/health.png" id="4_otjfi"]
+[ext_resource type="Texture2D" uid="uid://bmq3objsbdshm" path="res://Assets/Aseprite/Attributes/endurance.png" id="5_obtq6"]
+[ext_resource type="Texture2D" uid="uid://bgkcnn0i34epq" path="res://Assets/Tutorial/concede_threshold.png" id="6_otjfi"]
+[ext_resource type="Texture2D" uid="uid://cx76r8q2vqgvv" path="res://Assets/Aseprite/Attributes/strength.png" id="7_fxi16"]
+[ext_resource type="Texture2D" uid="uid://crrsom80gj47k" path="res://Assets/Aseprite/Attributes/criticality.png" id="8_vsl72"]
+[ext_resource type="Texture2D" uid="uid://dc123cwv575n6" path="res://Assets/Aseprite/Attributes/avoidance.png" id="9_yndlu"]
+[ext_resource type="Texture2D" uid="uid://uuhsexcwvpxj" path="res://Assets/Aseprite/Attributes/quickness.png" id="10_v87kc"]
+[ext_resource type="Texture2D" uid="uid://bauu1dneus5ck" path="res://Assets/Aseprite/Attributes/resilience.png" id="11_h2xek"]
+[ext_resource type="Texture2D" uid="uid://cvnilip0qogng" path="res://Assets/Aseprite/Attributes/sword_mastery.png" id="12_mxdcs"]
+[ext_resource type="Texture2D" uid="uid://buq5scxopockj" path="res://Assets/Aseprite/Attributes/axe_mastery.png" id="13_nsmmc"]
+[ext_resource type="Texture2D" uid="uid://dr6x14n64yfjf" path="res://Assets/Aseprite/Attributes/stabbing_mastery.png" id="14_84toi"]
+[ext_resource type="Texture2D" uid="uid://dl26mpyf8d2iv" path="res://Assets/Aseprite/Attributes/mace_mastery.png" id="15_g341i"]
+[ext_resource type="Texture2D" uid="uid://bddeyxky31tmc" path="res://Assets/Aseprite/Attributes/flagellation_mastery.png" id="16_qbgtf"]
+[ext_resource type="Texture2D" uid="uid://blkdqari80i7h" path="res://Assets/Aseprite/Attributes/shield_mastery.png" id="17_dl0fi"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ers0q"]
 load_path = "res://.godot/imported/battlefield_grass.png-e5cddb3c47484e286f5272d6124ff1c1.ctex"
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_w5vcv"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.7411765)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_b37jj"]
+bg_color = Color(0.7019608, 0.64705884, 0.33333334, 0.7058824)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8aown"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.33333334)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_otjfi"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_d2d4f"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.7411765)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t6syg"]
+bg_color = Color(0.29411766, 0.44705883, 0.43137255, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_t4ff4"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qrfef"]
+bg_color = Color(0.46666667, 0.45490196, 0.23137255, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_y6s48"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0)
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_csrb3"]
+bg_color = Color(0.7294118, 0.5686275, 0.34509805, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wxllh"]
+bg_color = Color(0.4745098, 0.26666668, 0.2901961, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_avhca"]
+bg_color = Color(0.7019608, 0.64705884, 0.33333334, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f2k8e"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.92941177)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_o0stp"]
+resource_local_to_scene = true
+font_size = 20
+font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_keq6e"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.7411765)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jt302"]
+bg_color = Color(0.7019608, 0.64705884, 0.33333334, 0.7058824)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4fgjf"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.33333334)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ljgp6"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.92941177)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ai44j"]
+content_margin_left = 4.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_obtq6"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.7411765)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6vw7e"]
+bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [node name="MainMenu" type="Control"]
 layout_mode = 3
@@ -31,10 +197,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -35.0
-offset_top = -50.5
-offset_right = 35.0
-offset_bottom = 50.5
+offset_left = -87.0
+offset_top = -98.0
+offset_right = 87.0
+offset_bottom = 98.0
 grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
@@ -42,14 +208,1791 @@ alignment = 1
 [node name="StartButton" type="Button" parent="VBoxContainer"]
 texture_filter = 1
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxFlat_w5vcv")
+theme_override_styles/hover = SubResource("StyleBoxFlat_b37jj")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_8aown")
+theme_override_styles/focus = SubResource("StyleBoxFlat_otjfi")
 text = "Play"
+
+[node name="TutorialButton" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxFlat_d2d4f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_b37jj")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_8aown")
+theme_override_styles/focus = SubResource("StyleBoxFlat_otjfi")
+text = "Tutorial"
 
 [node name="OptionsButton" type="Button" parent="VBoxContainer"]
 texture_filter = 1
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxFlat_d2d4f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_b37jj")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_8aown")
+theme_override_styles/focus = SubResource("StyleBoxFlat_otjfi")
 text = "Options"
 
 [node name="ExitButton" type="Button" parent="VBoxContainer"]
 texture_filter = 1
 layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxFlat_d2d4f")
+theme_override_styles/hover = SubResource("StyleBoxFlat_b37jj")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_8aown")
+theme_override_styles/focus = SubResource("StyleBoxFlat_otjfi")
 text = "Exit"
+
+[node name="Tutorial" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_t6syg")
+script = ExtResource("2_b37jj")
+
+[node name="Pages" type="Panel" parent="Tutorial"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_t4ff4")
+
+[node name="Page1" type="Panel" parent="Tutorial/Pages"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_qrfef")
+
+[node name="PageLabel" type="Label" parent="Tutorial/Pages/Page1"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -485.5
+offset_top = -224.0
+offset_right = 485.5
+offset_bottom = 285.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+text = "You see them every day in the slave market. Each one carries a story about how they ended up here. The thin Elf was likely taken by raiders, the trembling Human caught stealing from a sacred shrine, and the massive Troll sold himself to escape a life already broken long before chains.
+
+But their pasts mean nothing to you. As a Lanista, you care only about the potential buried beneath fear, hunger, and inexperience. These untrained slaves are raw material - and you know how to forge them into champions.
+
+You understand the strengths and weaknesses of every race. Your job is to shape them: train them with purpose, equip them wisely, and craft the combat strategies that will win the crowd. In the arena, glory belongs to the gladiator - but their success begins with you."
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="Page2" type="Panel" parent="Tutorial/Pages"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_csrb3")
+
+[node name="PageLabel" type="RichTextLabel" parent="Tutorial/Pages/Page2"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -485.5
+offset_top = -155.0
+offset_right = 485.5
+offset_bottom = 285.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "So how do you win in the arena? Simply by not losing. So how do you lose?
+
+First, never let your gladiator die. If their [color=\"79444a\"]Health[/color] drops below zero, you’ll be punished heavily. To reduce incoming damage, adjust your [color=\"c77b58\"]concede threshold[/color] based on how hard you expect the opponent to strike. You decide how risky you want to be with your gladiator.
+
+You can also lose if your gladiator doesn’t have enough [color=\"d2b600\"]Endurance[/color] and collapses from exhaustion. A fighter who can’t stay standing can’t win, no matter how strong they are."
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="EnduranceLabel" type="RichTextLabel" parent="Tutorial/Pages/Page2"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -431.0
+offset_top = -216.0
+offset_right = -204.5
+offset_bottom = -157.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "[color=\"d2b600\"]Endurance[/color]"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HealthLabel" type="RichTextLabel" parent="Tutorial/Pages/Page2"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 230.0
+offset_top = -217.0
+offset_right = 456.5
+offset_bottom = -158.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "[color=\"79444a\"]Health[/color]"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HealthEnduranceBar" type="TextureRect" parent="Tutorial/Pages/Page2"]
+layout_mode = 0
+offset_left = 784.0
+offset_top = 173.0
+offset_right = 1153.0
+offset_bottom = 215.0
+texture = ExtResource("3_y6s48")
+
+[node name="HealthStat" type="TextureRect" parent="Tutorial/Pages/Page2"]
+layout_mode = 0
+offset_left = 1166.0
+offset_top = 66.0
+offset_right = 1422.0
+offset_bottom = 322.0
+texture = ExtResource("4_otjfi")
+
+[node name="EnduranceStat" type="TextureRect" parent="Tutorial/Pages/Page2"]
+layout_mode = 0
+offset_left = 514.0
+offset_top = 66.0
+offset_right = 770.0
+offset_bottom = 322.0
+texture = ExtResource("5_obtq6")
+
+[node name="ConcedePanel" type="TextureRect" parent="Tutorial/Pages/Page2"]
+layout_mode = 0
+offset_left = 1508.0
+offset_top = 464.0
+offset_right = 1657.0
+offset_bottom = 695.0
+texture = ExtResource("6_otjfi")
+
+[node name="Page3" type="Panel" parent="Tutorial/Pages"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_wxllh")
+
+[node name="PageLabel" type="RichTextLabel" parent="Tutorial/Pages/Page3"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -485.5
+offset_top = -281.0
+offset_right = 485.5
+offset_bottom = 227.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "Each race has with their own unique characteristics. 
+
+[color=\"ba9158\"]Humans[/color] are the jack of all trades. You can train them to become any kind of gladiator you want. They adapt quickly and rarely disappoint.
+
+[color=\"b3a555\"]Elves[/color] are virtuosos of agility and weapon mastery, but fragile and demand careful handling. When trained well, they typically win through finesse rather than brute force.
+
+[color=\"ae5d40\"]Orcs[/color] are strong, tough and quick weapon learners, but below average in terms of agility.
+
+[color=\"726566\"]Trolls[/color] rely on their brutal physique. With their low intellect it's hard, but not impossible, to teach them other methods to win in the arena."
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Page4" type="Panel" parent="Tutorial/Pages"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_avhca")
+
+[node name="AttributePanelHelp" type="Panel" parent="Tutorial/Pages/Page4"]
+self_modulate = Color(1, 1, 1, 0.8627451)
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -1416.0
+offset_top = -481.0
+offset_right = -494.0
+offset_bottom = -156.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_f2k8e")
+
+[node name="VBoxContainer" type="GridContainer" parent="Tutorial/Pages/Page4/AttributePanelHelp"]
+clip_contents = true
+layout_mode = 0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 894.0
+offset_bottom = 313.0
+columns = 4
+
+[node name="HealthIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("4_otjfi")
+expand_mode = 2
+
+[node name="Health" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "How much health your gladiator 
+has when starting a duel"
+label_settings = SubResource("LabelSettings_o0stp")
+vertical_alignment = 1
+
+[node name="StrengthIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("7_fxi16")
+expand_mode = 2
+
+[node name="Strength" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Strength impacts how heavy items your gladiator 
+can wield, how hard you hit and counters weight"
+label_settings = SubResource("LabelSettings_o0stp")
+vertical_alignment = 1
+
+[node name="EnduranceIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("5_obtq6")
+expand_mode = 2
+
+[node name="Endurance" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Endurance determines how long your gladiator 
+can fight before collapsing from fatigue"
+label_settings = SubResource("LabelSettings_o0stp")
+vertical_alignment = 1
+
+[node name="CriticalityIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("8_vsl72")
+expand_mode = 2
+
+[node name="Criticality" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Criticality determines the likelihood 
+and magnitude of critical hits"
+label_settings = SubResource("LabelSettings_o0stp")
+vertical_alignment = 1
+
+[node name="AvoidanceIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("9_yndlu")
+expand_mode = 2
+
+[node name="Avoidance" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Avoidance determines the likelihood 
+of dodging an incoming attack"
+label_settings = SubResource("LabelSettings_o0stp")
+vertical_alignment = 1
+
+[node name="QuicknessIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("10_v87kc")
+expand_mode = 2
+
+[node name="Quickness" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Quickness determines how 
+fast your gladiator attacks"
+label_settings = SubResource("LabelSettings_o0stp")
+vertical_alignment = 1
+
+[node name="ResilienceIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("11_h2xek")
+expand_mode = 2
+
+[node name="Resilience" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Resilience determined effectiveness 
+of absorb and durability of equipped items"
+label_settings = SubResource("LabelSettings_o0stp")
+vertical_alignment = 1
+
+[node name="SwordMastery" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp"]
+layout_mode = 0
+offset_left = 555.0
+offset_top = 245.0
+offset_right = 834.0
+offset_bottom = 314.0
+size_flags_horizontal = 3
+text = "Masteries determine how well 
+your gladiator can handle a weapon 
+in relation to its difficulty."
+label_settings = SubResource("LabelSettings_o0stp")
+vertical_alignment = 1
+
+[node name="VBoxContainer2" type="GridContainer" parent="Tutorial/Pages/Page4/AttributePanelHelp"]
+clip_contents = true
+layout_mode = 0
+offset_left = 444.0
+offset_top = 245.0
+offset_right = 548.0
+offset_bottom = 313.0
+columns = 3
+
+[node name="SwordIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("12_mxdcs")
+expand_mode = 2
+
+[node name="AxeIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("13_nsmmc")
+expand_mode = 2
+
+[node name="StabbingIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("14_84toi")
+expand_mode = 2
+
+[node name="MaceIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("15_g341i")
+expand_mode = 2
+
+[node name="FlagellationIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("16_qbgtf")
+expand_mode = 2
+
+[node name="ShieldIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("17_dl0fi")
+expand_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Tutorial/Pages/Page4"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -32.5
+offset_top = -68.0
+offset_right = 32.5
+offset_bottom = 68.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="Human" type="Button" parent="Tutorial/Pages/Page4/VBoxContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxFlat_keq6e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jt302")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_4fgjf")
+text = "Human"
+
+[node name="Elf" type="Button" parent="Tutorial/Pages/Page4/VBoxContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxFlat_keq6e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jt302")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_4fgjf")
+text = "Elf"
+
+[node name="Troll" type="Button" parent="Tutorial/Pages/Page4/VBoxContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxFlat_keq6e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jt302")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_4fgjf")
+text = "Troll"
+
+[node name="Orc" type="Button" parent="Tutorial/Pages/Page4/VBoxContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxFlat_keq6e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_jt302")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_4fgjf")
+text = "Orc"
+
+[node name="AttributePanelHelp2" type="Panel" parent="Tutorial/Pages/Page4"]
+self_modulate = Color(1, 1, 1, 0.8627451)
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -819.0
+offset_top = -69.0
+offset_right = -494.0
+offset_bottom = 334.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ljgp6")
+
+[node name="GridContainer" type="GridContainer" parent="Tutorial/Pages/Page4/AttributePanelHelp2"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 5
+
+[node name="blank" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+vertical_alignment = 1
+
+[node name="HumanTitle" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Human"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ElfTitle" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Elf"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TrollTitle" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Troll"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OrcTitle" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Orc"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Health"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "0.80"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.50"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.25"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute2" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Strength"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human2" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf2" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "0.90"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll2" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.50"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc2" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.25"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute3" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Endurance"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human3" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf3" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.35"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll3" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "0.80"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc3" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "0.90"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute7" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Resilience"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human7" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf7" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll7" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc7" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute4" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Criticality"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human4" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf4" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.20"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll4" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "0.90"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc4" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute5" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Avoidance"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human5" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf5" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.55"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll5" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "0.50"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc5" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "0.70"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute6" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Quickness"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human6" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf6" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.40"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll6" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "0.60"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc6" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "0.80"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="blank3" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.34117648, 0.28235295, 0.32156864, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "--------"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="blank2" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.34117648, 0.28235295, 0.32156864, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "------"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="blank4" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.34117648, 0.28235295, 0.32156864, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "-----"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="blank5" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.34117648, 0.28235295, 0.32156864, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "-----"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="blank6" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.34117648, 0.28235295, 0.32156864, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "-----"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute9" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Masteries"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human9" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf9" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll9" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc9" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute10" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Stabbing"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human10" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf10" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.30"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll10" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "0.70"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc10" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute11" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Sword"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human11" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf11" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.25"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll11" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "0.70"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc11" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute12" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Axe"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human12" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf12" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll12" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "0.80"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc12" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute13" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Mace"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human13" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf13" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.05"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll13" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc13" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.20"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute14" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Flagellation"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human14" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf14" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll14" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.15"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc14" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.15"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute15" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "Shield"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human15" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf15" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "1.20"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll15" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "0.70"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc15" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_ai44j")
+text = "0.95"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RaceModifiers" type="Label" parent="Tutorial/Pages/Page4"]
+layout_mode = 0
+offset_left = 1101.0
+offset_top = 434.0
+offset_right = 1426.0
+offset_bottom = 470.0
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_ljgp6")
+text = "Race modifiers"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="GoBack" type="Button" parent="Tutorial"]
+z_index = 12
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 66.0
+offset_top = -137.0
+offset_right = 287.0
+offset_bottom = -67.0
+grow_vertical = 0
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 44
+theme_override_styles/normal = SubResource("StyleBoxFlat_obtq6")
+theme_override_styles/hover = SubResource("StyleBoxFlat_b37jj")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_8aown")
+text = "Back"
+
+[node name="PreviousPage" type="Button" parent="Tutorial"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -86.0
+offset_top = -225.0
+offset_right = -36.0
+offset_bottom = -176.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 44
+theme_override_styles/normal = SubResource("StyleBoxFlat_6vw7e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_b37jj")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_8aown")
+theme_override_styles/focus = SubResource("StyleBoxFlat_otjfi")
+text = "<-"
+
+[node name="NextPage" type="Button" parent="Tutorial"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 34.0
+offset_top = -225.0
+offset_right = 84.0
+offset_bottom = -176.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 44
+theme_override_styles/normal = SubResource("StyleBoxFlat_6vw7e")
+theme_override_styles/hover = SubResource("StyleBoxFlat_b37jj")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_8aown")
+theme_override_styles/focus = SubResource("StyleBoxFlat_otjfi")
+text = "->"
+
+[node name="PageLabel" type="Label" parent="Tutorial"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -31.0
+offset_top = -218.0
+offset_right = 29.0
+offset_bottom = -181.0
+grow_horizontal = 2
+grow_vertical = 0
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+text = "6 / 8"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[connection signal="pressed" from="VBoxContainer/TutorialButton" to="." method="_on_tutorial_button_pressed"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer/HealthIcon" to="." method="_on_health_icon_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer/HealthIcon" to="." method="_on_health_icon_mouse_exited"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer/StrengthIcon" to="." method="_on_strength_icon_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer/StrengthIcon" to="." method="_on_strength_icon_mouse_exited"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer/EnduranceIcon" to="." method="_on_endurance_icon_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer/EnduranceIcon" to="." method="_on_endurance_icon_mouse_exited"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer/CriticalityIcon" to="." method="_on_criticality_icon_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer/CriticalityIcon" to="." method="_on_criticality_icon_mouse_exited"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer/AvoidanceIcon" to="." method="_on_avoidance_icon_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer/AvoidanceIcon" to="." method="_on_avoidance_icon_mouse_exited"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer/QuicknessIcon" to="." method="_on_quickness_icon_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer/QuicknessIcon" to="." method="_on_quickness_icon_mouse_exited"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer/ResilienceIcon" to="." method="_on_resilience_icon_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer/ResilienceIcon" to="." method="_on_resilience_icon_mouse_exited"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2/SwordIcon" to="." method="_on_sword_icon_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2/SwordIcon" to="." method="_on_sword_icon_mouse_exited"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2/AxeIcon" to="." method="_on_axe_icon_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2/AxeIcon" to="." method="_on_axe_icon_mouse_exited"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2/StabbingIcon" to="." method="_on_stabbing_icon_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2/StabbingIcon" to="." method="_on_stabbing_icon_mouse_exited"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2/MaceIcon" to="." method="_on_mace_icon_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2/MaceIcon" to="." method="_on_mace_icon_mouse_exited"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2/FlagellationIcon" to="." method="_on_flagellation_icon_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2/FlagellationIcon" to="." method="_on_flagellation_icon_mouse_exited"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2/ShieldIcon" to="." method="_on_shield_icon_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer2/ShieldIcon" to="." method="_on_shield_icon_mouse_exited"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/VBoxContainer/Human" to="." method="_on_human_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/VBoxContainer/Human" to="." method="_on_human_mouse_exited"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/VBoxContainer/Elf" to="." method="_on_elf_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/VBoxContainer/Elf" to="." method="_on_elf_mouse_exited"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/VBoxContainer/Troll" to="." method="_on_troll_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/VBoxContainer/Troll" to="." method="_on_troll_mouse_exited"]
+[connection signal="mouse_entered" from="Tutorial/Pages/Page4/VBoxContainer/Orc" to="." method="_on_orc_mouse_entered"]
+[connection signal="mouse_exited" from="Tutorial/Pages/Page4/VBoxContainer/Orc" to="." method="_on_orc_mouse_exited"]
+[connection signal="pressed" from="Tutorial/GoBack" to="." method="_on_go_back_pressed"]
+[connection signal="pressed" from="Tutorial/PreviousPage" to="Tutorial" method="_on_previous_page_pressed"]
+[connection signal="pressed" from="Tutorial/NextPage" to="Tutorial" method="_on_next_page_pressed"]

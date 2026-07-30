@@ -4,20 +4,22 @@ Bugs
 	Välja om ras i race selection ger error
 		^ disablat knapparna efter man valt
 	Generellt errors efter leave game
-	Income ska komma efter rundan, inte när ens fight är över
+		+ Income ska komma efter rundan, inte när ens fight är över
 	
 Features
 		+ Vid ojämnt antal, möta en ghost eller fortsätta sin loss/winstreak
-			2 Något sätt att pivotera sin build - respec tokens i shoppen!
-			4 Tutorial
-		1 Uppgradera tier genom att sätta ihop 3 av lägre tier (borde bara kräva att lägga in light/heavy i equipment dicts
+			+ Något sätt att pivotera sin build - respec tokens i shoppen!
+	2 Tutorial
+		+ Uppgradera tier genom att sätta ihop 3 av lägre tier (borde bara kräva att lägga in light/heavy i equipment dicts
 		+ Vid miss, ge inte motståndaren en crit, utan dubblera tiden tills ditt nästa slag
-		3 Vid race selection ha info om rasbonusar
-	+ Panel för hit chance etc
-		Catch-up mechanic -> free rerolls?
-	+ Visual bar för endurance
-			Looping "skinande" tweens på typ guld/exp/hp för med juice?
-	toggling info panel om stats i equipment panel
+		+ Vid race selection ha info om rasbonusar
+		+ Panel för hit chance etc
+	5 Catch-up mechanic -> free rerolls?
+		+ Visual bar för endurance
+	6 Looping "skinande" tweens på typ guld/exp/hp för med juice?
+		+ Toggling info panel om stats i equipment panel
+	3 Resilience
+	Porträtt + map finish
 	
 Balance
 	0 Tid för rundor

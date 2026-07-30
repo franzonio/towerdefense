@@ -11,7 +11,7 @@ var all_gladiators
 var mouse_inside_button: = false
 var added: = false
 
-var name_color: = "ef692f"
+var name_color: = "#d2c9a5"
 var base_text_color: = "927e6a"
 var base_value_color: = "efd8a1"
 var req_ok_color: = "efd8a1"
@@ -53,6 +53,7 @@ func _ready():
 	parent_name = get_parent().name
 	if parent_name.contains("shop"):
 		label_display = format_name(attribute_name)
+		label_display = label_display.substr(0, label_display.length() - 2)
 		name_label = RichTextLabel.new()
 		name_label.add_theme_font_size_override("normal_font_size", 22)
 		name_label.add_theme_font_size_override("bold_font_size", 22)
@@ -65,7 +66,7 @@ func _ready():
 		name_label.position.y = -12
 		name_label.position.x = 30
 		name_label.size = Vector2(128, 128)
-		name_label.add_theme_color_override("font_outline_color", Color("4d4539"))
+		name_label.add_theme_color_override("font_outline_color", Color("#4b3d44"))
 		name_label.add_theme_constant_override("outline_size", 12)
 		name_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 
@@ -137,7 +138,7 @@ func _make_custom_tooltip(for_text):
 	return panel
 
 func _on_update_gold_req_shop(_id, gold):
-	var color = "77883b"
+	var color = "8caba1"
 	var gold_color = "#d2b600"
 
 	if parent_name and parent_name.contains("shop"):
@@ -195,11 +196,11 @@ func buy_card():
 		added = false
 		var id: = multiplayer.get_unique_id()
 
-		if attribute_name.contains("respec"):
+		if attribute_name.contains("regret"):
 			if multiplayer.is_server():
-				GameState_.buy_respec_token_card(id, amount, attribute_name, cost, true, parent_name)
+				GameState_.buy_regret_token_card(id, amount, attribute_name, cost, true, parent_name)
 			else:
-				GameState_.rpc_id(1, "buy_respec_token_card", id, amount, attribute_name, cost, true, parent_name)
+				GameState_.rpc_id(1, "buy_regret_token_card", id, amount, attribute_name, cost, true, parent_name)
 
 		disabled = true
 		#await get_tree().create_timer(0.15).timeout

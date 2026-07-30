@@ -1,6 +1,19 @@
-[gd_scene load_steps=5 format=3 uid="uid://bt21imgkgrpjm"]
+[gd_scene load_steps=28 format=3 uid="uid://bt21imgkgrpjm"]
 
 [ext_resource type="Script" uid="uid://bfpo3nty4nyn7" path="res://UI/AttributeAllocation.gd" id="1"]
+[ext_resource type="Texture2D" uid="uid://di0vlbdjk0255" path="res://Assets/Aseprite/Attributes/health.png" id="2_kth6h"]
+[ext_resource type="Texture2D" uid="uid://cx76r8q2vqgvv" path="res://Assets/Aseprite/Attributes/strength.png" id="3_hx16h"]
+[ext_resource type="Texture2D" uid="uid://bmq3objsbdshm" path="res://Assets/Aseprite/Attributes/endurance.png" id="4_c73vm"]
+[ext_resource type="Texture2D" uid="uid://crrsom80gj47k" path="res://Assets/Aseprite/Attributes/criticality.png" id="5_weeyi"]
+[ext_resource type="Texture2D" uid="uid://dc123cwv575n6" path="res://Assets/Aseprite/Attributes/avoidance.png" id="6_xueiq"]
+[ext_resource type="Texture2D" uid="uid://uuhsexcwvpxj" path="res://Assets/Aseprite/Attributes/quickness.png" id="7_rijm7"]
+[ext_resource type="Texture2D" uid="uid://bauu1dneus5ck" path="res://Assets/Aseprite/Attributes/resilience.png" id="8_gdvj0"]
+[ext_resource type="Texture2D" uid="uid://cvnilip0qogng" path="res://Assets/Aseprite/Attributes/sword_mastery.png" id="9_jmuk1"]
+[ext_resource type="Texture2D" uid="uid://buq5scxopockj" path="res://Assets/Aseprite/Attributes/axe_mastery.png" id="10_gtp8k"]
+[ext_resource type="Texture2D" uid="uid://dr6x14n64yfjf" path="res://Assets/Aseprite/Attributes/stabbing_mastery.png" id="11_46a4f"]
+[ext_resource type="Texture2D" uid="uid://dl26mpyf8d2iv" path="res://Assets/Aseprite/Attributes/mace_mastery.png" id="12_auhvx"]
+[ext_resource type="Texture2D" uid="uid://bddeyxky31tmc" path="res://Assets/Aseprite/Attributes/flagellation_mastery.png" id="13_qgjes"]
+[ext_resource type="Texture2D" uid="uid://blkdqari80i7h" path="res://Assets/Aseprite/Attributes/shield_mastery.png" id="14_f7gt7"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_tvy0e"]
 properties/0/path = NodePath(".:total_peers")
@@ -10,11 +23,114 @@ properties/0/replication_mode = 2
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ers0q"]
 load_path = "res://.godot/imported/battlefield_grass.png-e5cddb3c47484e286f5272d6124ff1c1.ctex"
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kth6h"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.7411765)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gt5g5"]
+bg_color = Color(0.7019608, 0.64705884, 0.33333334, 0.7058824)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+corner_detail = 1
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_hx16h"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.33333334)
+
+[sub_resource type="Theme" id="Theme_kth6h"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_c73vm"]
+resource_local_to_scene = true
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.54509807)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_weeyi"]
+resource_local_to_scene = true
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.54509807)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xueiq"]
+resource_local_to_scene = true
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.54509807)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+shadow_size = 5
+
 [sub_resource type="LabelSettings" id="LabelSettings_5miig"]
 font_size = 26
 font_color = Color(0.928571, 0.68508, 0.36248, 1)
 outline_size = 2
 outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5w426"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.92941177)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+
+[sub_resource type="LabelSettings" id="LabelSettings_57qbv"]
+resource_local_to_scene = true
+font_size = 20
+font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+outline_size = 5
+outline_color = Color(0, 0, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rijm7"]
+content_margin_left = 4.0
+bg_color = Color(0.6, 0.6, 0.6, 0)
 
 [node name="AttributeAllocation" type="Control"]
 texture_filter = 1
@@ -49,6 +165,7 @@ grow_horizontal = 2
 grow_vertical = 2
 
 [node name="GridContainer" type="GridContainer" parent="."]
+visible = false
 texture_filter = 1
 layout_mode = 1
 anchors_preset = 8
@@ -103,7 +220,7 @@ size_flags_horizontal = 4
 
 [node name="Strength" type="Label" parent="GridContainer"]
 layout_mode = 2
-tooltip_text = "Strength impacts how heavy weapons your gladiator can wield, and how hard you hit."
+tooltip_text = "Strength impacts how heavy weapons your gladiator can wield, how hard you hit and counters weight."
 mouse_filter = 1
 text = "Strength"
 
@@ -200,7 +317,7 @@ layout_mode = 2
 
 [node name="Avoidance" type="Label" parent="GridContainer"]
 layout_mode = 2
-tooltip_text = "Avoidance determines the likelihood of dodging in incoming attack."
+tooltip_text = "Avoidance determines the likelihood of dodging an incoming attack."
 mouse_filter = 1
 text = "Avoidance"
 
@@ -232,7 +349,7 @@ layout_mode = 2
 
 [node name="Resilience" type="Label" parent="GridContainer"]
 layout_mode = 2
-tooltip_text = "Resilience determines the effectiveness of your armor."
+tooltip_text = "Resilience determines the effectiveness of your equipped items."
 mouse_filter = 1
 text = "Resilience"
 
@@ -561,6 +678,10 @@ grow_vertical = 0
 [node name="PlayersReadyLabel" type="Label" parent="StartGameContainer"]
 texture_filter = 1
 layout_mode = 2
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 27
 text = "0/8 ready"
 horizontal_alignment = 1
 
@@ -572,12 +693,19 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -35.5
-offset_top = -102.0
-offset_right = 35.5
-offset_bottom = -71.0
+offset_left = -64.0
+offset_top = -255.0
+offset_right = 64.5
+offset_bottom = -208.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxFlat_kth6h")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gt5g5")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_hx16h")
 text = "Confirm"
 
 [node name="GoBack" type="Button" parent="."]
@@ -585,8 +713,15 @@ texture_filter = 1
 layout_mode = 1
 offset_left = 8.0
 offset_top = 8.0
-offset_right = 73.0
-offset_bottom = 39.0
+offset_right = 154.0
+offset_bottom = 54.0
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxFlat_kth6h")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gt5g5")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_hx16h")
 text = "Disconnect"
 
 [node name="ChatPanel" type="Panel" parent="."]
@@ -601,6 +736,8 @@ offset_bottom = -39.0
 grow_vertical = 0
 size_flags_horizontal = 3
 size_flags_vertical = 3
+theme = SubResource("Theme_kth6h")
+theme_override_styles/panel = SubResource("StyleBoxFlat_c73vm")
 
 [node name="ChatScroll" type="ScrollContainer" parent="ChatPanel"]
 layout_mode = 1
@@ -631,6 +768,7 @@ grow_vertical = 0
 texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_styles/normal = SubResource("StyleBoxFlat_weeyi")
 placeholder_text = "Type here..."
 keep_editing_on_text_submit = true
 clear_button_enabled = true
@@ -641,6 +779,9 @@ caret_blink = true
 texture_filter = 1
 layout_mode = 2
 size_flags_horizontal = 8
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_styles/normal = SubResource("StyleBoxFlat_xueiq")
 text = "Send"
 
 [node name="RaceSelectionTitle" type="Label" parent="."]
@@ -673,20 +814,1338 @@ grow_vertical = 2
 alignment = 1
 
 [node name="Human" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxFlat_kth6h")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gt5g5")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_hx16h")
 text = "Human"
 
 [node name="Elf" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxFlat_kth6h")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gt5g5")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_hx16h")
 text = "Elf"
 
-[node name="Orc" type="Button" parent="VBoxContainer"]
+[node name="Troll" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(150, 50)
 layout_mode = 2
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxFlat_kth6h")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gt5g5")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_hx16h")
+text = "Troll"
+
+[node name="Orc" type="Button" parent="VBoxContainer"]
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 27
+theme_override_styles/normal = SubResource("StyleBoxFlat_kth6h")
+theme_override_styles/hover = SubResource("StyleBoxFlat_gt5g5")
+theme_override_styles/disabled = SubResource("StyleBoxFlat_hx16h")
 text = "Orc"
 
-[node name="Troll" type="Button" parent="VBoxContainer"]
+[node name="AttributePanelHelp" type="Panel" parent="."]
+self_modulate = Color(1, 1, 1, 0.8627451)
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -1416.0
+offset_top = -481.0
+offset_right = -494.0
+offset_bottom = -156.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5w426")
+
+[node name="VBoxContainer" type="GridContainer" parent="AttributePanelHelp"]
+clip_contents = true
+layout_mode = 0
+offset_left = 6.0
+offset_top = 6.0
+offset_right = 894.0
+offset_bottom = 313.0
+columns = 4
+
+[node name="HealthIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+texture = ExtResource("2_kth6h")
+expand_mode = 2
+
+[node name="Health" type="Label" parent="AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "How much health your gladiator 
+has when starting a duel"
+label_settings = SubResource("LabelSettings_57qbv")
+vertical_alignment = 1
+
+[node name="StrengthIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("3_hx16h")
+expand_mode = 2
+
+[node name="Strength" type="Label" parent="AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Strength impacts how heavy items your gladiator 
+can wield, how hard you hit and counters weight"
+label_settings = SubResource("LabelSettings_57qbv")
+vertical_alignment = 1
+
+[node name="EnduranceIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("4_c73vm")
+expand_mode = 2
+
+[node name="Endurance" type="Label" parent="AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Endurance determines how long your gladiator 
+can fight before collapsing from fatigue"
+label_settings = SubResource("LabelSettings_57qbv")
+vertical_alignment = 1
+
+[node name="CriticalityIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("5_weeyi")
+expand_mode = 2
+
+[node name="Criticality" type="Label" parent="AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Criticality determines the likelihood 
+and magnitude of critical hits"
+label_settings = SubResource("LabelSettings_57qbv")
+vertical_alignment = 1
+
+[node name="AvoidanceIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("6_xueiq")
+expand_mode = 2
+
+[node name="Avoidance" type="Label" parent="AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Avoidance determines the likelihood 
+of dodging an incoming attack"
+label_settings = SubResource("LabelSettings_57qbv")
+vertical_alignment = 1
+
+[node name="QuicknessIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("7_rijm7")
+expand_mode = 2
+
+[node name="Quickness" type="Label" parent="AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Quickness determines how 
+fast your gladiator attacks"
+label_settings = SubResource("LabelSettings_57qbv")
+vertical_alignment = 1
+
+[node name="ResilienceIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer"]
+custom_minimum_size = Vector2(64, 64)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("8_gdvj0")
+expand_mode = 2
+
+[node name="Resilience" type="Label" parent="AttributePanelHelp/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Resilience determined effectiveness 
+of absorb and durability of equipped items"
+label_settings = SubResource("LabelSettings_57qbv")
+vertical_alignment = 1
+
+[node name="SwordMastery" type="Label" parent="AttributePanelHelp"]
+layout_mode = 0
+offset_left = 555.0
+offset_top = 245.0
+offset_right = 834.0
+offset_bottom = 314.0
+size_flags_horizontal = 3
+text = "Masteries determine how well 
+your gladiator can handle a weapon 
+in relation to its difficulty."
+label_settings = SubResource("LabelSettings_57qbv")
+vertical_alignment = 1
+
+[node name="VBoxContainer2" type="GridContainer" parent="AttributePanelHelp"]
+clip_contents = true
+layout_mode = 0
+offset_left = 444.0
+offset_top = 245.0
+offset_right = 548.0
+offset_bottom = 313.0
+columns = 3
+
+[node name="SwordIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("9_jmuk1")
+expand_mode = 2
+
+[node name="AxeIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("10_gtp8k")
+expand_mode = 2
+
+[node name="StabbingIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("11_46a4f")
+expand_mode = 2
+
+[node name="MaceIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 6
+texture = ExtResource("12_auhvx")
+expand_mode = 2
+
+[node name="FlagellationIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("13_qgjes")
+expand_mode = 2
+
+[node name="ShieldIcon" type="TextureRect" parent="AttributePanelHelp/VBoxContainer2"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+size_flags_horizontal = 12
+size_flags_vertical = 6
+texture = ExtResource("14_f7gt7")
+expand_mode = 2
+
+[node name="AttributePanelHelp2" type="Panel" parent="."]
+self_modulate = Color(1, 1, 1, 0.8627451)
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -819.0
+offset_top = -69.0
+offset_right = -494.0
+offset_bottom = 334.0
+grow_horizontal = 0
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_5w426")
+
+[node name="GridContainer" type="GridContainer" parent="AttributePanelHelp2"]
+clip_contents = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 5
+
+[node name="blank" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+vertical_alignment = 1
+
+[node name="HumanTitle" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Human"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ElfTitle" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Elf"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TrollTitle" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
 text = "Troll"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="OrcTitle" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Orc"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Health"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "0.80"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.50"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.25"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute2" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Strength"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human2" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf2" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "0.90"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll2" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.50"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc2" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.25"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute3" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Endurance"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human3" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf3" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.35"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll3" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "0.80"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc3" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "0.90"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute7" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Resilience"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human7" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf7" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll7" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc7" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute4" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Criticality"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human4" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf4" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.20"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll4" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "0.90"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc4" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute5" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Avoidance"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human5" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf5" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.55"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll5" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "0.50"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc5" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "0.70"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute6" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Quickness"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human6" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf6" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.40"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll6" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "0.60"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc6" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "0.80"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="blank3" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.34117648, 0.28235295, 0.32156864, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "--------"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="blank2" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.34117648, 0.28235295, 0.32156864, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "------"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="blank4" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.34117648, 0.28235295, 0.32156864, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "-----"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="blank5" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.34117648, 0.28235295, 0.32156864, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "-----"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="blank6" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.34117648, 0.28235295, 0.32156864, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "-----"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute9" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Masteries"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human9" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf9" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll9" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc9" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute10" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Stabbing"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human10" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf10" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.30"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll10" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "0.70"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc10" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute11" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Sword"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human11" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf11" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.25"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll11" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "0.70"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc11" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute12" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Axe"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human12" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf12" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll12" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "0.80"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc12" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute13" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Mace"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human13" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf13" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.05"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll13" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc13" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.20"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute14" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Flagellation"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human14" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf14" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.10"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll14" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.15"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc14" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.15"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Attribute15" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8039216, 0.5372549, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "Shield"
+horizontal_alignment = 2
+vertical_alignment = 1
+
+[node name="Human15" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7137255, 0, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.00"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Elf15" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.46666667, 0.53333336, 0.23137255, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "1.20"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Troll15" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "0.70"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Orc15" type="Label" parent="AttributePanelHelp2/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.5870003, 0.33500245, 0.36353052, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 18
+theme_override_styles/normal = SubResource("StyleBoxFlat_rijm7")
+text = "0.95"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="RaceModifiers" type="Label" parent="."]
+layout_mode = 0
+offset_left = 1101.0
+offset_top = 434.0
+offset_right = 1426.0
+offset_bottom = 470.0
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/line_spacing = 0
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_5w426")
+text = "Race modifiers"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="GridContainer/Strength_Buttons/Strength_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Quickness_Buttons/Quickness_Sub" to="." method="_on_strength_sub_pressed"]
@@ -701,3 +2160,37 @@ text = "Troll"
 [connection signal="pressed" from="GridContainer/Flagellation Mastery_Buttons/Flagellation Mastery_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Shield Mastery_Buttons/Shield Mastery_Sub" to="." method="_on_strength_sub_pressed"]
 [connection signal="pressed" from="GridContainer/Unarmed Mastery_Buttons/Unarmed Mastery_Sub" to="." method="_on_strength_sub_pressed"]
+[connection signal="mouse_entered" from="VBoxContainer/Human" to="." method="_on_human_mouse_entered"]
+[connection signal="mouse_exited" from="VBoxContainer/Human" to="." method="_on_human_mouse_exited"]
+[connection signal="mouse_entered" from="VBoxContainer/Elf" to="." method="_on_elf_mouse_entered"]
+[connection signal="mouse_exited" from="VBoxContainer/Elf" to="." method="_on_elf_mouse_exited"]
+[connection signal="mouse_entered" from="VBoxContainer/Troll" to="." method="_on_troll_mouse_entered"]
+[connection signal="mouse_exited" from="VBoxContainer/Troll" to="." method="_on_troll_mouse_exited"]
+[connection signal="mouse_entered" from="VBoxContainer/Orc" to="." method="_on_orc_mouse_entered"]
+[connection signal="mouse_exited" from="VBoxContainer/Orc" to="." method="_on_orc_mouse_exited"]
+[connection signal="mouse_entered" from="AttributePanelHelp/VBoxContainer/HealthIcon" to="." method="_on_health_icon_mouse_entered"]
+[connection signal="mouse_exited" from="AttributePanelHelp/VBoxContainer/HealthIcon" to="." method="_on_health_icon_mouse_exited"]
+[connection signal="mouse_entered" from="AttributePanelHelp/VBoxContainer/StrengthIcon" to="." method="_on_strength_icon_mouse_entered"]
+[connection signal="mouse_exited" from="AttributePanelHelp/VBoxContainer/StrengthIcon" to="." method="_on_strength_icon_mouse_exited"]
+[connection signal="mouse_entered" from="AttributePanelHelp/VBoxContainer/EnduranceIcon" to="." method="_on_endurance_icon_mouse_entered"]
+[connection signal="mouse_exited" from="AttributePanelHelp/VBoxContainer/EnduranceIcon" to="." method="_on_endurance_icon_mouse_exited"]
+[connection signal="mouse_entered" from="AttributePanelHelp/VBoxContainer/CriticalityIcon" to="." method="_on_criticality_icon_mouse_entered"]
+[connection signal="mouse_exited" from="AttributePanelHelp/VBoxContainer/CriticalityIcon" to="." method="_on_criticality_icon_mouse_exited"]
+[connection signal="mouse_entered" from="AttributePanelHelp/VBoxContainer/AvoidanceIcon" to="." method="_on_avoidance_icon_mouse_entered"]
+[connection signal="mouse_exited" from="AttributePanelHelp/VBoxContainer/AvoidanceIcon" to="." method="_on_avoidance_icon_mouse_exited"]
+[connection signal="mouse_entered" from="AttributePanelHelp/VBoxContainer/QuicknessIcon" to="." method="_on_quickness_icon_mouse_entered"]
+[connection signal="mouse_exited" from="AttributePanelHelp/VBoxContainer/QuicknessIcon" to="." method="_on_quickness_icon_mouse_exited"]
+[connection signal="mouse_entered" from="AttributePanelHelp/VBoxContainer/ResilienceIcon" to="." method="_on_resilience_icon_mouse_entered"]
+[connection signal="mouse_exited" from="AttributePanelHelp/VBoxContainer/ResilienceIcon" to="." method="_on_resilience_icon_mouse_exited"]
+[connection signal="mouse_entered" from="AttributePanelHelp/VBoxContainer2/SwordIcon" to="." method="_on_sword_icon_mouse_entered"]
+[connection signal="mouse_exited" from="AttributePanelHelp/VBoxContainer2/SwordIcon" to="." method="_on_sword_icon_mouse_exited"]
+[connection signal="mouse_entered" from="AttributePanelHelp/VBoxContainer2/AxeIcon" to="." method="_on_axe_icon_mouse_entered"]
+[connection signal="mouse_exited" from="AttributePanelHelp/VBoxContainer2/AxeIcon" to="." method="_on_axe_icon_mouse_exited"]
+[connection signal="mouse_entered" from="AttributePanelHelp/VBoxContainer2/StabbingIcon" to="." method="_on_stabbing_icon_mouse_entered"]
+[connection signal="mouse_exited" from="AttributePanelHelp/VBoxContainer2/StabbingIcon" to="." method="_on_stabbing_icon_mouse_exited"]
+[connection signal="mouse_entered" from="AttributePanelHelp/VBoxContainer2/MaceIcon" to="." method="_on_mace_icon_mouse_entered"]
+[connection signal="mouse_exited" from="AttributePanelHelp/VBoxContainer2/MaceIcon" to="." method="_on_mace_icon_mouse_exited"]
+[connection signal="mouse_entered" from="AttributePanelHelp/VBoxContainer2/FlagellationIcon" to="." method="_on_flagellation_icon_mouse_entered"]
+[connection signal="mouse_exited" from="AttributePanelHelp/VBoxContainer2/FlagellationIcon" to="." method="_on_flagellation_icon_mouse_exited"]
+[connection signal="mouse_entered" from="AttributePanelHelp/VBoxContainer2/ShieldIcon" to="." method="_on_shield_icon_mouse_entered"]
+[connection signal="mouse_exited" from="AttributePanelHelp/VBoxContainer2/ShieldIcon" to="." method="_on_shield_icon_mouse_exited"]

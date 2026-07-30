@@ -2,6 +2,7 @@ extends Node
 class_name RoundManager
 
 var players: = []
+var queued_rewards := []
 
 var current_pair_index: = 0
 
@@ -196,6 +197,19 @@ func start_next_round():
 		push_warning("⚠️ IntermissionTimer not found!")
 
 
+	# --- AFTER round has started, apply queued rewards ---
+	for action in queued_rewards:
+		match action.type:
+			"gold":
+				GameState_.grant_gold_for_peer(action.id, action.opponent, action.winner)
+			"streak":
+				GameState_.modify_streak(action.id, action.win)
+			"exp":
+				GameState_.grant_exp_for_peer(action.id, 4, 0)
+
+	# clear queue
+	queued_rewards.clear()
+
 
 func too_many_null_duels(_round: Array) -> bool:
 	var null_duel_count: = 0
@@ -276,40 +290,42 @@ func spawn_duel_between(peer1, peer2, index: int):
 	
 func _on_duel_finished(winner_id: int, loser_id: int):
 	await get_tree().process_frame
-	if duel_results.has(winner_id): 
+	if duel_results.has(winner_id):
 		return
 
 	# --- CASE 1: No opponent ---
 	if loser_id == -1:
 		duel_results[winner_id] = true
 
-		# Winner gets gold & exp as if they won
-		GameState_.grant_gold_for_peer(winner_id, -1, true)
-		GameState_.modify_streak(winner_id, true)
-		GameState_.grant_exp_for_peer(winner_id, 4, 0)
+		# QUEUE rewards instead of executing now
+		queued_rewards.append({"type": "gold", "id": winner_id, "opponent": -1, "winner": true})
+		queued_rewards.append({"type": "streak", "id": winner_id, "win": true})
+		queued_rewards.append({"type": "exp", "id": winner_id})
 
 		return
 
 	# --- CASE 2: Normal duel ---
 	if winner_id == -1:
-		return  # Should not happen, but keep guard
+		return
 
 	duel_results[winner_id] = true
 	duel_results[loser_id] = false
 
-	GameState_.grant_gold_for_peer(winner_id, loser_id, true)
-	GameState_.grant_gold_for_peer(loser_id, winner_id, false)
-	GameState_.modify_streak(winner_id, true)
-	GameState_.modify_streak(loser_id, false)
-	GameState_.grant_exp_for_peer(winner_id, 4, 0)
-	GameState_.grant_exp_for_peer(loser_id, 4, 0)
+	# QUEUE rewards
+	queued_rewards.append({"type": "gold", "id": winner_id, "opponent": loser_id, "winner": true})
+	queued_rewards.append({"type": "gold", "id": loser_id, "opponent": winner_id, "winner": false})
 
+	queued_rewards.append({"type": "streak", "id": winner_id, "win": true})
+	queued_rewards.append({"type": "streak", "id": loser_id, "win": false})
+
+	queued_rewards.append({"type": "exp", "id": winner_id})
+	queued_rewards.append({"type": "exp", "id": loser_id})
+
+	# --- elimination logic stays EXACTLY as-is ---
 	var ids_to_eliminate = []
 	if multiplayer.is_server():
 		if loser_id != -1:
-			
 			for id in player_ids:
-
 				if id != null:
 					if GameState_.all_gladiators[id]["player_life"] <= 0:
 						ids_to_eliminate.append(id)
@@ -331,7 +347,8 @@ func _on_duel_finished(winner_id: int, loser_id: int):
 			await get_tree().create_timer(4.0).timeout
 
 			if player_ids.size() >= 2:
-				start_next_round()
+				start_next_round()  # <-- rewards will run AFTER this
+
 			if player_ids.size() == 1:
 				var _name = GameState_.all_gladiators[player_ids[0]]["name"]
 				var color = GameState_.all_gladiators[player_ids[0]]["color"]
@@ -341,6 +358,7 @@ func _on_duel_finished(winner_id: int, loser_id: int):
 					GameState_.add_to_log(multiplayer.get_unique_id(), "⭐ " + formatted + " WON THE GAME! ⭐")
 				else:
 					GameState_.rpc("add_to_log", multiplayer.get_unique_id(), "⭐ " + formatted + " WON THE GAME! ⭐")
+
 	
 '''
 func _on_duel_finished(winner_id: int, loser_id: int):

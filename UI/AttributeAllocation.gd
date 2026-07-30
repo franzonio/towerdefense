@@ -70,7 +70,79 @@ var remaining_points: = 0
 @onready var confirm_button = $ConfirmButton
 @onready var player_life = 500
 
+@onready var health_mods = [$AttributePanelHelp2/GridContainer/Attribute, $AttributePanelHelp2/GridContainer/Human, 
+$AttributePanelHelp2/GridContainer/Elf, $AttributePanelHelp2/GridContainer/Troll, $AttributePanelHelp2/GridContainer/Orc]
 
+@onready var strength_mods = [$AttributePanelHelp2/GridContainer/Attribute2, $AttributePanelHelp2/GridContainer/Human2, 
+$AttributePanelHelp2/GridContainer/Elf2, $AttributePanelHelp2/GridContainer/Troll2, $AttributePanelHelp2/GridContainer/Orc2]
+
+@onready var endurance_mods = [$AttributePanelHelp2/GridContainer/Attribute3, $AttributePanelHelp2/GridContainer/Human3, 
+$AttributePanelHelp2/GridContainer/Elf3, $AttributePanelHelp2/GridContainer/Troll3, $AttributePanelHelp2/GridContainer/Orc3]
+
+@onready var criticality_mods = [$AttributePanelHelp2/GridContainer/Attribute4, $AttributePanelHelp2/GridContainer/Human4, 
+$AttributePanelHelp2/GridContainer/Elf4, $AttributePanelHelp2/GridContainer/Troll4, $AttributePanelHelp2/GridContainer/Orc4]
+
+@onready var avoidance_mods = [$AttributePanelHelp2/GridContainer/Attribute5, $AttributePanelHelp2/GridContainer/Human5, 
+$AttributePanelHelp2/GridContainer/Elf5, $AttributePanelHelp2/GridContainer/Troll5, $AttributePanelHelp2/GridContainer/Orc5]
+
+@onready var quickness_mods = [$AttributePanelHelp2/GridContainer/Attribute6, $AttributePanelHelp2/GridContainer/Human6, 
+$AttributePanelHelp2/GridContainer/Elf6, $AttributePanelHelp2/GridContainer/Troll6, $AttributePanelHelp2/GridContainer/Orc6]
+
+@onready var resilience_mods = [$AttributePanelHelp2/GridContainer/Attribute7, $AttributePanelHelp2/GridContainer/Human7, 
+$AttributePanelHelp2/GridContainer/Elf7, $AttributePanelHelp2/GridContainer/Troll7, $AttributePanelHelp2/GridContainer/Orc7]
+
+@onready var stabbing_mods = [$AttributePanelHelp2/GridContainer/Attribute10, $AttributePanelHelp2/GridContainer/Human10, 
+$AttributePanelHelp2/GridContainer/Elf10, $AttributePanelHelp2/GridContainer/Troll10, $AttributePanelHelp2/GridContainer/Orc10]
+
+@onready var sword_mods = [$AttributePanelHelp2/GridContainer/Attribute11, $AttributePanelHelp2/GridContainer/Human11, 
+$AttributePanelHelp2/GridContainer/Elf11, $AttributePanelHelp2/GridContainer/Troll11, $AttributePanelHelp2/GridContainer/Orc11]
+
+@onready var axe_mods = [$AttributePanelHelp2/GridContainer/Attribute12, $AttributePanelHelp2/GridContainer/Human12, 
+$AttributePanelHelp2/GridContainer/Elf12, $AttributePanelHelp2/GridContainer/Troll12, $AttributePanelHelp2/GridContainer/Orc12]
+
+@onready var mace_mods = [$AttributePanelHelp2/GridContainer/Attribute13, $AttributePanelHelp2/GridContainer/Human13, 
+$AttributePanelHelp2/GridContainer/Elf13, $AttributePanelHelp2/GridContainer/Troll13, $AttributePanelHelp2/GridContainer/Orc13]
+
+@onready var flagellation_mods = [$AttributePanelHelp2/GridContainer/Attribute14, $AttributePanelHelp2/GridContainer/Human14, 
+$AttributePanelHelp2/GridContainer/Elf14, $AttributePanelHelp2/GridContainer/Troll14, $AttributePanelHelp2/GridContainer/Orc14]
+
+@onready var shield_mods = [$AttributePanelHelp2/GridContainer/Attribute15, $AttributePanelHelp2/GridContainer/Human15, 
+$AttributePanelHelp2/GridContainer/Elf15, $AttributePanelHelp2/GridContainer/Troll15, $AttributePanelHelp2/GridContainer/Orc15]
+
+@onready var human_mods = [$AttributePanelHelp2/GridContainer/Human, $AttributePanelHelp2/GridContainer/Human2, 
+	$AttributePanelHelp2/GridContainer/Human3, $AttributePanelHelp2/GridContainer/Human7, 
+	$AttributePanelHelp2/GridContainer/Human4, $AttributePanelHelp2/GridContainer/Human5, 
+	$AttributePanelHelp2/GridContainer/Human6, $AttributePanelHelp2/GridContainer/Human10,
+	 $AttributePanelHelp2/GridContainer/Human11, $AttributePanelHelp2/GridContainer/Human12, 
+	$AttributePanelHelp2/GridContainer/Human13, $AttributePanelHelp2/GridContainer/Human14,
+	 $AttributePanelHelp2/GridContainer/Human15, $AttributePanelHelp2/GridContainer/HumanTitle]
+	
+@onready var elf_mods = [$AttributePanelHelp2/GridContainer/Elf, $AttributePanelHelp2/GridContainer/Elf2, 
+$AttributePanelHelp2/GridContainer/Elf3, $AttributePanelHelp2/GridContainer/Elf7, 
+$AttributePanelHelp2/GridContainer/Elf4, $AttributePanelHelp2/GridContainer/Elf5, 
+$AttributePanelHelp2/GridContainer/Elf6, $AttributePanelHelp2/GridContainer/Elf10, 
+$AttributePanelHelp2/GridContainer/Elf11, $AttributePanelHelp2/GridContainer/Elf12, 
+$AttributePanelHelp2/GridContainer/Elf13, $AttributePanelHelp2/GridContainer/Elf14,
+$AttributePanelHelp2/GridContainer/Elf15, $AttributePanelHelp2/GridContainer/ElfTitle]
+
+@onready var orc_mods = [$AttributePanelHelp2/GridContainer/Orc, $AttributePanelHelp2/GridContainer/Orc2, 
+$AttributePanelHelp2/GridContainer/Orc3, $AttributePanelHelp2/GridContainer/Orc7,
+ $AttributePanelHelp2/GridContainer/Orc4, $AttributePanelHelp2/GridContainer/Orc5, 
+$AttributePanelHelp2/GridContainer/Orc6, $AttributePanelHelp2/GridContainer/Orc10,
+ $AttributePanelHelp2/GridContainer/Orc11, $AttributePanelHelp2/GridContainer/Orc12, 
+$AttributePanelHelp2/GridContainer/Orc13, $AttributePanelHelp2/GridContainer/Orc14, 
+$AttributePanelHelp2/GridContainer/Orc15, $AttributePanelHelp2/GridContainer/OrcTitle]
+
+@onready var troll_mods = [$AttributePanelHelp2/GridContainer/Troll, $AttributePanelHelp2/GridContainer/Troll2, 
+$AttributePanelHelp2/GridContainer/Troll3, $AttributePanelHelp2/GridContainer/Troll7, 
+$AttributePanelHelp2/GridContainer/Troll4, $AttributePanelHelp2/GridContainer/Troll5, 
+$AttributePanelHelp2/GridContainer/Troll6, $AttributePanelHelp2/GridContainer/Troll10, 
+$AttributePanelHelp2/GridContainer/Troll11, $AttributePanelHelp2/GridContainer/Troll12, 
+$AttributePanelHelp2/GridContainer/Troll13, $AttributePanelHelp2/GridContainer/Troll14,
+$AttributePanelHelp2/GridContainer/Troll15, $AttributePanelHelp2/GridContainer/TrollTitle]
+
+var enter_color = "b3a555bb"
+var exit_color = "b3a55500"
 
 func _ready():
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
@@ -120,11 +192,7 @@ func _ready():
 
 
 
-
-
-
-
-
+	TweenFX.glow_pulse($VBoxContainer, 1, 0, 0.2)
 
 
 func _process(delta: float):
@@ -485,7 +553,7 @@ func _on_confirm():
 		}, 
 		"total_modifier_bonuses": {}, 
 		"age": "Young",
-		"respec_points": 10,
+		"regret_points": 10,
 		"points": 150
 	}
 
@@ -558,3 +626,145 @@ func go_back():
 		multiplayer.multiplayer_peer.close()
 
 	get_tree().change_scene_to_file("res://UI/MainMenu.tscn")
+
+func apply_stylebox(mods, color):
+	for mod in mods:
+		var old_sb = mod.get_theme_stylebox("normal")
+
+		if old_sb:
+			var new_sb = old_sb.duplicate()
+			new_sb.bg_color = color
+			mod.add_theme_stylebox_override("normal", new_sb)
+
+func _on_human_mouse_entered() -> void:
+	apply_stylebox(human_mods, enter_color)
+
+func _on_human_mouse_exited() -> void:
+	apply_stylebox(human_mods, exit_color)
+
+func _on_elf_mouse_entered() -> void:
+	apply_stylebox(elf_mods, enter_color)
+
+
+func _on_elf_mouse_exited() -> void:
+	apply_stylebox(elf_mods, exit_color)
+
+
+func _on_orc_mouse_entered() -> void:
+	apply_stylebox(orc_mods, enter_color)
+
+
+func _on_orc_mouse_exited() -> void:
+	apply_stylebox(orc_mods, exit_color)
+
+
+func _on_troll_mouse_entered() -> void:
+	apply_stylebox(troll_mods, enter_color)
+
+
+func _on_troll_mouse_exited() -> void:
+	apply_stylebox(troll_mods, exit_color)
+
+
+func _on_health_icon_mouse_entered() -> void:
+	apply_stylebox(health_mods, enter_color)
+
+
+func _on_health_icon_mouse_exited() -> void:
+	apply_stylebox(health_mods, exit_color)
+
+
+func _on_endurance_icon_mouse_entered() -> void:
+	apply_stylebox(endurance_mods, enter_color)
+
+
+func _on_endurance_icon_mouse_exited() -> void:
+	apply_stylebox(endurance_mods, exit_color)
+
+
+func _on_avoidance_icon_mouse_entered() -> void:
+	apply_stylebox(avoidance_mods, enter_color)
+
+
+func _on_avoidance_icon_mouse_exited() -> void:
+	apply_stylebox(avoidance_mods, exit_color)
+
+
+func _on_resilience_icon_mouse_entered() -> void:
+	apply_stylebox(resilience_mods, enter_color)
+
+
+func _on_resilience_icon_mouse_exited() -> void:
+	apply_stylebox(resilience_mods, exit_color)
+
+
+func _on_strength_icon_mouse_entered() -> void:
+	apply_stylebox(strength_mods, enter_color)
+
+
+func _on_strength_icon_mouse_exited() -> void:
+	apply_stylebox(strength_mods, exit_color)
+
+
+func _on_criticality_icon_mouse_entered() -> void:
+	apply_stylebox(criticality_mods, enter_color)
+
+
+func _on_criticality_icon_mouse_exited() -> void:
+	apply_stylebox(criticality_mods, exit_color)
+
+
+func _on_quickness_icon_mouse_entered() -> void:
+	apply_stylebox(quickness_mods, enter_color)
+
+
+func _on_quickness_icon_mouse_exited() -> void:
+	apply_stylebox(quickness_mods, exit_color)
+
+
+func _on_sword_icon_mouse_entered() -> void:
+	apply_stylebox(sword_mods, enter_color)
+
+
+func _on_sword_icon_mouse_exited() -> void:
+	apply_stylebox(sword_mods, exit_color)
+
+
+func _on_axe_icon_mouse_entered() -> void:
+	apply_stylebox(axe_mods, enter_color)
+
+
+func _on_axe_icon_mouse_exited() -> void:
+	apply_stylebox(axe_mods, exit_color)
+
+
+func _on_stabbing_icon_mouse_entered() -> void:
+	apply_stylebox(stabbing_mods, enter_color)
+
+
+func _on_stabbing_icon_mouse_exited() -> void:
+	apply_stylebox(stabbing_mods, exit_color)
+
+
+func _on_mace_icon_mouse_entered() -> void:
+	apply_stylebox(mace_mods, enter_color)
+
+
+func _on_mace_icon_mouse_exited() -> void:
+	apply_stylebox(mace_mods, exit_color)
+
+
+func _on_flagellation_icon_mouse_entered() -> void:
+	apply_stylebox(flagellation_mods, enter_color)
+
+
+func _on_flagellation_icon_mouse_exited() -> void:
+	apply_stylebox(flagellation_mods, exit_color)
+
+
+func _on_shield_icon_mouse_entered() -> void:
+	apply_stylebox(shield_mods, enter_color)
+
+
+func _on_shield_icon_mouse_exited() -> void:
+	apply_stylebox(shield_mods, exit_color)
