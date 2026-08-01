@@ -90,7 +90,7 @@ func _ready():
 		add_child(cost_label)
 		add_child(name_label)
 		if all_gladiators != null:
-			_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
+			_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators["gold"])
 
 func _make_custom_tooltip(for_text):
 	if modulate.a == 0:
@@ -150,9 +150,9 @@ func _on_update_gold_req_shop(_id, gold):
 			cost_label.bbcode_text = "[color=%s]$ %d[/color]" % [gold_color, cost]
 
 
-func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
-	all_gladiators = _all_gladiators
-	_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
+func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int, _player_gladiator_data: Dictionary):
+	all_gladiators = _player_gladiator_data
+	_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators["gold"])
 	tooltip_text = get_attribute_tooltip(attribute_name)
 
 func format_name(raw_name: String) -> String:
@@ -219,7 +219,7 @@ func buy_card():
 		else: disabled = false
 		'''
 
-func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data, _parent_name):
+func _on_card_buy_result(peer_id: int, success: bool, _parent_name):
 	if peer_id == multiplayer.get_unique_id():
 		if parent_name == _parent_name:
 			if success:

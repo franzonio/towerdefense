@@ -503,7 +503,7 @@ func _on_confirm():
 	var gladiator = {
 		"color": Color("d2c9ff"), 
 		"name": GameState_.selected_name, 
-		"gold": 20, 
+		"gold": 20000, 
 		"exp": 0, 
 		"streak": 0, 
 		"level": "1", 

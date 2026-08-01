@@ -6,8 +6,8 @@ var lobby = preload("res://Scenes/Lobby.tscn").instantiate()
 
 
 
-@onready var remaining_label = $RemainingLabel
-@onready var confirm_button = $ConfirmButton
+#@onready var remaining_label = $RemainingLabel
+#@onready var confirm_button = $ConfirmButton
 @onready var player_life = 500
 
 @onready var health_mods = [$Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer/Attribute, $Tutorial/Pages/Page4/AttributePanelHelp2/GridContainer/Human, 
@@ -93,7 +93,6 @@ func _ready():
 	TweenFX.glow_pulse($Tutorial/Pages/Page7/Label2)
 
 func on_start_pressed():
-
 	get_tree().change_scene_to_file("res://Scenes/Lobby.tscn")
 
 

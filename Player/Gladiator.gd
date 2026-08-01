@@ -173,6 +173,9 @@ var wep2_is_broken = 0
 signal died
 
 func _ready():
+	GameState_.connect("send_gladiator_data_to_peer_signal", Callable(self, "_on_send_gladiator_data_to_peer_signal"))
+	GameState_.connect("killed_by_server_signal", Callable(self, "_on_killed_by_server_signal"))
+	
 	wep1_is_broken = 0
 	wep2_is_broken = 0
 
@@ -200,8 +203,7 @@ func _ready():
 
 	sprite.play("idle_right")
 
-	GameState_.connect("send_gladiator_data_to_peer_signal", Callable(self, "_on_send_gladiator_data_to_peer_signal"))
-	GameState_.connect("killed_by_server_signal", Callable(self, "_on_killed_by_server_signal"))
+
 
 	if is_multiplayer_authority():
 
@@ -291,7 +293,7 @@ func _physics_process(delta):
 			sprite.play(current_animation)
 
 
-func _on_send_gladiator_data_to_peer_signal(_peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
+func _on_send_gladiator_data_to_peer_signal(_peer_id: int, _all_gladiators):
 	all_gladiators = _all_gladiators
 
 

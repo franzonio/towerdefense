@@ -311,6 +311,7 @@ func glow_pulse(node: CanvasItem, duration: float = 1.2, scale_amt: float = 0.05
 	var original_alpha: float = node.modulate.a
 	var tween: = node.get_tree().create_tween()
 	tween.set_loops()
+	tween.tween_interval(1)
 	tween.tween_property(node, "scale", original_scale * (1.0 + scale_amt), duration * 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.parallel().tween_property(node, "modulate:a", original_alpha * (1.0 - alpha_amt), duration * 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
 	tween.tween_property(node, "scale", original_scale, duration * 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)

@@ -620,19 +620,20 @@ func _ready():
 	max_lvl = str(int_keys[-1])
 
 func fix_icon_bonuses():
-	health_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-	strength_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-	endurance_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-	criticality_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-	avoidance_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-	quickness_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-	resilience_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-	axe_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-	sword_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-	stabbing_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-	flagellation_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-	mace_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-	shield_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+	if all_gladiators:
+		health_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+		strength_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+		endurance_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+		criticality_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+		avoidance_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+		quickness_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+		resilience_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+		axe_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+		sword_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+		stabbing_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+		flagellation_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+		mace_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+		shield_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
 
 func _process(delta: float) -> void :
 	prev_lvl = current_lvl
@@ -994,7 +995,7 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 	chat_scroll.scroll_vertical = chat_scroll.get_v_scroll_bar().max_value
 
 func update_equipment_ui():
-
+	
 	# here we need to update EquipmentPanelX with all peers equipment
 	var all_ids = all_gladiators.keys()
 	var all_item_slots = ["weapon1", "weapon2", "head", "shoulders", "chest", "belt", 
@@ -1376,7 +1377,7 @@ func _on_remove_item_from_inventory(id, _item_dict, slot_name):
 	if multiplayer.get_unique_id() != id: return
 	$Inventory/InventoryGridContainer.find_child(slot_name, true, false).get_child(0).queue_free()
 
-func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
+func _on_send_gladiator_data_to_peer_signal(peer_id: int, _all_gladiators):
 	print("update gladiator dict")
 	all_gladiators = _all_gladiators
 	#print(all_gladiators)
@@ -1717,7 +1718,6 @@ func _on_inventory_item_pressed(item_name: String, slot_name: String):
 
 
 func clear_shop_grid():
-
 	var tweens = []
 
 	for child in shop_grid.get_children():
@@ -1729,7 +1729,6 @@ func clear_shop_grid():
 
 			var tween: = get_tree().create_tween()
 			tween.tween_property(c, "modulate:a", 0.0, 0.1).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN)
-
 			if c:
 				var node_ref: = c
 				tween.tween_callback( func(): if node_ref: node_ref.queue_free())
@@ -1739,14 +1738,10 @@ func clear_shop_grid():
 	if tweens.size() > 0:
 		await tweens[-1].finished
 
-
-
-
 func roll_cards():
 	shop_grid.modulate.a = 1
 	all_cards = get_all_cards()
 	var weighted_random_cards = weighted_random_selection(all_cards, 5)
-
 	var i = 0
 	var shop_grid_children = shop_grid.get_children()
 	
@@ -1756,6 +1751,7 @@ func roll_cards():
 		card_instance.modulate.a = 0
 		card_instance["focus_mode"] = 0
 		shop_grid_children[i].add_child(card_instance)
+		#print("spawned card in shop")
 
 		var tween: = get_tree().create_tween()
 		tween.set_parallel(true)
@@ -1764,6 +1760,8 @@ func roll_cards():
 
 		await get_tree().create_timer(0.05).timeout
 		i += 1
+		
+	
 
 func _on_reroll_cards_new_round_signal(active_players: Array):
 	if is_rerolling:
@@ -1774,10 +1772,9 @@ func _on_reroll_cards_new_round_signal(active_players: Array):
 		return
 
 	await get_tree().process_frame
-
 	for player in active_players:
+		
 		if multiplayer.get_unique_id() == player:
-
 			refresh_button.disabled = true
 			reroll_cards()
 			#await get_tree().create_timer(1).timeout
@@ -2207,6 +2204,9 @@ func _on_health_icon_gui_input(event: InputEvent) -> void:
 			return
 		
 		#health_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		var current_timestamp = Time.get_unix_time_from_system()
+		var current_timestamp_in_milliseconds = current_timestamp*1000
+		print(str(current_timestamp_in_milliseconds) + ": on_health_icon_gui_input " + str(multiplayer.get_unique_id()))
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "health", 0, false)

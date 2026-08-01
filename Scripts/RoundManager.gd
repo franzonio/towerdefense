@@ -123,41 +123,25 @@ func regenerate_null_pairs(_current_round: Array) -> Array:
 @rpc("any_peer", "call_local")
 func start_next_round():
 	global_round_counter += 1
-
-
 	GameState_.add_age_modifiers(global_round_counter)
-
-
-
-
-
-
 	var active_players = player_ids
-
-
-
+	
 	if active_players.size() <= 1:
 		print("Game over or only one player left.")
 		return
-
-
+		
 	if rounds.is_empty():
 		print("Generating round-robin schedule...")
 		rounds = generate_round_robin_rounds()
 		current_round_index = 0
-
 
 	if current_round_index >= rounds.size():
 		print("All rounds completed, regenerating...")
 		rounds = generate_round_robin_rounds()
 		current_round_index = 0
 
-
-
 	current_round = rounds[current_round_index]
-
 	current_round = regenerate_null_pairs(current_round)
-
 	duel_results.clear()
 
 	# Spawn duels or assign auto-wins
@@ -185,7 +169,8 @@ func start_next_round():
 
 	current_round_index += 1
 
-	if global_round_counter >= 2: GameState_.reroll_cards_new_round(active_players)
+	if global_round_counter >= 2: 
+		GameState_.reroll_cards_new_round(active_players)
 
 	# INTERMISSION PHASE
 	if intermission_timer == null:

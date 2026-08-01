@@ -14,7 +14,6 @@ var all_gladiators
 var initial_tooltip_received = 0
 
 
-
 var mouse_inside_button: = false
 var added: = false
 signal button_parent(parent_name: String)
@@ -54,7 +53,6 @@ var crafted_item_dict = {}
 var cost_label
 
 func _ready():
-
 	add_theme_color_override("icon_hover_color", Color(1.27, 1.27, 1.27, 1.0))
 	add_theme_color_override("icon_disabled_color", "ffffff")
 	add_theme_color_override("icon_hover_pressed_color", "ffffffb5")
@@ -142,7 +140,7 @@ func _ready():
 		add_child(name_label)
 
 		if all_gladiators != null:
-			_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
+			_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators["gold"])
 
 
 func setup(_item_dict):
@@ -208,12 +206,17 @@ func _make_custom_tooltip(for_text):
 
 	return panel
 
-func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
-	all_gladiators = _all_gladiators
+func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int, _player_gladiator_data: Dictionary):#, _all_gladiators):
+	#var current_timestamp = Time.get_unix_time_from_system()
+	#var current_timestamp_in_milliseconds = current_timestamp*1000
+	#print(str(current_timestamp_in_milliseconds) + ": update card signal for " + str(_peer_id) + " | " + equipment_name)
+	
+	all_gladiators = _player_gladiator_data
+	
 
 	if all_gladiators == null:
 		print("all_gladiators is null in _on_send_gladiator_data_to_peer_card_signal")
-	_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[multiplayer.get_unique_id()]["gold"])
+	_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators["gold"])
 
 func set_text_color(tier):
 	var color
@@ -253,9 +256,9 @@ func _on_update_gold_req_shop(_id, gold):
 
 
 			if crafted_item_dict != {}:
-				tooltip_text = get_item_tooltip(crafted_item_dict[equipment_name], all_gladiators, item_dict)
+				tooltip_text = get_item_tooltip(crafted_item_dict[equipment_name], item_dict)
 			else:
-				tooltip_text = get_item_tooltip(item_dict[equipment_name], all_gladiators, item_dict)
+				tooltip_text = get_item_tooltip(item_dict[equipment_name], item_dict)
 
 
 
@@ -273,15 +276,15 @@ func _on_equipment_card_updated(id, updated_item_dict, slot, item, _all_gladiato
 		if parent_name != slot: return
 		tooltip_text = ""
 		if crafted_item_dict != {}:
-			tooltip_text = get_item_tooltip(crafted_item_dict[item], all_gladiators, updated_item_dict)
+			tooltip_text = get_item_tooltip(crafted_item_dict[item], updated_item_dict)
 		else:
-			tooltip_text = get_item_tooltip(updated_item_dict[item], all_gladiators, updated_item_dict)
+			tooltip_text = get_item_tooltip(updated_item_dict[item], updated_item_dict)
 	elif ucfirst(slot) in parent_name:
 		tooltip_text = ""
 		if crafted_item_dict != {}:
-			tooltip_text = get_item_tooltip(crafted_item_dict[item], all_gladiators, updated_item_dict)
+			tooltip_text = get_item_tooltip(crafted_item_dict[item], updated_item_dict)
 		else:
-			tooltip_text = get_item_tooltip(updated_item_dict[item], all_gladiators, updated_item_dict)
+			tooltip_text = get_item_tooltip(updated_item_dict[item], updated_item_dict)
 
 
 
@@ -305,16 +308,16 @@ func _on_send_equipment_dict_to_peer(id, _item_dict):
 	if _item_dict.has(equipment_name):
 
 		item_dict = _item_dict.duplicate(true)
-		_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators[id]["gold"])
+		_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators["gold"])
 
 		var item = item_dict[equipment_name].duplicate(true)
 
 
 		if tooltip_text == "":
 			if crafted_item_dict != {}:
-				tooltip_text = get_item_tooltip(crafted_item_dict[equipment_name], all_gladiators, item_dict)
+				tooltip_text = get_item_tooltip(crafted_item_dict[equipment_name], item_dict)
 			else:
-				tooltip_text = get_item_tooltip(item_dict[equipment_name], all_gladiators, item_dict)
+				tooltip_text = get_item_tooltip(item_dict[equipment_name], item_dict)
 
 
 
@@ -385,7 +388,7 @@ func buy_equipment():
 			disabled = false
 		'''
 
-func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data, _parent_name):
+func _on_card_buy_result(peer_id: int, success: bool, _parent_name):
 	if peer_id == multiplayer.get_unique_id():
 		if parent_name == _parent_name:
 			if success:
@@ -400,26 +403,13 @@ func _on_card_buy_result(peer_id: int, success: bool, _gladiator_data, _parent_n
 				
 
 
-func get_item_tooltip(item_data: Dictionary, _all_gladiators, __item_dict):
+func get_item_tooltip(item_data: Dictionary, __item_dict):
 	if __item_dict.has(equipment_name):
 
 
 
 
 		"\n\t\torig_min_dmg = item.get(\"min_dmg\", 0)\n\t\torig_durability = item.get(\"durability\", 0)\n\t\torig_weight = item.get(\"weight\", 0) # never null here\n\t\torig_speed = item.get(\"speed\", 0)\n\t\torig_crit_chance = item.get(\"crit_chance\", 0)\n\t\torig_crit_multi = item.get(\"crit_multi\", 0)\n\t\torig_absorb = item.get(\"absorb\", 0)\n\t\toriginal_item_dict = __item_dict.duplicate(true)\n\t\t"
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -535,11 +525,11 @@ func get_item_tooltip(item_data: Dictionary, _all_gladiators, __item_dict):
 
 
 
-	if int(all_gladiators[multiplayer.get_unique_id()]["level"]) >= int(level): lvl_req_color = req_ok_color
+	if int(all_gladiators["level"]) >= int(level): lvl_req_color = req_ok_color
 	else: lvl_req_color = req_nok_color
 
 
-	if all_gladiators[multiplayer.get_unique_id()]["attributes"]["strength"] >= str_req: str_req_color = req_ok_color
+	if all_gladiators["attributes"]["strength"] >= str_req: str_req_color = req_ok_color
 	else: str_req_color = req_nok_color
 
 
