@@ -1,12 +1,13 @@
-[gd_scene load_steps=40 format=3 uid="uid://kfhwn4lpml61"]
+[gd_scene load_steps=67 format=3 uid="uid://kfhwn4lpml61"]
 
 [ext_resource type="Script" uid="uid://v412lfmukh41" path="res://UI/MainMenu.gd" id="1"]
 [ext_resource type="Script" uid="uid://bssi0t884b3hj" path="res://UI/tutorial.gd" id="2_b37jj"]
 [ext_resource type="Texture2D" uid="uid://bg48fcrh4pw6c" path="res://Assets/Tutorial/health_endurance.png" id="3_y6s48"]
 [ext_resource type="Texture2D" uid="uid://di0vlbdjk0255" path="res://Assets/Aseprite/Attributes/health.png" id="4_otjfi"]
 [ext_resource type="Texture2D" uid="uid://bmq3objsbdshm" path="res://Assets/Aseprite/Attributes/endurance.png" id="5_obtq6"]
-[ext_resource type="Texture2D" uid="uid://bgkcnn0i34epq" path="res://Assets/Tutorial/concede_threshold.png" id="6_otjfi"]
+[ext_resource type="Script" uid="uid://blkc8vbdwq5pv" path="res://Assets/Tutorial/concede_panel_2.gd" id="6_vsl72"]
 [ext_resource type="Texture2D" uid="uid://cx76r8q2vqgvv" path="res://Assets/Aseprite/Attributes/strength.png" id="7_fxi16"]
+[ext_resource type="Script" uid="uid://dhwaceb7vkh5y" path="res://UI/concede_threshold_menu.gd" id="7_yndlu"]
 [ext_resource type="Texture2D" uid="uid://crrsom80gj47k" path="res://Assets/Aseprite/Attributes/criticality.png" id="8_vsl72"]
 [ext_resource type="Texture2D" uid="uid://dc123cwv575n6" path="res://Assets/Aseprite/Attributes/avoidance.png" id="9_yndlu"]
 [ext_resource type="Texture2D" uid="uid://uuhsexcwvpxj" path="res://Assets/Aseprite/Attributes/quickness.png" id="10_v87kc"]
@@ -17,6 +18,28 @@
 [ext_resource type="Texture2D" uid="uid://dl26mpyf8d2iv" path="res://Assets/Aseprite/Attributes/mace_mastery.png" id="15_g341i"]
 [ext_resource type="Texture2D" uid="uid://bddeyxky31tmc" path="res://Assets/Aseprite/Attributes/flagellation_mastery.png" id="16_qbgtf"]
 [ext_resource type="Texture2D" uid="uid://blkdqari80i7h" path="res://Assets/Aseprite/Attributes/shield_mastery.png" id="17_dl0fi"]
+[ext_resource type="Texture2D" uid="uid://bbtp5bm6prkxf" path="res://Assets/Aseprite/Equipment/Weapons/Axes/light/axe_t1_light_128x128.png" id="19_qbgtf"]
+[ext_resource type="Texture2D" uid="uid://ivd4sx2t3ndp" path="res://Assets/Aseprite/Equipment/Weapons/Axes/light/axe_t2_light_128x128.png" id="20_dl0fi"]
+[ext_resource type="Texture2D" uid="uid://8n2kpvqser4e" path="res://Assets/Aseprite/Equipment/Weapons/Axes/light/axe_t3_light_128x128.png" id="21_f2k8e"]
+[ext_resource type="Texture2D" uid="uid://bjwj55njgq0ma" path="res://Assets/Aseprite/Equipment/Weapons/Axes/light/axe_t4_light_128x128.png" id="22_o0stp"]
+[ext_resource type="Texture2D" uid="uid://dw8shrur0ko37" path="res://Assets/Aseprite/Equipment/Weapons/Axes/heavy/axe_t1_heavy_128x128.png" id="23_keq6e"]
+[ext_resource type="Texture2D" uid="uid://cdcfnxi31rx55" path="res://Assets/Aseprite/Equipment/Weapons/Axes/heavy/axe_t2_heavy_128x128.png" id="24_jt302"]
+[ext_resource type="Texture2D" uid="uid://bcrq1axypr8qv" path="res://Assets/Aseprite/Equipment/Weapons/Axes/heavy/axe_t3_heavy_128x128.png" id="25_4fgjf"]
+[ext_resource type="Texture2D" uid="uid://bravfvoiateh4" path="res://Assets/Aseprite/Equipment/Weapons/Axes/heavy/axe_t4_heavy_128x128.png" id="26_ljgp6"]
+[ext_resource type="Texture2D" uid="uid://bdc7pvh6cdlj3" path="res://Assets/Aseprite/Equipment/Armor/Chest/png/chest_t1_light_128x128.png" id="27_ai44j"]
+[ext_resource type="Texture2D" uid="uid://0wvl5chk5ufm" path="res://Assets/Aseprite/Equipment/Armor/Chest/png/chest_t2_light_128x128.png" id="28_n3vlb"]
+[ext_resource type="Texture2D" uid="uid://bey58a4lq6pr3" path="res://Assets/Aseprite/Equipment/Armor/Chest/png/chest_t3_light_128x128.png" id="29_nm3xl"]
+[ext_resource type="Texture2D" uid="uid://dnm2fb7fcekbf" path="res://Assets/Aseprite/Equipment/Armor/Chest/png/chest_t4_light_128x128.png" id="30_c5pug"]
+[ext_resource type="Texture2D" uid="uid://b41nk1e0mwuhn" path="res://Assets/Aseprite/Equipment/Armor/Chest/png/chest_t1_heavy_128x128.png" id="31_h5geo"]
+[ext_resource type="Texture2D" uid="uid://r7btjv6uo71i" path="res://Assets/Aseprite/Equipment/Armor/Chest/png/chest_t2_heavy_128x128.png" id="32_3uwan"]
+[ext_resource type="Texture2D" uid="uid://ti5eyk4vr0yd" path="res://Assets/Aseprite/Equipment/Armor/Chest/png/chest_t3_heavy_128x128.png" id="33_f13hc"]
+[ext_resource type="Texture2D" uid="uid://dawbep1pmh2vp" path="res://Assets/Aseprite/Equipment/Armor/Chest/png/chest_t4_heavy_128x128.png" id="34_cxvft"]
+[ext_resource type="Texture2D" uid="uid://d1d8efbjo75t8" path="res://Assets/Tutorial/crafting2.png" id="35_h5geo"]
+[ext_resource type="Texture2D" uid="uid://ctnx0sg16m66v" path="res://Assets/Tutorial/crafting4.png" id="36_3uwan"]
+[ext_resource type="Texture2D" uid="uid://bxbpshp8xm2y" path="res://Assets/Tutorial/crafting3.png" id="37_f13hc"]
+[ext_resource type="Texture2D" uid="uid://cchnv7rq1qkgs" path="res://Assets/Tutorial/crafting1.png" id="38_cxvft"]
+[ext_resource type="Texture2D" uid="uid://cci7w04u37abr" path="res://Assets/Aseprite/Scrolls/scroll_of_injection.png" id="39_f13hc"]
+[ext_resource type="Texture2D" uid="uid://n14y776ffbj5" path="res://Assets/Aseprite/Scrolls/scroll_of_luck.png" id="40_cxvft"]
 
 [sub_resource type="CompressedTexture2D" id="CompressedTexture2D_ers0q"]
 load_path = "res://.godot/imported/battlefield_grass.png-e5cddb3c47484e286f5272d6124ff1c1.ctex"
@@ -83,11 +106,82 @@ corner_detail = 1
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_csrb3"]
 bg_color = Color(0.7294118, 0.5686275, 0.34509805, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5kwvm"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+border_color = Color(0.29411766, 0.23921569, 0.26666668, 0.8352941)
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+anti_aliasing = false
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_us337"]
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.7137255)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ca11x"]
+resource_local_to_scene = true
+bg_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+shadow_size = 5
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_dhyvq"]
+bg_color = Color(0.46666667, 0.45490196, 0.23137255, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.57254905, 0.45490196, 0.25490198, 1)
+border_blend = true
+corner_radius_top_left = 2
+corner_radius_top_right = 2
+corner_radius_bottom_right = 2
+corner_radius_bottom_left = 2
+corner_detail = 1
+shadow_size = 6
+
+[sub_resource type="Theme" id="Theme_v87kc"]
+resource_local_to_scene = true
+Button/icons/icon = null
+Button/styles/normal = SubResource("StyleBoxFlat_5kwvm")
+LineEdit/styles/normal = SubResource("StyleBoxFlat_us337")
+Panel/styles/panel = SubResource("StyleBoxFlat_ca11x")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_ca11x")
+PopupMenu/colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+PopupMenu/colors/font_disabled_color = Color(0.8235294, 0.7882353, 0.64705884, 0.8745098)
+PopupMenu/colors/font_hover_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+PopupMenu/colors/font_outline_color = Color(0.3019608, 0.27058825, 0.22352941, 1)
+PopupMenu/constants/outline_size = 8
+PopupMenu/font_sizes/font_size = 22
+PopupMenu/styles/panel = SubResource("StyleBoxFlat_dhyvq")
+PopupPanel/styles/panel = SubResource("StyleBoxFlat_ca11x")
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wxllh"]
 bg_color = Color(0.4745098, 0.26666668, 0.2901961, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_avhca"]
-bg_color = Color(0.7019608, 0.64705884, 0.33333334, 1)
+bg_color = Color(0.7294118, 0.5686275, 0.34509805, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_f2k8e"]
 bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.92941177)
@@ -101,13 +195,6 @@ corner_radius_top_right = 2
 corner_radius_bottom_right = 2
 corner_radius_bottom_left = 2
 corner_detail = 1
-
-[sub_resource type="LabelSettings" id="LabelSettings_o0stp"]
-resource_local_to_scene = true
-font_size = 20
-font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-outline_size = 5
-outline_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_keq6e"]
 bg_color = Color(0.3019608, 0.27058825, 0.22352941, 0.7411765)
@@ -261,6 +348,7 @@ theme_override_styles/focus = SubResource("StyleBoxFlat_otjfi")
 text = "Exit"
 
 [node name="Tutorial" type="Panel" parent="."]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -314,7 +402,7 @@ text = "You see them every day in the slave market. Each one carries a story abo
 
 But their pasts mean nothing to you. As a Lanista, you care only about the potential buried beneath fear, hunger, and inexperience. These untrained slaves are raw material - and you know how to forge them into champions.
 
-You understand the strengths and weaknesses of every race. Your job is to shape them: train them with purpose, equip them wisely, and craft the combat strategies that will win the crowd. In the arena, glory belongs to the gladiator - but their success begins with you."
+You understand the strengths and weaknesses of every race. Your job is to shape them. Train them with purpose, equip them wisely, and craft the combat strategies that will win the crowd. In the arena, glory belongs to the gladiator - but their success begins with you."
 horizontal_alignment = 1
 vertical_alignment = 1
 autowrap_mode = 2
@@ -447,13 +535,77 @@ offset_right = 770.0
 offset_bottom = 322.0
 texture = ExtResource("5_obtq6")
 
-[node name="ConcedePanel" type="TextureRect" parent="Tutorial/Pages/Page2"]
-layout_mode = 0
-offset_left = 1508.0
-offset_top = 464.0
-offset_right = 1657.0
-offset_bottom = 695.0
-texture = ExtResource("6_otjfi")
+[node name="ConcedePanel2" type="Panel" parent="Tutorial/Pages/Page2"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -377.0
+offset_top = -553.0
+offset_right = -229.0
+offset_bottom = -488.0
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset = Vector2(74, 32.5)
+theme = SubResource("Theme_v87kc")
+script = ExtResource("6_vsl72")
+
+[node name="Label" type="Label" parent="Tutorial/Pages/Page2/ConcedePanel2"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -25.5
+offset_top = 4.0
+offset_right = 25.5
+offset_bottom = 27.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 22
+text = "Concede"
+
+[node name="ConcedeThresholdMenu" type="OptionButton" parent="Tutorial/Pages/Page2/ConcedePanel2"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -65.625
+offset_top = -36.0
+offset_right = 65.625
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = SubResource("Theme_v87kc")
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_focus_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_pressed_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_hover_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+alignment = 1
+item_count = 6
+popup/item_0/text = "50 %"
+popup/item_0/id = 0
+popup/item_1/text = "40 %"
+popup/item_1/id = 1
+popup/item_2/text = "30 %"
+popup/item_2/id = 2
+popup/item_3/text = "20 %"
+popup/item_3/id = 3
+popup/item_4/text = "10 %"
+popup/item_4/id = 4
+popup/item_5/text = "0 %"
+popup/item_5/id = 5
+script = ExtResource("7_yndlu")
 
 [node name="Page3" type="Panel" parent="Tutorial/Pages"]
 visible = false
@@ -504,6 +656,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Page4" type="Panel" parent="Tutorial/Pages"]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -521,10 +674,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -1416.0
-offset_top = -481.0
-offset_right = -494.0
-offset_bottom = -156.0
+offset_left = -1403.0
+offset_top = -47.0
+offset_right = -509.0
+offset_bottom = 278.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_f2k8e")
@@ -543,15 +696,20 @@ custom_minimum_size = Vector2(64, 64)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+tooltip_text = "Help"
 texture = ExtResource("4_otjfi")
 expand_mode = 2
 
-[node name="Health" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+[node name="Health" type="RichTextLabel" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "How much health your gladiator 
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "How much [color=\"cd8900\"]health[/color] your gladiator 
 has when starting a duel"
-label_settings = SubResource("LabelSettings_o0stp")
 vertical_alignment = 1
 
 [node name="StrengthIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
@@ -562,12 +720,15 @@ size_flags_vertical = 6
 texture = ExtResource("7_fxi16")
 expand_mode = 2
 
-[node name="Strength" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+[node name="Strength" type="RichTextLabel" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Strength impacts how heavy items your gladiator 
-can wield, how hard you hit and counters weight"
-label_settings = SubResource("LabelSettings_o0stp")
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "[color=\"cd8900\"]Strength[/color] impacts how heavy items your gladiator can wield, how hard you hit and reduces impact of weight"
 vertical_alignment = 1
 
 [node name="EnduranceIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
@@ -578,12 +739,16 @@ size_flags_vertical = 6
 texture = ExtResource("5_obtq6")
 expand_mode = 2
 
-[node name="Endurance" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+[node name="Endurance" type="RichTextLabel" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Endurance determines how long your gladiator 
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "[color=\"cd8900\"]Endurance[/color] determines how long your gladiator 
 can fight before collapsing from fatigue"
-label_settings = SubResource("LabelSettings_o0stp")
 vertical_alignment = 1
 
 [node name="CriticalityIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
@@ -594,12 +759,16 @@ size_flags_vertical = 6
 texture = ExtResource("8_vsl72")
 expand_mode = 2
 
-[node name="Criticality" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+[node name="Criticality" type="RichTextLabel" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Criticality determines the likelihood 
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "[color=\"cd8900\"]Criticality[/color] determines the likelihood 
 and magnitude of critical hits"
-label_settings = SubResource("LabelSettings_o0stp")
 vertical_alignment = 1
 
 [node name="AvoidanceIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
@@ -610,12 +779,16 @@ size_flags_vertical = 6
 texture = ExtResource("9_yndlu")
 expand_mode = 2
 
-[node name="Avoidance" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+[node name="Avoidance" type="RichTextLabel" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Avoidance determines the likelihood 
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "[color=\"cd8900\"]Avoidance[/color] determines the likelihood 
 of dodging an incoming attack"
-label_settings = SubResource("LabelSettings_o0stp")
 vertical_alignment = 1
 
 [node name="QuicknessIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
@@ -626,12 +799,16 @@ size_flags_vertical = 6
 texture = ExtResource("10_v87kc")
 expand_mode = 2
 
-[node name="Quickness" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+[node name="Quickness" type="RichTextLabel" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Quickness determines how 
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "[color=\"cd8900\"]Quickness[/color] determines how 
 fast your gladiator attacks"
-label_settings = SubResource("LabelSettings_o0stp")
 vertical_alignment = 1
 
 [node name="ResilienceIcon" type="TextureRect" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
@@ -642,25 +819,32 @@ size_flags_vertical = 6
 texture = ExtResource("11_h2xek")
 expand_mode = 2
 
-[node name="Resilience" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
+[node name="Resilience" type="RichTextLabel" parent="Tutorial/Pages/Page4/AttributePanelHelp/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Resilience determined effectiveness 
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "[color=\"cd8900\"]Resilience[/color] determined effectiveness 
 of absorb and durability of equipped items"
-label_settings = SubResource("LabelSettings_o0stp")
 vertical_alignment = 1
 
-[node name="SwordMastery" type="Label" parent="Tutorial/Pages/Page4/AttributePanelHelp"]
+[node name="SwordMastery" type="RichTextLabel" parent="Tutorial/Pages/Page4/AttributePanelHelp"]
 layout_mode = 0
 offset_left = 555.0
 offset_top = 245.0
 offset_right = 834.0
 offset_bottom = 314.0
 size_flags_horizontal = 3
-text = "Masteries determine how well 
-your gladiator can handle a weapon 
-in relation to its difficulty."
-label_settings = SubResource("LabelSettings_o0stp")
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/normal_font_size = 20
+bbcode_enabled = true
+text = "[color=\"cd8900\"]Masteries[/color] determine how well your gladiator can handle a weapon 
+in relation to its difficulty"
 vertical_alignment = 1
 
 [node name="VBoxContainer2" type="GridContainer" parent="Tutorial/Pages/Page4/AttributePanelHelp"]
@@ -721,6 +905,7 @@ texture = ExtResource("17_dl0fi")
 expand_mode = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="Tutorial/Pages/Page4"]
+visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -792,10 +977,10 @@ anchor_left = 1.0
 anchor_top = 0.5
 anchor_right = 1.0
 anchor_bottom = 0.5
-offset_left = -819.0
-offset_top = -69.0
-offset_right = -494.0
-offset_bottom = 334.0
+offset_left = -922.0
+offset_top = -473.0
+offset_right = -597.0
+offset_bottom = -70.0
 grow_horizontal = 0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ljgp6")
@@ -1846,10 +2031,10 @@ vertical_alignment = 1
 
 [node name="RaceModifiers" type="Label" parent="Tutorial/Pages/Page4"]
 layout_mode = 0
-offset_left = 1101.0
-offset_top = 434.0
-offset_right = 1426.0
-offset_bottom = 470.0
+offset_left = 998.0
+offset_top = 30.0
+offset_right = 1323.0
+offset_bottom = 66.0
 size_flags_horizontal = 3
 theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
@@ -1860,6 +2045,748 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_ljgp6")
 text = "Race modifiers"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="Label" type="RichTextLabel" parent="Tutorial/Pages/Page4"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -443.0
+offset_top = -397.0
+offset_right = 17.0
+offset_bottom = -126.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "So what does this mean in practice? 
+
+Take a moment to read about the [color=\"cd8900\"]attributes[/color] that builds up the core of a gladiator"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Page5" type="Panel" parent="Tutorial/Pages"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_avhca")
+
+[node name="Label" type="RichTextLabel" parent="Tutorial/Pages/Page5"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -472.0
+offset_top = -388.0
+offset_right = 474.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "The three main sources of [color=\"cd8900\"]attributes[/color] are 
+1) buying in the shop 
+2) leveling up your gladiator
+3) equipping items with attribute modifiers
+
+Note: attributes from equipped items are not affected by race modifiers!
+
+
+Your gladiator's attributes will also permanently adjust as they [color=\"ba9158\"]age[/color]. Their power increases as they transition from being [color=\"ba9158\"]young[/color] to [color=\"ba9158\"]adult[/color], while it decreases later in life when becoming [color=\"ba9158\"]aged[/color] and eventually [color=\"ba9158\"]old[/color]."
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Page6" type="Panel" parent="Tutorial/Pages"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_avhca")
+
+[node name="Label" type="RichTextLabel" parent="Tutorial/Pages/Page6"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -472.0
+offset_top = -388.0
+offset_right = 474.0
+offset_bottom = -224.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "Equipment are divided into four [color=\"4b726e\"]Tiers[/color]. Each tier comes with one [color=\"8caba1\"]light[/color] and one [color=\"847875\"]heavy[/color] variant with unique characteristics suitable for different types of gladiators."
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Weapons" type="GridContainer" parent="Tutorial/Pages/Page6"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 326.0
+offset_top = -161.0
+offset_right = 850.0
+offset_bottom = 153.0
+grow_vertical = 2
+columns = 4
+
+[node name="Label5" type="RichTextLabel" parent="Tutorial/Pages/Page6/Weapons"]
+z_index = 12
+custom_minimum_size = Vector2(1, 50)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "[color=\"D1B187\"]Tier 1[/color]"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label6" type="RichTextLabel" parent="Tutorial/Pages/Page6/Weapons"]
+z_index = 12
+custom_minimum_size = Vector2(1, 50)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "[color=\"03877d\"]Tier 2[/color]"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label7" type="RichTextLabel" parent="Tutorial/Pages/Page6/Weapons"]
+z_index = 12
+custom_minimum_size = Vector2(1, 50)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "[color=\"d2b600\"]Tier 3[/color]"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label8" type="RichTextLabel" parent="Tutorial/Pages/Page6/Weapons"]
+z_index = 12
+custom_minimum_size = Vector2(1, 0)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "[color=\"d2004f\"]Tier 4[/color]"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Tier1Light" type="TextureRect" parent="Tutorial/Pages/Page6/Weapons"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("19_qbgtf")
+
+[node name="Tier2Light" type="TextureRect" parent="Tutorial/Pages/Page6/Weapons"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("20_dl0fi")
+
+[node name="Tier3Light" type="TextureRect" parent="Tutorial/Pages/Page6/Weapons"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("21_f2k8e")
+
+[node name="Tier4Light" type="TextureRect" parent="Tutorial/Pages/Page6/Weapons"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("22_o0stp")
+
+[node name="Tier1Heavy" type="TextureRect" parent="Tutorial/Pages/Page6/Weapons"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("23_keq6e")
+
+[node name="Tier2Heavy" type="TextureRect" parent="Tutorial/Pages/Page6/Weapons"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("24_jt302")
+
+[node name="Tier3Heavy" type="TextureRect" parent="Tutorial/Pages/Page6/Weapons"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("25_4fgjf")
+
+[node name="Tier4Heavy" type="TextureRect" parent="Tutorial/Pages/Page6/Weapons"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("26_ljgp6")
+
+[node name="Armor" type="GridContainer" parent="Tutorial/Pages/Page6"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -876.0
+offset_top = -159.0
+offset_right = -264.0
+offset_bottom = 155.0
+grow_horizontal = 0
+grow_vertical = 2
+columns = 4
+
+[node name="Label5" type="RichTextLabel" parent="Tutorial/Pages/Page6/Armor"]
+z_index = 12
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "[color=\"D1B187\"]Tier 1[/color]"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label6" type="RichTextLabel" parent="Tutorial/Pages/Page6/Armor"]
+z_index = 12
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "[color=\"03877d\"]Tier 2[/color]"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label7" type="RichTextLabel" parent="Tutorial/Pages/Page6/Armor"]
+z_index = 12
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "[color=\"d2b600\"]Tier 3[/color]"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label8" type="RichTextLabel" parent="Tutorial/Pages/Page6/Armor"]
+z_index = 12
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "[color=\"d2004f\"]Tier 4[/color]"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Tier1Light" type="TextureRect" parent="Tutorial/Pages/Page6/Armor"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("27_ai44j")
+
+[node name="Tier2Light" type="TextureRect" parent="Tutorial/Pages/Page6/Armor"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("28_n3vlb")
+
+[node name="Tier3Light" type="TextureRect" parent="Tutorial/Pages/Page6/Armor"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("29_nm3xl")
+
+[node name="Tier4Light" type="TextureRect" parent="Tutorial/Pages/Page6/Armor"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("30_c5pug")
+
+[node name="Tier1Heavy" type="TextureRect" parent="Tutorial/Pages/Page6/Armor"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("31_h5geo")
+
+[node name="Tier2Heavy" type="TextureRect" parent="Tutorial/Pages/Page6/Armor"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("32_3uwan")
+
+[node name="Tier3Heavy" type="TextureRect" parent="Tutorial/Pages/Page6/Armor"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("33_f13hc")
+
+[node name="Tier4Heavy" type="TextureRect" parent="Tutorial/Pages/Page6/Armor"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 2
+texture = ExtResource("34_cxvft")
+
+[node name="Label2" type="RichTextLabel" parent="Tutorial/Pages/Page6"]
+z_index = 12
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 0
+offset_left = 197.0
+offset_top = 471.0
+offset_right = 347.0
+offset_bottom = 521.0
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "[color=\"8caba1\"]Light[/color]"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label3" type="RichTextLabel" parent="Tutorial/Pages/Page6"]
+z_index = 12
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 0
+offset_left = 189.0
+offset_top = 586.0
+offset_right = 339.0
+offset_bottom = 669.0
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "[color=\"847875\"]Heavy[/color]"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label4" type="RichTextLabel" parent="Tutorial/Pages/Page6"]
+z_index = 12
+custom_minimum_size = Vector2(150, 50)
+layout_mode = 0
+offset_left = 925.0
+offset_top = 474.0
+offset_right = 1075.0
+offset_bottom = 524.0
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "[color=\"8caba1\"]Light[/color]"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label5" type="RichTextLabel" parent="Tutorial/Pages/Page6"]
+z_index = 12
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 0
+offset_left = 918.0
+offset_top = 581.0
+offset_right = 1068.0
+offset_bottom = 664.0
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "[color=\"847875\"]Heavy[/color]"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Page7" type="Panel" parent="Tutorial/Pages"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_avhca")
+
+[node name="Label2" type="RichTextLabel" parent="Tutorial/Pages/Page7"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -73.0
+offset_top = -3.0
+offset_right = 69.0
+offset_bottom = 90.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(71, 46.5)
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "->"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="RichTextLabel" parent="Tutorial/Pages/Page7"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -472.0
+offset_top = -388.0
+offset_right = 474.0
+offset_bottom = -117.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "Equipment will automatically [color=\"ba9158\"]upgrade[/color] to the next tier within the light/heavy variant by having three of the same item in the inventory."
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Tier2Heavy" type="TextureRect" parent="Tutorial/Pages/Page7"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 0
+offset_left = 757.0
+offset_top = 517.0
+offset_right = 885.0
+offset_bottom = 645.0
+texture = ExtResource("32_3uwan")
+
+[node name="Tier3Heavy" type="TextureRect" parent="Tutorial/Pages/Page7"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 0
+offset_left = 1027.0
+offset_top = 517.0
+offset_right = 1155.0
+offset_bottom = 645.0
+texture = ExtResource("33_f13hc")
+
+[node name="Tier2Heavy2" type="TextureRect" parent="Tutorial/Pages/Page7"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 0
+offset_left = 757.0
+offset_top = 646.0
+offset_right = 885.0
+offset_bottom = 774.0
+texture = ExtResource("32_3uwan")
+
+[node name="Tier2Heavy3" type="TextureRect" parent="Tutorial/Pages/Page7"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 0
+offset_left = 757.0
+offset_top = 388.0
+offset_right = 885.0
+offset_bottom = 516.0
+texture = ExtResource("32_3uwan")
+
+[node name="Page8" type="Panel" parent="Tutorial/Pages"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_avhca")
+
+[node name="Label2" type="RichTextLabel" parent="Tutorial/Pages/Page8"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -86.0
+offset_top = -33.0
+offset_right = 56.0
+offset_bottom = 60.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(71, 46.5)
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "->"
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Label" type="RichTextLabel" parent="Tutorial/Pages/Page8"]
+z_index = 12
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -209.0
+offset_top = -524.0
+offset_right = 236.0
+offset_bottom = -301.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+theme_override_colors/default_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 16
+theme_override_font_sizes/normal_font_size = 31
+theme_override_font_sizes/bold_font_size = 31
+theme_override_font_sizes/bold_italics_font_size = 31
+theme_override_font_sizes/italics_font_size = 31
+theme_override_font_sizes/mono_font_size = 31
+theme_override_styles/normal = SubResource("StyleBoxFlat_y6s48")
+bbcode_enabled = true
+text = "Equipment can be crafted using [color=\"b00098\"]Scrolls[/color] which has a chance to forge an item into an incredible piece. It can also turn into a downgrade compared to the stock item."
+autowrap_mode = 2
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Tier2Heavy" type="TextureRect" parent="Tutorial/Pages/Page8"]
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 0
+offset_left = 110.0
+offset_top = 321.0
+offset_right = 366.0
+offset_bottom = 577.0
+texture = ExtResource("22_o0stp")
+
+[node name="Tier3Heavy" type="TextureRect" parent="Tutorial/Pages/Page8"]
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 0
+offset_left = 1237.0
+offset_top = 804.0
+offset_right = 1493.0
+offset_bottom = 1060.0
+texture = ExtResource("33_f13hc")
+
+[node name="Tier2Heavy4" type="TextureRect" parent="Tutorial/Pages/Page8"]
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 0
+offset_left = 1137.0
+offset_top = 334.0
+offset_right = 1393.0
+offset_bottom = 590.0
+texture = ExtResource("22_o0stp")
+
+[node name="Tier3Heavy2" type="TextureRect" parent="Tutorial/Pages/Page8"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 0
+offset_left = 1429.0
+offset_top = 558.0
+offset_right = 1840.0
+offset_bottom = 1045.0
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("35_h5geo")
+
+[node name="Tier2Heavy5" type="TextureRect" parent="Tutorial/Pages/Page8"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 0
+offset_left = 1350.0001
+offset_top = 22.000002
+offset_right = 1837.0001
+offset_bottom = 633.0
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("36_3uwan")
+
+[node name="Tier2Heavy6" type="TextureRect" parent="Tutorial/Pages/Page8"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 0
+offset_left = 318.0
+offset_top = 137.0
+offset_right = 702.0
+offset_bottom = 592.0
+scale = Vector2(0.8, 0.8)
+texture = ExtResource("37_f13hc")
+
+[node name="Tier3Heavy3" type="TextureRect" parent="Tutorial/Pages/Page8"]
+custom_minimum_size = Vector2(256, 256)
+layout_mode = 0
+offset_left = 342.0
+offset_top = 724.0
+offset_right = 598.0
+offset_bottom = 980.0
+texture = ExtResource("33_f13hc")
+
+[node name="Tier3Heavy4" type="TextureRect" parent="Tutorial/Pages/Page8"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 0
+offset_left = 545.0
+offset_top = 574.0
+offset_right = 824.0
+offset_bottom = 903.0
+texture = ExtResource("38_cxvft")
+
+[node name="scrolls" type="TextureRect" parent="Tutorial/Pages/Page8"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 0
+offset_left = 843.0
+offset_top = 213.0
+offset_right = 971.0
+offset_bottom = 341.0
+texture = ExtResource("39_f13hc")
+
+[node name="scrolls2" type="TextureRect" parent="Tutorial/Pages/Page8"]
+custom_minimum_size = Vector2(128, 128)
+layout_mode = 0
+offset_left = 976.0
+offset_top = 213.0
+offset_right = 1104.0
+offset_bottom = 341.0
+texture = ExtResource("40_cxvft")
 
 [node name="GoBack" type="Button" parent="Tutorial"]
 z_index = 12
@@ -1906,7 +2833,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_6vw7e")
 theme_override_styles/hover = SubResource("StyleBoxFlat_b37jj")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_8aown")
 theme_override_styles/focus = SubResource("StyleBoxFlat_otjfi")
-text = "<-"
+text = "<"
 
 [node name="NextPage" type="Button" parent="Tutorial"]
 z_index = 12
@@ -1931,7 +2858,7 @@ theme_override_styles/normal = SubResource("StyleBoxFlat_6vw7e")
 theme_override_styles/hover = SubResource("StyleBoxFlat_b37jj")
 theme_override_styles/disabled = SubResource("StyleBoxFlat_8aown")
 theme_override_styles/focus = SubResource("StyleBoxFlat_otjfi")
-text = "->"
+text = ">"
 
 [node name="PageLabel" type="Label" parent="Tutorial"]
 z_index = 12

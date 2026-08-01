@@ -8,7 +8,7 @@ extends Node
 			"hands": 1, 
 			"min_dmg": 1.0, 
 			"max_dmg": 3.0, 
-			"durability": INF, 
+			"durability": 1, 
 			"crit_chance": 0.1, 
 			"crit_multi": 1.1, 
 			"speed": 0.25, 

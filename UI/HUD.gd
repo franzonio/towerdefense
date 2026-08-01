@@ -1377,7 +1377,9 @@ func _on_remove_item_from_inventory(id, _item_dict, slot_name):
 	$Inventory/InventoryGridContainer.find_child(slot_name, true, false).get_child(0).queue_free()
 
 func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data: Dictionary, _all_gladiators):
+	print("update gladiator dict")
 	all_gladiators = _all_gladiators
+	#print(all_gladiators)
 	if rename_panels_done == 0:
 		rename_equipment_panels(all_gladiators)
 		for id in all_gladiators.keys():
@@ -1388,17 +1390,8 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _player_gladiator_data
 	update_equipment_ui()
 	fix_icon_bonuses()
 	if peer_id == multiplayer.get_unique_id():
-
-
-
-
-
-
-
-
 		player_gladiator_data = all_gladiators[peer_id]
 		update_craft_ui()
-
 		update_attribute_ui()
 		update_concede_ui()
 		update_stance_ui()
@@ -1485,6 +1478,9 @@ func update_attribute_ui():
 	
 	regret_points_left = all_gladiators[multiplayer.get_unique_id()]["regret_points"]
 	
+	#print("points left: " + str(points_left))
+	
+	'''
 	health_icon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	strength_icon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	endurance_icon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -1498,6 +1494,7 @@ func update_attribute_ui():
 	flagellation_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	mace_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	shield_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	'''
 	
 	#print(regret_points_left)
 	regret_points_label.text = "Regret: " + str(regret_points_left)
@@ -1943,10 +1940,6 @@ func _on_life_changed(peer_id: int, new_life: int):
 func populate_hud():
 	var peer_ids = all_gladiators.keys()
 	peer_ids.sort()
-
-
-
-
 	for i in range(min(peer_ids.size(), 8)):
 		var peer_id = peer_ids[i]
 
@@ -1963,17 +1956,11 @@ func populate_hud():
 		name_label = player_container.get_node("PlayerInfo/PlayerName")
 		race_label = player_container.get_node("PlayerInfo/PlayerRace")
 		life_label = player_container.get_node("PlayerLife")
-
-
-
 		var color = gladiator_data.get("color", Color.WHITE)
 		var _name = gladiator_data.get("name", "Unknown")
 
-
-
 		name_label.bbcode_enabled = true
 		name_label.bbcode_text = "[color=%s]%s[/color]" % [color, _name]
-
 
 		race_label.text = str(gladiator_data.get("race", "???")) + "       Lvl " + all_gladiators[peer_id]["level"]
 
@@ -1987,9 +1974,7 @@ func populate_hud():
 		if life_dict[peer_id] < prev_life_dict[peer_id]:
 			TweenFX.critical_hit(texture_rect)
 			TweenFX.shake(texture_rect, 0.6, 3)
-
-
-
+			
 		var life = int(gladiator_data.get("player_life", 0))
 		life_label.text = "❤️ %d" % life
 
@@ -2221,13 +2206,13 @@ func _on_health_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 		
-		health_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#health_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "health", 0, false)
 			
 		else:
-			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "health", false)
+			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "health", 0, false)
 			
 		update_attribute_ui()
 
@@ -2249,14 +2234,14 @@ func _on_strength_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		strength_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#strength_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "strength", 0, false)
 			
 			
 		else:
-			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "strength", false)
+			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "strength", 0, false)
 			
 			
 		update_attribute_ui()
@@ -2279,14 +2264,14 @@ func _on_endurance_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		endurance_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#endurance_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "endurance", 0, false)
 			
 			
 		else:
-			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "endurance", false)
+			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "endurance", 0, false)
 			
 			
 		update_attribute_ui()
@@ -2309,14 +2294,14 @@ func _on_criticality_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		criticality_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#criticality_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "crit_rating", 0, false)
 			
 			
 		else:
-			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "crit_rating", false)
+			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "crit_rating", 0, false)
 			
 			
 		update_attribute_ui()
@@ -2339,14 +2324,14 @@ func _on_avoidance_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 		
-		avoidance_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#avoidance_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "avoidance", 0, false)
 			
 			
 		else:
-			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "avoidance", false)
+			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "avoidance", 0, false)
 			
 			
 		update_attribute_ui()
@@ -2369,14 +2354,14 @@ func _on_quickness_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		quickness_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#quickness_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "quickness", 0, false)
 			
 			
 		else:
-			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "quickness", false)
+			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "quickness", 0, false)
 			
 			
 		update_attribute_ui()
@@ -2399,14 +2384,14 @@ func _on_resilience_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		resilience_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#resilience_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "resilience", 0, false)
 			
 			
 		else:
-			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "resilience", false)
+			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "resilience", 0, false)
 			
 			
 		update_attribute_ui()
@@ -2429,14 +2414,14 @@ func _on_sword_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		sword_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#sword_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "sword_mastery", 0, false)
 			
 			
 		else:
-			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "sword_mastery", false)
+			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "sword_mastery", 0, false)
 			
 			
 		update_attribute_ui()
@@ -2459,14 +2444,14 @@ func _on_axe_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		axe_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#axe_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "axe_mastery", 0, false)
 			
 			
 		else:
-			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "axe_mastery", false)
+			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "axe_mastery", 0, false)
 			
 			
 		update_attribute_ui()
@@ -2489,14 +2474,14 @@ func _on_stabbing_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		stabbing_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#stabbing_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "stabbing_mastery", 0, false)
 			
 			
 		else:
-			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "stabbing_mastery", false)
+			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "stabbing_mastery", 0, false)
 			
 			
 		update_attribute_ui()
@@ -2519,14 +2504,14 @@ func _on_mace_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		mace_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#mace_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "mace_mastery", 0, false)
 			
 			
 		else:
-			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "mace_mastery", false)
+			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "mace_mastery", 0, false)
 			
 			
 		update_attribute_ui()
@@ -2549,14 +2534,14 @@ func _on_flagellation_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 		
-		flagellation_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#flagellation_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "flagellation_mastery", 0, false)
 			
 			
 		else:
-			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "flagellation_mastery", false)
+			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "flagellation_mastery", 0, false)
 			
 			
 		update_attribute_ui()
@@ -2579,14 +2564,14 @@ func _on_shield_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		shield_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#shield_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "shield_mastery", 0, false)
 			
 			
 		else:
-			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "shield_mastery", false)
+			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "shield_mastery", 0, false)
 			
 			
 		update_attribute_ui()

@@ -503,7 +503,7 @@ func _on_confirm():
 	var gladiator = {
 		"color": Color("d2c9ff"), 
 		"name": GameState_.selected_name, 
-		"gold": 10000, 
+		"gold": 20, 
 		"exp": 0, 
 		"streak": 0, 
 		"level": "1", 
@@ -548,8 +548,8 @@ func _on_confirm():
 		}, 
 
 		"crafting_mats": {
-			"scroll_of_luck": 1000, 
-			"scroll_of_injection": 1000
+			"scroll_of_luck": 0, 
+			"scroll_of_injection": 0
 		}, 
 		"total_modifier_bonuses": {}, 
 		"age": "Young",

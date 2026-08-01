@@ -1,25 +1,35 @@
 Bugs
-	Gear unequip/equip kalkyl buggar
+	0 Gear unequip/equip kalkyl buggar
 		- lyckas inte reproducera...
-	Välja om ras i race selection ger error
-		^ disablat knapparna efter man valt
+		- hände en gång till, var i lategame, tog av/på gear på min vänsterpanel. Gearet hade flat HP och %inc hp. Händer bara en gång verkar det som. 
 	Generellt errors efter leave game
-		+ Income ska komma efter rundan, inte när ens fight är över
+	
+	1 Man kan regret-specca gear points
+	  Behöver en funktion som samlar all attributes från gear. Multiplicera det med %inc attr bonuses.
+	  Vid if:en "print("Negative value after regret, ignoring")", ändra <= 1 med värdet ovan.
+	2 Man kan respecca under sin str req på vapen 
+	  Lägg in en check att om str < wep_req, sätt vapen som "unarmed" och visa visuellt i eq panel
+	3 Global crit multi funkar inte i stat panelen? Funkade på ring men inte belt. 
+	  Global attack speed funkar inte heller på belt. Verkar inte funkar på amulet heller?
+	8 Fixa initial position på vapnena
+	5 Det laggar att ex. specca attributes som peer. Blir dictsen för stora?
+	4 Uppgraderade t3 -> t4 tung hjälm, blev inte riktigt rätt. Ikonen behöll t3 och fick errors.
+		E 0:55:34:614   _on_send_equipment_dict_to_peer: Invalid access to property or key 'barbute_of_kings' on a base object of type 'Dictionary'.
+	
+	6 Lilja slog 160 när hans 2h gick sönder. Vapnet ersattes inte korrekt med no_wep
+	7 Verkade ta skada x3 när jag förlorade en runda
+	
+	Få det att funka med 3+ spelare
 	
 Features
 		+ Vid ojämnt antal, möta en ghost eller fortsätta sin loss/winstreak
-			+ Något sätt att pivotera sin build - respec tokens i shoppen!
 	2 Tutorial
-		+ Uppgradera tier genom att sätta ihop 3 av lägre tier (borde bara kräva att lägga in light/heavy i equipment dicts
-		+ Vid miss, ge inte motståndaren en crit, utan dubblera tiden tills ditt nästa slag
-		+ Vid race selection ha info om rasbonusar
-		+ Panel för hit chance etc
 	5 Catch-up mechanic -> free rerolls?
-		+ Visual bar för endurance
 	6 Looping "skinande" tweens på typ guld/exp/hp för med juice?
-		+ Toggling info panel om stats i equipment panel
 	3 Resilience
 	Porträtt + map finish
+	Skriva ut "Starting round X" i chatten, så att man enklare kan se vilken runda som folk tog dmg etc
+	
 	
 Balance
 	0 Tid för rundor
@@ -36,4 +46,5 @@ Balance
 	
 Tankar
 	 Attribute cards applicerar inte rasbonusar, endast självutlagda poäng -> minska antalet attribute kort -> ge fler poäng vid lvl up 
-	 
+	 Starta med lite random stats? Särskilt i weapon masteries.
+	 Infinite craft material för guld i lvl 10? Separat shop typ.

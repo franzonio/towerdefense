@@ -32,7 +32,7 @@ var heavy_class_color = "#847875"
 
 var tier
 var t1_color: = "D1B187"
-var t2_color: = "#00877E"
+var t2_color: = "#03877d"
 var t3_color: = "#D2B600"
 var t4_color: = "#D2004F"
 var tier_colors = [t1_color, t2_color, t3_color, t4_color]

@@ -90,7 +90,7 @@ func _ready():
 	$VBoxContainer/OptionsButton.pressed.connect(on_options_pressed)
 	$VBoxContainer/ExitButton.pressed.connect(on_exit_pressed)
 	
-
+	TweenFX.glow_pulse($Tutorial/Pages/Page7/Label2)
 
 func on_start_pressed():
 

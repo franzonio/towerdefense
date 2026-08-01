@@ -343,7 +343,6 @@ func check_for_attack(delta: float):
 			attack_charge_time += delta
 
 			if attack_charge_time >= attack_speed and opponent.current_health > opponent.max_health * opponent.concede_threshold and !opponent.dead:
-
 				var dodge_modify = 1
 				var jester_penalty = 1
 				if all_gladiators[opponent_peer_id]["stance"] == "jester":
@@ -390,6 +389,7 @@ func check_for_attack(delta: float):
 					skip_next_attack = false
 					return
 					
+					
 				if next_attack_weapon == 0:
 					weapon = weapon1
 					if weapon1_durability > 0:
@@ -400,7 +400,7 @@ func check_for_attack(delta: float):
 						_hit_chance = no_wep_hit_chance
 						_crit_chance = no_wep_crit_chance
 						_crit_multi = no_wep_crit_multi
-						attack_speed = no_wep_attack_speed
+						weapon1_speed = no_wep_attack_speed
 					prev_attack_weapon = next_attack_weapon
 					next_attack_weapon = 1
 
@@ -417,6 +417,7 @@ func check_for_attack(delta: float):
 						_hit_chance = no_wep_hit_chance
 						_crit_chance = no_wep_crit_chance
 						_crit_multi = no_wep_crit_multi
+						weapon2_speed = no_wep_attack_speed
 					prev_attack_weapon = next_attack_weapon
 					next_attack_weapon = 0
 
@@ -921,9 +922,10 @@ func update_gladiator(data: Dictionary, id):
 	
 	weapon1 = data["weapon1"][weapon1_name]
 	weapon2 = data["weapon2"][weapon2_name]
+	
 	weapon1_durability = data["weapon1"][weapon1_name]["durability"]
 	weapon2_durability = data["weapon2"][weapon2_name]["durability"]
-
+	
 	life_on_block = combined_gladiator_bonuses.get("life_on_block", 0)
 
 	shield_absorb = data["weapon2"][weapon2_name].get("absorb", -1)
@@ -1090,4 +1092,5 @@ func get_attack_speed(hands):
 		- weight / (400.0 + weight)
 		- 5.0 / (1.0 + (0.7 * quickness / ((100.0 + 3.0 * weight) / (weapon1_speed))) ** 2)))
 	
+	#print("in attack speed function: " + str(_attack_speed))
 	return _attack_speed

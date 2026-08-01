@@ -70,10 +70,10 @@ var total_modifier_bonuses = {}
 var prev_total_modifier_bonuses = {}
 
 var age_limits = {
-	"Troll": {"Adult": 8, "Aged": 16, "Old": 22},
-	"Orc": {"Adult": 8, "Aged": 16, "Old": 22},
-	"Elf": {"Adult": 12, "Aged": 24, "Old": 32},
-	"Human": {"Adult": 10, "Aged": 18, "Old": 26}}
+	"Troll": {"Adult": 32, "Aged": 64, "Old": 84},
+	"Orc": {"Adult": 32, "Aged": 64, "Old": 84},
+	"Elf": {"Adult": 48, "Aged": 88, "Old": 108},
+	"Human": {"Adult": 40, "Aged": 72, "Old": 92}}
 
 var age_modifiers = {
 		"Troll": {
@@ -277,8 +277,8 @@ func _ready():
 
 func create_card_pool():
 	craft_cards_stock = {
-		"scroll_of_luck": 50,
-		"scroll_of_injection": 50
+		"scroll_of_luck": 100,
+		"scroll_of_injection": 100
 	}
 	
 	attr_cards_stock = {
@@ -475,10 +475,10 @@ func grant_gold_for_peer(id: int, opponent_id: int, winner: bool):
 	# Announce streak bonus quote
 	if peer_streak > 0 and streak_bonus > 0 and peer_streak % WIN_STREAK_STEP == 0:
 		var index = min(int(streak_bonus) - 1, win_streak_quotes.size() - 1)
-		add_to_log(id, win_streak_quotes[index])
+		#add_to_log(id, win_streak_quotes[index])
 	elif peer_streak < 0 and streak_bonus > 0 and peer_streak % LOSS_STREAK_STEP == 0:
 		var index = min(int(streak_bonus) - 1, loss_streak_quotes.size() - 1)
-		add_to_log(id, loss_streak_quotes[index])
+		#add_to_log(id, loss_streak_quotes[index])
 
 	# 2. Opponent streak break bonus
 	var opponent_streak = all_gladiators[opponent_id]["streak"]
@@ -1249,6 +1249,7 @@ func buy_regret_token_card(id: int, amount: int, attribute: String, cost: int, m
 			if modify_stock: 
 				adjust_card_stock(attribute, "remove")
 			success = true
+			all_gladiators[id]["gold"] -= cost
 			all_gladiators[id]["regret_points"] += amount
 			rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id], parent_name)
 			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
@@ -1293,7 +1294,8 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int, modi
 					all_gladiators[id]["regret_points"] += amount
 					all_gladiators[id]["points"] -= amount
 				else:
-					all_gladiators[id]["points"] -= amount
+					if modify_stock == false:
+						all_gladiators[id]["points"] -= amount
 				
 				rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
 				rpc_id(id, "notify_card_buy_result", id, success, all_gladiators[id], parent_name)
