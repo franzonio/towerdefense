@@ -297,7 +297,7 @@ func _on_send_gladiator_data_to_peer_signal(_peer_id: int, _all_gladiators):
 	all_gladiators = _all_gladiators
 	var current_timestamp = Time.get_unix_time_from_system()
 	var current_timestamp_in_milliseconds = current_timestamp*1000
-	print(str(current_timestamp_in_milliseconds) + ": GLADIATOR receive new dict " + str(_peer_id))
+	#print(str(current_timestamp_in_milliseconds) + ": GLADIATOR receive new dict " + str(_peer_id))
 
 
 func _on_concede_threshold_changed(value: float):

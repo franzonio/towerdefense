@@ -55,6 +55,8 @@ var cost_label
 var start
 var end
 
+var hud
+
 func _ready():
 	GameState_.connect("card_buy_result", Callable(self, "_on_card_buy_result"))
 	GameState_.connect("send_equipment_dict_to_peer_signal", Callable(self, "_on_send_equipment_dict_to_peer"))
@@ -78,7 +80,8 @@ func _ready():
 	pivot_offset = size / 2
 
 
-	var hud = get_hud()
+	hud = get_hud()
+	hud.connect("send_data_to_cards_signal", Callable(self, "_on_receive_data_from_hud_signal"))
 	all_gladiators = hud.player_gladiator_data
 	
 	equipment_script = load("res://Equipment.gd")
@@ -113,7 +116,7 @@ func _ready():
 
 	
 
-	start = Time.get_unix_time_from_system()*1000
+	#start = Time.get_unix_time_from_system()*1000
 
 	
 		
@@ -238,12 +241,30 @@ func _make_custom_tooltip(for_text):
 
 	return panel
 
-func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int, _player_gladiator_data: Dictionary):#, _all_gladiators):
+
+func _on_receive_data_from_hud_signal(_id, player_gladiator_from_hud):
+	#var current_timestamp = Time.get_unix_time_from_system()
+	#var current_timestamp_in_milliseconds = current_timestamp*1000
+	#print(str(current_timestamp_in_milliseconds) + ": CARD receive new dict " + str(_peer_id) + " | " + equipment_name)
+	
+	#var _hud = get_hud()
+	#all_gladiators = _hud.player_gladiator_data
+	#all_gladiators = _player_gladiator_data
+	
+
+	if player_gladiator_from_hud == null:
+		print("all_gladiators is null in _on_send_gladiator_data_to_peer_card_signal")
+	_on_update_gold_req_shop(multiplayer.get_unique_id(), player_gladiator_from_hud["gold"])
+
+
+func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int):#, _player_gladiator_data: Dictionary):#, _all_gladiators):
 	var current_timestamp = Time.get_unix_time_from_system()
 	var current_timestamp_in_milliseconds = current_timestamp*1000
-	print(str(current_timestamp_in_milliseconds) + ": CARD receive new dict " + str(_peer_id) + " | " + equipment_name)
+	#print(str(current_timestamp_in_milliseconds) + ": CARD receive new dict " + str(_peer_id) + " | " + equipment_name)
 	
-	all_gladiators = _player_gladiator_data
+	var _hud = get_hud()
+	all_gladiators = _hud.player_gladiator_data
+	#all_gladiators = _player_gladiator_data
 	
 
 	if all_gladiators == null:
@@ -263,7 +284,7 @@ func set_text_color(tier):
 func _on_update_gold_req_shop(_id, gold):
 	var current_timestamp = Time.get_unix_time_from_system()
 	var current_timestamp_in_milliseconds = current_timestamp*1000
-	print(str(current_timestamp_in_milliseconds) + ": CARD update gold req in shop  " + str(_id) + " | " + equipment_name)
+	#print(str(current_timestamp_in_milliseconds) + ": CARD update gold req in shop  " + str(_id) + " | " + equipment_name)
 
 	if multiplayer.get_unique_id() != _id: return
 
@@ -327,7 +348,7 @@ func ucfirst(_text: String) -> String:
 
 func _on_send_equipment_dict_to_peer(id, _item_dict):
 	if id != multiplayer.get_unique_id(): return
-	end = Time.get_unix_time_from_system()*1000
+	#end = Time.get_unix_time_from_system()*1000
 	#if start and parent_name.contains("shop"): print("took " + str(end-start) + " ms to get card dict for " + equipment_name)
 	if initial_tooltip_received == 1:
 		return
@@ -412,7 +433,7 @@ func buy_equipment():
 	if not equipment_name:
 		push_error("Card attribute_name is not set!")
 		return
-
+		
 	if mouse_inside_button:
 		added = false
 		var id: = multiplayer.get_unique_id()
@@ -420,6 +441,7 @@ func buy_equipment():
 		if multiplayer.is_server():
 			GameState_.buy_equipment_card(id, equipment_name, cost, parent_name)
 		else:
+			start = Time.get_unix_time_from_system()*1000
 			GameState_.rpc_id(1, "buy_equipment_card", id, equipment_name, cost, parent_name)
 
 		disabled = true
@@ -439,6 +461,10 @@ func buy_equipment():
 
 func _on_card_buy_result(peer_id: int, success: bool, _parent_name):
 	if peer_id == multiplayer.get_unique_id():
+		end = Time.get_unix_time_from_system()*1000
+		
+		if start and end:
+			print("EQUIPMENT: " + equipment_name + " buy card latency: " + str(end-start))
 		if parent_name == _parent_name:
 			if success:
 				tooltip_text = ""

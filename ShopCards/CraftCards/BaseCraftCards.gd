@@ -40,9 +40,11 @@ func _ready():
 	mouse_exited.connect(_on_mouse_exited)
 	
 	var hud = get_hud()
+	hud.connect("send_data_to_cards_signal", Callable(self, "_on_receive_data_from_hud_signal"))
+	
 	all_gladiators = hud.player_gladiator_data
 	var id = multiplayer.get_unique_id()
-	_on_send_gladiator_data_to_peer_card_signal(id, all_gladiators)
+	_on_send_gladiator_data_to_peer_card_signal(id)#, all_gladiators)
 	
 	#if multiplayer.is_server():
 	#	GameState_.refresh_gladiator_data_card(multiplayer.get_unique_id())
@@ -156,8 +158,22 @@ func _on_update_gold_req_shop(_id, gold):
 			cost_label.bbcode_text = "[color=%s]$ %d[/color]" % [gold_color, cost]
 
 
-func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int, _player_gladiator_data: Dictionary):
-	all_gladiators = _player_gladiator_data
+func _on_receive_data_from_hud_signal(_id, player_gladiator_from_hud):
+	#all_gladiators = _player_gladiator_data
+	
+	#var _hud = get_hud()
+	#all_gladiators = _hud.player_gladiator_data
+	
+	_on_update_gold_req_shop(multiplayer.get_unique_id(), player_gladiator_from_hud["gold"])
+	tooltip_text = "[color=%s]%s[/color]" % ["d2c9a5", get_craft_tooltip(craft_name)]
+	
+
+func _on_send_gladiator_data_to_peer_card_signal(_peer_id: int):#, _player_gladiator_data = {}):
+	#all_gladiators = _player_gladiator_data
+	
+	var _hud = get_hud()
+	all_gladiators = _hud.player_gladiator_data
+	
 	_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators["gold"])
 	tooltip_text = "[color=%s]%s[/color]" % ["d2c9a5", get_craft_tooltip(craft_name)]
 

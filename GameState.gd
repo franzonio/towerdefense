@@ -35,7 +35,7 @@ signal card_buy_result(peer_id: int, success: bool, _parent)
 signal broadcast_log_signal(message: String)
 signal send_player_colors_to_peer_signal(id: int, colors: Dictionary)
 signal send_equipment_dict_to_peer_signal(id: int, dict: Dictionary)
-signal send_gladiator_data_to_peer_card_signal(id: int, dict: Dictionary)
+signal send_gladiator_data_to_peer_card_signal(id: int)#, dict: Dictionary)
 signal broadcast_players_ready_signal(players_ready: int)
 signal killed_by_server_signal(id: int)
 signal reroll_cards_new_round_signal(active_players)
@@ -380,8 +380,8 @@ func grant_exp_for_peer(id: int, amount: int, cost: int):
 
 	# RPC updates
 	#rpc_id(id, "update_gold_req_in_shop_for_peer", id, gold)
-	rpc_id(id, "send_gladiator_data_to_peer_card", id, g)
-	#rpc("send_gladiator_data_to_peer", id, all_gladiators)
+	#rpc_id(id, "send_gladiator_data_to_peer_card", id, g)
+	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
 	rpc("update_hud_data_to_peer", id, g)
 
 	update_all_equipment_cards(id)
@@ -684,8 +684,9 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 			g["inventory"] = check_for_item_upgrades(peer_id, inventory)
 
 			all_gladiators[peer_id] = g
-			rpc_id(peer_id, "send_gladiator_data_to_peer_card", peer_id, g)
+			
 			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators)
+			#rpc_id(peer_id, "send_gladiator_data_to_peer_card", peer_id)#, g)
 
 			update_all_equipment_cards(peer_id)
 			return
@@ -917,8 +918,10 @@ func equip_item(peer_id, equipment, selected_slot):
 			g["weight"] += weight
 
 		all_gladiators[peer_id] = g
-		rpc_id(peer_id, "send_gladiator_data_to_peer_card", peer_id, g)
+		
+		
 		rpc("send_gladiator_data_to_peer", peer_id, all_gladiators)
+		#rpc_id(peer_id, "send_gladiator_data_to_peer_card", peer_id)#, g)
 
 		update_all_equipment_cards(peer_id)
 
@@ -1048,8 +1051,8 @@ func peer_concede(id, threshold):
 	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
 	
 @rpc("any_peer", "call_local")
-func send_gladiator_data_to_peer_card(id: int, _gladiator_data) -> void:
-	emit_signal("send_gladiator_data_to_peer_card_signal", id, _gladiator_data)
+func send_gladiator_data_to_peer_card(id: int):#, _gladiator_data) -> void:
+	emit_signal("send_gladiator_data_to_peer_card_signal", id)#, _gladiator_data)
 
 @rpc("any_peer", "call_local")
 func refresh_gladiator_data_card(id: int) -> void:
@@ -1119,7 +1122,7 @@ func buy_equipment_card(id: int, equipment: String, cost: int, parent_name = "")
 	# --- Check gold ---
 	if g["gold"] < cost:
 		rpc_id(id, "notify_card_buy_result", id, success, parent_name)
-		return  # Not enough gold (your original logic)
+		return  # Not enough gold 
 	
 	# --- Create item ---
 	var item_dict: Dictionary = get_equipment_by_name(id, equipment).duplicate(true)
@@ -1257,7 +1260,7 @@ func buy_reroll(id):
 	if all_gladiators[id]["gold"] >= cost:
 		all_gladiators[id]["gold"] -= cost
 		#rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
-		rpc_id(id, "send_gladiator_data_to_peer_card", id, all_gladiators[id])
+		#rpc_id(id, "send_gladiator_data_to_peer_card", id)#, all_gladiators[id])
 		rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
 	else:
 		return#add_to_peer_log(id, "[INFO] Not enough gold!")
@@ -1342,8 +1345,10 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int, modi
 	#rpc_id(id, "update_gold_req_in_shop_for_peer", id, g["gold"])
 	emit_signal("gladiator_attribute_changed", all_gladiators)
 	rpc_id(id, "notify_card_buy_result", id, success, parent_name)
-	rpc_id(id, "send_gladiator_data_to_peer_card", id, g)
+	
+	
 	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
+	#rpc_id(id, "send_gladiator_data_to_peer_card", id)#, g)
 
 	update_all_equipment_cards(id)
 

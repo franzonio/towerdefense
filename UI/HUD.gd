@@ -169,7 +169,7 @@ var equipment_pressed: = false
 var chat_input_pressed: = false
 var msg_just_sent: = false
 
-
+var old_start
 var start
 var end
 
@@ -292,6 +292,7 @@ var equipment_data
 signal concede_threshold_changed(value: int)
 signal stance_changed(value: int)
 signal attack_changed(value: int)
+signal send_data_to_cards_signal(id, data)
 var craft_active = ""
 
 ### ATTRIBUTES ###
@@ -1384,9 +1385,18 @@ func _on_remove_item_from_inventory(id, _item_dict, slot_name):
 	if multiplayer.get_unique_id() != id: return
 	$Inventory/InventoryGridContainer.find_child(slot_name, true, false).get_child(0).queue_free()
 
+
+func send_data_to_cards(id, data):
+	emit_signal("send_data_to_cards_signal", id, data)
+
 func _on_send_gladiator_data_to_peer_signal(peer_id: int, _all_gladiators):
-	print("HUD update gladiator dict")
+	end = Time.get_unix_time_from_system()*1000
+	if start != old_start:
+		var delta = end-start
+		print("HUD took " + str(delta) + " ms get new gladiator data")	
+	#print("HUD update gladiator dict")
 	all_gladiators = _all_gladiators
+	
 	#print(all_gladiators)
 	if rename_panels_done == 0:
 		rename_equipment_panels(all_gladiators)
@@ -1399,6 +1409,7 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _all_gladiators):
 	
 	if peer_id == multiplayer.get_unique_id():
 		player_gladiator_data = all_gladiators[peer_id]
+		send_data_to_cards(peer_id, player_gladiator_data)
 		fix_icon_bonuses()
 		update_craft_ui()
 		update_attribute_ui()
@@ -1466,9 +1477,6 @@ func update_concede_ui():
 	else: concede_threshold_menu.select(previous_index)
 
 func update_attribute_ui():
-	#end = Time.get_unix_time_from_system()*1000
-	#print("took " + str(end-start) + " ms to update health text")
-	
 	var attributes = player_gladiator_data.get("attributes", {})
 	health_panel.text = str(int(attributes["health"]))
 	strength_panel.text = str(int(attributes["strength"]))
@@ -1527,21 +1535,6 @@ func update_attribute_ui():
 		points_left_label.visible = false
 		for icon in attribute_icons:
 			icon.disabled = true
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -2198,7 +2191,7 @@ func grant_points_for_peer(_id, amount):
 		GameState_.rpc_id(1, "request_points", multiplayer.get_unique_id(), amount)
 
 func _on_health_icon_gui_input(event: InputEvent) -> void:
-	#start = Time.get_unix_time_from_system()*1000
+	
 	var left_click = false
 	var right_click = false
 	
@@ -2215,10 +2208,13 @@ func _on_health_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 		
-		health_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
-		var current_timestamp = Time.get_unix_time_from_system()
-		var current_timestamp_in_milliseconds = current_timestamp*1000
-		print(str(current_timestamp_in_milliseconds) + ": on_health_icon_gui_input " + str(multiplayer.get_unique_id()))
+		#health_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#var current_timestamp = Time.get_unix_time_from_system()
+		#var current_timestamp_in_milliseconds = current_timestamp*1000
+		#print(str(current_timestamp_in_milliseconds) + ": on_health_icon_gui_input " + str(multiplayer.get_unique_id()))
+		
+		#old_start = start
+		start = Time.get_unix_time_from_system()*1000
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "health", 0, false)
@@ -2226,7 +2222,9 @@ func _on_health_icon_gui_input(event: InputEvent) -> void:
 		else:
 			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "health", 0, false)
 			
-		update_attribute_ui()
+		
+		#update_attribute_ui()
+		
 
 
 func _on_strength_icon_gui_input(event: InputEvent) -> void:
@@ -2256,7 +2254,7 @@ func _on_strength_icon_gui_input(event: InputEvent) -> void:
 			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "strength", 0, false)
 			
 			
-		update_attribute_ui()
+		#update_attribute_ui()
 
 
 func _on_endurance_icon_gui_input(event: InputEvent) -> void:
@@ -2286,7 +2284,7 @@ func _on_endurance_icon_gui_input(event: InputEvent) -> void:
 			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "endurance", 0, false)
 			
 			
-		update_attribute_ui()
+		#update_attribute_ui()
 
 
 func _on_criticality_icon_gui_input(event: InputEvent) -> void:
@@ -2316,7 +2314,7 @@ func _on_criticality_icon_gui_input(event: InputEvent) -> void:
 			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "crit_rating", 0, false)
 			
 			
-		update_attribute_ui()
+		#update_attribute_ui()
 
 
 func _on_avoidance_icon_gui_input(event: InputEvent) -> void:
@@ -2346,7 +2344,7 @@ func _on_avoidance_icon_gui_input(event: InputEvent) -> void:
 			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "avoidance", 0, false)
 			
 			
-		update_attribute_ui()
+		#update_attribute_ui()
 
 
 func _on_quickness_icon_gui_input(event: InputEvent) -> void:
@@ -2376,7 +2374,7 @@ func _on_quickness_icon_gui_input(event: InputEvent) -> void:
 			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "quickness", 0, false)
 			
 			
-		update_attribute_ui()
+		#update_attribute_ui()
 
 
 func _on_resilience_icon_gui_input(event: InputEvent) -> void:
@@ -2406,7 +2404,7 @@ func _on_resilience_icon_gui_input(event: InputEvent) -> void:
 			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "resilience", 0, false)
 			
 			
-		update_attribute_ui()
+		#update_attribute_ui()
 
 
 func _on_sword_icon_gui_input(event: InputEvent) -> void:
@@ -2436,7 +2434,7 @@ func _on_sword_icon_gui_input(event: InputEvent) -> void:
 			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "sword_mastery", 0, false)
 			
 			
-		update_attribute_ui()
+		#update_attribute_ui()
 
 
 func _on_axe_icon_gui_input(event: InputEvent) -> void:
@@ -2466,7 +2464,7 @@ func _on_axe_icon_gui_input(event: InputEvent) -> void:
 			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "axe_mastery", 0, false)
 			
 			
-		update_attribute_ui()
+		#update_attribute_ui()
 
 
 func _on_stabbing_icon_gui_input(event: InputEvent) -> void:
@@ -2496,7 +2494,7 @@ func _on_stabbing_icon_gui_input(event: InputEvent) -> void:
 			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "stabbing_mastery", 0, false)
 			
 			
-		update_attribute_ui()
+		#update_attribute_ui()
 
 
 func _on_mace_icon_gui_input(event: InputEvent) -> void:
@@ -2526,7 +2524,7 @@ func _on_mace_icon_gui_input(event: InputEvent) -> void:
 			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "mace_mastery", 0, false)
 			
 			
-		update_attribute_ui()
+		#update_attribute_ui()
 
 
 func _on_flagellation_icon_gui_input(event: InputEvent) -> void:
@@ -2556,7 +2554,7 @@ func _on_flagellation_icon_gui_input(event: InputEvent) -> void:
 			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "flagellation_mastery", 0, false)
 			
 			
-		update_attribute_ui()
+		#update_attribute_ui()
 
 
 func _on_shield_icon_gui_input(event: InputEvent) -> void:
@@ -2586,7 +2584,7 @@ func _on_shield_icon_gui_input(event: InputEvent) -> void:
 			GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "shield_mastery", 0, false)
 			
 			
-		update_attribute_ui()
+		#update_attribute_ui()
 
 
 
