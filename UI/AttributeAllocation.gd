@@ -377,13 +377,13 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 
 func _initialize_attributes():
 	attributes = {
-		"strength": 0.0, 
+		"strength": 150.0, 
 		"quickness": 0.0, 
 		"crit_rating": 0.0, 
 		"avoidance": 0.0, 
-		"health": 1.0, 
+		"health": 100.0, 
 		"resilience": 0.0, 
-		"endurance": 0.0, 
+		"endurance": 3.0, 
 		"sword_mastery": 0.0, 
 		"axe_mastery": 0.0, 
 		"mace_mastery": 0.0, 
@@ -548,8 +548,8 @@ func _on_confirm():
 		}, 
 
 		"crafting_mats": {
-			"scroll_of_luck": 0, 
-			"scroll_of_injection": 0
+			"scroll_of_luck": 10000, 
+			"scroll_of_injection": 10000
 		}, 
 		"total_modifier_bonuses": {}, 
 		"age": "Young",

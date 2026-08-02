@@ -27,7 +27,6 @@ var selected_name = "PlayerName"
 @onready var meeting_points 
 
 signal gladiator_life_changed(id: int, new_life: int)
-signal gladiator_attribute_changed(new_all_gladiators: Dictionary)
 signal countdown_updated(time_left: int)
 signal card_stock_changed(new_all_cards_stock: Dictionary)
 #signal card_stock_initialize(new_attr_cards_stock: Dictionary)
@@ -40,12 +39,15 @@ signal send_gladiator_data_to_peer_card_signal(id: int, dict: Dictionary)
 signal broadcast_players_ready_signal(players_ready: int)
 signal killed_by_server_signal(id: int)
 signal reroll_cards_new_round_signal(active_players)
+signal gladiator_attribute_changed(new_all_gladiators: Dictionary)
 
-signal update_equipment_card_signal(id, item_dict_to_craft, slot, item, all_gladiators)
+signal update_equipment_card_signal(id, item_dict_to_craft, slot, item)
 signal add_item_to_inventory_signal(id, item_dict, slot_name)
 signal remove_item_from_inventory_signal(id, item_dict, slot_name)
 signal add_item_to_equipment_signal(peer_id, item_dict, category)
 signal remove_item_from_equipment_signal(peer_id, item_dict, category)
+
+signal update_hud_data_to_peer_signal(id, data)
 
 signal signal_update_gold_req_in_shop_for_peer(id, gold)
 
@@ -323,12 +325,17 @@ func create_card_pool():
 
 @rpc("any_peer", "call_local")
 func update_all_equipment_cards(id):
-	#print(all_gladiators)
-	for slot_name in all_gladiators[id]["inventory"].keys():
-		var slot_data = all_gladiators[id]["inventory"][slot_name]
+	var g: Dictionary = all_gladiators[id]
+	var inventory: Dictionary = g["inventory"]
+
+	for slot_name in inventory.keys():
+		var slot_data: Dictionary = inventory[slot_name]
+
 		if slot_data.size() > 0:
 			var first_key = slot_data.keys()[0]
 			rpc_id(id, "update_equipment_card", id, slot_data, slot_name, first_key)
+
+
 
 @rpc("any_peer", "call_local")
 func update_gold_req_in_shop_for_peer(id, gold):
@@ -337,206 +344,210 @@ func update_gold_req_in_shop_for_peer(id, gold):
 
 @rpc("any_peer", "call_local")
 func grant_exp_for_peer(id: int, amount: int, cost: int):
-	if all_gladiators[id]["gold"] >= cost:
-		all_gladiators[id]["gold"] -= cost
-		all_gladiators[id]["exp"] += amount
-		var current_level = all_gladiators[id]["level"]
-		var current_exp = all_gladiators[id]["exp"]
+	var g: Dictionary = all_gladiators[id]   # cache gladiator
+	var gold: int = g["gold"]
+	var exp: int = g["exp"]
+	var level: int = int(g["level"])         # store as int for faster math
 
-		while true:
-			var next_level = str(int(current_level) + 1)
-			if not exp_for_level.has(next_level):
-				break  # Max level reached
+	if gold < cost:
+		return
 
-			var required_exp = exp_for_level[next_level]
-			if current_exp >= required_exp:
-				current_exp -= required_exp
-				current_level = str(int(current_level) + 1)
-				
-			else:
-				break
+	# Apply cost and exp gain
+	gold -= cost
+	exp += amount
 
-		all_gladiators[id]["level"] = current_level
-		all_gladiators[id]["exp"] = current_exp
-		rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
-		rpc_id(id, "send_gladiator_data_to_peer_card", id, all_gladiators[id])
-		#rpc_id(id, "update_equipment_card", )
-		rpc("send_gladiator_data_to_peer", id, all_gladiators)
-		update_all_equipment_cards(id)
-	else: return#add_to_peer_log(id, "Not enough gold!")
+	# Level-up loop
+	while true:
+		var next_level := str(level + 1)
+
+		if not exp_for_level.has(next_level):
+			break  # max level reached
+
+		var required_exp: int = exp_for_level[next_level]
+
+		if exp >= required_exp:
+			exp -= required_exp
+			level += 1
+		else:
+			break
+
+	# Write back updated values
+	g["gold"] = gold
+	g["exp"] = exp
+	g["level"] = str(level)
+	
+	all_gladiators[id] = g
+
+	# RPC updates
+	#rpc_id(id, "update_gold_req_in_shop_for_peer", id, gold)
+	rpc_id(id, "send_gladiator_data_to_peer_card", id, g)
+	#rpc("send_gladiator_data_to_peer", id, all_gladiators)
+	rpc("update_hud_data_to_peer", id, g)
+
+	update_all_equipment_cards(id)
+
+@rpc("any_peer", "call_local")
+func update_hud_data_to_peer(id: int, data):
+	emit_signal("update_hud_data_to_peer_signal", id, data)
+	
 
 @rpc("any_peer", "call_local")
 func grant_gold_for_peer(id: int, opponent_id: int, winner: bool):
 	# --- Tunable parameters ---
-	var WIN_STREAK_STEP := 3          # Wins per +1 gold
-	var WIN_STREAK_CAP := 3           # Max gold from win streak
-	var LOSS_STREAK_STEP := 2         # Losses per +1 gold
-	var LOSS_STREAK_CAP := 4          # Max gold from loss streak
-	
-	var STREAK_BREAK_BONUS_SAME := 1  # You both had win streaks
-	var STREAK_BREAK_BONUS_UPSET := 3 # You had loss streak, opponent had win streak
-	
-	# Gold thresholds and corresponding bonuses
+	var WIN_STREAK_STEP := 3
+	var WIN_STREAK_CAP := 3
+	var LOSS_STREAK_STEP := 2
+	var LOSS_STREAK_CAP := 4
+
+	var STREAK_BREAK_BONUS_SAME := 1
+	var STREAK_BREAK_BONUS_UPSET := 3
+
 	var INCOME_GOLD_THRESHOLDS := [10, 20, 30, 40, 50]
-	var INCOME_GOLD_BONUSES :=    [1,   2,  3,  4,  5]
-	
-	var peer_color = all_gladiators[id]["color"]
-	var peer_name = "[color=%s]%s[/color]" % [peer_color, all_gladiators[id]["name"]]
+	var INCOME_GOLD_BONUSES :=    [1,  2,  3,  4,  5]
 
-	var peer_streak = all_gladiators[id]["streak"]
-	var peer_gold = all_gladiators[id]["gold"]
+	# --- Cache gladiator dictionaries ---
+	var g: Dictionary = all_gladiators[id]
+	var opp: Dictionary = all_gladiators[opponent_id] if opponent_id != -1 else null
 
-	var total_bonus = 0
-	var streak_bonus = 0
-	var income_bonus = 0
-	var win_bonus = 1  # You still "win" the round
-	var base_amount = 3
-	
+	# --- Cache frequently used values ---
+	var peer_color = g["color"]
+	var peer_name := "[color=%s]%s[/color]" % [peer_color, g["name"]]
+
+	var peer_streak: int = g["streak"]
+	var peer_gold: int = g["gold"]
+
+	var total_bonus := 0
+	var streak_bonus := 0
+	var income_bonus := 0
+	var streak_break_bonus := 0
+	var win_bonus = 1 if winner else 0
+	var base_amount := 3
+
+	# --- CASE: No opponent (walkover win) ---
 	if opponent_id == -1:
-		# No opponent → no streak break logic, no opponent name
-		win_bonus = 1  # You still "win" the round
-
-		# Streak bonus (same as normal)
+		# Streak bonus
 		if peer_streak > 0:
-			streak_bonus += min(peer_streak / WIN_STREAK_STEP, WIN_STREAK_CAP)
+			streak_bonus = min(peer_streak / WIN_STREAK_STEP, WIN_STREAK_CAP)
 		elif peer_streak < 0:
-			streak_bonus += min(abs(peer_streak) / LOSS_STREAK_STEP, LOSS_STREAK_CAP)
+			streak_bonus = min(abs(peer_streak) / LOSS_STREAK_STEP, LOSS_STREAK_CAP)
 
-		# Income bonus (same as normal)
-		for i in range(INCOME_GOLD_THRESHOLDS.size()):
+		# Income bonus
+		for i in INCOME_GOLD_THRESHOLDS.size():
 			if peer_gold >= INCOME_GOLD_THRESHOLDS[i] and (i == INCOME_GOLD_THRESHOLDS.size() - 1 or peer_gold < INCOME_GOLD_THRESHOLDS[i+1]):
-				income_bonus += INCOME_GOLD_BONUSES[i]
+				income_bonus = INCOME_GOLD_BONUSES[i]
 				break
 
-		var gold_from_gear = all_gladiators[id].get("total_modifier_bonuses", {}).get("to_gold_income", 0)
+		# Gear bonus
+		var gear_mods = g.get("total_modifier_bonuses", {})
+		var gold_from_gear = gear_mods.get("to_gold_income", 0)
 
 		total_bonus = base_amount + win_bonus + income_bonus + streak_bonus + gold_from_gear
 
-		all_gladiators[id]["income_last_round"] = {
-			"base": base_amount, "win": win_bonus, "income": income_bonus,
-			"streak": streak_bonus, "streak_break": 0, "gear": gold_from_gear
+		g["income_last_round"] = {
+			"base": base_amount,
+			"win": win_bonus,
+			"income": income_bonus,
+			"streak": streak_bonus,
+			"streak_break": 0,
+			"gear": gold_from_gear
 		}
 
-		all_gladiators[id]["gold"] += int(total_bonus)
-		rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
-		rpc("send_gladiator_data_to_peer", id, all_gladiators)
+		g["gold"] += int(total_bonus)
+		all_gladiators[id] = g
+		rpc_id(id, "update_gold_req_in_shop_for_peer", id, g["gold"])
+		#rpc("send_gladiator_data_to_peer", id, all_gladiators)
+		rpc_id(id, "update_hud_data_to_peer", id, g)
 
-		var free_win_text = peer_name + " gets walkover win!"
-
-		add_to_log(id, free_win_text)
-
+		add_to_log(id, peer_name + " gets walkover win!")
 		return
-	
-	
-	var opponent_color = all_gladiators[opponent_id]["color"]#.to_html()
-	
-	var opponent_name = "[color=%s]%s[/color]" % [opponent_color, all_gladiators[opponent_id]["name"]]
 
-	var win_streak_quotes = [
-	#peer_name + " is hailed—streak commands glory!",
-	#peer_name + " is cheered—victories stir the crowd",
-	#peer_name + " is revered—unbroken reign ignites awe",
-	#peer_name + " is exalted—triumphs sway the emperor!",
-	#peer_name + " is immortalized—streak crowns a legend!",
-	peer_name + " is on a killing spree!",
-	peer_name + " is unstoppable!",
-	peer_name + " is a Legend!"]
-	
-	var loss_streak_quotes = [
-	#peer_name + " endures—the crowd spares a coin...",
-	#peer_name + " perseveres—pity swells in the stands...",
-	#peer_name + " rises—defeat feeds the people’s compassion",
-	#peer_name + " struggles—the emperor’s hand turns generous...",
-	#peer_name + " endures legend’s trial—gold fuels the return..."
-	peer_name + " falls behind...",
-	peer_name + " endures...",
-	peer_name + " suffers...",
-	peer_name + " bleeds..."]
+	# --- CASE: Normal duel ---
+	var opponent_color = opp["color"]
+	var opponent_name := "[color=%s]%s[/color]" % [opponent_color, opp["name"]]
 
-	var break_streak_quotes = [
-	#peer_name + " strikes—" + opponent_name + "'s streak falls!",
-	#peer_name + " topples " + opponent_name + "—cheers shake the arena",
-	#peer_name + " ends " + opponent_name + "'s reign—the emperor rises to applaud!",
-	#peer_name + " shatters " + opponent_name + "'s destiny—gold rains from the stands",
-	#peer_name + " breaks " + opponent_name + "'s legend—the empire rewards the impossible!"]
-	peer_name + " stops " + opponent_name + "'s killing spree!",
-	peer_name + " breaks " + opponent_name + "'s dominance!",
-	peer_name + " butchers " + opponent_name + "'s Legend!"]
-	
-	# --- Logic ---
-	var streak_break_bonus = 0
-	
-	# 1. Streak bonus
-	if peer_streak > 0: # win-streak
-		streak_bonus += min(peer_streak / WIN_STREAK_STEP, WIN_STREAK_CAP)
-	elif peer_streak < 0: # loss-streak
-		streak_bonus += min(abs(peer_streak) / LOSS_STREAK_STEP, LOSS_STREAK_CAP)
-	
-	# Announce streak bonus quote
-	if peer_streak > 0 and streak_bonus > 0 and peer_streak % WIN_STREAK_STEP == 0:
-		var index = min(int(streak_bonus) - 1, win_streak_quotes.size() - 1)
-		#add_to_log(id, win_streak_quotes[index])
-	elif peer_streak < 0 and streak_bonus > 0 and peer_streak % LOSS_STREAK_STEP == 0:
-		var index = min(int(streak_bonus) - 1, loss_streak_quotes.size() - 1)
-		#add_to_log(id, loss_streak_quotes[index])
+	var win_streak_quotes := [
+		peer_name + " is on a killing spree!",
+		peer_name + " is unstoppable!",
+		peer_name + " is a Legend!"
+	]
 
-	# 2. Opponent streak break bonus
-	var opponent_streak = all_gladiators[opponent_id]["streak"]
+	var loss_streak_quotes := [
+		peer_name + " falls behind...",
+		peer_name + " endures...",
+		peer_name + " suffers...",
+		peer_name + " bleeds..."
+	]
+
+	var break_streak_quotes := [
+		peer_name + " stops " + opponent_name + "'s killing spree!",
+		peer_name + " breaks " + opponent_name + "'s dominance!",
+		peer_name + " butchers " + opponent_name + "'s Legend!"
+	]
+
+	# --- Streak bonus ---
+	if peer_streak > 0:
+		streak_bonus = min(peer_streak / WIN_STREAK_STEP, WIN_STREAK_CAP)
+	elif peer_streak < 0:
+		streak_bonus = min(abs(peer_streak) / LOSS_STREAK_STEP, LOSS_STREAK_CAP)
+
+	# (Quotes disabled in your original code)
+
+	# --- Opponent streak break bonus ---
+	var opponent_streak: int = opp["streak"]
+
 	if opponent_streak > WIN_STREAK_STEP and winner:
-		if peer_streak > 0:
-			streak_break_bonus += STREAK_BREAK_BONUS_SAME
-		elif peer_streak <= 0:
-			streak_break_bonus += STREAK_BREAK_BONUS_UPSET
-			
-	if opponent_streak > 0 and streak_break_bonus:
-		var streak_tier = min(opponent_streak / WIN_STREAK_STEP, WIN_STREAK_CAP)
-		var index = int(streak_tier) - 1  # Tier 1 → index 0, Tier 2 → index 1, etc.
-		if index >= 0 and index < break_streak_quotes.size():
-			1#add_to_log(id, break_streak_quotes[index])
+		streak_break_bonus = STREAK_BREAK_BONUS_SAME if peer_streak > 0 else STREAK_BREAK_BONUS_UPSET
 
-	
-	# 3. Income bonus
-	for i in range(INCOME_GOLD_THRESHOLDS.size()):
+
+	# (Quotes disabled in your original code)
+
+	# --- Income bonus ---
+	for i in INCOME_GOLD_THRESHOLDS.size():
 		if peer_gold >= INCOME_GOLD_THRESHOLDS[i] and (i == INCOME_GOLD_THRESHOLDS.size() - 1 or peer_gold < INCOME_GOLD_THRESHOLDS[i+1]):
-			income_bonus += INCOME_GOLD_BONUSES[i]
+			income_bonus = INCOME_GOLD_BONUSES[i]
 			break
-	
-	if winner: win_bonus = 1
-	else: win_bonus = 0
-	
-	
-	
-	#print(all_gladiators[id]["name"] + " total_bonus: " + str(total_bonus))
-	# 4. Final gold addition
-	var gold_from_gear = all_gladiators[id].get("total_modifier_bonuses", {})
-	gold_from_gear = gold_from_gear.get("to_gold_income", 0)
-	
-	total_bonus = base_amount + win_bonus + income_bonus + streak_bonus + streak_break_bonus + gold_from_gear
-	
-	all_gladiators[id]["income_last_round"] = {
-		"base": base_amount, "win": win_bonus, "income": income_bonus, 
-		"streak": streak_bonus, "streak_break": streak_break_bonus, "gear": gold_from_gear}
 
-	
-	all_gladiators[id]["gold"] += int(total_bonus)
-	#print(str(base_amount + int(total_bonus)) + " gold for peer " + str(id))
-	rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
-	rpc("send_gladiator_data_to_peer", id, all_gladiators)
+	# --- Gear bonus ---
+	var gear_mods = g.get("total_modifier_bonuses", {})
+	var gold_from_gear = gear_mods.get("to_gold_income", 0)
+
+	# --- Final gold ---
+	total_bonus = base_amount + win_bonus + income_bonus + streak_bonus + streak_break_bonus + gold_from_gear
+
+	g["income_last_round"] = {
+		"base": base_amount,
+		"win": win_bonus,
+		"income": income_bonus,
+		"streak": streak_bonus,
+		"streak_break": streak_break_bonus,
+		"gear": gold_from_gear
+	}
+
+	g["gold"] += int(total_bonus)
+	all_gladiators[id] = g
+
+	rpc_id(id, "update_gold_req_in_shop_for_peer", id, g["gold"])
+	#rpc("send_gladiator_data_to_peer", id, all_gladiators)
+	rpc_id(id, "update_hud_data_to_peer", id, g)
+
 
 
 @rpc("any_peer", "call_local")
 func modify_streak(id: int, win: bool):
-	var current_streak = all_gladiators[id]["streak"]
+	var g = all_gladiators[id]
+	var current_streak = g["streak"]
 	if current_streak >= 0 and win: # continue win streak
-		all_gladiators[id]["streak"] += 1
+		g["streak"] += 1
 	elif current_streak <= 0 and !win: # continue loss streak
-		all_gladiators[id]["streak"] -= 1
+		g["streak"] -= 1
 	elif current_streak <= 0 and win: # broke loss streak
-		all_gladiators[id]["streak"] = 1
+		g["streak"] = 1
 	elif current_streak >= 0 and !win: # broke win streak
-		all_gladiators[id]["streak"] = -1
+		g["streak"] = -1
 	
-	rpc("send_gladiator_data_to_peer", id, all_gladiators)
+	all_gladiators[id] = g
+	#rpc("send_gladiator_data_to_peer", id, all_gladiators)
+	rpc_id(id, "update_hud_data_to_peer", id, g)
 	
 	
 @rpc("authority", "call_local")
@@ -545,11 +556,9 @@ func send_player_colors_to_peer(id: int, _player_colors) -> void:
 
 @rpc("any_peer", "call_local")
 func get_player_colors(id: int) -> void:
-	#print("asdasdasd: " + str(all_gladiators[id]))
 	rpc_id(id, "send_player_colors_to_peer", id, player_colors)
 	
 func assign_peer_colors(players): 
-	#print("In GameState | players: " + str(players))
 	_players = players
 	var shuffled_colors = peer_colors.duplicate()
 	shuffled_colors.shuffle()
@@ -612,92 +621,121 @@ func get_equipment_by_name(id, item_name: String):
 			var result := {}
 			result[item_name] = items[item_name]
 			#print("Sending to peer " + str(id) + ": " + str(result))
-			rpc_id(id, "send_equipment_dict_to_peer", id, result)
+			#rpc_id(id, "send_equipment_dict_to_peer", id, result)
 			return result
 	#return {}  # Return empty if not found
 
 @rpc("any_peer", "call_local")
 func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
+	var g: Dictionary = all_gladiators[peer_id]              # cache gladiator
+	var inventory: Dictionary = g["inventory"]              # cache inventory
+	var item_dict: Dictionary = g[category]                 # cache category dict
+
 	prev_total_modifier_bonuses = total_modifier_bonuses
-	var item_dict = all_gladiators[peer_id][category] 
-	var hands = item_dict[equipment].get("hands", -1)
-	var item = equipment_button_parent_name.replace("Slot", "").to_lower()
-	var modifier_attributes = item_dict[equipment]["modifiers"].get("attributes", {})
-	var modifier_bonuses = item_dict[equipment]["modifiers"].get("bonuses", {})
-	var weight = item_dict[equipment].get("weight", 0)
-	
-	for slot_name in all_gladiators[peer_id]["inventory"].keys():
-		if all_gladiators[peer_id]["inventory"][slot_name] == {}:
-			all_gladiators[peer_id]["inventory"][slot_name] = item_dict
-			
+
+	var item_data: Dictionary = item_dict[equipment]
+	var hands: int = item_data.get("hands", -1)
+	var item: String = equipment_button_parent_name.replace("Slot", "").to_lower()
+
+	var modifier_attributes: Dictionary = item_data["modifiers"].get("attributes", {})
+	var modifier_bonuses: Dictionary = item_data["modifiers"].get("bonuses", {})
+	var weight: int = item_data.get("weight", 0)
+
+	# --- Find first empty inventory slot ---
+	for slot_name in inventory.keys():
+		var slot_data: Dictionary = inventory[slot_name]
+
+		if slot_data.size() == 0:
+			# Place item into inventory
+			inventory[slot_name] = item_dict
+
+			# Handle weapon slot resets
 			if hands == 2:
-				all_gladiators[peer_id]["weapon1"] = get_equipment_by_name(peer_id, "unarmed")
-				all_gladiators[peer_id]["weapon2"] = get_equipment_by_name(peer_id, "unarmed")
-			elif item == "weapon1" or item == "weapon2": all_gladiators[peer_id][item] = get_equipment_by_name(peer_id, "unarmed")
-			else: all_gladiators[peer_id][item] = {}
-			
+				g["weapon1"] = get_equipment_by_name(peer_id, "unarmed")
+				g["weapon2"] = get_equipment_by_name(peer_id, "unarmed")
+			elif item == "weapon1" or item == "weapon2":
+				g[item] = get_equipment_by_name(peer_id, "unarmed")
+			else:
+				g[item] = {}
+
+			# Remove attribute bonuses
 			remove_attribute_bonuses(peer_id)
-			if modifier_attributes != {}:
+
+			if modifier_attributes.size() > 0:
+				var attrs: Dictionary = g["attributes"]
 				for attribute in modifier_attributes:
-					all_gladiators[peer_id]["attributes"][attribute] -= modifier_attributes[attribute]
-			
+					attrs[attribute] -= modifier_attributes[attribute]
+
+			# Recalculate bonuses
 			total_modifier_bonuses = collect_gladiator_bonuses(peer_id)
-			all_gladiators[peer_id]["total_modifier_bonuses"] = total_modifier_bonuses
-			
+			g["total_modifier_bonuses"] = total_modifier_bonuses
+
 			add_attribute_bonuses(peer_id)
-			
-			if weight: all_gladiators[peer_id]["weight"] -= weight
-			
+
+			# Weight
+			if weight != 0:
+				g["weight"] -= weight
+
+			# RPC updates
 			rpc_id(peer_id, "add_item_to_inventory", peer_id, item_dict, slot_name)
 			rpc_id(peer_id, "remove_item_from_equipment", peer_id, item_dict, category)
-			
-			all_gladiators[peer_id]["inventory"] = check_for_item_upgrades(peer_id, all_gladiators[peer_id]["inventory"])
-			
-			rpc_id(peer_id, "send_gladiator_data_to_peer_card", peer_id, all_gladiators[peer_id])
+
+			# Upgrades
+			g["inventory"] = check_for_item_upgrades(peer_id, inventory)
+
+			all_gladiators[peer_id] = g
+			rpc_id(peer_id, "send_gladiator_data_to_peer_card", peer_id, g)
 			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators)
-			
+
 			update_all_equipment_cards(peer_id)
 			return
-	
+
 	add_to_peer_log(peer_id, "[INFO] No inventory space!")
 
+
 func check_for_item_upgrades(id: int, slots: Dictionary) -> Dictionary:
-	var inventory = all_gladiators[id]["inventory"]
-	var visual_updates := []   # queue of visual changes
+	var g: Dictionary = all_gladiators[id]
+	var inventory: Dictionary = g["inventory"]
+	var visual_updates: Array = []
 
 	while true:
 		var upgrade_found := false
-		var counts := {}
-		var slot_map := {}
+		var counts: Dictionary = {}
+		var slot_map: Dictionary = {}
 
 		# --- 1. Count items and track their slots ---
-		for slot in inventory.keys():
-			if inventory[slot].is_empty():
+		for slot_name in inventory.keys():
+			var slot_data: Dictionary = inventory[slot_name]
+			if slot_data.is_empty():
 				continue
 
-			var item_name = inventory[slot].keys()[0]
-			var item = inventory[slot][item_name]
+			var item_name: String = slot_data.keys()[0]
+			var item: Dictionary = slot_data[item_name]
 
 			counts[item_name] = counts.get(item_name, 0) + 1
-			slot_map[item_name] = slot_map.get(item_name, [])
-			slot_map[item_name].append(slot)
+
+			if not slot_map.has(item_name):
+				slot_map[item_name] = []
+			slot_map[item_name].append(slot_name)
 
 		# --- 2. Find items that appear 3 times ---
 		for item_name in counts.keys():
 			if counts[item_name] < 3:
 				continue
 
-			var sample_slot = slot_map[item_name][0]
-			var item = inventory[sample_slot][item_name]
+			var sample_slot: String = slot_map[item_name][0]
+			var item: Dictionary = inventory[sample_slot][item_name]
 
-			var category = item["category"]
-			var class_type = item["class"]
-			var tier = item["tier"]
+			var category: String = item["category"]
+			var class_type: String = item["class"]
+			var tier: int = item["tier"]
 
 			# --- 3. Find next tier in equipment_data ---
-			var next_item_name := ""
-			for eq_name in equipment_data[category].keys():
-				var eq = equipment_data[category][eq_name]
+			var next_item_name: String = ""
+			var category_dict: Dictionary = equipment_data[category]
+
+			for eq_name in category_dict.keys():
+				var eq: Dictionary = category_dict[eq_name]
 				if eq["class"] == class_type and eq["tier"] == tier + 1:
 					next_item_name = eq_name
 					break
@@ -706,32 +744,30 @@ func check_for_item_upgrades(id: int, slots: Dictionary) -> Dictionary:
 				continue  # no upgrade exists
 
 			# --- 4. Remove the three items ---
-			var remove_slots = slot_map[item_name].slice(0, 3)
+			var remove_slots: Array = slot_map[item_name].slice(0, 3)
 			for s in remove_slots:
 				inventory[s].clear()
-				all_gladiators[id]["inventory"][s].clear()
+				g["inventory"][s].clear()
 
-				# queue visual update
 				visual_updates.append({
 					"type": "remove",
 					"slot": s
 				})
 
 			# --- 5. Place upgraded item in first empty slot ---
-			var upgraded_item = equipment_data[category][next_item_name].duplicate(true)
+			var upgraded_item: Dictionary = category_dict[next_item_name].duplicate(true)
 
-			for slot in inventory.keys():
-				if inventory[slot].is_empty():
-					upgraded_item["inventory_slot"] = slot
+			for slot_name in inventory.keys():
+				var slot_data: Dictionary = inventory[slot_name]
+				if slot_data.is_empty():
+					upgraded_item["inventory_slot"] = slot_name
 
-					# IMPORTANT: embed item_name → item_dict
-					inventory[slot][next_item_name] = upgraded_item
-					all_gladiators[id]["inventory"][slot] = inventory[slot]
+					inventory[slot_name][next_item_name] = upgraded_item
+					g["inventory"][slot_name] = inventory[slot_name]
 
-					# queue visual update with correct structure
 					visual_updates.append({
 						"type": "add",
-						"slot": slot,
+						"slot": slot_name,
 						"item_name": next_item_name,
 						"item": upgraded_item
 					})
@@ -751,6 +787,7 @@ func check_for_item_upgrades(id: int, slots: Dictionary) -> Dictionary:
 	return inventory
 
 
+
 @rpc("any_peer", "call_local")
 func refresh_inventory_ui(id, inventory_dict):
 	emit_signal("refresh_inventory_ui_signal", id, inventory_dict)
@@ -760,168 +797,131 @@ func refresh_inventory_ui(id, inventory_dict):
 
 @rpc("any_peer", "call_local")
 func equip_item(peer_id, equipment, selected_slot):
-	var item_dict = all_gladiators[peer_id]["inventory"][selected_slot] 
-	#get_equipment_by_name(peer_id, equipment)
-	var type = item_dict[equipment]["type"]
-	var category = item_dict[equipment]["category"]
-	var str_req = item_dict[equipment].get("str_req", 0) 
-	var lvl_req = item_dict[equipment].get("level", 0) 
-	var modifier_attributes = item_dict[equipment]["modifiers"].get("attributes", {})
-	var modifier_bonuses = item_dict[equipment]["modifiers"].get("bonuses", {})
-	var weight = item_dict[equipment].get("weight", 0)
-	var equip_success = 0
-	
+	var g: Dictionary = all_gladiators[peer_id]                     # cache gladiator
+	var inventory: Dictionary = g["inventory"]                     # cache inventory
+	var item_dict: Dictionary = inventory[selected_slot]           # cached item slot
+	var item_data: Dictionary = item_dict[equipment]               # cached item data
+
+	var type: String = item_data["type"]
+	var category: String = item_data["category"]
+	var str_req: int = item_data.get("str_req", 0)
+	var lvl_req: int = item_data.get("level", 0)
+	var modifier_attributes: Dictionary = item_data["modifiers"].get("attributes", {})
+	var modifier_bonuses: Dictionary = item_data["modifiers"].get("bonuses", {})
+	var weight: int = item_data.get("weight", 0)
+
+	var equip_success := false
+
+	# Normalize weapon categories
 	if category in ["sword", "axe", "flagellation", "stabbing", "mace"]:
 		category = "weapon"
-	
-	if int(all_gladiators[peer_id]["level"]) >= lvl_req:
-		if all_gladiators[peer_id]["attributes"]["strength"] >= str_req:
-			if type == "weapon" and category != "shield":
-				var _hands = item_dict[equipment]["hands"] # to be implemented
-				var _skill_req = item_dict[equipment]["skill_req"] # to be implemented
-				
-				if _hands == 2 and all_gladiators[peer_id]["weapon1"].keys()[0] == "unarmed" and all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed":
-					all_gladiators[peer_id]["weapon1"] = item_dict
-					all_gladiators[peer_id]["weapon2"] = item_dict
-					category = "weapon1"
-					equip_success = 1
-				elif _hands == 1 and all_gladiators[peer_id]["weapon1"].keys()[0] == "unarmed": 
-					all_gladiators[peer_id]["weapon1"] = item_dict
-					category = "weapon1"
-					equip_success = 1
-				elif _hands == 1 and all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed": 
-					all_gladiators[peer_id]["weapon2"] = item_dict
-					equip_success = 1
-					category = "weapon2"
-				else: 
-					add_to_peer_log(peer_id, "[INFO] Cannot equip more weapons!")
-					return
-					
-			elif category == "shield":
-				if all_gladiators[peer_id]["weapon2"].keys()[0] == "unarmed": 
-					all_gladiators[peer_id]["weapon2"] = item_dict
-					category = "weapon2"
-					equip_success = 1
-				else: 
-					add_to_peer_log(peer_id, "[INFO] Can only wear shield in off-hand!")
-					return
-					
-			elif category == "head":
-				if all_gladiators[peer_id]["head"] == {}: 
-					all_gladiators[peer_id]["head"] = item_dict
-					equip_success = 1
-				else: 
-					add_to_peer_log(peer_id, "[INFO] Already wearing a helmet")
-					return
-				
-			elif category == "chest":
-				if all_gladiators[peer_id]["chest"] == {}: 
-					all_gladiators[peer_id]["chest"] = item_dict
-					equip_success = 1
-				else: 
-					add_to_peer_log(peer_id, "[INFO] Already wearing a chest")
-					return
-				
-			elif category == "shoulders":
-				if all_gladiators[peer_id]["shoulders"] == {}: 
-					all_gladiators[peer_id]["shoulders"] = item_dict
-					equip_success = 1
-				else: 
-					add_to_peer_log(peer_id, "[INFO] Already wearing shoulders")
-					return
-				
-			elif category == "belt":
-				if all_gladiators[peer_id]["belt"] == {}: 
-					all_gladiators[peer_id]["belt"] = item_dict
-					equip_success = 1
-				else: 
-					add_to_peer_log(peer_id, "[INFO] Already wearing belt")
-					return
-				
-			elif category == "boots":
-				if all_gladiators[peer_id]["boots"] == {}: 
-					all_gladiators[peer_id]["boots"] = item_dict
-					equip_success = 1
-				else: 
-					add_to_peer_log(peer_id, "[INFO] Already wearing boots")
-					return
-				
-			elif category == "gloves":
-				if all_gladiators[peer_id]["gloves"] == {}: 
-					all_gladiators[peer_id]["gloves"] = item_dict
-					equip_success = 1
-				else: 
-					add_to_peer_log(peer_id, "[INFO] Already wearing gloves")
-					return
-				
-			elif category == "legs":
-				if all_gladiators[peer_id]["legs"] == {}: 
-					all_gladiators[peer_id]["legs"] = item_dict
-					equip_success = 1
-				else: 
-					add_to_peer_log(peer_id, "[INFO] Already wearing legs")
-					return
-				
-			elif category == "amulet":
-				if all_gladiators[peer_id]["amulet"] == {}: 
-					all_gladiators[peer_id]["amulet"] = item_dict
-					equip_success = 1
-				else: 
-					add_to_peer_log(peer_id, "[INFO] Already wearing amulet")
-					return
-				
-			elif category == "ring": 
-				if all_gladiators[peer_id]["ring1"] == {}: 
-					all_gladiators[peer_id]["ring1"] = item_dict
-					category = "ring1"
-					equip_success = 1
-				elif all_gladiators[peer_id]["ring2"] == {}: 
-					all_gladiators[peer_id]["ring2"] = item_dict
-					category = "ring2"
-					equip_success = 1
-				else: 
-					add_to_peer_log(peer_id, "[INFO] Cannot equip more rings!")
-					return
-				
-			else: 
-				add_to_peer_log(peer_id, "[INFO] Invalid item type! Please report this as a bug.")
+
+	# --- Requirements ---
+	var level_ok := int(g["level"]) >= lvl_req
+	var strength_ok = g["attributes"]["strength"] >= str_req
+
+	if not level_ok:
+		add_to_peer_log(peer_id, "[INFO] Item requires level " + str(lvl_req) + ", you are level " + str(g["level"]))
+		return
+
+	if not strength_ok:
+		add_to_peer_log(peer_id, "[INFO] Need " + str(str_req) + " strength, you have " + str(g["attributes"]["strength"]) + "!")
+		return
+
+	# --- EQUIP LOGIC ---
+	if type == "weapon" and category != "shield":
+		var hands: int = item_data.get("hands", 1)
+		var skill_req = item_data.get("skill_req", "")  # unused but cached
+
+		var w1_name: String = g["weapon1"].keys()[0]
+		var w2_name: String = g["weapon2"].keys()[0]
+
+		if hands == 2:
+			if w1_name == "unarmed" and w2_name == "unarmed":
+				g["weapon1"] = item_dict
+				g["weapon2"] = item_dict
+				category = "weapon1"
+				equip_success = true
+			else:
+				add_to_peer_log(peer_id, "[INFO] Need both hands free for two‑handed weapon!")
 				return
 
-			#for slot_name in all_gladiators[peer_id]["inventory"].keys():
-				#var item = all_gladiators[peer_id]["inventory"][slot_name]
+		elif hands == 1:
+			if w1_name == "unarmed":
+				g["weapon1"] = item_dict
+				category = "weapon1"
+				equip_success = true
+			elif w2_name == "unarmed":
+				g["weapon2"] = item_dict
+				category = "weapon2"
+				equip_success = true
+			else:
+				add_to_peer_log(peer_id, "[INFO] Cannot equip more weapons!")
+				return
 
-			if equip_success:# and typeof(item) == TYPE_DICTIONARY and item.has(equipment):
-				all_gladiators[peer_id]["inventory"][selected_slot] = {}  # Clear slot
-				rpc_id(peer_id, "remove_item_from_inventory", peer_id, item_dict, selected_slot)
-				rpc_id(peer_id, "add_item_to_equipment", peer_id, item_dict, category)
-				
-			prev_total_modifier_bonuses = all_gladiators[peer_id].get("total_modifier_bonuses", {})
-			total_modifier_bonuses = collect_gladiator_bonuses(peer_id)
-			all_gladiators[peer_id]["total_modifier_bonuses"] = total_modifier_bonuses
+	elif category == "shield":
+		var w2_name: String = g["weapon2"].keys()[0]
+		if w2_name == "unarmed":
+			g["weapon2"] = item_dict
+			category = "weapon2"
+			equip_success = true
+		else:
+			add_to_peer_log(peer_id, "[INFO] Shield can only be worn in off‑hand!")
+			return
 
-			remove_attribute_bonuses(peer_id)
-			# Apply item modifier attributes from items
-			if modifier_attributes != {}:
-				for attribute in modifier_attributes:
-					all_gladiators[peer_id]["attributes"][attribute] += modifier_attributes[attribute]#*(1+float(total_modifier_bonuses.get(key, 0))/100)
-					
-			add_attribute_bonuses(peer_id)
-			
-			# TODO Apply item modifier bonuses
-			#if modifier_bonuses != {}: 1 
-			
-			#print(all_gladiators[peer_id]["attributes"]["endurance"])
-			#print(all_gladiators[peer_id])
-			
-			if weight: all_gladiators[peer_id]["weight"] += weight
-				
-			rpc_id(peer_id, "send_gladiator_data_to_peer_card", peer_id, all_gladiators[peer_id])
-			rpc("send_gladiator_data_to_peer", peer_id, all_gladiators)
-			#rpc_id(peer_id, "update_equipment_card", peer_id, all_gladiators[peer_id][category], category, equipment)
-			
-			update_all_equipment_cards(peer_id)
-		else: add_to_peer_log(peer_id, "[INFO] Need " + str(str_req) + " strength to equip item, you have " + str(int(all_gladiators[peer_id]["attributes"]["strength"])) + "!")
-	else: add_to_peer_log(peer_id, "[INFO] Item requires level " + str(lvl_req) + " to equip, you are level " + str(all_gladiators[peer_id]["level"]))
+	else:
+		# Armor categories
+		var slot_name := category
+		if category == "ring":
+			if g["ring1"].is_empty():
+				g["ring1"] = item_dict
+				category = "ring1"
+				equip_success = true
+			elif g["ring2"].is_empty():
+				g["ring2"] = item_dict
+				category = "ring2"
+				equip_success = true
+			else:
+				add_to_peer_log(peer_id, "[INFO] Cannot equip more rings!")
+				return
+		else:
+			if g[slot_name].is_empty():
+				g[slot_name] = item_dict
+				equip_success = true
+			else:
+				add_to_peer_log(peer_id, "[INFO] Already wearing " + category)
+				return
+
+	# --- APPLY EQUIP EFFECTS ---
+	if equip_success:
+		inventory[selected_slot] = {}  # clear inventory slot
+
+		rpc_id(peer_id, "remove_item_from_inventory", peer_id, item_dict, selected_slot)
+		rpc_id(peer_id, "add_item_to_equipment", peer_id, item_dict, category)
+
+		# Update bonuses
+		prev_total_modifier_bonuses = g.get("total_modifier_bonuses", {})
+		total_modifier_bonuses = collect_gladiator_bonuses(peer_id)
+		g["total_modifier_bonuses"] = total_modifier_bonuses
+
+		remove_attribute_bonuses(peer_id)
+
+		if modifier_attributes.size() > 0:
+			var attrs : Dictionary = g["attributes"]
+			for attribute in modifier_attributes:
+				attrs[attribute] += modifier_attributes[attribute]
+
+		add_attribute_bonuses(peer_id)
+
+		if weight != 0:
+			g["weight"] += weight
+
+		all_gladiators[peer_id] = g
+		rpc_id(peer_id, "send_gladiator_data_to_peer_card", peer_id, g)
+		rpc("send_gladiator_data_to_peer", peer_id, all_gladiators)
+
+		update_all_equipment_cards(peer_id)
+
 
 
 func get_age_stage(_race: String, _round: int) -> String:
@@ -1074,7 +1074,7 @@ func notify_card_buy_result(id: int, success: bool, _parent) -> void:
 func update_equipment_card(id, item_dict_to_craft, slot, item):
 	#print("update_equipment_card")
 	#print(item)
-	emit_signal("update_equipment_card_signal", id, item_dict_to_craft, slot, item, all_gladiators)
+	emit_signal("update_equipment_card_signal", id, item_dict_to_craft, slot, item)#, all_gladiators)
 	
 @rpc("any_peer", "call_local")
 func add_item_to_inventory(id, item_dict, slot_name):
@@ -1101,131 +1101,153 @@ signal remove_item_from_equipment_signal(peer_id, item_dict, category)
 '''
 
 @rpc("any_peer", "call_local")
-func buy_equipment_card(id: int, equipment: String, cost: int, parent_name = ""): 
-	#if buy_ready == false:
-	#	return
+func buy_equipment_card(id: int, equipment: String, cost: int, parent_name = ""):
 	buy_ready = false
 	var success := false
-	if all_cards_stock[equipment] >= 1:
-		if all_gladiators[id]["gold"] >= cost:
-			var item_dict = get_equipment_by_name(id, equipment).duplicate(true)
-			
-			for slot_name in all_gladiators[id]["inventory"].keys():
-				if all_gladiators[id]["inventory"][slot_name] == {}:
-					#print(slot_name + " is empty, putting item there")
-					item_dict[equipment]["inventory_slot"] = slot_name
-					#print(item_dict)
-					all_gladiators[id]["inventory"][slot_name] = item_dict
-					all_gladiators[id]["gold"] -= cost
-					adjust_card_stock(equipment, "remove")
-					success = true
-					rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
-					rpc_id(id, "add_item_to_inventory", id, item_dict, slot_name)
-					
-					all_gladiators[id]["inventory"] = check_for_item_upgrades(id, all_gladiators[id]["inventory"])
-					
-					rpc_id(id, "notify_card_buy_result", id, success, parent_name)
-					rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
-					return
-			add_to_peer_log(id, "[INFO] No inventory space!")
-		else: return#add_to_peer_log(id, "[INFO] Not enough gold!")
-	else: 
+
+	# --- Cache gladiator + inventory ---
+	var g: Dictionary = all_gladiators[id]
+	var inventory: Dictionary = g["inventory"]
+
+	# --- Check stock ---
+	if all_cards_stock[equipment] < 1:
 		add_to_peer_log(id, "No " + equipment + " cards left in stock!")
-		
 		rpc_id(id, "notify_card_buy_result", id, success, parent_name)
 		rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
+		return
+
+	# --- Check gold ---
+	if g["gold"] < cost:
+		rpc_id(id, "notify_card_buy_result", id, success, parent_name)
+		return  # Not enough gold (your original logic)
+	
+	# --- Create item ---
+	var item_dict: Dictionary = get_equipment_by_name(id, equipment).duplicate(true)
+
+	# --- Find empty inventory slot ---
+	for slot_name in inventory.keys():
+		var slot_data: Dictionary = inventory[slot_name]
+
+		if slot_data.is_empty():
+			# Place item
+			item_dict[equipment]["inventory_slot"] = slot_name
+			inventory[slot_name] = item_dict
+
+			# Pay gold
+			g["gold"] -= cost
+
+			# Update stock
+			adjust_card_stock(equipment, "remove")
+
+			success = true
+
+			# RPC updates
+			rpc_id(id, "update_gold_req_in_shop_for_peer", id, g["gold"])
+			rpc_id(id, "add_item_to_inventory", id, item_dict, slot_name)
+
+			# Check upgrades
+			g["inventory"] = check_for_item_upgrades(id, inventory)
+			all_gladiators[id] = g
+			
+			rpc_id(id, "notify_card_buy_result", id, success, parent_name)
+			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
+			return
+
+	# --- No space ---
+	success = false
+	rpc_id(id, "notify_card_buy_result", id, success, parent_name)
+	add_to_peer_log(id, "[INFO] No inventory space!")
+
 
 @rpc("any_peer", "call_local")
-func sell_from_equipment(peer_id: int, equipment: String, equipment_button_parent_name, category): 
-	# 1 remove from slot, increase gold
-	# replace with unarmed if weapon is sold
-	var item_dict = all_gladiators[peer_id][category]#get_equipment_by_name(peer_id, equipment)
-	#var slot_name = item_dict.get("inventory_slot", "")
-	var price = item_dict[equipment]["price"]
-	#var type = item_dict[equipment]["type"] # to be implemented
-	var hands = item_dict[equipment].get("hands", -1)
-	var item = equipment_button_parent_name.replace("Slot", "").to_lower()
-	var modifier_attributes = item_dict[equipment]["modifiers"].get("attributes", {})
-	var modifier_bonuses = item_dict[equipment]["modifiers"].get("bonuses", {})
-	var weight = item_dict[equipment].get("weight", 0)
-	#var sell_success = 0
-	
+func sell_from_equipment(peer_id: int, equipment: String, equipment_button_parent_name, category):
+	var g: Dictionary = all_gladiators[peer_id]                     # cache gladiator
+	var item_dict: Dictionary = g[category]                        # cached equipped item
+	var item_data: Dictionary = item_dict[equipment]               # cached item data
+
+	var price: int = item_data["price"]
+	var hands: int = item_data.get("hands", -1)
+	var item_slot: String = equipment_button_parent_name.replace("Slot", "").to_lower()
+
+	var modifier_attributes: Dictionary = item_data["modifiers"].get("attributes", {})
+	var modifier_bonuses: Dictionary = item_data["modifiers"].get("bonuses", {})
+	var weight: int = item_data.get("weight", 0)
+
+	# --- Remove item from equipment slots ---
 	if hands == 2:
-		all_gladiators[peer_id]["weapon1"] = get_equipment_by_name(peer_id, "unarmed")
-		all_gladiators[peer_id]["weapon2"] = get_equipment_by_name(peer_id, "unarmed")
-	elif item == "weapon1" or item == "weapon2": all_gladiators[peer_id][item] = get_equipment_by_name(peer_id, "unarmed")
-	else: all_gladiators[peer_id][item] = {}
-	
-	# Remove item modifier attributes from items
-	if modifier_attributes != {}:
+		g["weapon1"] = get_equipment_by_name(peer_id, "unarmed")
+		g["weapon2"] = get_equipment_by_name(peer_id, "unarmed")
+	elif item_slot == "weapon1" or item_slot == "weapon2":
+		g[item_slot] = get_equipment_by_name(peer_id, "unarmed")
+	else:
+		g[item_slot] = {}
+
+	# --- Remove attribute modifiers ---
+	if modifier_attributes.size() > 0:
+		var attrs: Dictionary = g["attributes"]
 		for attribute in modifier_attributes:
-			all_gladiators[peer_id]["attributes"][attribute] -= modifier_attributes[attribute]
-	
-	# TODO Remove item modifier bonuses
-	if modifier_bonuses != {}: 1 
-	
-	# Remove weight of item
-	if weight: all_gladiators[peer_id]["weight"] -= weight
-	
-	all_gladiators[peer_id]["gold"] += int(price/2)
-	
-	rpc_id(peer_id, "update_gold_req_in_shop_for_peer", peer_id, all_gladiators[peer_id]["gold"])
-	adjust_card_stock(equipment, "add")  # Restore stock
+			attrs[attribute] -= modifier_attributes[attribute]
+
+	# --- TODO: Remove modifier bonuses ---
+	if modifier_bonuses.size() > 0:
+		1  # placeholder (same as your original)
+
+	# --- Remove weight ---
+	if weight != 0:
+		g["weight"] -= weight
+
+	# --- Add gold (half price) ---
+	g["gold"] += int(price / 2)
+	all_gladiators[peer_id] = g
+
+	# --- RPC updates ---
+	rpc_id(peer_id, "update_gold_req_in_shop_for_peer", peer_id, g["gold"])
+	adjust_card_stock(equipment, "add")
 	rpc_id(peer_id, "remove_item_from_equipment", peer_id, item_dict, category)
 	rpc("send_gladiator_data_to_peer", peer_id, all_gladiators)
-	return
+
 
 	#print("Item not found in equipment panel!")
 					
 @rpc("any_peer", "call_local")
 func sell_from_inventory(id: int, equipment: String, selected_slot): 
-	if all_gladiators[id]["inventory"][selected_slot] == {}:
+	var g = all_gladiators[id]
+	if g["inventory"][selected_slot] == {}:
 		add_to_peer_log(id, "[INFO] Item not found in inventory!")
 		return
 	
 	var item_dict = get_equipment_by_name(id, equipment)
 	var price = item_dict[equipment]["price"]
 	
-	all_gladiators[id]["inventory"][selected_slot] = {}  # Clear slot
-	all_gladiators[id]["gold"] += int(price/2)
-	rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
+	g["inventory"][selected_slot] = {}  # Clear slot
+	g["gold"] += int(price/2)
+	all_gladiators[id] = g
+	
+	rpc_id(id, "update_gold_req_in_shop_for_peer", id, g["gold"])
 	rpc_id(id, "remove_item_from_inventory", id, item_dict, selected_slot)
 	adjust_card_stock(equipment, "add")  # Restore stock
 	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
 	
-
-'''
-	for slot_name in all_gladiators[id]["inventory"].keys():
-		var item = all_gladiators[id]["inventory"][slot_name]
-		
-
-		# Check if the item is a dictionary and contains the equipment name
-		if typeof(item) == TYPE_DICTIONARY and item.has(equipment) and item[equipment]["inventory_slot"] == slot_name:
-			print("item to sell: " + str(item))
-			all_gladiators[id]["inventory"][slot_name] = {}  # Clear slot
-			all_gladiators[id]["gold"] += int(price/2)
-			#print("gold: " + str(all_gladiators[id]["gold"]))
-			emit_signal("sell_item_from_inventory", id, item_dict, slot_name)
-			adjust_card_stock(equipment, "add")  # Restore stock
-			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators[id], all_gladiators)
-			return  # Exit after first match
-'''
 	
 	
 @rpc("any_peer", "call_local")
 func buy_craft_card(id, craft_name, cost, parent_name = ""):
 	var success := false
+	var g = all_gladiators[id]
+	
 	if all_cards_stock[craft_name] >= 1:
-		if all_gladiators[id]["gold"] >= cost:
-			all_gladiators[id]["crafting_mats"][craft_name] += 1
-			all_gladiators[id]["gold"] -= cost
+		if g["gold"] >= cost:
+			g["crafting_mats"][craft_name] += 1
+			g["gold"] -= cost
+			all_gladiators[id] = g
 			adjust_card_stock(craft_name, "remove")
 			success = true
 			rpc_id(id, "notify_card_buy_result", id, success, parent_name)
 			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
-			rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
+			rpc_id(id, "update_gold_req_in_shop_for_peer", id, g["gold"])
 		else: return#add_to_peer_log(id, "[INFO] Not enough gold!")
 	else: 
+		rpc_id(id, "notify_card_buy_result", id, success, parent_name)
 		add_to_peer_log(id, "[INFO] No " + craft_name + " cards left in stock!")
 	
 @rpc("any_peer", "call_local")
@@ -1234,7 +1256,7 @@ func buy_reroll(id):
 	
 	if all_gladiators[id]["gold"] >= cost:
 		all_gladiators[id]["gold"] -= cost
-		rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
+		#rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
 		rpc_id(id, "send_gladiator_data_to_peer_card", id, all_gladiators[id])
 		rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
 	else:
@@ -1264,49 +1286,67 @@ func request_points(id, amount):
 	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
 	
 @rpc("any_peer", "call_local")
-func buy_attribute_card(id: int, amount: int, attribute: String, cost: int, modify_stock = true, parent_name = ""):
+func buy_attribute_card(id: int, amount: int, attribute: String, cost: int, modify_stock := true, parent_name := ""):
+	var g: Dictionary = all_gladiators[id]                     # cache gladiator
+	var attrs: Dictionary = g["attributes"]                    # cache attributes
+	var race: String = g["race"]                               # cache race
+	var gold: int = g["gold"]                                  # cache gold
+
 	var success := false
-	if all_cards_stock[attribute] >= 1:
-		if all_gladiators[id]["gold"] >= cost:
-			#print("modify_attribute called on peer: ", multiplayer.get_unique_id())
-			var race = all_gladiators[id]["race"]
-			
-			total_modifier_bonuses = collect_gladiator_bonuses(id)
-			if all_gladiators.has(id):
-				var key = "increased_" + attribute
-				var amount_after_bonuses = float(amount)*RACE_MODIFIERS[race][attribute]*(1+float(total_modifier_bonuses.get(key, 0))/100)
-				
-				if amount_after_bonuses < 0:
-					if (all_gladiators[id]["attributes"][attribute] + amount_after_bonuses) <= 1:
-						print("Negative value after regret, ignoring")
-						return
-					
-					
-				all_gladiators[id]["attributes"][attribute] += amount_after_bonuses
-				all_gladiators[id]["gold"] -= cost
-				emit_signal("gladiator_attribute_changed", all_gladiators)
-				
-				if modify_stock: 
-					adjust_card_stock(attribute, "remove")
-				success = true
-				
-				if amount < 0:
-					all_gladiators[id]["regret_points"] += amount
-					all_gladiators[id]["points"] -= amount
-				else:
-					if modify_stock == false:
-						all_gladiators[id]["points"] -= amount
-				
-				rpc_id(id, "update_gold_req_in_shop_for_peer", id, all_gladiators[id]["gold"])
-				rpc_id(id, "notify_card_buy_result", id, success, parent_name)
-				rpc_id(id, "send_gladiator_data_to_peer_card", id, all_gladiators[id])
-				rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
-				update_all_equipment_cards(id)
-		else: return#add_to_peer_log(id, "[INFO] Not enough gold!")
-	else: 
+
+	# --- Stock check ---
+	if all_cards_stock[attribute] < 1:
 		add_to_peer_log(id, "[INFO] No " + attribute + " cards left in stock!")
 		rpc_id(id, "notify_card_buy_result", id, success, parent_name)
-		
+		return
+
+	# --- Gold check ---
+	if gold < cost:
+		rpc_id(id, "notify_card_buy_result", id, success, parent_name)
+		return
+
+	# --- Calculate bonuses ---
+	total_modifier_bonuses = collect_gladiator_bonuses(id)
+	var key := "increased_" + attribute
+	var bonus_percent := float(total_modifier_bonuses.get(key, 0))
+
+	var race_mult = RACE_MODIFIERS[race][attribute]
+	var amount_after_bonuses = float(amount) * race_mult * (1.0 + bonus_percent / 100.0)
+
+	# --- Prevent negative attribute dropping below 1 ---
+	if amount_after_bonuses < 0:
+		if attrs[attribute] + amount_after_bonuses <= 1:
+			print("Negative value after regret, ignoring")
+			return
+
+	# --- Apply attribute change ---
+	attrs[attribute] += amount_after_bonuses
+	g["gold"] = gold - cost
+
+	# --- Stock modification ---
+	if modify_stock:
+		adjust_card_stock(attribute, "remove")
+
+	success = true
+
+	# --- Regret / points logic ---
+	if amount < 0:
+		g["regret_points"] += amount
+		g["points"] -= amount
+	else:
+		if not modify_stock:
+			g["points"] -= amount
+
+	all_gladiators[id] = g
+	# --- RPC updates ---
+	#rpc_id(id, "update_gold_req_in_shop_for_peer", id, g["gold"])
+	emit_signal("gladiator_attribute_changed", all_gladiators)
+	rpc_id(id, "notify_card_buy_result", id, success, parent_name)
+	rpc_id(id, "send_gladiator_data_to_peer_card", id, g)
+	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
+
+	update_all_equipment_cards(id)
+
 		
 		
 @rpc("any_peer")
@@ -1351,35 +1391,19 @@ func _submit_gladiator_remote(data: Dictionary):
 	_store_gladiator(sender_id, data)
 
 func _store_gladiator(peer_id: int, data: Dictionary):
-	#var used_colors = []
-	#for gladiator in all_gladiators.values():
-	#	used_colors.append(gladiator.get("color"))
-		
-	#var available_colors = peer_colors.filter(func(c): return not used_colors.has(c))
-	#var assigned_color = available_colors.pick_random()
-	#print("peer_id: " + str(peer_id))
-	#print("player_colors: " + str(player_colors))
-	#print("player_colors[1]: " + str(player_colors[1]))
-	
 	if player_colors.has(int(peer_id)):
 		data["color"] = player_colors[int(peer_id)]
 	all_gladiators[peer_id] = data
 	
-	#print("🎯 Gladiator stored for peer:", peer_id)
-	#print(all_gladiators)
-	#print("all_gladiators.size(): " + str(all_gladiators.size()))
-	#print("len(_players): " + str(len(_players)))
 	players_ready += 1
 	
 	var total_peers = 0
-	#if multiplayer.is_server(): 
 	for i in multiplayer.get_peers():
 		if i == 0: continue
 		total_peers += 1
-	#print("all_gladiators.size(): " + str(all_gladiators.size()) + " | multiplayer.get_peers(): " + str(multiplayer.get_peers()))
+		
 	if all_gladiators.size() == total_peers+1:# and len(multiplayer.get_peers()) > 1:  # >= NetworkManager_.max_players + 1:
 		
-		#await get_tree().create_timer(2).timeout
 		var countdown = 1
 		for i in countdown:
 			add_to_log(get_multiplayer_authority(), "✅ All players ready, starting game in %s..." % [str(countdown-i)])
@@ -1420,95 +1444,120 @@ func reroll_cards_new_round_send_signal(_active_players: Array):
 
 @rpc("any_peer", "call_local")
 func use_craft_mat_on_item(id, craft_mat, item, slot):
-	
-	var stock_item = get_equipment_by_name(id, item).duplicate(true)
-	var item_dict_to_craft = all_gladiators[id]["inventory"][slot].duplicate(true)
-	var possible_attributes = attr_cards_stock.keys()
-	var roll_interval_max = 3+2*item_dict_to_craft[item]["level"]
-	
-	# == TOME OF CHAOS ==
-	if craft_mat == "scroll_of_luck": # Roll 3 attributes
+	var g: Dictionary = all_gladiators[id]
+	var inventory: Dictionary = g["inventory"]
+
+	var stock_item: Dictionary = get_equipment_by_name(id, item).duplicate(true)
+	var item_dict_to_craft: Dictionary = inventory[slot].duplicate(true)
+
+	var item_data: Dictionary = item_dict_to_craft[item]
+	var modifiers: Dictionary = item_data["modifiers"]
+	var bonuses: Dictionary = modifiers["bonuses"]
+	var attributes: Dictionary = modifiers["attributes"]
+
+	var possible_attributes: Array = attr_cards_stock.keys()
+	var roll_interval_max: int = 3 + 2 * item_data["level"]
+
+	# ============================
+	# == TOME OF CHAOS (Luck) ==
+	# ============================
+	if craft_mat == "scroll_of_luck":
 		item_dict_to_craft = stock_item.duplicate(true)
-		#print("stock item: " + str(item_dict_to_craft))
-		var nbr_of_bonuses_pool = [0,0,1,1,2,2,3]
-		var nbr_of_bonuses = randi() % nbr_of_bonuses_pool.size()
-		var nbr_of_bonuses_to_roll = nbr_of_bonuses_pool[nbr_of_bonuses]
-		var random_bonuses = get_bonuses_rolls(id, slot, nbr_of_bonuses_to_roll)
-		#print("random_bonuses: " + str(random_bonuses))
-		item_dict_to_craft[item]["modifiers"]["bonuses"] = random_bonuses.duplicate(true)
-		
-		var nbr_of_attributes_pool = [1,1,1,1,2,2,3]
-		var nbr_of_attributes = randi() % nbr_of_attributes_pool.size()
-		var nbr_of_attributes_to_roll = nbr_of_attributes_pool[nbr_of_attributes]
-		var random_attributes = get_attribute_rolls(possible_attributes, nbr_of_attributes_to_roll, roll_interval_max)
-		#print("random_attributes: " + str(random_attributes))
-		item_dict_to_craft[item]["modifiers"]["attributes"] = random_attributes.duplicate(true)
-		
-	# == TOME OF INJECTION ==
-	if craft_mat == "scroll_of_injection": # Add 1 new attribute
-		var existing_attributes_on_item = item_dict_to_craft[item]["modifiers"]["attributes"].keys().size()
-		var existing_bonuses_on_item = item_dict_to_craft[item]["modifiers"]["bonuses"].keys().size()
-		
+		item_data = item_dict_to_craft[item]
+		modifiers = item_data["modifiers"]
+
+		# Roll bonuses
+		var bonus_pool := [0,0,1,1,2,2,3]
+		var bonus_roll = bonus_pool[randi() % bonus_pool.size()]
+		var random_bonuses = get_bonuses_rolls(id, slot, bonus_roll)
+		modifiers["bonuses"] = random_bonuses.duplicate(true)
+
+		# Roll attributes
+		var attr_pool := [1,1,1,1,2,2,3]
+		var attr_roll = attr_pool[randi() % attr_pool.size()]
+		var random_attributes := get_attribute_rolls(possible_attributes, attr_roll, roll_interval_max)
+		modifiers["attributes"] = random_attributes.duplicate(true)
+
+	# ================================
+	# == TOME OF INJECTION (Add 1) ==
+	# ================================
+	elif craft_mat == "scroll_of_injection":
+		var existing_attr_count := attributes.keys().size()
+		var existing_bonus_count := bonuses.keys().size()
+
 		var random_bonus = get_scroll_of_injection_bonus_roll(id, item, slot)
-		var random_attribute = get_scroll_of_injection_attribute_roll(item_dict_to_craft[item]["modifiers"]["attributes"], possible_attributes, roll_interval_max)
-		
-		if existing_attributes_on_item >= 3 and existing_bonuses_on_item < 3: 
-			if random_bonus == {}:
-				add_to_peer_log(id, "[INFO] No more bonuses exists for this item!")
+		var random_attr := get_scroll_of_injection_attribute_roll(attributes, possible_attributes, roll_interval_max)
+
+		if existing_attr_count >= 3 and existing_bonus_count < 3:
+			if random_bonus.is_empty():
+				add_to_peer_log(id, "[INFO] No more bonuses exist for this item!")
 				return
-			item_dict_to_craft[item]["modifiers"]["bonuses"][random_bonus.keys()[0]] = random_bonus[random_bonus.keys()[0]]
-			
-		elif existing_attributes_on_item < 3 and existing_bonuses_on_item >= 3: 
-			item_dict_to_craft[item]["modifiers"]["attributes"][random_attribute.keys()[0]] = random_attribute[random_attribute.keys()[0]]
-			
-		elif existing_attributes_on_item < 3 and existing_bonuses_on_item < 3: 
-			var coin_flip = randi() % 2
-			if random_bonus == {}:
-				coin_flip = 1
-			
-			if coin_flip == 0:
-				item_dict_to_craft[item]["modifiers"]["bonuses"][random_bonus.keys()[0]] = random_bonus[random_bonus.keys()[0]]
-			elif coin_flip == 1: 
-				item_dict_to_craft[item]["modifiers"]["attributes"][random_attribute.keys()[0]] = random_attribute[random_attribute.keys()[0]]
-			
+			var bname = random_bonus.keys()[0]
+			bonuses[bname] = random_bonus[bname]
+
+		elif existing_attr_count < 3 and existing_bonus_count >= 3:
+			var aname = random_attr.keys()[0]
+			attributes[aname] = random_attr[aname]
+
+		elif existing_attr_count < 3 and existing_bonus_count < 3:
+			var coin := randi() % 2
+			if random_bonus.is_empty():
+				coin = 1
+
+			if coin == 0:
+				var bname = random_bonus.keys()[0]
+				bonuses[bname] = random_bonus[bname]
+			else:
+				var aname = random_attr.keys()[0]
+				attributes[aname] = random_attr[aname]
+
 		else:
 			add_to_peer_log(id, "[INFO] Item is full on modifiers!")
 			return
-		
-	# == TOME OF LIBERTY ==
-	if craft_mat == "scroll_of_liberty": print("") # Remove all/one modifiers
-			
-	var bonuses_after_craft = item_dict_to_craft[item]["modifiers"]["bonuses"]
-		
-	if "local_increased_attack_speed" in bonuses_after_craft:
-		var wep_base_attack_speed = stock_item[item].get("speed", -1)
-		item_dict_to_craft[item]["speed"] = wep_base_attack_speed*(1+float(bonuses_after_craft["local_increased_attack_speed"])/100.0)
-		
-	if "local_increased_crit_multi" in bonuses_after_craft:
-		var wep_base_crit_multi = stock_item[item].get("crit_multi", -1)
-		item_dict_to_craft[item]["crit_multi"] = wep_base_crit_multi*(1+float(bonuses_after_craft["local_increased_crit_multi"])/100.0)
-		
-	if "local_increased_crit_chance" in bonuses_after_craft:
-		var wep_base_crit_chance = stock_item[item].get("crit_chance", -1)
-		item_dict_to_craft[item]["crit_chance"] = wep_base_crit_chance*(1+float(bonuses_after_craft["local_increased_crit_chance"])/100.0)
 
-	if "local_added_abs" in bonuses_after_craft:
+	# ================================
+	# == TOME OF LIBERTY (Remove) ==
+	# ================================
+	elif craft_mat == "scroll_of_liberty":
+		print("")  # Placeholder
+
+	# ================================
+	# == APPLY LOCAL BONUS EFFECTS ==
+	# ================================
+	var bonuses_after = modifiers["bonuses"]
+
+	if bonuses_after.has("local_increased_attack_speed"):
+		var base_speed = stock_item[item].get("speed", -1)
+		item_data["speed"] = base_speed * (1 + float(bonuses_after["local_increased_attack_speed"]) / 100.0)
+
+	if bonuses_after.has("local_increased_crit_multi"):
+		var base_multi = stock_item[item].get("crit_multi", -1)
+		item_data["crit_multi"] = base_multi * (1 + float(bonuses_after["local_increased_crit_multi"]) / 100.0)
+
+	if bonuses_after.has("local_increased_crit_chance"):
+		var base_chance = stock_item[item].get("crit_chance", -1)
+		item_data["crit_chance"] = base_chance * (1 + float(bonuses_after["local_increased_crit_chance"]) / 100.0)
+
+	if bonuses_after.has("local_added_abs"):
 		var base_abs = stock_item[item].get("absorb", -1)
-		item_dict_to_craft[item]["absorb"] = base_abs + float(bonuses_after_craft["local_added_abs"])
-		
-	if "local_added_durability" in bonuses_after_craft or "local_increased_durability" in bonuses_after_craft:
-		var base_durability = stock_item[item].get("durability", -1)
-		var added_durability = float(bonuses_after_craft.get("local_added_durability", 0))
-		var increased_durability = float(bonuses_after_craft.get("local_increased_durability", 0))
-		item_dict_to_craft[item]["durability"] = (base_durability + added_durability)*(1+increased_durability/100.0)
-				
+		item_data["absorb"] = base_abs + float(bonuses_after["local_added_abs"])
 
-			
-	all_gladiators[id]["crafting_mats"][craft_mat] -= 1
-	all_gladiators[id]["inventory"][slot] = item_dict_to_craft.duplicate(true)
-	
-	rpc_id(id, "update_equipment_card", id, all_gladiators[id]["inventory"][slot], slot, item)
+	if bonuses_after.has("local_added_durability") or bonuses_after.has("local_increased_durability"):
+		var base_dur = stock_item[item].get("durability", -1)
+		var added := float(bonuses_after.get("local_added_durability", 0))
+		var inc := float(bonuses_after.get("local_increased_durability", 0))
+		item_data["durability"] = (base_dur + added) * (1 + inc / 100.0)
+
+	# ================================
+	# == FINALIZE CRAFTING ==
+	# ================================
+	g["crafting_mats"][craft_mat] -= 1
+	inventory[slot] = item_dict_to_craft.duplicate(true)
+	all_gladiators[id] = g
+
+	rpc_id(id, "update_equipment_card", id, inventory[slot], slot, item)
 	rpc("send_gladiator_data_to_peer", id, all_gladiators)
+
 	
 	#pretty_print_dict(all_gladiators[id])
 

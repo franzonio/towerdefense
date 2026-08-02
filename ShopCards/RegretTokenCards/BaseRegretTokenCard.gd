@@ -27,6 +27,12 @@ var normal_text_color = "efd8a1"
 var no_bonus_color = "d2b600"
 
 func _ready():
+	GameState_.connect("card_buy_result", Callable(self, "_on_card_buy_result"))
+	#GameState_.connect("send_equipment_dict_to_peer_signal", Callable(self, "_on_send_equipment_dict_to_peer"))
+	GameState_.connect("send_gladiator_data_to_peer_card_signal", Callable(self, "_on_send_gladiator_data_to_peer_card_signal"))
+	#GameState_.connect("update_equipment_card_signal", Callable(self, "_on_equipment_card_updated"))
+	GameState_.connect("signal_update_gold_req_in_shop_for_peer", Callable(self, "_on_update_gold_req_shop"))
+	
 	add_theme_color_override("icon_hover_color", Color(1.27, 1.27, 1.27, 1.0))
 	add_theme_color_override("icon_disabled_color", "ffffff")
 	add_theme_color_override("icon_hover_pressed_color", "ffffffb5")
@@ -39,16 +45,16 @@ func _ready():
 	race_modifiers = GameState_.RACE_MODIFIERS
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
-	GameState_.connect("card_buy_result", Callable(self, "_on_card_buy_result"))
-	GameState_.connect("send_equipment_dict_to_peer_signal", Callable(self, "_on_send_equipment_dict_to_peer"))
-	GameState_.connect("send_gladiator_data_to_peer_card_signal", Callable(self, "_on_send_gladiator_data_to_peer_card_signal"))
-	GameState_.connect("update_equipment_card_signal", Callable(self, "_on_equipment_card_updated"))
-	GameState_.connect("signal_update_gold_req_in_shop_for_peer", Callable(self, "_on_update_gold_req_shop"))
+	
+	var hud = get_hud()
+	all_gladiators = hud.player_gladiator_data
+	var id = multiplayer.get_unique_id()
+	_on_send_gladiator_data_to_peer_card_signal(id, all_gladiators)
 
-	if multiplayer.is_server():
-		GameState_.refresh_gladiator_data_card(multiplayer.get_unique_id())
-	else:
-		GameState_.rpc_id(1, "refresh_gladiator_data_card", multiplayer.get_unique_id())
+	#if multiplayer.is_server():
+	#	GameState_.refresh_gladiator_data_card(multiplayer.get_unique_id())
+	#else:
+	#	GameState_.rpc_id(1, "refresh_gladiator_data_card", multiplayer.get_unique_id())
 
 	parent_name = get_parent().name
 	if parent_name.contains("shop"):
@@ -92,6 +98,14 @@ func _ready():
 		if all_gladiators != null:
 			_on_update_gold_req_shop(multiplayer.get_unique_id(), all_gladiators["gold"])
 
+func get_hud():
+	var n = self
+	while n:
+		if n.name == "HUD":
+			return n
+		n = n.get_parent()
+		
+
 func _make_custom_tooltip(for_text):
 	if modulate.a == 0:
 		tooltip_text = ""
@@ -104,7 +118,7 @@ func _make_custom_tooltip(for_text):
 	var sb: = StyleBoxFlat.new()
 
 	sb.bg_color = Color("4d4539")
-	sb.border_color = Color("#77883b")
+	sb.border_color = Color("#8caba1")
 	sb.border_width_left = 2
 	sb.border_width_right = 2
 	sb.border_width_top = 2
@@ -233,4 +247,4 @@ func _on_card_buy_result(peer_id: int, success: bool, _parent_name):
 				disabled = false
 
 func get_attribute_tooltip(_attribute_name):
-	return ""
+	return "Gives you regret points"

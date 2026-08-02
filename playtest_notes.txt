@@ -7,16 +7,23 @@ Bugs
 	1 Man kan regret-specca gear points
 	  Behöver en funktion som samlar all attributes från gear. Multiplicera det med %inc attr bonuses.
 	  Vid if:en "print("Negative value after regret, ignoring")", ändra <= 1 med värdet ovan.
+	  
 	2 Man kan respecca under sin str req på vapen 
 	  Lägg in en check att om str < wep_req, sätt vapen som "unarmed" och visa visuellt i eq panel
+	  Eller göra som ovan, att inte kunna regretta lägre än sitt str krav
+	  
 	3 Global crit multi funkar inte i stat panelen? Funkade på ring men inte belt. 
 	  Global attack speed funkar inte heller på belt. Verkar inte funkar på amulet heller?
+	  
 	8 Fixa initial position på vapnena
+	
 	5 Det laggar att ex. specca attributes som peer. Blir dictsen för stora?
+	
 	4 Uppgraderade t3 -> t4 tung hjälm, blev inte riktigt rätt. Ikonen behöll t3 och fick errors.
 		E 0:55:34:614   _on_send_equipment_dict_to_peer: Invalid access to property or key 'barbute_of_kings' on a base object of type 'Dictionary'.
 	
 	6 Lilja slog 160 när hans 2h gick sönder. Vapnet ersattes inte korrekt med no_wep
+	
 	7 Verkade ta skada x3 när jag förlorade en runda
 	
 	Få det att funka med 3+ spelare
@@ -48,3 +55,4 @@ Tankar
 	 Attribute cards applicerar inte rasbonusar, endast självutlagda poäng -> minska antalet attribute kort -> ge fler poäng vid lvl up 
 	 Starta med lite random stats? Särskilt i weapon masteries.
 	 Infinite craft material för guld i lvl 10? Separat shop typ.
+	 Börja med ett random vapen, och stats nog att använda det?

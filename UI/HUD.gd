@@ -170,7 +170,8 @@ var chat_input_pressed: = false
 var msg_just_sent: = false
 
 
-
+var start
+var end
 
 @export var all_cards: Array
 
@@ -505,6 +506,21 @@ var healthbar_color = Color("77883b")
 var race_modifiers
 
 func _ready():
+	GameState_.connect("gladiator_life_changed", Callable(self, "_on_life_changed"))
+	GameState_.connect("countdown_updated", Callable(self, "_on_countdown_updated"))
+	GameState_.connect("card_stock_changed", Callable(self, "_on_card_stock_changed"))
+	GameState_.connect("send_gladiator_data_to_peer_signal", Callable(self, "_on_send_gladiator_data_to_peer_signal"))
+	GameState_.connect("broadcast_log_signal", Callable(self, "_on_log_received"))
+	GameState_.connect("reroll_cards_new_round_signal", Callable(self, "_on_reroll_cards_new_round_signal"))
+	GameState_.connect("add_item_to_inventory_signal", Callable(self, "_on_add_item_to_inventory"))
+	GameState_.connect("remove_item_from_inventory_signal", Callable(self, "_on_remove_item_from_inventory"))
+	GameState_.connect("add_item_to_equipment_signal", Callable(self, "_on_add_item_to_equipment"))
+	GameState_.connect("remove_item_from_equipment_signal", Callable(self, "_on_remove_item_from_equipment"))
+	GameState_.connect("refresh_inventory_ui_signal", Callable(self, "_on_refresh_inventory_ui"))
+	
+	GameState_.connect("update_hud_data_to_peer_signal", Callable(self, "_on_update_hud_data_to_peer"))
+	
+	
 	wep1_broken = 0
 	wep2_broken = 0
 	race_modifiers = GameState_.RACE_MODIFIERS
@@ -523,8 +539,6 @@ func _ready():
 	attack_menu["focus_mode"] = 0
 	$AttributePanel/Help["focus_mode"] = 0
 
-
-
 	round_now = 1
 	esc_menu.visible = false
 	confirm_disconnect.visible = false
@@ -532,21 +546,6 @@ func _ready():
 	equipment_script = load("res://Equipment.gd")
 	equipment_instance = equipment_script.new()
 	equipment_data = equipment_instance.all_equipment
-
-
-	GameState_.connect("gladiator_life_changed", Callable(self, "_on_life_changed"))
-	GameState_.connect("countdown_updated", Callable(self, "_on_countdown_updated"))
-	GameState_.connect("card_stock_changed", Callable(self, "_on_card_stock_changed"))
-	GameState_.connect("send_gladiator_data_to_peer_signal", Callable(self, "_on_send_gladiator_data_to_peer_signal"))
-	GameState_.connect("broadcast_log_signal", Callable(self, "_on_log_received"))
-	GameState_.connect("reroll_cards_new_round_signal", Callable(self, "_on_reroll_cards_new_round_signal"))
-
-	GameState_.connect("add_item_to_inventory_signal", Callable(self, "_on_add_item_to_inventory"))
-	GameState_.connect("remove_item_from_inventory_signal", Callable(self, "_on_remove_item_from_inventory"))
-	GameState_.connect("add_item_to_equipment_signal", Callable(self, "_on_add_item_to_equipment"))
-	GameState_.connect("remove_item_from_equipment_signal", Callable(self, "_on_remove_item_from_equipment"))
-	
-	GameState_.connect("refresh_inventory_ui_signal", Callable(self, "_on_refresh_inventory_ui"))
 
 	health_icon_panel.add_theme_stylebox_override("disabled", health_icon_panel.get_theme_stylebox("normal"))
 	strength_icon_panel.add_theme_stylebox_override("disabled", strength_icon_panel.get_theme_stylebox("normal"))
@@ -566,8 +565,6 @@ func _ready():
 	send_button.pressed.connect(_on_send_pressed)
 	chat_input.text_submitted.connect(_on_send_pressed)
 
-
-
 	inventory_popup.clear()
 	inventory_popup.add_item("Equip", 0)
 	inventory_popup.add_item("Sell", 1)
@@ -586,8 +583,6 @@ func _ready():
 	shop_grid.visible = true
 	refresh_button.visible = true
 	label_buy_roll.visible = true
-
-
 
 	if multiplayer.is_server(): GameState_.initialize_card_stock()
 	else: GameState_.rpc_id(1, "initialize_card_stock")
@@ -619,21 +614,32 @@ func _ready():
 	int_keys.sort()
 	max_lvl = str(int_keys[-1])
 
+func _on_update_hud_data_to_peer(id, data):
+	all_gladiators[id] = data
+	if multiplayer.get_unique_id() == id:
+		update_gold(data["gold"])
+		update_experience(data["exp"])
+		label_gold.get_income_details(data.get("income_last_round", {}))
+	populate_hud()
+
 func fix_icon_bonuses():
-	if all_gladiators:
-		health_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-		strength_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-		endurance_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-		criticality_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-		avoidance_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-		quickness_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-		resilience_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-		axe_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-		sword_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-		stabbing_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-		flagellation_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-		mace_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
-		shield_mastery_icon_panel.set_race(all_gladiators[multiplayer.get_unique_id()]["race"])
+	var race = ""
+	if player_gladiator_data: 
+		race = player_gladiator_data.get("race", "")
+	if race != "":
+		health_icon_panel.set_race(race)
+		strength_icon_panel.set_race(race)
+		endurance_icon_panel.set_race(race)
+		criticality_icon_panel.set_race(race)
+		avoidance_icon_panel.set_race(race)
+		quickness_icon_panel.set_race(race)
+		resilience_icon_panel.set_race(race)
+		axe_mastery_icon_panel.set_race(race)
+		sword_mastery_icon_panel.set_race(race)
+		stabbing_mastery_icon_panel.set_race(race)
+		flagellation_mastery_icon_panel.set_race(race)
+		mace_mastery_icon_panel.set_race(race)
+		shield_mastery_icon_panel.set_race(race)
 
 func _process(delta: float) -> void :
 	prev_lvl = current_lvl
@@ -1010,6 +1016,7 @@ func update_equipment_ui():
 	for id in all_ids:
 		var wep2_slots = get_node_or_null("_EquipmentPanel" + str(id) + "/PanelContainerBottom/BottomPanel/Weapon2Slot")
 		wep2_slots.visible = true
+		var _player_gladiator_data = all_gladiators[id]
 
 		equipment_panel_inspect = get_node("_EquipmentPanel" + str(id) + "/InspectLabel")
 		equipment_panel = get_node("_EquipmentPanel" + str(id))
@@ -1021,26 +1028,26 @@ func update_equipment_ui():
 		equipment_panel_inspect.bbcode_enabled = true
 		var _text
 
-		var strength = all_gladiators[id]["attributes"]["strength"]
-		var quickness = all_gladiators[id]["attributes"]["quickness"]
-		var crit_rating = all_gladiators[id]["attributes"]["crit_rating"]
-		var avoidance = all_gladiators[id]["attributes"]["avoidance"]
-		var health = all_gladiators[id]["attributes"]["health"]
+		var strength = _player_gladiator_data["attributes"]["strength"]
+		var quickness = _player_gladiator_data["attributes"]["quickness"]
+		var crit_rating = _player_gladiator_data["attributes"]["crit_rating"]
+		var avoidance = _player_gladiator_data["attributes"]["avoidance"]
+		var health = _player_gladiator_data["attributes"]["health"]
 
-		var endurance = all_gladiators[id]["attributes"]["endurance"]
-		var sword_mastery = all_gladiators[id]["attributes"]["sword_mastery"]
-		var axe_mastery = all_gladiators[id]["attributes"]["axe_mastery"]
-		var mace_mastery = all_gladiators[id]["attributes"]["mace_mastery"]
-		var stabbing_mastery = all_gladiators[id]["attributes"]["stabbing_mastery"]
-		var flagellation_mastery = all_gladiators[id]["attributes"]["flagellation_mastery"]
-		var shield_mastery = all_gladiators[id]["attributes"]["shield_mastery"]
-		var unarmed_mastery = all_gladiators[id]["attributes"]["unarmed_mastery"]
-
-
+		var endurance = _player_gladiator_data["attributes"]["endurance"]
+		var sword_mastery = _player_gladiator_data["attributes"]["sword_mastery"]
+		var axe_mastery = _player_gladiator_data["attributes"]["axe_mastery"]
+		var mace_mastery = _player_gladiator_data["attributes"]["mace_mastery"]
+		var stabbing_mastery = _player_gladiator_data["attributes"]["stabbing_mastery"]
+		var flagellation_mastery = _player_gladiator_data["attributes"]["flagellation_mastery"]
+		var shield_mastery = _player_gladiator_data["attributes"]["shield_mastery"]
+		var unarmed_mastery = _player_gladiator_data["attributes"]["unarmed_mastery"]
 
 
 
-		var weight = all_gladiators[id]["weight"]
+
+
+		var weight = _player_gladiator_data["weight"]
 		var physique = strength + health + endurance / 2
 		var agility = [quickness, crit_rating / 2, avoidance, sword_mastery / 3, axe_mastery / 3, mace_mastery / 3, 
 			stabbing_mastery / 3, flagellation_mastery / 3, shield_mastery / 3, unarmed_mastery / 3].reduce( func(a, b): return a + b)
@@ -1069,7 +1076,7 @@ func update_equipment_ui():
 		var inspect_text = ""
 
 
-		var age = all_gladiators[id]["age"]
+		var age = _player_gladiator_data["age"]
 		inspect_text += "[color=%s]%s[/color]\n" % ["d2c9a5", age]
 		inspect_text += "[color=%s]Physique:[/color] [color=%s] %s [/color]\n" % ["cd8900", "d2c9a5", gladiator_physique_class]
 		inspect_text += "[color=%s]Agility:[/color] [color=%s] %s [/color] \n" % ["d2b600", "d2c9a5", gladiator_agility_class]
@@ -1077,7 +1084,7 @@ func update_equipment_ui():
 		equipment_panel_inspect.bbcode_text = inspect_text
 
 
-		var race = all_gladiators[id].get("race", "???")
+		var race = _player_gladiator_data.get("race", "???")
 		if race == "Troll":
 			equipment_panel_picture.texture = troll_picture
 		elif race == "Orc":
@@ -1096,19 +1103,19 @@ func update_equipment_ui():
 
 
 
-		var color = all_gladiators[id].get("color", Color.WHITE)
+		var color = _player_gladiator_data.get("color", Color.WHITE)
 		var hex_color = color
-		var formatted = "[color=%s]%s[/color]" % [hex_color, all_gladiators[id]["name"]]
+		var formatted = "[color=%s]%s[/color]" % [hex_color, _player_gladiator_data["name"]]
 		equipment_panel_name.bbcode_enabled = true
 		equipment_panel_name.bbcode_text = formatted
 		equipment_panel_name["theme_override_constants/outline_size"] = name_and_chat_outline_thickness
 
 		equipment_panel.visible = true
-		var get_spawn_point = all_gladiators[id].get("spawn_point", Vector2(0, 0))
+		var get_spawn_point = _player_gladiator_data.get("spawn_point", Vector2(0, 0))
 		var side = find_spawn_side(get_spawn_point)
 		
 		if get_spawn_point != Vector2(0, 0):
-			equipment_panel.position = all_gladiators[id]["spawn_point"]
+			equipment_panel.position = _player_gladiator_data["spawn_point"]
 			
 		if id == multiplayer.get_unique_id():
 			endurance_bar.visible = true
@@ -1127,13 +1134,13 @@ func update_equipment_ui():
 
 
 
-		var wep1_name = all_gladiators[id].get("weapon1", "???").keys()[0]
-		var wep2_name = all_gladiators[id].get("weapon2", "???").keys()[0]
-		var wep1_category = all_gladiators[id].get("weapon1", "???")[wep1_name]["category"]
-		var wep2_category = all_gladiators[id].get("weapon2", "???")[wep2_name]["category"]
-		var wep1_tier = all_gladiators[id].get("weapon1", "???")[wep1_name].get("tier", "???")
-		var wep2_tier = all_gladiators[id].get("weapon2", "???")[wep2_name].get("tier", "???")
-		var wep1_hands = all_gladiators[id].get("weapon1", "???")[wep1_name].get("hands", "???")
+		var wep1_name = _player_gladiator_data.get("weapon1", "???").keys()[0]
+		var wep2_name = _player_gladiator_data.get("weapon2", "???").keys()[0]
+		var wep1_category = _player_gladiator_data.get("weapon1", "???")[wep1_name]["category"]
+		var wep2_category = _player_gladiator_data.get("weapon2", "???")[wep2_name]["category"]
+		var wep1_tier = _player_gladiator_data.get("weapon1", "???")[wep1_name].get("tier", "???")
+		var wep2_tier = _player_gladiator_data.get("weapon2", "???")[wep2_name].get("tier", "???")
+		var wep1_hands = _player_gladiator_data.get("weapon1", "???")[wep1_name].get("hands", "???")
 
 
 		var wep1_vfx_effect
@@ -1215,7 +1222,7 @@ func update_equipment_ui():
 
 		for slot in all_item_slots:
 			var item_slot
-			var item_dict = all_gladiators[id][slot]
+			var item_dict = _player_gladiator_data[slot]
 			if item_dict == {}:
 				var slot_ = slot.capitalize().strip_edges().replace(" ", "") + "Slot"
 
@@ -1378,7 +1385,7 @@ func _on_remove_item_from_inventory(id, _item_dict, slot_name):
 	$Inventory/InventoryGridContainer.find_child(slot_name, true, false).get_child(0).queue_free()
 
 func _on_send_gladiator_data_to_peer_signal(peer_id: int, _all_gladiators):
-	print("update gladiator dict")
+	print("HUD update gladiator dict")
 	all_gladiators = _all_gladiators
 	#print(all_gladiators)
 	if rename_panels_done == 0:
@@ -1389,18 +1396,19 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _all_gladiators):
 			life_dict[id] = 999999
 		rename_panels_done = 1
 	update_equipment_ui()
-	fix_icon_bonuses()
+	
 	if peer_id == multiplayer.get_unique_id():
 		player_gladiator_data = all_gladiators[peer_id]
+		fix_icon_bonuses()
 		update_craft_ui()
 		update_attribute_ui()
 		update_concede_ui()
 		update_stance_ui()
 		update_attack_ui()
-		update_gold(all_gladiators[peer_id]["gold"])
-		update_experience(all_gladiators[peer_id]["exp"])
+		update_gold(player_gladiator_data["gold"])
+		update_experience(player_gladiator_data["exp"])
 		update_gladiator_stats(peer_id)
-		label_gold.get_income_details(all_gladiators[peer_id].get("income_last_round", {}))
+		label_gold.get_income_details(player_gladiator_data.get("income_last_round", {}))
 	populate_hud()
 
 func update_craft_ui():
@@ -1444,7 +1452,7 @@ func update_attack_ui():
 func update_concede_ui():
 	var previous_index = concede_threshold_menu.get_selected_id()
 
-	var attributes = all_gladiators[multiplayer.get_unique_id()].get("attributes", {})
+	var attributes = player_gladiator_data.get("attributes", {})
 	var options = ["50% (" + str(int(round(0.5 * attributes["health"]))) + " hp)", 
 		"40% (" + str(int(round(0.4 * attributes["health"]))) + " hp)", 
 		"30% (" + str(int(round(0.3 * attributes["health"]))) + " hp)", 
@@ -1458,7 +1466,10 @@ func update_concede_ui():
 	else: concede_threshold_menu.select(previous_index)
 
 func update_attribute_ui():
-	var attributes = all_gladiators[multiplayer.get_unique_id()].get("attributes", {})
+	#end = Time.get_unix_time_from_system()*1000
+	#print("took " + str(end-start) + " ms to update health text")
+	
+	var attributes = player_gladiator_data.get("attributes", {})
 	health_panel.text = str(int(attributes["health"]))
 	strength_panel.text = str(int(attributes["strength"]))
 	endurance_panel.text = str(int(attributes["endurance"]))
@@ -1474,14 +1485,14 @@ func update_attribute_ui():
 	shield_mastery_panel.text = str(int(attributes["shield_mastery"]))
 	unarmed_mastery_panel.text = str(int(attributes["unarmed_mastery"]))
 	
-	points_left = all_gladiators[multiplayer.get_unique_id()]["points"]
+	points_left = player_gladiator_data["points"]
 	points_left_label.text = "Points: " + str(points_left)
 	
-	regret_points_left = all_gladiators[multiplayer.get_unique_id()]["regret_points"]
+	regret_points_left = player_gladiator_data["regret_points"]
 	
 	#print("points left: " + str(points_left))
 	
-	'''
+	
 	health_icon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	strength_icon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	endurance_icon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
@@ -1495,7 +1506,7 @@ func update_attribute_ui():
 	flagellation_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	mace_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	shield_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_STOP
-	'''
+	
 	
 	#print(regret_points_left)
 	regret_points_label.text = "Regret: " + str(regret_points_left)
@@ -2011,19 +2022,19 @@ func update_gold(amount: int):
 		label_buy_exp.bbcode_text = "[color=%s]$ 5[/color]" % ["d2b600"]
 
 func update_experience(amount: int):
-	var _lvl = all_gladiators[multiplayer.get_unique_id()]["level"]
+	var _lvl = player_gladiator_data["level"]
 
 	if _lvl == max_lvl:
 		label_xp.bbcode_text = "[color=%s]Lv. %s[/color]" % ["d2c9a5", _lvl]
 		label_buy_exp.visible = false
 		exp_button.visible = false
 	else:
-		var exp_to_lvl_up = str(exp_for_level[str(int(all_gladiators[multiplayer.get_unique_id()]["level"]) + 1)])
+		var exp_to_lvl_up = str(exp_for_level[str(int(_lvl) + 1)])
 		label_xp.bbcode_text = "[color=%s]Lv. %s  %s/%s[/color]" % ["d2c9a5", _lvl, str(amount), exp_to_lvl_up]
 
 
 func _on_exp_button_button_up():
-	var _lvl = all_gladiators[multiplayer.get_unique_id()]["level"]
+	var _lvl = player_gladiator_data["level"]
 	if _lvl == max_lvl: 
 		return
 		
@@ -2187,6 +2198,7 @@ func grant_points_for_peer(_id, amount):
 		GameState_.rpc_id(1, "request_points", multiplayer.get_unique_id(), amount)
 
 func _on_health_icon_gui_input(event: InputEvent) -> void:
+	#start = Time.get_unix_time_from_system()*1000
 	var left_click = false
 	var right_click = false
 	
@@ -2203,7 +2215,7 @@ func _on_health_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 		
-		#health_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		health_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		var current_timestamp = Time.get_unix_time_from_system()
 		var current_timestamp_in_milliseconds = current_timestamp*1000
 		print(str(current_timestamp_in_milliseconds) + ": on_health_icon_gui_input " + str(multiplayer.get_unique_id()))
@@ -2234,7 +2246,7 @@ func _on_strength_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		#strength_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		strength_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "strength", 0, false)
@@ -2264,7 +2276,7 @@ func _on_endurance_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		#endurance_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		endurance_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "endurance", 0, false)
@@ -2294,7 +2306,7 @@ func _on_criticality_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		#criticality_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		criticality_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "crit_rating", 0, false)
@@ -2324,7 +2336,7 @@ func _on_avoidance_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 		
-		#avoidance_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		avoidance_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "avoidance", 0, false)
@@ -2354,7 +2366,7 @@ func _on_quickness_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		#quickness_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		quickness_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "quickness", 0, false)
@@ -2384,7 +2396,7 @@ func _on_resilience_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		#resilience_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		resilience_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "resilience", 0, false)
@@ -2414,7 +2426,7 @@ func _on_sword_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		#sword_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		sword_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "sword_mastery", 0, false)
@@ -2444,7 +2456,7 @@ func _on_axe_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		#axe_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		axe_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "axe_mastery", 0, false)
@@ -2474,7 +2486,7 @@ func _on_stabbing_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		#stabbing_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		stabbing_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "stabbing_mastery", 0, false)
@@ -2504,7 +2516,7 @@ func _on_mace_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		#mace_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		mace_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "mace_mastery", 0, false)
@@ -2534,7 +2546,7 @@ func _on_flagellation_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 		
-		#flagellation_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		flagellation_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "flagellation_mastery", 0, false)
@@ -2564,7 +2576,7 @@ func _on_shield_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		#shield_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		shield_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "shield_mastery", 0, false)
@@ -2577,132 +2589,6 @@ func _on_shield_icon_gui_input(event: InputEvent) -> void:
 		update_attribute_ui()
 
 
-
-
-
-
-
-'
-func _on_strength_icon_button_up() -> void :
-	var amount = get_amount(left_click, right_click)
-	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "strength", 0, false)
-		points_left -= amount
-	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "strength", false)
-		points_left -= amount
-	update_attribute_ui()
-
-func _on_endurance_icon_button_up() -> void :
-	var amount = get_amount(left_click, right_click)
-	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "endurance", 0, false)
-		points_left -= amount
-	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "endurance", false)
-		points_left -= amount
-	update_attribute_ui()
-
-func _on_criticality_icon_button_up() -> void :
-	var amount = get_amount(left_click, right_click)
-	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "crit_rating", 0, false)
-		points_left -= amount
-	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "crit_rating", false)
-		points_left -= amount
-	update_attribute_ui()
-
-func _on_avoidance_icon_button_up() -> void :
-	var amount = get_amount(left_click, right_click)
-	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "avoidance", 0, false)
-		points_left -= amount
-	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "avoidance", false)
-		points_left -= amount
-	update_attribute_ui()
-
-func _on_quickness_icon_button_up() -> void :
-	var amount = get_amount(left_click, right_click)
-	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "quickness", 0, false)
-		points_left -= amount
-	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "quickness", false)
-		points_left -= amount
-	update_attribute_ui()
-
-func _on_resilience_icon_button_up() -> void :
-	var amount = get_amount(left_click, right_click)
-	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "resilience", 0, false)
-		points_left -= amount
-	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "resilience", false)
-		points_left -= amount
-	update_attribute_ui()
-
-func _on_sword_icon_button_up() -> void :
-	var amount = get_amount(left_click, right_click)
-	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "sword_mastery", 0, false)
-		points_left -= amount
-	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "sword_mastery", false)
-		points_left -= amount
-	update_attribute_ui()
-
-func _on_axe_icon_button_up() -> void :
-	var amount = get_amount(left_click, right_click)
-	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "axe_mastery", 0, false)
-		points_left -= amount
-	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "axe_mastery", false)
-		points_left -= amount
-	update_attribute_ui()
-
-func _on_stabbing_icon_button_up() -> void :
-	var amount = get_amount(left_click, right_click)
-	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "stabbing_mastery", 0, false)
-		points_left -= amount
-	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "stabbing_mastery", false)
-		points_left -= amount
-	update_attribute_ui()
-
-func _on_mace_icon_button_up() -> void :
-	var amount = get_amount(left_click, right_click)
-	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "mace_mastery", 0, false)
-		points_left -= amount
-	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "mace_mastery", false)
-		points_left -= amount
-	update_attribute_ui()
-
-func _on_flagellation_icon_button_up() -> void :
-	var amount = get_amount(left_click, right_click)
-	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "flagellation_mastery", 0, false)
-		points_left -= amount
-	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "flagellation_mastery", false)
-		points_left -= amount
-	update_attribute_ui()
-
-func _on_shield_icon_button_up() -> void :
-	var amount = get_amount(left_click, right_click)
-	if multiplayer.is_server():
-		GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "shield_mastery", 0, false)
-		points_left -= amount
-	else:
-		GameState_.rpc_id(1, "buy_attribute_card", multiplayer.get_unique_id(), amount, "shield_mastery", false)
-		points_left -= amount
-	update_attribute_ui()
-'
 
 func play_animation(id, animation, _weapon, hand):
 	var _hand
@@ -2837,7 +2723,7 @@ func _on_lock_shop_pressed() -> void :
 	
 	
 func update_gladiator_stats(id):
-	var combined_gladiator_bonuses = all_gladiators.get("total_modifier_bonuses", {})
+	var combined_gladiator_bonuses = player_gladiator_data.get("total_modifier_bonuses", {})
 
 
 	#var recalculated_hit_chance = 0
@@ -2850,45 +2736,45 @@ func update_gladiator_stats(id):
 	var boots_absorb = 0
 	var gloves_absorb = 0
 
-	if all_gladiators[id].has("chest") and all_gladiators[id]["chest"].size() > 0:
-		var chest_name = all_gladiators[id]["chest"].keys()[0]
-		chest_absorb = all_gladiators[id]["chest"][chest_name].get("absorb", 0)
-	if all_gladiators[id].has("shoulders") and all_gladiators[id]["shoulders"].size() > 0:
-		var shoulders_name = all_gladiators[id]["shoulders"].keys()[0]
-		shoulders_absorb = all_gladiators[id]["shoulders"][shoulders_name].get("absorb", 0)
-	if all_gladiators[id].has("head") and all_gladiators[id]["head"].size() > 0:
-		var head_name = all_gladiators[id]["head"].keys()[0]
-		head_absorb = all_gladiators[id]["head"][head_name].get("absorb", 0)
+	if player_gladiator_data.has("chest") and player_gladiator_data["chest"].size() > 0:
+		var chest_name = player_gladiator_data["chest"].keys()[0]
+		chest_absorb = player_gladiator_data["chest"][chest_name].get("absorb", 0)
+	if player_gladiator_data.has("shoulders") and player_gladiator_data["shoulders"].size() > 0:
+		var shoulders_name = player_gladiator_data["shoulders"].keys()[0]
+		shoulders_absorb = player_gladiator_data["shoulders"][shoulders_name].get("absorb", 0)
+	if player_gladiator_data.has("head") and player_gladiator_data["head"].size() > 0:
+		var head_name = player_gladiator_data["head"].keys()[0]
+		head_absorb = player_gladiator_data["head"][head_name].get("absorb", 0)
 
-	if all_gladiators[id].has("belt") and all_gladiators[id]["belt"].size() > 0:
-		var belt_name = all_gladiators[id]["belt"].keys()[0]
-		belt_absorb = all_gladiators[id]["belt"][belt_name].get("absorb", 0)
-	if all_gladiators[id].has("legs") and all_gladiators[id]["legs"].size() > 0:
-		var legs_name = all_gladiators[id]["legs"].keys()[0]
-		legs_absorb = all_gladiators[id]["legs"][legs_name].get("absorb", 0)
-	if all_gladiators[id].has("boots") and all_gladiators[id]["boots"].size() > 0:
-		var boots_name = all_gladiators[id]["boots"].keys()[0]
-		boots_absorb = all_gladiators[id]["boots"][boots_name].get("absorb", 0)
-	if all_gladiators[id].has("gloves") and all_gladiators[id]["gloves"].size() > 0:
-		var gloves_name = all_gladiators[id]["gloves"].keys()[0]
-		gloves_absorb = all_gladiators[id]["gloves"][gloves_name].get("absorb", 0)
+	if player_gladiator_data.has("belt") and player_gladiator_data["belt"].size() > 0:
+		var belt_name = player_gladiator_data["belt"].keys()[0]
+		belt_absorb = player_gladiator_data["belt"][belt_name].get("absorb", 0)
+	if player_gladiator_data.has("legs") and player_gladiator_data["legs"].size() > 0:
+		var legs_name = player_gladiator_data["legs"].keys()[0]
+		legs_absorb = player_gladiator_data["legs"][legs_name].get("absorb", 0)
+	if player_gladiator_data.has("boots") and player_gladiator_data["boots"].size() > 0:
+		var boots_name = player_gladiator_data["boots"].keys()[0]
+		boots_absorb = player_gladiator_data["boots"][boots_name].get("absorb", 0)
+	if player_gladiator_data.has("gloves") and player_gladiator_data["gloves"].size() > 0:
+		var gloves_name = player_gladiator_data["gloves"].keys()[0]
+		gloves_absorb = player_gladiator_data["gloves"][gloves_name].get("absorb", 0)
 
 
-	var stance = all_gladiators[id]["stance"]
-	var attack_type = all_gladiators[id]["attack_type"]
+	var stance = player_gladiator_data["stance"]
+	var attack_type = player_gladiator_data["attack_type"]
 
-	var strength = all_gladiators[id]["attributes"]["strength"]
-	var quickness = all_gladiators[id]["attributes"]["quickness"]
-	var crit_rating = all_gladiators[id]["attributes"]["crit_rating"]
-	var avoidance = all_gladiators[id]["attributes"]["avoidance"]
-	var max_health = all_gladiators[id]["attributes"]["health"]
-	var resilience = all_gladiators[id]["attributes"]["resilience"]
-	var endurance = all_gladiators[id]["attributes"]["endurance"]
-	var sword_mastery = all_gladiators[id]["attributes"]["sword_mastery"]
-	var axe_mastery = all_gladiators[id]["attributes"]["axe_mastery"]
-	var stabbing_mastery = all_gladiators[id]["attributes"]["stabbing_mastery"]
-	var mace_mastery = all_gladiators[id]["attributes"]["mace_mastery"]
-	var flagellation_mastery = all_gladiators[id]["attributes"]["flagellation_mastery"]
+	var strength = player_gladiator_data["attributes"]["strength"]
+	var quickness = player_gladiator_data["attributes"]["quickness"]
+	var crit_rating = player_gladiator_data["attributes"]["crit_rating"]
+	var avoidance = player_gladiator_data["attributes"]["avoidance"]
+	var max_health = player_gladiator_data["attributes"]["health"]
+	var resilience = player_gladiator_data["attributes"]["resilience"]
+	var endurance = player_gladiator_data["attributes"]["endurance"]
+	var sword_mastery = player_gladiator_data["attributes"]["sword_mastery"]
+	var axe_mastery = player_gladiator_data["attributes"]["axe_mastery"]
+	var stabbing_mastery = player_gladiator_data["attributes"]["stabbing_mastery"]
+	var mace_mastery = player_gladiator_data["attributes"]["mace_mastery"]
+	var flagellation_mastery = player_gladiator_data["attributes"]["flagellation_mastery"]
 
 	var stance_dodge_mod = 1
 	var stance_parry_block_mod = 1
@@ -2923,55 +2809,55 @@ func update_gladiator_stats(id):
 		attack_type_str_mod = 1.3
 
 
-	var level = all_gladiators[id]["level"]
-	var weapon1_name = all_gladiators[id]["weapon1"].keys()[0]
-	var weapon2_name = all_gladiators[id]["weapon2"].keys()[0]
+	var level = player_gladiator_data["level"]
+	var weapon1_name = player_gladiator_data["weapon1"].keys()[0]
+	var weapon2_name = player_gladiator_data["weapon2"].keys()[0]
 
-	var weapon1_skill_req = all_gladiators[id]["weapon1"][weapon1_name]["skill_req"]
-	var weapon1_str_req = all_gladiators[id]["weapon1"][weapon1_name]["str_req"]
-	var weapon1_speed = all_gladiators[id]["weapon1"][weapon1_name]["speed"]
-	var weapon1_range = all_gladiators[id]["weapon1"][weapon1_name]["range"]
-	var weapon1_crit_chance = 1 + all_gladiators[id]["weapon1"][weapon1_name]["crit_chance"]
-	var weapon1_crit_multi = all_gladiators[id]["weapon1"][weapon1_name]["crit_multi"]
+	var weapon1_skill_req = player_gladiator_data["weapon1"][weapon1_name]["skill_req"]
+	var weapon1_str_req = player_gladiator_data["weapon1"][weapon1_name]["str_req"]
+	var weapon1_speed = player_gladiator_data["weapon1"][weapon1_name]["speed"]
+	var weapon1_range = player_gladiator_data["weapon1"][weapon1_name]["range"]
+	var weapon1_crit_chance = 1 + player_gladiator_data["weapon1"][weapon1_name]["crit_chance"]
+	var weapon1_crit_multi = player_gladiator_data["weapon1"][weapon1_name]["crit_multi"]
 
-	var weapon2_skill_req = all_gladiators[id]["weapon2"][weapon2_name]["skill_req"]
-	var weapon2_str_req = all_gladiators[id]["weapon2"][weapon2_name]["str_req"]
-	var weapon2_speed = all_gladiators[id]["weapon2"][weapon2_name]["speed"]
-	var weapon2_range = all_gladiators[id]["weapon2"][weapon2_name]["range"]
-	var weapon2_crit_chance = 1 + all_gladiators[id]["weapon2"][weapon2_name]["crit_chance"]
-	var weapon2_crit_multi = all_gladiators[id]["weapon2"][weapon2_name]["crit_multi"]
+	var weapon2_skill_req = player_gladiator_data["weapon2"][weapon2_name]["skill_req"]
+	var weapon2_str_req = player_gladiator_data["weapon2"][weapon2_name]["str_req"]
+	var weapon2_speed = player_gladiator_data["weapon2"][weapon2_name]["speed"]
+	var weapon2_range = player_gladiator_data["weapon2"][weapon2_name]["range"]
+	var weapon2_crit_chance = 1 + player_gladiator_data["weapon2"][weapon2_name]["crit_chance"]
+	var weapon2_crit_multi = player_gladiator_data["weapon2"][weapon2_name]["crit_multi"]
 
 	var armor_absorb = 1.0
-	var concede_threshold = all_gladiators[id]["concede"]
+	var concede_threshold = player_gladiator_data["concede"]
 
 
 
-	var race = all_gladiators[id]["race"].to_lower()
-	var gladiator_name = all_gladiators[id].name
+	var race = player_gladiator_data["race"].to_lower()
+	var gladiator_name = player_gladiator_data.name
 
 
-	var weight = all_gladiators[id]["weight"] - strength / 40
+	var weight = player_gladiator_data["weight"] - strength / 40
 	var endurance_weight = 1 - weight / (100 + weight)
 	var endurance_decay = endurance / 75 + 1
 	endurance_sec = 2 + stance_endurance_mod * endurance * endurance_weight / endurance_decay
-	var weapon1 = all_gladiators[id]["weapon1"][weapon1_name]
-	var weapon2 = all_gladiators[id]["weapon2"][weapon2_name]
-	var weapon1_durability = all_gladiators[id]["weapon1"][weapon1_name]["durability"]
-	var weapon2_durability = all_gladiators[id]["weapon2"][weapon2_name]["durability"]
+	var weapon1 = player_gladiator_data["weapon1"][weapon1_name]
+	var weapon2 = player_gladiator_data["weapon2"][weapon2_name]
+	var weapon1_durability = player_gladiator_data["weapon1"][weapon1_name]["durability"]
+	var weapon2_durability = player_gladiator_data["weapon2"][weapon2_name]["durability"]
 
 	var life_on_block = combined_gladiator_bonuses.get("life_on_block", 0)
 
-	var shield_absorb = all_gladiators[id]["weapon2"][weapon2_name].get("absorb", -1)
-	var weapon1_can_parry = all_gladiators[id]["weapon1"][weapon1_name]["parry"]
-	var weapon2_can_parry = all_gladiators[id]["weapon2"][weapon2_name]["parry"]
-	var weapon2_can_block = all_gladiators[id]["weapon2"][weapon2_name]["block"]
-	var weapon_hands_to_carry = all_gladiators[id]["weapon1"][weapon1_name]["hands"]
+	var shield_absorb = player_gladiator_data["weapon2"][weapon2_name].get("absorb", -1)
+	var weapon1_can_parry = player_gladiator_data["weapon1"][weapon1_name]["parry"]
+	var weapon2_can_parry = player_gladiator_data["weapon2"][weapon2_name]["parry"]
+	var weapon2_can_block = player_gladiator_data["weapon2"][weapon2_name]["block"]
+	var weapon_hands_to_carry = player_gladiator_data["weapon1"][weapon1_name]["hands"]
 
 
-	var weapon1_category = all_gladiators[id]["weapon1"][weapon1_name].get("category", "")
-	var weapon2_category = all_gladiators[id]["weapon2"][weapon2_name].get("category", "")
-	var glad_weapon1_category_skill = all_gladiators[id]["attributes"][weapon1_category + "_mastery"]
-	var glad_weapon2_category_skill = all_gladiators[id]["attributes"][weapon2_category + "_mastery"]
+	var weapon1_category = player_gladiator_data["weapon1"][weapon1_name].get("category", "")
+	var weapon2_category = player_gladiator_data["weapon2"][weapon2_name].get("category", "")
+	var glad_weapon1_category_skill = player_gladiator_data["attributes"][weapon1_category + "_mastery"]
+	var glad_weapon2_category_skill = player_gladiator_data["attributes"][weapon2_category + "_mastery"]
 
 	var hit_base_per_lvl = - 1.1
 	var hit_skill_weight_1 = (glad_weapon1_category_skill / (weapon1_skill_req * (0.8 + weight / 150.0))) # Reduce hit chance with weight

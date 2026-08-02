@@ -295,6 +295,9 @@ func _physics_process(delta):
 
 func _on_send_gladiator_data_to_peer_signal(_peer_id: int, _all_gladiators):
 	all_gladiators = _all_gladiators
+	var current_timestamp = Time.get_unix_time_from_system()
+	var current_timestamp_in_milliseconds = current_timestamp*1000
+	print(str(current_timestamp_in_milliseconds) + ": GLADIATOR receive new dict " + str(_peer_id))
 
 
 func _on_concede_threshold_changed(value: float):
@@ -462,7 +465,7 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 	var added_max_dmg = 0
 	var min_base_dmg = _weapon["min_dmg"]
 	var max_base_dmg = _weapon["max_dmg"]
-	var added_dmg = _weapon["modifiers"]["bonuses"].get("added_dmg", "0").split("-")
+	var added_dmg = _weapon["modifiers"].get("bonuses", {}).get("added_dmg", "0").split("-")
 
 	if added_dmg.size() > 1:
 		added_min_dmg = int(added_dmg[0])
@@ -470,7 +473,7 @@ func deal_attack(attacker: Node, defender: Node, _weapon, _hit_chance, _crit_cha
 
 	var blood_rage_dmg = combined_gladiator_bonuses.get("blood_rage", [0, 0])
 	blood_rage_dmg = blood_rage_dmg[1]
-	var increased_dmg = 1.0 + float(_weapon["modifiers"]["bonuses"].get("increased_dmg", "0")) / 100.0 + float(blood_rage_dmg) / 100.0
+	var increased_dmg = 1.0 + float(_weapon["modifiers"].get("bonuses", {}).get("increased_dmg", "0")) / 100.0 + float(blood_rage_dmg) / 100.0
 	var wep_min_dmg = int(round((min_base_dmg + added_min_dmg) * increased_dmg))
 	var wep_max_dmg = int(round((max_base_dmg + added_max_dmg) * increased_dmg))
 
