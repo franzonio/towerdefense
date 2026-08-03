@@ -25,7 +25,7 @@ extends Node
 			"modifiers":
 				{
 				"attributes": {}, 
-				"alterations": {}
+				"bonuses": {}
 				}
 			}
 	}, 
@@ -844,7 +844,7 @@ extends Node
 		}, 
 	}, 
 
-	"rings": {
+	"ring": {
 		"ring_of_stone": {
 			"class": "Both", "tier": 1, "price": 25, "stock": 14, "type": "jewellery", "category": "ring", "weight": 0, 
 			"absorb": 0, "str_req": 0, "level": 1, 

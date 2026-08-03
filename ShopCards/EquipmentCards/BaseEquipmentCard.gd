@@ -8,7 +8,7 @@ var cost
 var name_label
 var self_name
 var parent_name
-var item_dict
+var item_dict = {}
 var original_item_dict
 var all_gladiators
 var initial_tooltip_received = 0
@@ -56,6 +56,7 @@ var start
 var end
 
 var hud
+var latest_tooltip = ""
 
 func _ready():
 	GameState_.connect("card_buy_result", Callable(self, "_on_card_buy_result"))
@@ -87,11 +88,14 @@ func _ready():
 	equipment_script = load("res://Equipment.gd")
 	equipment_instance = equipment_script.new()
 	equipment_data = equipment_instance.all_equipment
-	item_dict = get_equipment_by_name(equipment_name)
+	if item_dict == {}:
+		item_dict = get_equipment_by_name(equipment_name)
 	var id = multiplayer.get_unique_id()
+	
+
 	_on_send_equipment_dict_to_peer(id, item_dict)
 	#tooltip_text = get_item_tooltip(item_dict[equipment_name], item_dict)
-	
+
 	
 	var item = find_value_recursive(equipment_data, equipment_name)
 	cost = item["price"]
@@ -252,6 +256,7 @@ func _on_receive_data_from_hud_signal(_id, player_gladiator_from_hud):
 	#all_gladiators = _player_gladiator_data
 	
 
+
 	if player_gladiator_from_hud == null:
 		print("all_gladiators is null in _on_send_gladiator_data_to_peer_card_signal")
 	_on_update_gold_req_shop(multiplayer.get_unique_id(), player_gladiator_from_hud["gold"])
@@ -309,8 +314,10 @@ func _on_update_gold_req_shop(_id, gold):
 
 			if crafted_item_dict != {}:
 				tooltip_text = get_item_tooltip(crafted_item_dict[equipment_name], item_dict)
+				latest_tooltip = get_item_tooltip(crafted_item_dict[equipment_name], item_dict)
 			else:
 				tooltip_text = get_item_tooltip(item_dict[equipment_name], item_dict)
+				latest_tooltip = get_item_tooltip(item_dict[equipment_name], item_dict)
 
 
 
@@ -329,14 +336,18 @@ func _on_equipment_card_updated(id, updated_item_dict, slot, item):#, _all_gladi
 		tooltip_text = ""
 		if crafted_item_dict != {}:
 			tooltip_text = get_item_tooltip(crafted_item_dict[item], updated_item_dict)
+			latest_tooltip = get_item_tooltip(crafted_item_dict[item], updated_item_dict)
 		else:
 			tooltip_text = get_item_tooltip(updated_item_dict[item], updated_item_dict)
+			latest_tooltip = get_item_tooltip(updated_item_dict[item], updated_item_dict)
 	elif ucfirst(slot) in parent_name:
 		tooltip_text = ""
 		if crafted_item_dict != {}:
 			tooltip_text = get_item_tooltip(crafted_item_dict[item], updated_item_dict)
+			latest_tooltip = get_item_tooltip(crafted_item_dict[item], updated_item_dict)
 		else:
 			tooltip_text = get_item_tooltip(updated_item_dict[item], updated_item_dict)
+			latest_tooltip = get_item_tooltip(updated_item_dict[item], updated_item_dict)
 
 
 
@@ -346,6 +357,7 @@ func ucfirst(_text: String) -> String:
 	return _text[0].to_upper() + _text.substr(1)
 
 
+	
 func _on_send_equipment_dict_to_peer(id, _item_dict):
 	if id != multiplayer.get_unique_id(): return
 	#end = Time.get_unix_time_from_system()*1000
@@ -358,6 +370,8 @@ func _on_send_equipment_dict_to_peer(id, _item_dict):
 	if all_gladiators == null:
 		print("all_gladiators is null in _on_equipment_card_updated")
 		return
+
+	
 
 	if _item_dict.has(equipment_name):
 
@@ -377,6 +391,7 @@ func _on_send_equipment_dict_to_peer(id, _item_dict):
 				orig_absorb = item.get("absorb", 0)
 				original_item_dict = item.duplicate(true)
 				tooltip_text = get_item_tooltip(crafted_item_dict[equipment_name], item_dict)
+				latest_tooltip = get_item_tooltip(crafted_item_dict[equipment_name], item_dict)
 			else:
 				orig_min_dmg = item.get("min_dmg", 0)
 				orig_durability = item.get("durability", 0)
@@ -387,6 +402,7 @@ func _on_send_equipment_dict_to_peer(id, _item_dict):
 				orig_absorb = item.get("absorb", 0)
 				original_item_dict = item.duplicate(true)
 				tooltip_text = get_item_tooltip(item_dict[equipment_name], item_dict)
+				latest_tooltip = get_item_tooltip(item_dict[equipment_name], item_dict)
 				
 
 
@@ -483,6 +499,9 @@ func get_item_tooltip(item_data: Dictionary, __item_dict):
 
 		"\n\t\torig_min_dmg = item.get(\"min_dmg\", 0)\n\t\torig_durability = item.get(\"durability\", 0)\n\t\torig_weight = item.get(\"weight\", 0) # never null here\n\t\torig_speed = item.get(\"speed\", 0)\n\t\torig_crit_chance = item.get(\"crit_chance\", 0)\n\t\torig_crit_multi = item.get(\"crit_multi\", 0)\n\t\torig_absorb = item.get(\"absorb\", 0)\n\t\toriginal_item_dict = __item_dict.duplicate(true)\n\t\t"
 
+	#if equipment_name == "barbaric_claymore":
+		#print(str(latest_tooltip))
+		
 	var display_name = format_name(equipment_name)
 
 	var tier = item_data.get("tier", -1)

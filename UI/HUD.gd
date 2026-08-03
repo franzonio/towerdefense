@@ -1293,7 +1293,7 @@ func update_equipment_ui():
 				else:
 					continue
 
-func _on_add_item_to_inventory(id, item_dict, slot_name):
+func _on_add_item_to_inventory(id, _item_dict, slot_name):
 	if id != multiplayer.get_unique_id():
 		return
 
@@ -1301,7 +1301,7 @@ func _on_add_item_to_inventory(id, item_dict, slot_name):
 	for card in all_cards:
 		card_scene_map[card[1]] = card[0]
 
-	var item_name = item_dict.keys()[0]
+	var item_name = _item_dict.keys()[0]
 
 
 	if card_scene_map.has(item_name):
@@ -1309,6 +1309,7 @@ func _on_add_item_to_inventory(id, item_dict, slot_name):
 		card_instance.button_down.connect(_on_inventory_item_pressed.bind(item_name, slot_name))
 		card_instance.set_multiplayer_authority(multiplayer.get_unique_id())
 		card_instance["focus_mode"] = 0
+		card_instance.item_dict = _item_dict
 		$Inventory/InventoryGridContainer.find_child(slot_name, true, false).add_child(card_instance)
 	else:
 		print("⚠️ No matching scene for item:", item_name)
@@ -1393,7 +1394,7 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _all_gladiators):
 	end = Time.get_unix_time_from_system()*1000
 	if start != old_start:
 		var delta = end-start
-		print("HUD took " + str(delta) + " ms get new gladiator data")	
+		#print("HUD took " + str(delta) + " ms get new gladiator data")	
 	#print("HUD update gladiator dict")
 	all_gladiators = _all_gladiators
 	
@@ -2244,7 +2245,7 @@ func _on_strength_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		strength_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#strength_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "strength", 0, false)
@@ -2274,7 +2275,7 @@ func _on_endurance_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		endurance_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#endurance_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "endurance", 0, false)
@@ -2304,7 +2305,7 @@ func _on_criticality_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		criticality_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#criticality_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "crit_rating", 0, false)
@@ -2334,7 +2335,7 @@ func _on_avoidance_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 		
-		avoidance_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#avoidance_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "avoidance", 0, false)
@@ -2364,7 +2365,7 @@ func _on_quickness_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		quickness_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#quickness_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "quickness", 0, false)
@@ -2394,7 +2395,7 @@ func _on_resilience_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		resilience_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#resilience_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "resilience", 0, false)
@@ -2424,7 +2425,7 @@ func _on_sword_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		sword_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#sword_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "sword_mastery", 0, false)
@@ -2454,7 +2455,7 @@ func _on_axe_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		axe_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#axe_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "axe_mastery", 0, false)
@@ -2484,7 +2485,7 @@ func _on_stabbing_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		stabbing_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#stabbing_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "stabbing_mastery", 0, false)
@@ -2514,7 +2515,7 @@ func _on_mace_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		mace_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#mace_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "mace_mastery", 0, false)
@@ -2544,7 +2545,7 @@ func _on_flagellation_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 		
-		flagellation_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#flagellation_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "flagellation_mastery", 0, false)
@@ -2574,7 +2575,7 @@ func _on_shield_icon_gui_input(event: InputEvent) -> void:
 		if right_click and (abs(regret_points_left) < abs(amount)):
 			return
 			
-		shield_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+		#shield_mastery_icon_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
 		
 		if multiplayer.is_server():
 			GameState_.buy_attribute_card(multiplayer.get_unique_id(), amount, "shield_mastery", 0, false)
@@ -2724,7 +2725,6 @@ func update_gladiator_stats(id):
 	var combined_gladiator_bonuses = player_gladiator_data.get("total_modifier_bonuses", {})
 
 
-	#var recalculated_hit_chance = 0
 
 	var chest_absorb = 0
 	var head_absorb = 0
@@ -2877,29 +2877,30 @@ func update_gladiator_stats(id):
 		var block_skill_weight1 = (0.7*glad_weapon2_category_skill / (weapon2_skill_req * (0.8 + weight / 400.0)))
 		block_chance = stance_parry_block_mod * (wep1_difficulty + 1.1/(hit_base_per_lvl - (block_skill_weight1 ** hit_curve_smoothness)))
 
-		crit_multi = [stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400))), 
-			stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400)))]
+		crit_multi = [(1 + combined_gladiator_bonuses.get("global_increased_crit_multi", 0) / 100.0)*(stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400)))), 
+			(1 + combined_gladiator_bonuses.get("global_increased_crit_multi", 0) / 100.0)*(stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400))))]
 
 		var W1 = weight / ( 400 + weight)
-		crit_chance = [weapon1_crit_chance - 1 - W1 + stance_crit_chance_mod * (((weapon1_crit_chance-W1) ** 4) * crit_rating / ((((weapon1_crit_chance-W1) ** 4) * crit_rating) + 300+6*weight)), 
-					   weapon1_crit_chance - 1 - W1 + stance_crit_chance_mod * (((weapon1_crit_chance-W1) ** 4) * crit_rating / ((((weapon1_crit_chance-W1) ** 4) * crit_rating) + 300+6*weight))]
+		crit_chance = [(1 + combined_gladiator_bonuses.get("global_increased_crit_chance", 0) / 100.0)*(weapon1_crit_chance - 1 - W1 + stance_crit_chance_mod * (((weapon1_crit_chance-W1) ** 4) * crit_rating / ((((weapon1_crit_chance-W1) ** 4) * crit_rating) + 300+6*weight))), 
+					   (1 + combined_gladiator_bonuses.get("global_increased_crit_chance", 0) / 100.0)*(weapon1_crit_chance - 1 - W1 + stance_crit_chance_mod * (((weapon1_crit_chance-W1) ** 4) * crit_rating / ((((weapon1_crit_chance-W1) ** 4) * crit_rating) + 300+6*weight)))]
 
 
-		hit_chance = [attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness))), 
-			attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness)))]
+		hit_chance = [combined_gladiator_bonuses.get("added_hit_chance", 0) / 100.0 + attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness))), 
+					  combined_gladiator_bonuses.get("added_hit_chance", 0) / 100.0 + attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness)))]
 	else:
 		block_chance = 0
-		crit_multi = [stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400))), 
-			stance_crit_multi_mod * ((weapon2_crit_multi + (((1 + weapon2_crit_multi) ** weapon2_crit_multi) * crit_rating) / (weapon2_crit_multi * crit_rating + 400)))]
+		crit_multi = [(1 + combined_gladiator_bonuses.get("global_increased_crit_multi", 0) / 100.0)*(stance_crit_multi_mod * ((weapon1_crit_multi + (((1 + weapon1_crit_multi) ** weapon1_crit_multi) * crit_rating) / (weapon1_crit_multi * crit_rating + 400)))), 
+			(1 + combined_gladiator_bonuses.get("global_increased_crit_multi", 0) / 100.0)*(stance_crit_multi_mod * ((weapon2_crit_multi + (((1 + weapon2_crit_multi) ** weapon2_crit_multi) * crit_rating) / (weapon2_crit_multi * crit_rating + 400))))]
 
 		var W1 = weight / ( 400 + weight)
 		var W2 = weight / ( 400 + weight)
 		
-		crit_chance = [weapon1_crit_chance - 1 - W1 + stance_crit_chance_mod * (((weapon1_crit_chance-W1) ** 4) * crit_rating / ((((weapon1_crit_chance-W1) ** 4) * crit_rating) + 300+6*weight)), 
-					   weapon2_crit_chance - 1 - W2 + stance_crit_chance_mod * (((weapon2_crit_chance-W2) ** 4) * crit_rating / ((((weapon2_crit_chance-W2) ** 4) * crit_rating) + 300+6*weight))]
+		crit_chance = [(1 + combined_gladiator_bonuses.get("global_increased_crit_chance", 0) / 100.0)*(weapon1_crit_chance - 1 - W1 + stance_crit_chance_mod * (((weapon1_crit_chance-W1) ** 4) * crit_rating / ((((weapon1_crit_chance-W1) ** 4) * crit_rating) + 300+6*weight))), 
+					   (1 + combined_gladiator_bonuses.get("global_increased_crit_chance", 0) / 100.0)*(weapon2_crit_chance - 1 - W2 + stance_crit_chance_mod * (((weapon2_crit_chance-W2) ** 4) * crit_rating / ((((weapon2_crit_chance-W2) ** 4) * crit_rating) + 300+6*weight)))]
 
-		hit_chance = [attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness))), 
-			attack_type_hit_mod * (wep2_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_2 ** hit_curve_smoothness)))]
+		hit_chance = [combined_gladiator_bonuses.get("added_hit_chance", 0) / 100.0 + attack_type_hit_mod * (wep1_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_1 ** hit_curve_smoothness))), 
+					  combined_gladiator_bonuses.get("added_hit_chance", 0) / 100.0 +  attack_type_hit_mod * (wep2_difficulty + 1 / (hit_base_per_lvl - (hit_skill_weight_2 ** hit_curve_smoothness)))]
+
 
 	if weapon1_name == "unarmed":
 		crit_chance[0] = 0.10

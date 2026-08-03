@@ -631,7 +631,7 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 	var inventory: Dictionary = g["inventory"]              # cache inventory
 	var item_dict: Dictionary = g[category]                 # cache category dict
 
-	prev_total_modifier_bonuses = total_modifier_bonuses
+	prev_total_modifier_bonuses[peer_id] = total_modifier_bonuses[peer_id]
 
 	var item_data: Dictionary = item_dict[equipment]
 	var hands: int = item_data.get("hands", -1)
@@ -640,6 +640,16 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 	var modifier_attributes: Dictionary = item_data["modifiers"].get("attributes", {})
 	var modifier_bonuses: Dictionary = item_data["modifiers"].get("bonuses", {})
 	var weight: int = item_data.get("weight", 0)
+	
+	
+	total_modifier_bonuses[peer_id] = collect_gladiator_bonuses(peer_id)
+	var _total_str_after_unequip = total_str_after_unequip(peer_id, total_modifier_bonuses[peer_id].get("increased_strength", 0), item_data)
+	var str_req_from_gear = collect_str_req_from_gear(peer_id) # [req, item]
+	
+	if _total_str_after_unequip < str_req_from_gear[0]:
+		add_to_peer_log(peer_id, "[INFO] Cannot unequip because " + format_name(str_req_from_gear[1]) + " requires " + str(str_req_from_gear[0]) + " points")
+	
+		return
 
 	# --- Find first empty inventory slot ---
 	for slot_name in inventory.keys():
@@ -667,8 +677,8 @@ func unequip_item(peer_id, equipment, equipment_button_parent_name, category):
 					attrs[attribute] -= modifier_attributes[attribute]
 
 			# Recalculate bonuses
-			total_modifier_bonuses = collect_gladiator_bonuses(peer_id)
-			g["total_modifier_bonuses"] = total_modifier_bonuses
+			total_modifier_bonuses[peer_id] = collect_gladiator_bonuses(peer_id)
+			g["total_modifier_bonuses"] = total_modifier_bonuses[peer_id]
 
 			add_attribute_bonuses(peer_id)
 
@@ -901,9 +911,9 @@ func equip_item(peer_id, equipment, selected_slot):
 		rpc_id(peer_id, "add_item_to_equipment", peer_id, item_dict, category)
 
 		# Update bonuses
-		prev_total_modifier_bonuses = g.get("total_modifier_bonuses", {})
-		total_modifier_bonuses = collect_gladiator_bonuses(peer_id)
-		g["total_modifier_bonuses"] = total_modifier_bonuses
+		prev_total_modifier_bonuses[peer_id] = g.get("total_modifier_bonuses", {})
+		total_modifier_bonuses[peer_id] = collect_gladiator_bonuses(peer_id)
+		g["total_modifier_bonuses"] = total_modifier_bonuses[peer_id]
 
 		remove_attribute_bonuses(peer_id)
 
@@ -968,7 +978,7 @@ func remove_attribute_bonuses(peer_id):
 	var all_attributes = all_gladiators[peer_id]["attributes"].keys()
 	for attr in all_attributes:
 		var increased_string = "increased_" + attr
-		all_gladiators[peer_id]["attributes"][attr] = all_gladiators[peer_id]["attributes"].get(attr, 0)/(1+float(prev_total_modifier_bonuses.get(increased_string, 0))/100)
+		all_gladiators[peer_id]["attributes"][attr] = all_gladiators[peer_id]["attributes"].get(attr, 0)/(1+float(prev_total_modifier_bonuses[peer_id].get(increased_string, 0))/100)
 
 func add_attribute_bonuses(peer_id):
 	var all_attributes = all_gladiators[peer_id]["attributes"].keys()
@@ -976,6 +986,114 @@ func add_attribute_bonuses(peer_id):
 		var increased_string = "increased_" + attr
 		all_gladiators[peer_id]["attributes"][attr] = all_gladiators[peer_id]["attributes"].get(attr, 0)*(1+float(all_gladiators[peer_id]["total_modifier_bonuses"].get(increased_string, 0))/100)
 
+func format_name(raw_name: String) -> String:
+	var parts = raw_name.split("_")
+	var joined = ""
+	for i in parts.size():
+		joined += parts[i]
+		if i < parts.size() - 1:
+			joined += " "
+	return joined.capitalize()
+
+@rpc("any_peer", "call_local")
+func collect_str_req_from_gear(id):
+	var max_req = 0
+	var which_item
+	var str
+	var result = [0, ""]
+	
+	var merged := {}
+	var excluded_keys := ["inventory", "total_modifier_bonuses"]
+	var gladiator = all_gladiators[id].duplicate(true)
+
+	for key in gladiator.keys():
+		if excluded_keys.has(key):
+			continue
+
+		var slot = gladiator[key]
+		if typeof(slot) != TYPE_DICTIONARY:
+			continue
+
+		for item_key in slot.keys():
+			var item = slot[item_key]
+			if typeof(item) != TYPE_DICTIONARY:
+				continue
+
+			# Collect str req
+			if item.has("str_req"):
+				str = item["str_req"]
+				
+				if str > max_req:
+					max_req = str
+					which_item = item_key
+					result = [max_req, which_item]
+				
+	return result
+	
+@rpc("any_peer", "call_local")
+func total_str_after_unequip(id, bonus_gear, item_dict):
+	#print(item_dict)
+	remove_attribute_bonuses(id)
+	var total_divided_by_bonus = all_gladiators[id]["attributes"]["strength"]
+	add_attribute_bonuses(id)
+	var total_after_unequip = (total_divided_by_bonus - item_dict["modifiers"]["attributes"].get("strength", 0))*(1 + (bonus_gear - int(item_dict["modifiers"]["bonuses"].get("increased_strength", 0)))/100.0)
+	#print("total_after_unequip: " + str(total_after_unequip))
+	return total_after_unequip
+
+@rpc("any_peer", "call_local")
+func collect_gladiator_total_attributes_from_gear(id, bonuses, attributes):
+	var total_attributes = {}
+	for attr in attributes:
+			for key in bonuses:
+				if key.contains(attr):
+					total_attributes[attr] = + attributes[attr] * (1.0 + bonuses[key]/100.0)
+	
+	return total_attributes
+
+@rpc("any_peer", "call_local")
+func collect_gladiator_flat_attributes_from_equipment(id): 
+	var merged := {}
+	var excluded_keys := ["inventory", "total_modifier_bonuses"]
+	var skip_weapon2 := false
+	var gladiator = all_gladiators[id].duplicate(true)
+
+	for key in gladiator.keys():
+		if excluded_keys.has(key):
+			continue
+
+		var slot = gladiator[key]
+		if typeof(slot) != TYPE_DICTIONARY:
+			continue
+
+		for item_key in slot.keys():
+			var item = slot[item_key]
+			if typeof(item) != TYPE_DICTIONARY:
+				continue
+
+			# Check if weapon1 is two-handed
+			if key == "weapon1" and item.has("hands") and item["hands"] == 2:
+				skip_weapon2 = true
+
+			# Skip weapon2 if weapon1 is two-handed
+			if key == "weapon2" and skip_weapon2 and item.has("type") and item["type"] == "weapon":
+				continue
+
+			# Collect bonuses
+			if item.has("modifiers") and item["modifiers"].has("attributes"):
+				var attributes = item["modifiers"]["attributes"]
+				for attribute_key in attributes.keys():
+					var value = attributes[attribute_key]
+					
+					if merged.has(attribute_key):
+						if value is Array:
+							for i in range(len(value)):#var numeric_value = float(value[i]) if typeof(value[i]) in [TYPE_STRING, TYPE_INT, TYPE_FLOAT] and String(value[i]).is_valid_float() else 0
+								merged[attribute_key][i] += float(value[i])
+						else:
+							merged[attribute_key] += float(value)
+					else:
+						if value is Array: merged[attribute_key] = value
+						else: merged[attribute_key] = float(value)
+	return merged
 
 @rpc("any_peer", "call_local")
 func collect_gladiator_bonuses(id): 
@@ -1010,27 +1128,17 @@ func collect_gladiator_bonuses(id):
 				var bonuses = item["modifiers"]["bonuses"]
 				for bonus_key in bonuses.keys():
 					var value = bonuses[bonus_key]
-					#print(value)
-					#var numeric_value = float(value) if typeof(value) in [TYPE_STRING, TYPE_INT, TYPE_FLOAT] and String(value).is_valid_float() else 0
 					
 					if bonus_key == "blood_rage":
 						print("pause")
 					
 					if merged.has(bonus_key):
 						if value is Array:
-							for i in range(len(value)):
-								#var numeric_value = float(value[i]) if typeof(value[i]) in [TYPE_STRING, TYPE_INT, TYPE_FLOAT] and String(value[i]).is_valid_float() else 0
+							for i in range(len(value)):#var numeric_value = float(value[i]) if typeof(value[i]) in [TYPE_STRING, TYPE_INT, TYPE_FLOAT] and String(value[i]).is_valid_float() else 0
 								merged[bonus_key][i] += float(value[i])
 						else:
-							#var numeric_value = float(value) if typeof(value) in [TYPE_STRING, TYPE_INT, TYPE_FLOAT] and String(value).is_valid_float() else 0
 							merged[bonus_key] += float(value)
 					else:
-						#if value is Array:
-						#	for i in range(len(value)):
-								#var numeric_value = float(value[i]) if typeof(value[i]) in [TYPE_STRING, TYPE_INT, TYPE_FLOAT] and String(value[i]).is_valid_float() else 0
-						#		merged[bonus_key][i] = float(value[i])#numeric_value[i]
-						#else:
-							#var numeric_value = float(value) if typeof(value) in [TYPE_STRING, TYPE_INT, TYPE_FLOAT] and String(value).is_valid_float() else 0
 						if value is Array: merged[bonus_key] = value
 						else: merged[bonus_key] = float(value)
 	return merged
@@ -1154,6 +1262,7 @@ func buy_equipment_card(id: int, equipment: String, cost: int, parent_name = "")
 			
 			rpc_id(id, "notify_card_buy_result", id, success, parent_name)
 			rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
+			#update_all_equipment_cards(id)
 			return
 
 	# --- No space ---
@@ -1175,6 +1284,15 @@ func sell_from_equipment(peer_id: int, equipment: String, equipment_button_paren
 	var modifier_attributes: Dictionary = item_data["modifiers"].get("attributes", {})
 	var modifier_bonuses: Dictionary = item_data["modifiers"].get("bonuses", {})
 	var weight: int = item_data.get("weight", 0)
+	
+	total_modifier_bonuses[peer_id] = collect_gladiator_bonuses(peer_id)
+	var _total_str_after_unequip = total_str_after_unequip(peer_id, total_modifier_bonuses[peer_id].get("increased_strength", 0), item_data)
+	var str_req_from_gear = collect_str_req_from_gear(peer_id) # [req, item]
+	
+	if _total_str_after_unequip < str_req_from_gear[0]:
+		add_to_peer_log(peer_id, "[INFO] Cannot unequip because " + format_name(str_req_from_gear[1]) + " requires " + str(str_req_from_gear[0]) + " points")
+	
+		return
 
 	# --- Remove item from equipment slots ---
 	if hands == 2:
@@ -1309,17 +1427,30 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int, modi
 		return
 
 	# --- Calculate bonuses ---
-	total_modifier_bonuses = collect_gladiator_bonuses(id)
+	total_modifier_bonuses[id] = collect_gladiator_bonuses(id)
+	var total_attributes_from_eq_flat = collect_gladiator_flat_attributes_from_equipment(id)
+	var total_attributes_from_gear_combined = collect_gladiator_total_attributes_from_gear(id, total_modifier_bonuses[id], total_attributes_from_eq_flat)
+	#print("\ntotal attributes: \n" + str(total_attributes_from_gear_combined))
+	
+	
 	var key := "increased_" + attribute
-	var bonus_percent := float(total_modifier_bonuses.get(key, 0))
+	var bonus_percent := float(total_modifier_bonuses[id].get(key, 0))
 
 	var race_mult = RACE_MODIFIERS[race][attribute]
 	var amount_after_bonuses = float(amount) * race_mult * (1.0 + bonus_percent / 100.0)
 
 	# --- Prevent negative attribute dropping below 1 ---
 	if amount_after_bonuses < 0:
-		if attrs[attribute] + amount_after_bonuses <= 1:
-			print("Negative value after regret, ignoring")
+		if attrs[attribute] + amount_after_bonuses < total_attributes_from_gear_combined.get(attribute, 0):
+			add_to_peer_log(id, "[INFO] No points placed in " + format_name(attribute))
+			#rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
+			return
+
+		var str_req_from_gear = collect_str_req_from_gear(id) # [req, item]
+		
+		if attrs[attribute] + amount_after_bonuses < str_req_from_gear[0]:
+			add_to_peer_log(id, "[INFO] Cannot regret " + format_name(attribute) + " because " + format_name(str_req_from_gear[1]) + " requires " + str(str_req_from_gear[0]) + " points")
+			#rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
 			return
 
 	# --- Apply attribute change ---
@@ -1345,8 +1476,6 @@ func buy_attribute_card(id: int, amount: int, attribute: String, cost: int, modi
 	#rpc_id(id, "update_gold_req_in_shop_for_peer", id, g["gold"])
 	emit_signal("gladiator_attribute_changed", all_gladiators)
 	rpc_id(id, "notify_card_buy_result", id, success, parent_name)
-	
-	
 	rpc_id(id, "send_gladiator_data_to_peer", id, all_gladiators)
 	#rpc_id(id, "send_gladiator_data_to_peer_card", id)#, g)
 
