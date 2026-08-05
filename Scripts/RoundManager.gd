@@ -181,6 +181,7 @@ func start_next_round():
 	else:
 		push_warning("⚠️ IntermissionTimer not found!")
 
+	GameState_.add_to_log(get_multiplayer_authority(), "day " + str(global_round_counter) + " begins..." )
 
 	# --- AFTER round has started, apply queued rewards ---
 	for action in queued_rewards:
