@@ -113,19 +113,11 @@ func _ready():
 
 	set_texture_filter(CanvasItem.TEXTURE_FILTER_NEAREST)
 
-
 	initial_tooltip_received = 0
 	mouse_entered.connect(_on_mouse_entered)
 	mouse_exited.connect(_on_mouse_exited)
 
 	
-
-	#start = Time.get_unix_time_from_system()*1000
-
-	
-		
-		
-
 	parent_name = get_parent().name
 	if parent_name.contains("shop"):#== "ShopGridContainer":
 		label_display = format_name(equipment_name)
@@ -453,14 +445,14 @@ func buy_equipment():
 	if mouse_inside_button:
 		added = false
 		var id: = multiplayer.get_unique_id()
-
+		disabled = true
 		if multiplayer.is_server():
 			GameState_.buy_equipment_card(id, equipment_name, cost, parent_name)
 		else:
 			start = Time.get_unix_time_from_system()*1000
 			GameState_.rpc_id(1, "buy_equipment_card", id, equipment_name, cost, parent_name)
 
-		disabled = true
+		
 		#await get_tree().create_timer(0.15).timeout
 		'''
 		if added:
@@ -479,6 +471,7 @@ func _on_card_buy_result(peer_id: int, success: bool, _parent_name):
 	if peer_id == multiplayer.get_unique_id():
 		end = Time.get_unix_time_from_system()*1000
 		
+		disabled = false
 		if start and end:
 			print("EQUIPMENT: " + equipment_name + " buy card latency: " + str(end-start))
 		if parent_name == _parent_name:
@@ -490,7 +483,7 @@ func _on_card_buy_result(peer_id: int, success: bool, _parent_name):
 				tween.tween_property(self, "modulate:a", 0, 0.5).set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_OUT)
 				TweenFX.fold_out(self, 0.2)
 			else: 
-				disabled = false
+				1
 				
 
 

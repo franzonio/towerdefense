@@ -994,7 +994,7 @@ expand_mode = 2
 [node name="Resilience" type="Label" parent="AttributePanelHelp/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Resilience determined effectiveness 
+text = "Resilience determines the effectiveness 
 of absorb and durability of equipped items"
 label_settings = SubResource("LabelSettings_57qbv")
 vertical_alignment = 1

@@ -19,8 +19,8 @@ extends Node
 			"stock": 500, 
 			"type": "weapon", 
 			"category": "unarmed", 
-			"str_req": 20, 
-			"skill_req": 30, 
+			"str_req": 0, 
+			"skill_req": 0, 
 			"level": 1, 
 			"modifiers":
 				{

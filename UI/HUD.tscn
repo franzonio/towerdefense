@@ -2764,6 +2764,10 @@ offset_left = -10.0
 offset_top = -23.0
 grow_horizontal = 0
 grow_vertical = 0
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 24
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -2793,6 +2797,10 @@ offset_left = -10.0
 offset_top = -23.0
 grow_horizontal = 0
 grow_vertical = 0
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_outline_color = Color(0.29411766, 0.23921569, 0.26666668, 1)
+theme_override_constants/outline_size = 7
+theme_override_font_sizes/font_size = 24
 horizontal_alignment = 1
 vertical_alignment = 1
 
@@ -5590,7 +5598,7 @@ expand_mode = 2
 [node name="Resilience" type="Label" parent="AttributePanelHelp/VBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "Resilience determined effectiveness 
+text = "Resilience determines the effectiveness 
 of absorb and durability of equipped items"
 label_settings = SubResource("LabelSettings_yxlso")
 vertical_alignment = 1

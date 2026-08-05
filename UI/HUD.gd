@@ -455,7 +455,7 @@ var craft_active = ""
 @onready var plate_helmet_card = preload("res://ShopCards/EquipmentCards/Head/Heavy/PlateHelmet.tscn")
 @onready var steelforged_helmet_card = preload("res://ShopCards/EquipmentCards/Head/Heavy/SteelforgedHelmet.tscn")
 @onready var barbute_of_kings_card = preload("res://ShopCards/EquipmentCards/Head/Heavy/BarbuteOfKings.tscn")
-@onready var bloodsteel_barbute_card = preload("res://ShopCards/EquipmentCards/Head/Heavy/BarbuteOfKings.tscn")
+@onready var bloodsteel_barbute_card = preload("res://ShopCards/EquipmentCards/Head/Heavy/BloodsteelBarbute.tscn")
 
 ### LEGS ###
 @onready var leather_pantaloons_card = preload("res://ShopCards/EquipmentCards/Legs/Light/LeatherPantaloons.tscn")
@@ -463,7 +463,7 @@ var craft_active = ""
 @onready var legwraps_of_elven_silk_card = preload("res://ShopCards/EquipmentCards/Legs/Light/LegwrapsOfElvenSilk.tscn")
 @onready var legwraps_of_sin_card = preload("res://ShopCards/EquipmentCards/Legs/Light/LegwrapsOfSin.tscn")
 @onready var plate_legs_card = preload("res://ShopCards/EquipmentCards/Legs/Heavy/PlateLegs.tscn")
-@onready var steelforged_Legs_card = preload("res://ShopCards/EquipmentCards/Legs/Heavy/SteelforgedLegs.tscn")
+@onready var steelforged_legs_card = preload("res://ShopCards/EquipmentCards/Legs/Heavy/SteelforgedLegs.tscn")
 @onready var legguards_of_kings_card = preload("res://ShopCards/EquipmentCards/Legs/Heavy/LegguardsOfKings.tscn")
 @onready var bloodsteel_legguards_card = preload("res://ShopCards/EquipmentCards/Legs/Heavy/BloodsteelLegguards.tscn")
 
@@ -796,7 +796,7 @@ func get_all_cards():
 		[legwraps_of_elven_silk_card, "legwraps_of_elven_silk", card_stock["legwraps_of_elven_silk"]], 
 		[legwraps_of_sin_card, "legwraps_of_sin", card_stock["legwraps_of_sin"]], 
 		[plate_legs_card, "plate_legs", card_stock["plate_legs"]], 
-		[steelforged_Legs_card, "steelforged_legs", card_stock["steelforged_legs"]], 
+		[steelforged_legs_card, "steelforged_legs", card_stock["steelforged_legs"]], 
 		[legguards_of_kings_card, "legguards_of_kings", card_stock["legguards_of_kings"]], 
 		[bloodsteel_legguards_card, "bloodsteel_legguards", card_stock["bloodsteel_legguards"]], 
 
@@ -2028,6 +2028,7 @@ func update_experience(amount: int):
 
 
 func _on_exp_button_button_up():
+	if player_gladiator_data == null: return
 	var _lvl = player_gladiator_data["level"]
 	if _lvl == max_lvl: 
 		return
@@ -2192,7 +2193,6 @@ func grant_points_for_peer(_id, amount):
 		GameState_.rpc_id(1, "request_points", multiplayer.get_unique_id(), amount)
 
 func _on_health_icon_gui_input(event: InputEvent) -> void:
-	
 	var left_click = false
 	var right_click = false
 	

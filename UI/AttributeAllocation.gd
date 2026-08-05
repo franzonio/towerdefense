@@ -53,8 +53,8 @@ var no_wep = {"hands": 1,
 	"stock": 500, 
 	"type": "weapon", 
 	"category": "unarmed", 
-	"str_req": 20, 
-	"skill_req": 30, 
+	"str_req": 0, 
+	"skill_req": 0, 
 	"level": 1, 
 	"modifiers": {
 		"attributes": {}, 
@@ -553,7 +553,7 @@ func _on_confirm():
 		}, 
 		"total_modifier_bonuses": {}, 
 		"age": "Young",
-		"regret_points": 10,
+		"regret_points": 1000,
 		"points": 150
 	}
 
