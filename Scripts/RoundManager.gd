@@ -159,14 +159,14 @@ func start_next_round():
 			#print("%s gets a free win this round (bye)." % p1)
 			spawn_duel_between(p1, p2, spawn_index)
 			spawn_index += 1
-			register_duel_result(p1, -1)
+			register_duel_result(p1, null)
 		elif p2 != null:
 			#print("%s gets a free win this round (bye)." % p2)
 			spawn_duel_between(p1, p2, spawn_index)
 			spawn_index += 1
-			register_duel_result(p2, -1)
+			register_duel_result(p2, null)
 		elif p1 == null and p2 == null: total_duels -= 1
-
+	
 	current_round_index += 1
 
 	if global_round_counter >= 2: 
@@ -189,7 +189,7 @@ func start_next_round():
 			"gold":
 				GameState_.grant_gold_for_peer(action.id, action.opponent, action.winner)
 			"streak":
-				GameState_.modify_streak(action.id, action.win)
+				GameState_.modify_streak(action.id, action.win, true)
 			"exp":
 				GameState_.grant_exp_for_peer(action.id, 4, 0)
 
@@ -204,7 +204,7 @@ func too_many_null_duels(_round: Array) -> bool:
 	if null_duel_count > 1: return true
 	return false
 
-func register_duel_result(winner_id: int, loser_id: int = -1):
+func register_duel_result(winner_id, loser_id):
 
 	_on_duel_finished(winner_id, loser_id)
 
@@ -224,9 +224,6 @@ func spawn_duel_between(peer1, peer2, index: int):
 	if peer1 != null and peer2 != null:
 		var data1 = data[peer1]
 		var data2 = data[peer2]
-
-
-
 		glad1 = gladiator_spawner.spawn({
 			"scene": "res://Player/Gladiator.tscn", 
 			"peer_id": peer1, 
@@ -246,8 +243,6 @@ func spawn_duel_between(peer1, peer2, index: int):
 
 	elif peer1 != null and peer2 == null:
 		var data1 = GameState_.all_gladiators[peer1]
-
-
 		glad1 = gladiator_spawner.spawn({
 			"scene": "res://Player/Gladiator.tscn", 
 			"peer_id": peer1, 
@@ -258,8 +253,6 @@ func spawn_duel_between(peer1, peer2, index: int):
 		})
 	elif peer1 == null and peer2 != null:
 		var data2 = GameState_.all_gladiators[peer2]
-
-
 		glad2 = gladiator_spawner.spawn({
 			"scene": "res://Player/Gladiator.tscn", 
 			"peer_id": peer2, 
@@ -274,24 +267,24 @@ func spawn_duel_between(peer1, peer2, index: int):
 	if glad2: glad2.died.connect( func(): _on_duel_finished(peer1, peer2))
 	
 	
-func _on_duel_finished(winner_id: int, loser_id: int):
+func _on_duel_finished(winner_id, loser_id):
 	await get_tree().process_frame
 	if duel_results.has(winner_id):
 		return
 
 	# --- CASE 1: No opponent ---
-	if loser_id == -1:
+	if loser_id == null:
 		duel_results[winner_id] = true
 
 		# QUEUE rewards instead of executing now
-		queued_rewards.append({"type": "gold", "id": winner_id, "opponent": -1, "winner": true})
+		queued_rewards.append({"type": "gold", "id": winner_id, "opponent": null, "winner": true})
 		queued_rewards.append({"type": "streak", "id": winner_id, "win": true})
 		queued_rewards.append({"type": "exp", "id": winner_id})
 
 		return
 
 	# --- CASE 2: Normal duel ---
-	if winner_id == -1:
+	if winner_id == null:
 		return
 
 	duel_results[winner_id] = true
@@ -310,7 +303,7 @@ func _on_duel_finished(winner_id: int, loser_id: int):
 	# --- elimination logic stays EXACTLY as-is ---
 	var ids_to_eliminate = []
 	if multiplayer.is_server():
-		if loser_id != -1:
+		if loser_id != null:
 			for id in player_ids:
 				if id != null:
 					if GameState_.all_gladiators[id]["player_life"] <= 0:

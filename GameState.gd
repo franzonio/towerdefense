@@ -392,7 +392,7 @@ func update_hud_data_to_peer(id: int, data):
 	
 
 @rpc("any_peer", "call_local")
-func grant_gold_for_peer(id: int, opponent_id: int, winner: bool):
+func grant_gold_for_peer(id, opponent_id, winner: bool):
 	# --- Tunable parameters ---
 	var WIN_STREAK_STEP := 3
 	var WIN_STREAK_CAP := 3
@@ -407,7 +407,8 @@ func grant_gold_for_peer(id: int, opponent_id: int, winner: bool):
 
 	# --- Cache gladiator dictionaries ---
 	var g: Dictionary = all_gladiators[id]
-	var opp: Dictionary = all_gladiators[opponent_id] if opponent_id != -1 else null
+	var opp
+	if opponent_id: opp = all_gladiators[opponent_id] if opponent_id != null else null
 
 	# --- Cache frequently used values ---
 	var peer_color = g["color"]
@@ -424,7 +425,7 @@ func grant_gold_for_peer(id: int, opponent_id: int, winner: bool):
 	var base_amount := 3
 
 	# --- CASE: No opponent (walkover win) ---
-	if opponent_id == -1:
+	if opponent_id == null:
 		# Streak bonus
 		if peer_streak > 0:
 			streak_bonus = min(peer_streak / WIN_STREAK_STEP, WIN_STREAK_CAP)
@@ -462,8 +463,16 @@ func grant_gold_for_peer(id: int, opponent_id: int, winner: bool):
 		return
 
 	# --- CASE: Normal duel ---
-	var opponent_color = opp["color"]
-	var opponent_name := "[color=%s]%s[/color]" % [opponent_color, opp["name"]]
+	var opponent_color
+	if opponent_id: 
+		opponent_color = opp["color"]
+	else: opponent_color = Color.WHITE
+	
+	var opponent_name 
+	if opponent_id: 
+		opponent_name = "[color=%s]%s[/color]" % [opponent_color, opp["name"]]
+	else: 
+		opponent_name = "unknown"
 
 	var win_streak_quotes := [
 		peer_name + " is on a killing spree!",
@@ -493,7 +502,11 @@ func grant_gold_for_peer(id: int, opponent_id: int, winner: bool):
 	# (Quotes disabled in your original code)
 
 	# --- Opponent streak break bonus ---
-	var opponent_streak: int = opp["streak"]
+	var opponent_streak
+	if opponent_id: 
+		opponent_streak = opp["streak"]
+	else: 
+		opponent_streak = 0
 
 	if opponent_streak > WIN_STREAK_STEP and winner:
 		streak_break_bonus = STREAK_BREAK_BONUS_SAME if peer_streak > 0 else STREAK_BREAK_BONUS_UPSET
@@ -533,9 +546,16 @@ func grant_gold_for_peer(id: int, opponent_id: int, winner: bool):
 
 
 @rpc("any_peer", "call_local")
-func modify_streak(id: int, win: bool):
+func modify_streak(id: int, win: bool, walkover = false):
 	var g = all_gladiators[id]
 	var current_streak = g["streak"]
+	
+	if walkover: 
+		if current_streak >= 0:
+			g["streak"] += 1
+		else:
+			g["streak"] -= 1
+	
 	if current_streak >= 0 and win: # continue win streak
 		g["streak"] += 1
 	elif current_streak <= 0 and !win: # continue loss streak

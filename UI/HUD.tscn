@@ -2051,6 +2051,7 @@ toggle_mode = true
 replication_config = SubResource("SceneReplicationConfig_yixhe")
 
 [node name="Label_Round" type="RichTextLabel" parent="."]
+z_index = 4094
 offset_left = 270.0
 offset_top = 14.0
 offset_right = 427.0
@@ -2066,6 +2067,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Label_Gold" type="RichTextLabel" parent="."]
+z_index = 4094
 texture_filter = 1
 offset_left = 1516.0
 offset_top = 14.0
@@ -2083,6 +2085,7 @@ vertical_alignment = 1
 script = ExtResource("2_ikkuv")
 
 [node name="Label_Experience" type="RichTextLabel" parent="."]
+z_index = 4094
 texture_filter = 1
 offset_left = 1693.0
 offset_top = 14.0
@@ -2100,6 +2103,7 @@ autowrap_mode = 0
 vertical_alignment = 1
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
+z_index = 4094
 offset_left = 18.0
 offset_top = 22.0
 offset_right = 205.0
@@ -2152,7 +2156,6 @@ offset_right = 182.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tooltip_text = "Remaining health"
 mouse_filter = 1
 theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 theme_override_constants/outline_size = 4
@@ -2204,7 +2207,6 @@ offset_right = 182.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tooltip_text = "Remaining health"
 mouse_filter = 1
 theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 theme_override_constants/outline_size = 4
@@ -2256,7 +2258,6 @@ offset_right = 182.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tooltip_text = "Remaining health"
 mouse_filter = 1
 theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 theme_override_constants/outline_size = 4
@@ -2308,7 +2309,6 @@ offset_right = 182.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tooltip_text = "Remaining health"
 mouse_filter = 1
 theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 theme_override_constants/outline_size = 4
@@ -2360,7 +2360,6 @@ offset_right = 182.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tooltip_text = "Remaining health"
 mouse_filter = 1
 theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 theme_override_constants/outline_size = 4
@@ -2412,7 +2411,6 @@ offset_right = 182.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tooltip_text = "Remaining health"
 mouse_filter = 1
 theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 theme_override_constants/outline_size = 4
@@ -2464,7 +2462,6 @@ offset_right = 182.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tooltip_text = "Remaining health"
 mouse_filter = 1
 theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 theme_override_constants/outline_size = 4
@@ -2516,7 +2513,6 @@ offset_right = 182.0
 offset_bottom = 47.0
 size_flags_horizontal = 3
 size_flags_vertical = 3
-tooltip_text = "Remaining health"
 mouse_filter = 1
 theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
 theme_override_constants/outline_size = 4
@@ -2581,6 +2577,7 @@ one_shot = true
 autostart = true
 
 [node name="IntermissionTimerLabel" type="RichTextLabel" parent="."]
+z_index = 4094
 offset_left = 880.0
 offset_top = 269.0
 offset_right = 1037.0
@@ -2597,6 +2594,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="LockShop" type="Button" parent="."]
+z_index = 4094
 texture_filter = 1
 custom_minimum_size = Vector2(70, 0)
 offset_left = 1437.0
@@ -2619,6 +2617,7 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_1gabh")
 text = "LOCK"
 
 [node name="RefreshButton" type="Button" parent="."]
+z_index = 4094
 texture_filter = 1
 custom_minimum_size = Vector2(70, 0)
 offset_left = 1437.0
@@ -2641,6 +2640,7 @@ theme_override_styles/disabled = SubResource("StyleBoxFlat_1gabh")
 text = "REROLL"
 
 [node name="LabelBuyRoll" type="RichTextLabel" parent="."]
+z_index = 4094
 offset_left = 1463.0
 offset_top = 129.0
 offset_right = 1503.0
@@ -2654,6 +2654,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="LabelBuyExp" type="RichTextLabel" parent="."]
+z_index = 4094
 offset_left = 1707.0
 offset_top = 84.0
 offset_right = 1747.0
@@ -2667,6 +2668,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="ShopGridContainer" type="GridContainer" parent="."]
+z_index = 4094
 custom_minimum_size = Vector2(960, 192)
 offset_left = 479.0
 offset_top = 1.9999847
@@ -2719,6 +2721,7 @@ grow_horizontal = 2
 pivot_offset = Vector2(480, 112.5)
 
 [node name="CraftingContainer" type="VBoxContainer" parent="."]
+z_index = 4094
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0
@@ -2805,6 +2808,7 @@ horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Inventory" type="VBoxContainer" parent="."]
+z_index = 4094
 custom_minimum_size = Vector2(256, 64)
 anchors_preset = 7
 anchor_left = 0.5
@@ -2999,6 +3003,257 @@ label_settings = SubResource("LabelSettings_yxlso")
 layout_mode = 2
 size_flags_horizontal = 3
 label_settings = SubResource("LabelSettings_yxlso")
+
+[node name="Panel" type="Panel" parent="."]
+self_modulate = Color(1, 1, 1, 0.5254902)
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -208.0
+offset_right = 541.0
+offset_bottom = -39.0
+grow_vertical = 0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource("Theme_i6ua2")
+
+[node name="ChatScroll" type="ScrollContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 9.0
+offset_top = 7.0
+offset_right = -7.0
+offset_bottom = -9.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ChatLog" type="VBoxContainer" parent="Panel/ChatScroll"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+z_index = 4094
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 4.0
+offset_top = -35.0
+offset_right = 541.0
+offset_bottom = -4.0
+grow_vertical = 0
+
+[node name="ChatInput" type="LineEdit" parent="HBoxContainer"]
+texture_filter = 1
+layout_mode = 2
+size_flags_horizontal = 3
+theme = SubResource("Theme_i6ua2")
+placeholder_text = "Type here..."
+keep_editing_on_text_submit = true
+clear_button_enabled = true
+draw_control_chars = true
+caret_blink = true
+
+[node name="SendButton" type="Button" parent="HBoxContainer"]
+texture_filter = 1
+custom_minimum_size = Vector2(60, 0)
+layout_mode = 2
+size_flags_horizontal = 8
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 20
+theme_override_styles/normal = SubResource("StyleBoxFlat_2aqtr")
+text = "Send"
+
+[node name="ExpButton" type="Button" parent="."]
+z_index = 4094
+texture_filter = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -226.0
+offset_top = 53.0
+offset_right = -160.0
+offset_bottom = 87.0
+grow_horizontal = 0
+theme = SubResource("Theme_i6ua2")
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 24
+theme_override_styles/normal = SubResource("StyleBoxFlat_ec1tb")
+text = "TRAIN"
+script = ExtResource("18")
+
+[node name="ConcedePanel" type="Panel" parent="."]
+z_index = 4094
+texture_filter = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -367.0
+offset_top = -242.0
+offset_right = -219.0
+offset_bottom = -177.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = SubResource("Theme_i6ua2")
+
+[node name="Label" type="Label" parent="ConcedePanel"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -25.5
+offset_top = 4.0
+offset_right = 25.5
+offset_bottom = 27.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 22
+text = "Concede"
+
+[node name="ConcedeThresholdMenu" type="OptionButton" parent="ConcedePanel"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -65.625
+offset_top = -36.0
+offset_right = 65.625
+offset_bottom = -3.0
+grow_horizontal = 2
+grow_vertical = 0
+theme = SubResource("Theme_i6ua2")
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_focus_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_pressed_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_hover_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+alignment = 1
+script = ExtResource("19")
+
+[node name="AttackPanel" type="Panel" parent="."]
+z_index = 4094
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -367.0
+offset_top = -104.0
+offset_right = -219.0
+offset_bottom = -39.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = SubResource("Theme_i6ua2")
+
+[node name="Label" type="Label" parent="AttackPanel"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -36.0
+offset_top = 4.0
+offset_right = 36.0
+offset_bottom = 27.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 22
+text = "Attack Type"
+
+[node name="AttackMenu" type="OptionButton" parent="AttackPanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -63.0
+offset_top = -33.0
+offset_right = 63.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_focus_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_pressed_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_hover_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+alignment = 1
+script = ExtResource("20")
+
+[node name="StancePanel" type="Panel" parent="."]
+z_index = 4094
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -367.0
+offset_top = -173.0
+offset_right = -219.0
+offset_bottom = -108.0
+grow_horizontal = 0
+grow_vertical = 0
+theme = SubResource("Theme_i6ua2")
+
+[node name="Label" type="Label" parent="StancePanel"]
+texture_filter = 1
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -21.5
+offset_top = 4.0
+offset_right = 21.5
+offset_bottom = 27.0
+grow_horizontal = 2
+theme_override_colors/font_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 22
+text = "Stance"
+
+[node name="StanceMenu" type="OptionButton" parent="StancePanel"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -63.0
+offset_top = -33.0
+offset_right = 63.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_focus_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_pressed_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_colors/font_hover_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
+theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 20
+alignment = 1
+item_count = 1
+popup/item_0/id = 0
+script = ExtResource("21")
 
 [node name="AttributePanel" type="Panel" parent="."]
 self_modulate = Color(1, 1, 1, 0.8627451)
@@ -3538,253 +3793,8 @@ text = "?"
 icon_alignment = 1
 script = ExtResource("19_1gabh")
 
-[node name="Panel" type="Panel" parent="."]
-self_modulate = Color(1, 1, 1, 0.5254902)
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = -208.0
-offset_right = 541.0
-offset_bottom = -39.0
-grow_vertical = 0
-size_flags_horizontal = 3
-size_flags_vertical = 3
-theme = SubResource("Theme_i6ua2")
-
-[node name="ChatScroll" type="ScrollContainer" parent="Panel"]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = 9.0
-offset_top = 7.0
-offset_right = -7.0
-offset_bottom = -9.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="ChatLog" type="VBoxContainer" parent="Panel/ChatScroll"]
-texture_filter = 1
-layout_mode = 2
-size_flags_horizontal = 3
-size_flags_vertical = 3
-
-[node name="HBoxContainer" type="HBoxContainer" parent="."]
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 4.0
-offset_top = -35.0
-offset_right = 541.0
-offset_bottom = -4.0
-grow_vertical = 0
-
-[node name="ChatInput" type="LineEdit" parent="HBoxContainer"]
-texture_filter = 1
-layout_mode = 2
-size_flags_horizontal = 3
-theme = SubResource("Theme_i6ua2")
-placeholder_text = "Type here..."
-keep_editing_on_text_submit = true
-clear_button_enabled = true
-draw_control_chars = true
-caret_blink = true
-
-[node name="SendButton" type="Button" parent="HBoxContainer"]
-texture_filter = 1
-custom_minimum_size = Vector2(60, 0)
-layout_mode = 2
-size_flags_horizontal = 8
-theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 20
-theme_override_styles/normal = SubResource("StyleBoxFlat_2aqtr")
-text = "Send"
-
-[node name="ExpButton" type="Button" parent="."]
-texture_filter = 1
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -226.0
-offset_top = 53.0
-offset_right = -160.0
-offset_bottom = 87.0
-grow_horizontal = 0
-theme = SubResource("Theme_i6ua2")
-theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_constants/outline_size = 6
-theme_override_font_sizes/font_size = 24
-theme_override_styles/normal = SubResource("StyleBoxFlat_ec1tb")
-text = "TRAIN"
-script = ExtResource("18")
-
-[node name="ConcedePanel" type="Panel" parent="."]
-texture_filter = 1
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -367.0
-offset_top = -242.0
-offset_right = -219.0
-offset_bottom = -177.0
-grow_horizontal = 0
-grow_vertical = 0
-theme = SubResource("Theme_i6ua2")
-
-[node name="Label" type="Label" parent="ConcedePanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -25.5
-offset_top = 4.0
-offset_right = 25.5
-offset_bottom = 27.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 22
-text = "Concede"
-
-[node name="ConcedeThresholdMenu" type="OptionButton" parent="ConcedePanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -65.625
-offset_top = -36.0
-offset_right = 65.625
-offset_bottom = -3.0
-grow_horizontal = 2
-grow_vertical = 0
-theme = SubResource("Theme_i6ua2")
-theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_colors/font_focus_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_colors/font_pressed_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_colors/font_hover_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 20
-alignment = 1
-script = ExtResource("19")
-
-[node name="AttackPanel" type="Panel" parent="."]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -367.0
-offset_top = -104.0
-offset_right = -219.0
-offset_bottom = -39.0
-grow_horizontal = 0
-grow_vertical = 0
-theme = SubResource("Theme_i6ua2")
-
-[node name="Label" type="Label" parent="AttackPanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -36.0
-offset_top = 4.0
-offset_right = 36.0
-offset_bottom = 27.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 22
-text = "Attack Type"
-
-[node name="AttackMenu" type="OptionButton" parent="AttackPanel"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -63.0
-offset_top = -33.0
-offset_right = 63.0
-offset_bottom = -2.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_colors/font_focus_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_colors/font_pressed_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_colors/font_hover_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 20
-alignment = 1
-script = ExtResource("20")
-
-[node name="StancePanel" type="Panel" parent="."]
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -367.0
-offset_top = -173.0
-offset_right = -219.0
-offset_bottom = -108.0
-grow_horizontal = 0
-grow_vertical = 0
-theme = SubResource("Theme_i6ua2")
-
-[node name="Label" type="Label" parent="StancePanel"]
-texture_filter = 1
-layout_mode = 1
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -21.5
-offset_top = 4.0
-offset_right = 21.5
-offset_bottom = 27.0
-grow_horizontal = 2
-theme_override_colors/font_color = Color(0.78039217, 0.48235294, 0.34509805, 1)
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 22
-text = "Stance"
-
-[node name="StanceMenu" type="OptionButton" parent="StancePanel"]
-layout_mode = 1
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-offset_left = -63.0
-offset_top = -33.0
-offset_right = 63.0
-offset_bottom = -2.0
-grow_horizontal = 2
-grow_vertical = 0
-theme_override_colors/font_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_colors/font_focus_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_colors/font_pressed_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_colors/font_hover_color = Color(0.8235294, 0.7882353, 0.64705884, 1)
-theme_override_constants/outline_size = 8
-theme_override_font_sizes/font_size = 20
-alignment = 1
-item_count = 1
-popup/item_0/id = 0
-script = ExtResource("21")
-
 [node name="EquipmentPanel1" type="Panel" parent="."]
+z_index = -5
 texture_filter = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -4111,6 +4121,7 @@ justification_flags = 0
 
 [node name="EquipmentPanel2" type="Panel" parent="."]
 visible = false
+z_index = -5
 texture_filter = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -4437,6 +4448,7 @@ justification_flags = 0
 
 [node name="EquipmentPanel3" type="Panel" parent="."]
 visible = false
+z_index = -5
 texture_filter = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -4763,6 +4775,7 @@ justification_flags = 0
 
 [node name="EquipmentPanel4" type="Panel" parent="."]
 visible = false
+z_index = -5
 texture_filter = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -5088,7 +5101,7 @@ vertical_alignment = 1
 justification_flags = 0
 
 [node name="EscMenu" type="VBoxContainer" parent="."]
-z_index = 17
+z_index = 4096
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -5185,6 +5198,7 @@ text = " No "
 
 [node name="Stats" type="Panel" parent="."]
 self_modulate = Color(1, 1, 1, 0.8627451)
+z_index = 4094
 texture_filter = 1
 anchors_preset = 6
 anchor_left = 1.0
@@ -5706,6 +5720,7 @@ icon_alignment = 1
 [connection signal="pressed" from="RefreshButton" to="." method="_on_refresh_button_pressed"]
 [connection signal="toggled" from="CraftingContainer/CraftingMats/ScrollOfLuck" to="." method="_on_scroll_of_luck_toggled"]
 [connection signal="toggled" from="CraftingContainer/CraftingMats/ScrollOfInjection" to="." method="_on_scroll_of_injection_toggled"]
+[connection signal="button_up" from="ExpButton" to="." method="_on_exp_button_button_up"]
 [connection signal="button_up" from="AttributePanel/VBoxContainer/HealthIcon" to="." method="_on_health_icon_button_up"]
 [connection signal="gui_input" from="AttributePanel/VBoxContainer/HealthIcon" to="." method="_on_health_icon_gui_input"]
 [connection signal="button_up" from="AttributePanel/VBoxContainer/StrengthIcon" to="." method="_on_strength_icon_button_up"]
@@ -5733,7 +5748,6 @@ icon_alignment = 1
 [connection signal="button_up" from="AttributePanel/VBoxContainer/ShieldIcon" to="." method="_on_shield_icon_button_up"]
 [connection signal="gui_input" from="AttributePanel/VBoxContainer/ShieldIcon" to="." method="_on_shield_icon_gui_input"]
 [connection signal="toggled" from="AttributePanel/Help" to="." method="_on_help_toggled"]
-[connection signal="button_up" from="ExpButton" to="." method="_on_exp_button_button_up"]
 [connection signal="pressed" from="EscMenu/Resume" to="." method="_on_resume_pressed"]
 [connection signal="pressed" from="EscMenu/Options" to="." method="_on_options_pressed"]
 [connection signal="pressed" from="EscMenu/Disconnect" to="." method="_on_disconnect_pressed"]

@@ -1,4 +1,4 @@
-[gd_scene load_steps=45 format=3 uid="uid://bh10l06wi8flh"]
+[gd_scene load_steps=39 format=3 uid="uid://bh10l06wi8flh"]
 
 [ext_resource type="Script" uid="uid://wndbyt2f56xv" path="res://Player/Gladiator.gd" id="1"]
 [ext_resource type="Texture2D" uid="uid://dvkftuu6pmsh6" path="res://Assets/PlayerAssets/Free RGW Sprites/RPG Maker/RPG Maker MZ (48x48)/sv_actors/Character_005_Battler.png" id="2"]
@@ -331,302 +331,69 @@ properties/0/replication_mode = 2
 properties/1/path = NodePath(".:current_animation")
 properties/1/spawn = true
 properties/1/replication_mode = 2
-properties/2/path = NodePath("DamagePopup:text")
+properties/2/path = NodePath(".:last_attack_time")
 properties/2/spawn = true
 properties/2/replication_mode = 2
-properties/3/path = NodePath(".:last_attack_time")
+properties/3/path = NodePath(".:prev_animation")
 properties/3/spawn = true
 properties/3/replication_mode = 2
-properties/4/path = NodePath(".:prev_animation")
+properties/4/path = NodePath(".:next_attack_critical")
 properties/4/spawn = true
 properties/4/replication_mode = 2
-properties/5/path = NodePath(".:next_attack_critical")
+properties/5/path = NodePath(".:next_taken_hit_critical")
 properties/5/spawn = true
 properties/5/replication_mode = 2
-properties/6/path = NodePath(".:next_taken_hit_critical")
+properties/6/path = NodePath(".:opponent_peer_id")
 properties/6/spawn = true
 properties/6/replication_mode = 2
-properties/7/path = NodePath(".:opponent_peer_id")
+properties/7/path = NodePath(".:gladiator_name")
 properties/7/spawn = true
 properties/7/replication_mode = 2
-properties/8/path = NodePath(".:gladiator_name")
+properties/8/path = NodePath(".:in_combat")
 properties/8/spawn = true
 properties/8/replication_mode = 2
-properties/9/path = NodePath(".:in_combat")
-properties/9/spawn = true
+properties/9/path = NodePath("Sprite:animation")
+properties/9/spawn = false
 properties/9/replication_mode = 2
-properties/10/path = NodePath("Sprite:animation")
-properties/10/spawn = false
+properties/10/path = NodePath(".:current_health")
+properties/10/spawn = true
 properties/10/replication_mode = 2
-properties/11/path = NodePath(".:current_health")
+properties/11/path = NodePath(".:concede_threshold")
 properties/11/spawn = true
 properties/11/replication_mode = 2
-properties/12/path = NodePath(".:concede_threshold")
+properties/12/path = NodePath(".:max_health")
 properties/12/spawn = true
 properties/12/replication_mode = 2
-properties/13/path = NodePath(".:max_health")
+properties/13/path = NodePath(".:weapon1_durability")
 properties/13/spawn = true
 properties/13/replication_mode = 2
-properties/14/path = NodePath(".:weapon1_durability")
+properties/14/path = NodePath(".:weapon2_durability")
 properties/14/spawn = true
 properties/14/replication_mode = 2
-properties/15/path = NodePath(".:weapon2_durability")
+properties/15/path = NodePath(".:weapon1_can_parry")
 properties/15/spawn = true
 properties/15/replication_mode = 2
-properties/16/path = NodePath(".:weapon1_can_parry")
+properties/16/path = NodePath(".:weapon2_can_parry")
 properties/16/spawn = true
 properties/16/replication_mode = 2
-properties/17/path = NodePath(".:weapon2_can_parry")
+properties/17/path = NodePath(".:parry_chance")
 properties/17/spawn = true
 properties/17/replication_mode = 2
-properties/18/path = NodePath(".:parry_chance")
+properties/18/path = NodePath(".:block_chance")
 properties/18/spawn = true
 properties/18/replication_mode = 2
-properties/19/path = NodePath(".:block_chance")
+properties/19/path = NodePath(".:shield_absorb")
 properties/19/spawn = true
 properties/19/replication_mode = 2
-properties/20/path = NodePath(".:shield_absorb")
+properties/20/path = NodePath(".:weapon2_can_block")
 properties/20/spawn = true
 properties/20/replication_mode = 2
-properties/21/path = NodePath(".:weapon2_can_block")
+properties/21/path = NodePath(".:dead")
 properties/21/spawn = true
 properties/21/replication_mode = 2
-properties/22/path = NodePath(".:dead")
+properties/22/path = NodePath(".:absorb_after_resilience")
 properties/22/spawn = true
 properties/22/replication_mode = 2
-properties/23/path = NodePath(".:absorb_after_resilience")
-properties/23/spawn = true
-properties/23/replication_mode = 2
-properties/24/path = NodePath("CharacterAnimationPlayer:current_animation")
-properties/24/spawn = true
-properties/24/replication_mode = 2
-
-[sub_resource type="Animation" id="Animation_1oxpr"]
-resource_name = "attackLeftSwingFront"
-length = 0.9
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../CanvasLayer/WeaponFront:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(24, 5), Vector2(27.5, 3.5), Vector2(30, -5), Vector2(-11.5, 5.5), Vector2(-4.5, 23.999998), Vector2(-4.5, 23.999998), Vector2(6, 9), Vector2(18, 4.5), Vector2(24, 5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../CanvasLayer/WeaponFront:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [0.0, 0.0, 0.0, -0.8360127, -1.2164944, -1.2164944, 0.09599311, 0.3159046, 0.0]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../CanvasLayer/vfx:frame")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [108, 109, 110, 111, 112, 113, 114, 115, 116]
-}
-
-[sub_resource type="Animation" id="Animation_2fui2"]
-resource_name = "attackRightSwingFront"
-length = 0.9
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../CanvasLayer/WeaponFront:position")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(-4, 4.5), Vector2(-7, 4), Vector2(-10.5, -4.5), Vector2(31.999996, 5), Vector2(24.000006, 25.500002), Vector2(24.000006, 25.000002), Vector2(19.5, 19.5), Vector2(7.500002, 9.5), Vector2(-4, 4.5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../CanvasLayer/WeaponFront:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 1,
-"values": [0.0, 0.0, 0.0, 0.7696902, 1.3473942, 1.3473942, 0.99309236, 0.3159046, 0.0]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../CanvasLayer/vfx:frame")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [108, 109, 110, 111, 112, 113, 114, 115, 116]
-}
-
-[sub_resource type="Animation" id="Animation_g1gyr"]
-resource_name = "die"
-loop_mode = 1
-step = 0.1
-
-[sub_resource type="Animation" id="Animation_g8gnm"]
-resource_name = "idle_left"
-length = 0.4
-loop_mode = 1
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../CanvasLayer/WeaponFront:position")
-tracks/0/interp = 0
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(24, 5), Vector2(24, 6), Vector2(24, 7), Vector2(24, 6)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../CanvasLayer/WeaponFront:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [0.0, 0.0, 0.0, 0.0]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../CanvasLayer/vfx:frame")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [104, 105, 106, 107]
-}
-
-[sub_resource type="Animation" id="Animation_o4i8o"]
-resource_name = "idle_right"
-length = 0.4
-step = 0.1
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("../CanvasLayer/WeaponFront:position")
-tracks/0/interp = 0
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [Vector2(-4, 6), Vector2(-4, 7), Vector2(-4, 5)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("../CanvasLayer/WeaponFront:rotation")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [0.0, 0.0, 0.0, 0.0]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("../CanvasLayer/vfx:frame")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 0,
-"values": [104, 105, 106, 107]
-}
-tracks/3/type = "value"
-tracks/3/imported = false
-tracks/3/enabled = true
-tracks/3/path = NodePath("../CanvasLayer/WeaponBack:skew")
-tracks/3/interp = 1
-tracks/3/loop_wrap = true
-tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [0.52883476, 0.52883476, 0.52883476, 0.52883476]
-}
-tracks/4/type = "value"
-tracks/4/imported = false
-tracks/4/enabled = true
-tracks/4/path = NodePath("../CanvasLayer/WeaponBack:scale")
-tracks/4/interp = 1
-tracks/4/loop_wrap = true
-tracks/4/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(0.25, 0.25), Vector2(0.25, 0.25), Vector2(0.25, 0.25), Vector2(0.25, 0.25)]
-}
-tracks/5/type = "value"
-tracks/5/imported = false
-tracks/5/enabled = true
-tracks/5/path = NodePath("../CanvasLayer/WeaponBack:rotation")
-tracks/5/interp = 1
-tracks/5/loop_wrap = true
-tracks/5/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [-0.31939524, -0.31939524, -0.31939524, -0.31939524]
-}
-tracks/6/type = "value"
-tracks/6/imported = false
-tracks/6/enabled = true
-tracks/6/path = NodePath("../CanvasLayer/WeaponBack:position")
-tracks/6/interp = 1
-tracks/6/loop_wrap = true
-tracks/6/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
-"update": 1,
-"values": [Vector2(12, 6.5), Vector2(12, 7.5), Vector2(12, 8.5), Vector2(12, 7.5)]
-}
-
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_g1gyr"]
-_data = {
-&"attackLeftSwingFront": SubResource("Animation_1oxpr"),
-&"attackRightSwingFront": SubResource("Animation_2fui2"),
-&"die": SubResource("Animation_g1gyr"),
-&"idle_left": SubResource("Animation_g8gnm"),
-&"idle_right": SubResource("Animation_o4i8o")
-}
 
 [node name="Gladiator" type="CharacterBody2D"]
 top_level = true
@@ -683,12 +450,6 @@ offset_right = 40.0
 offset_bottom = 23.0
 text = "df"
 horizontal_alignment = 1
-
-[node name="CharacterAnimationPlayer" type="AnimationPlayer" parent="."]
-root_node = NodePath(".")
-libraries = {
-&"": SubResource("AnimationLibrary_g1gyr")
-}
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 

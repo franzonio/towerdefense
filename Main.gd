@@ -68,7 +68,6 @@ func _ready():
 
 
 	if multiplayer.is_server():
-		print("added round_manager")
 		var round_manager = round_manager_scene.instantiate()
 		add_child(round_manager)
 

@@ -38,7 +38,6 @@ limit_left = 0
 limit_top = 0
 limit_right = 3840
 limit_bottom = 2160
-position_smoothing_speed = 10.0
 script = ExtResource("3")
 
 [node name="GladiatorSpawner" type="MultiplayerSpawner" parent="."]

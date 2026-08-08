@@ -492,6 +492,7 @@ var craft_active = ""
 var is_rerolling: = false
 
 #var time_to_live = 9999
+var update_initial_equipment_panel_positions_done = 0
 var rename_panels_done = 0
 var points_left = 0
 var regret_points_left = 0
@@ -643,8 +644,12 @@ func fix_icon_bonuses():
 		shield_mastery_icon_panel.set_race(race)
 
 func _process(delta: float) -> void :
+	#update_equipment_panel_position()
+	
 	prev_lvl = current_lvl
 	if all_gladiators:
+		if multiplayer.get_unique_id() == 0:
+			print("ID == 0 wtf???")
 		current_lvl = int(all_gladiators[multiplayer.get_unique_id()].get("level", 1))
 
 	if prev_lvl < current_lvl:
@@ -682,6 +687,7 @@ func _process(delta: float) -> void :
 		concede_threshold_menu.disabled = true
 		stance_menu.disabled = true
 		attack_menu.disabled = true
+		
 
 	if Input.is_action_just_pressed("focus_chat"):
 		chat_input.grab_focus()
@@ -1001,6 +1007,60 @@ func _add_message(sender_id, sender_name: String, timestamp: String, message: St
 	await get_tree().process_frame
 	chat_scroll.scroll_vertical = chat_scroll.get_v_scroll_bar().max_value
 
+@rpc("any_peer", "call_local")
+func update_equipment_panel_position():
+	
+	if all_gladiators == null: return
+	if rename_panels_done == 0: return
+	
+	var all_ids = all_gladiators.keys()
+	
+	var xform := get_viewport().get_canvas_transform()
+	
+	for id in all_ids:
+		if xform == null:
+			return
+			
+		var _player_gladiator_data = all_gladiators[id]
+		var animation_parent = get_node_or_null("_EquipmentPanel" + str(id) + "/Animations")
+		var get_spawn_point = _player_gladiator_data.get("spawn_point", Vector2(0, 0))
+		var _endurance_bar = get_node("_EquipmentPanel" + str(id) + "/EnduranceBar")
+		
+		if get_spawn_point == Vector2(0,0): 
+			return
+		
+		var side = find_spawn_side(get_spawn_point)
+		var screen_pos = xform * get_spawn_point
+		
+		if screen_pos == null: 
+			return
+		
+		equipment_panel = get_node("_EquipmentPanel" + str(id))
+		
+		
+		if get_spawn_point != Vector2(0, 0):
+			equipment_panel.position = screen_pos #_player_gladiator_data["spawn_point"]
+			
+		if id == multiplayer.get_unique_id():
+			if _endurance_bar != null: _endurance_bar.visible = true
+			if side == "left": 
+				attribute_panel.position = equipment_panel.position - Vector2(180, 0)
+			elif side == "right": 
+				attribute_panel.position = equipment_panel.position + Vector2(302, 0)
+				
+			#print("peer " + str(id) + " attribute_panel.position = " + str(attribute_panel.position))
+		else:
+			_endurance_bar.visible = false
+
+		if side == "left":
+			animation_parent.scale.x = 1
+		elif side == "right":
+			animation_parent.position = Vector2(300, 0) #equipment_panel.position - Vector2(400, 400)
+			animation_parent.scale.x = -1
+		
+	update_initial_equipment_panel_positions_done = 1
+
+
 func update_equipment_ui():
 	
 	# here we need to update EquipmentPanelX with all peers equipment
@@ -1015,6 +1075,7 @@ func update_equipment_ui():
 
 
 	for id in all_ids:
+		
 		var wep2_slots = get_node_or_null("_EquipmentPanel" + str(id) + "/PanelContainerBottom/BottomPanel/Weapon2Slot")
 		wep2_slots.visible = true
 		var _player_gladiator_data = all_gladiators[id]
@@ -1115,7 +1176,7 @@ func update_equipment_ui():
 		var get_spawn_point = _player_gladiator_data.get("spawn_point", Vector2(0, 0))
 		var side = find_spawn_side(get_spawn_point)
 		
-		if get_spawn_point != Vector2(0, 0):
+		'if get_spawn_point != Vector2(0, 0):
 			equipment_panel.position = _player_gladiator_data["spawn_point"]
 			
 		if id == multiplayer.get_unique_id():
@@ -1131,7 +1192,7 @@ func update_equipment_ui():
 			animation_parent.scale.x = 1
 		elif side == "right":
 			animation_parent.position = equipment_panel.position - Vector2(400, 400)
-			animation_parent.scale.x = -1
+			animation_parent.scale.x = -1'
 
 
 
@@ -1292,6 +1353,11 @@ func update_equipment_ui():
 
 				else:
 					continue
+		'for g in get_tree().get_nodes_in_group("gladiators"):
+			if g.owner_id == id:
+				var old_eq_panel = g.get_child(-1)
+				old_eq_panel.queue_free()
+				g.add_child(equipment_panel)'
 
 func _on_add_item_to_inventory(id, _item_dict, slot_name):
 	if id != multiplayer.get_unique_id():
@@ -1406,6 +1472,7 @@ func _on_send_gladiator_data_to_peer_signal(peer_id: int, _all_gladiators):
 			prev_life_dict[id] = 999999
 			life_dict[id] = 999999
 		rename_panels_done = 1
+	if update_initial_equipment_panel_positions_done == 0: update_equipment_panel_position()
 	update_equipment_ui()
 	
 	if peer_id == multiplayer.get_unique_id():
@@ -1769,6 +1836,7 @@ func roll_cards():
 	
 
 func _on_reroll_cards_new_round_signal(active_players: Array):
+	update_equipment_panel_position()
 	if is_rerolling:
 		print("blocked dual rerolls")
 		return
@@ -2164,11 +2232,13 @@ func rename_equipment_panels(_all_gladiators: Dictionary) -> void :
 		if has_node(old_name):
 			var panel: = get_node(old_name)
 			panel.name = "_EquipmentPanel" + str(ids[i])
+			panel.add_to_group("equipment_panels")
 		else:
 			push_warning("Node '%s' not found in scene" % old_name)
 
 #func _gui_input(event: InputEvent) -> void:
 	# Check if the event is a mouse button click
+
 
 func get_amount(left_click, right_click):
 	var amount

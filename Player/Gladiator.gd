@@ -35,7 +35,7 @@ var no_wep_attack_speed = no_wep["speed"]
 var time_passed = 0
 @onready var nav = $NavigationAgent2D
 
-@onready var sprite = $CharacterAnimationPlayer
+#@onready var sprite = $CharacterAnimationPlayer
 @onready var multiplayer_sync = $MultiplayerSynchronizer
 
 @export var speed: float = 250.0
@@ -196,12 +196,12 @@ func _ready():
 
 	if direction.x < 0:
 		face_towards = "left"
-		sprite.play("idle_left")
+		#sprite.play("idle_left")
 	else:
 		face_towards = "right"
-		sprite.play("idle_right")
+		#sprite.play("idle_right")
 
-	sprite.play("idle_right")
+	#sprite.play("idle_right")
 
 
 
@@ -259,39 +259,20 @@ func _process(delta: float) -> void :
 				receive_damage(blood_rage_dmg, -1, 1, 0, 0, 0, 0, 0, weapon1_durability, weapon2_durability, 0, 0)
 
 	if is_multiplayer_authority():
+		if opponent == null: 
+			return
 		if opponent and opponent.dead and not opponent_dead:
 			opponent_dead = true
-			print("opponent_dead")
 			rpc("show_damage_popup", 0, -2, 1, 0, 0, 0, 0, 0, 0, 0, "WINNER")
 		if !dead and time_passed > endurance_sec and !opponent_dead:
 			dead = 1
-
 			rpc("die")
 
 func _physics_process(delta):
 	if is_multiplayer_authority() and opponent != null and is_instance_valid(opponent) and opponent.current_health > opponent.max_health * opponent.concede_threshold and opponent_peer_id:
 
-		if opponent_dead:
-			if face_towards == "right":
-				sprite.play("idle_right")
-			elif face_towards == "left":
-				sprite.play("idle_left")
-			return
-
 		check_for_attack(delta)
 		handle_ai_movement(delta)
-
-
-	else:
-		if opponent_dead:
-			if face_towards == "right":
-				sprite.play("idle_right")
-			elif face_towards == "left":
-				sprite.play("idle_left")
-			return
-		if current_animation.begins_with("attack"):
-			sprite.play(current_animation)
-
 
 func _on_send_gladiator_data_to_peer_signal(_peer_id: int, _all_gladiators):
 	all_gladiators = _all_gladiators
@@ -303,35 +284,10 @@ func _on_send_gladiator_data_to_peer_signal(_peer_id: int, _all_gladiators):
 func _on_concede_threshold_changed(value: float):
 	concede_threshold = value
 
-func handle_animation():
-	if current_animation.begins_with("attack"):
-		sprite.play(current_animation)
-		if face_towards == "right":
-			current_animation = "idle_right"
-		elif face_towards == "left":
-			current_animation = "idle_left"
-
-	elif current_animation.begins_with("idle") and !sprite.is_playing():
-		if face_towards == "right":
-			current_animation = "idle_right"
-		elif face_towards == "left":
-			current_animation = "idle_left"
-		sprite.play(current_animation)
-
-
-
-
-
-
-
 func _on_any_animation_finished():
 
 	if current_animation == "die":
 		emit_signal("died")
-
-
-
-
 
 func check_for_attack(delta: float):
 	if opponent == null or !is_instance_valid(opponent):
@@ -664,11 +620,6 @@ func die():
 	set_physics_process(false)
 	set_process(false)
 	$CollisionShape2D.disabled = true
-	sprite.stop()
-
-
-
-
 
 	emit_signal("died")
 
@@ -735,14 +686,15 @@ func show_damage_popup(amount, raw_damage, hit_success, dodge_success, crit, par
 	elif face_towards == "right":
 		popup.global_position = global_position
 
-
-
-
-
+	var hud = get_node("/root/Main/HUD")
+	var equipment_panel = hud.get_node("_EquipmentPanel" + str(owner_id))
+	popup.id = owner_id
+	popup.position = equipment_panel.position
+	hud.add_child(popup)
+	
 	popup.show_damage(amount, raw_damage, hit_success, dodge_success, crit, parry_success, spawn_point, 
 		defender_weapon1_broken, defender_weapon2_broken, block_success, shield_absorb, winner)
-	$CanvasLayer.add_child(popup)
-
+		
 	if amount < 0:
 		TweenFX.punch_in(popup, 0.1, 0.5)
 	elif raw_damage == -1:
@@ -770,7 +722,6 @@ func update_all_gladiators(data: Dictionary):
 
 					g.update_gladiator(data[id], id)
 				else:
-
 					g.rpc_id(g.get_multiplayer_authority(), "update_gladiator", data[id], id)
 
 func update_gladiator_after_strategy(hit_chance_penalty, dodge_mod):

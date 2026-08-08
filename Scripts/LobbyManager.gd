@@ -61,7 +61,7 @@ func _ready():
 
 	using_steam = true
 
-	steam_or_enet.visible = false
+	#steam_or_enet.visible = false
 	pre_join_or_host_menu.visible = true
 	host_container.visible = false
 	post_join_or_host_menu.visible = false
@@ -142,10 +142,7 @@ func _on_select_host_pressed():
 func _on_host_pressed():
 	if using_steam:
 		SteamManager_.initialize_steam()
-		NetworkManager_.host_game(max_players)
-
-
-
+		NetworkManager_.host_game_steam(max_players)
 
 		register_player_name(multiplayer.get_unique_id(), Steam.getPersonaName())
 		GameState_.selected_name = Steam.getPersonaName()
@@ -158,16 +155,17 @@ func _on_host_pressed():
 		post_join_or_host_menu.visible = true
 		start_button.visible = true
 		start_button.disabled = false
-
 	else:
-		NetworkManager_.host_game(max_players)
+		NetworkManager_.host_game_enet(max_players)
 		pre_join_or_host_menu.visible = false
 		host_container.visible = false
 		post_join_or_host_menu.visible = true
 
-		if !NetworkManager_.is_host: start_button.disabled = true
+		if !NetworkManager_.is_host:
+			start_button.disabled = true
 		register_player_name(multiplayer.get_unique_id(), name_input.text)
 		GameState_.selected_name = name_input.text
+
 
 func _on_join_pressed():
 	if using_steam:
@@ -177,12 +175,13 @@ func _on_join_pressed():
 		Steam.lobby_match_list.connect(_on_lobby_match_list)
 		NetworkManager_.list_lobbies()
 	else:
-		NetworkManager_.join_game(NetworkManager_.server_ip)
+		NetworkManager_.join_game_enet(NetworkManager_.server_ip)
 		select_host_container.visible = false
 		pre_join_or_host_menu.visible = false
 		post_join_or_host_menu.visible = true
 		start_button.visible = true
 		start_button.disabled = true
+
 		print("⏳ Waiting for connection...")
 		await multiplayer.connected_to_server
 		print("✅ Client connected with ID:", multiplayer.get_unique_id())
@@ -192,6 +191,7 @@ func _on_join_pressed():
 		GameState_.selected_name = name_input.text
 
 		_update_player_list()
+
 
 
 
@@ -220,7 +220,7 @@ func _on_lobby_match_list(lobbies: Array):
 func join_lobby(_lobby_id = 0):
 	players = {}
 	lobby_id = _lobby_id
-	NetworkManager_.join_game(lobby_id)
+	NetworkManager_.join_game_steam(lobby_id)
 
 	$LobbyContainer.visible = false
 	select_host_container.visible = false
@@ -228,6 +228,7 @@ func join_lobby(_lobby_id = 0):
 	post_join_or_host_menu.visible = true
 	start_button.visible = true
 	start_button.disabled = true
+
 
 
 
@@ -287,7 +288,7 @@ func _update_player_list():
 
 		player_list.add_item(players[id])
 
-
+	
 
 func _on_use_steam_button_pressed():
 	using_steam = true
